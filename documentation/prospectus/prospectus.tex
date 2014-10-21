@@ -1,0 +1,94 @@
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\usepackage[table]{xcolor}
+\usepackage[font=scriptsize]{caption}
+\usepackage[pdftex]{graphicx}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\usepackage[UKenglish]{isodate}% http://ctan.org/pkg/isodate
+\usepackage {tabularx}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{changepage}% http://ctan.org/pkg/changepage
+\usepackage{pdfpages}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{tikz-uml}
+\usetikzlibrary{arrows,shadows,positioning}
+\usetikzlibrary{shadows.blur}
+\usetikzlibrary{shapes.symbols}
+\usepackage{tocloft}
+\usepackage{pgf-umlsd}
+\usepackage{ifthen}
+\usepackage{xstring}
+\usepackage{pgfopts}
+\usepackage{calc}
+\usepackage{babel}
+
+\pagestyle{fancy}
+
+\headheight = 28pt 
+\headsep = 12pt
+\cleanlookdateon
+\fancyhead[L]{CEN4020\\FALL2014}
+\fancyhead[C]{Software Engineering I\\\today}
+\fancyhead[R]{Prestige Worldwide\\Prospectus}
+
+\fancyfoot[C]{}
+\fancyfoot[R]{\thepage { $|$ Page}}
+
+\definecolor{light-gray}{gray}{0.90}
+\definecolor{dark-gray}{gray}{.65}
+
+\setlength{\parindent}{1cm} % Default is 15pt.
+
+\pagenumbering{roman}
+
+\setcounter{secnumdepth}{0}
+
+% Table of contents dots
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\begin{document}
+  \input{./title.tex}
+
+  \tableofcontents
+  \listoffigures
+
+  \clearpage
+
+  % reset page numbering
+  \pagenumbering{arabic}
+  \setcounter{page}{1}
+
+  \section{Roles and Responsibilities}
+  %\begin{adjustwidth}{2.5em}{0pt}
+  %  \footnotesize{Software Engineering 9th Edition, Ian Sommerville, page 78}\\
+  %\end{adjustwidth}
+  \begin{adjustwidth}{1.5em}{0pt}
+    \begin{itemize}
+      \item Project Manager (Arron Solano) - the project manager will be resposible to ensure that tasks related to completing our project will be completed in a timely and correct manner. Daily and weekly meetings will be held to enhance the work done by the project manager.
+      \item Front End \& User Interface Developer (Brian Howell) - will develop the user interface 
+      \item Back End Developer (Daniel Carroll) - responsible to develop database storage system and other functions related to storage and application funcationality.
+       \item Bitcoin Integration (Michael Danko) - will integrate software functions to work in conjunction with bitcoin blockchain.
+    \end{itemize}
+    
+\end{adjustwidth}
+
+  \section{Project Description}
+  \begin{adjustwidth}{1.5em}{0pt}
+
+  \normalsize{\textbf{A short description of the project, why is the software needed what problem does it solve, who will use the software, what is the scope of the project?}}\\ 
+
+  \end{adjustwidth}
+
+  \section{Software Compeitetors}
+
+  \normalsize{\textbf{Is there software out there that functions similarly? How is ours better? Is our app a mobile app, web app, database, etc?}}\\ 
+
+
+  \section{Web Site}
+  Our website is located at \url{http://nohomeyet.com}
+
+\end{document}
