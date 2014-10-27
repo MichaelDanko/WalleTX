@@ -1,0 +1,90 @@
+\documentclass[12pt]{article}
+
+\usepackage{fancyhdr}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\usepackage[table]{xcolor}
+\usepackage[font=scriptsize]{caption}
+\usepackage[pdftex]{graphicx}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\usepackage[UKenglish]{isodate}% http://ctan.org/pkg/isodate
+\usepackage {tabularx}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{changepage}% http://ctan.org/pkg/changepage
+\usepackage{pdfpages}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{tikz-uml}
+\usetikzlibrary{arrows,shadows,positioning}
+\usetikzlibrary{shadows.blur}
+\usetikzlibrary{shapes.symbols}
+\usepackage{tocloft}
+\usepackage{pgf-umlsd}
+\usepackage{ifthen}
+\usepackage{xstring}
+\usepackage{pgfopts}
+\usepackage{calc}
+\usepackage{babel}
+\usepackage{anyfontsize}
+\usepackage{geometry}
+\pagestyle{fancy}
+
+\headheight = 28pt 
+\headsep = 12pt
+\cleanlookdateon
+
+% Default Page Header & Footer
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{}
+\fancyhead[C]{}
+\fancyhead[R]{}
+
+\fancyfoot[C]{}
+\fancyfoot[R]{\thepage}
+
+% Title Page Header Style
+\fancypagestyle{titlestyle}
+{
+     \fancyhf{}
+     % Remove header bar
+     \renewcommand{\headrulewidth}{0pt}
+     
+     \fancyfoot[L]{\large\emph{Group Members:}\\Arron \textsc{Solano}\\Brian \textsc{Howell}\\Daniel \textsc{Carroll}\\Michael \textsc{Danko}}
+}
+
+\definecolor{light-gray}{gray}{0.90}
+\definecolor{dark-gray}{gray}{.65}
+
+\setlength{\parindent}{1cm} % Default is 15pt.
+
+\pagenumbering{roman}
+
+\setcounter{secnumdepth}{3} 
+\setcounter{tocdepth}{3}
+\cftsetindents{subsubsection}{0.9cm}{1.27cm}
+% Table of contents dots
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\begin{document}
+  \input{./title.tex}
+
+  \tableofcontents
+  %\listoffigures
+
+  \clearpage
+
+  % reset page numbering
+  \pagenumbering{arabic}
+  \setcounter{page}{1}
+
+  \input{./chapter1/chapter1.tex}
+
+  \input{./chapter2/chapter2.tex}
+
+  \input{./chapter3/chapter3.tex}
+  \input{./chapter4/chapter4.tex}
+  \input{./chapter5/chapter5.tex}
+  \input{./chapter6/chapter6.tex}
+  \input{./chapter7/chapter7.tex}
+
+ \end{document}
