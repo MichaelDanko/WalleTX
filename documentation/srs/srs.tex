@@ -60,27 +60,27 @@
 
 \pagenumbering{roman}
 
+% Table of Contents Settings
 \setcounter{secnumdepth}{3} 
 \setcounter{tocdepth}{3}
 \cftsetindents{subsubsection}{0.9cm}{1.27cm}
+
 % Table of contents dots
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
 \begin{document}
   \input{./title.tex}
 
   \tableofcontents
   %\listoffigures
-
   \clearpage
-
+  
   % reset page numbering
   \pagenumbering{arabic}
   \setcounter{page}{1}
 
   \input{./chapter1/chapter1.tex}
-
   \input{./chapter2/chapter2.tex}
-
   \input{./chapter3/chapter3.tex}
   \input{./chapter4/chapter4.tex}
   \input{./chapter5/chapter5.tex}
