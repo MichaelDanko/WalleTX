@@ -29,6 +29,19 @@
 \usepackage{anyfontsize}
 \usepackage{geometry}
 \pagestyle{fancy}
+\usepackage{float}
+
+\usepackage[table]{xcolor}
+ \definecolor{lightblue}{rgb}{0.93,0.95,1.0}
+ \rowcolors{1}{white}{lightblue}
+\usepackage{etoolbox}
+\makeatletter
+\preto\tabular{\global\rownum=1}
+\makeatother
+
+% table padding
+\usepackage{array}
+\setlength\extrarowheight{4pt} % or whatever amount is appropriate
 
 \headheight = 28pt 
 \headsep = 12pt
