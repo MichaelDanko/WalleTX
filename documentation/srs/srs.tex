@@ -30,6 +30,7 @@
 \usepackage{geometry}
 \pagestyle{fancy}
 \usepackage{float}
+\usepackage{tabu}
 
 \usepackage[table]{xcolor}
  \definecolor{lightblue}{rgb}{0.93,0.95,1.0}
@@ -80,6 +81,11 @@
 
 % Table of contents dots
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+% Blue Title Cells
+\newcommand\BlueCell[1]{%
+    \multicolumn{1}{c}{\cellcolor{dark-gray}\textcolor{yellow}{#1}}
+}
 
 \begin{document}
   \input{./title.tex}

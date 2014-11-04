@@ -17,6 +17,28 @@ Identifying actors:\\
 Actors will be the customer/user of the application.  Most interested in our application would be those interested in Bitcoin. Service and maintenance of the system will be performed by the developers(Prestige Worldwide). Systems external resources will be blockchain, SQLite, and other external wallets providing information. (Michael and Brian please confirm external resources of Bitcoin)
 
     \subsubsection{Use Case Descriptions}
+    \begin{figure}[ht]
+      \includegraphics[width=1.0\textwidth]{./chapter7/diagrams/use-case-backup.png}
+    \end{figure}
+
+\begin{table}[H]
+  \tabulinesep=1.2mm
+      \rowcolors{2}{gray!25}{white}
+      \begin{tabu}{r | X}
+        \rowfont{\color{black}}
+        \taburulecolor{white}
+        \taburowcolors 2{light-gray .. white}
+        \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Backup Data}}}\\
+        \hline
+        \textsf{Actors} & User\\
+        Description & A user will be able to backup all wallet information, transaction hashes, and tags associate with those transactions to an XML or JSON file.\\
+        Data & public wallet identification, transaction hashes, tags associate with transactions\\
+        Stimulus & User initiates a data backup\\
+        Response & Dialog box will confirm backup\\
+        Comments & Is there any additional data that needs to be backed up? Where will the database backup be stored?\\
+      \end{tabu}
+    \end{table}
+
 
 Identifying use cases:\\
 \begin{itemize}
@@ -54,16 +76,6 @@ The primary task of the customer/user will be to interact with the application. 
     \end{table}
 
     \subsubsection{Use Case Summary Table}
-    \begin{table}[H]
-      \begin{tabularx}{\textwidth}{r | X}
-        Actors                       & Summary\\
-        \hline
-        Customer/End User            &         Development Team/Maintenance & This actor will be interacting via the support and maintance of the  application.  They will maintain DB orginzation, revision handling, and  overall maintaince of the application\\
-        External Bitcoin Wallets     & External Bitcoin Wallets will be providing our application with vital  information.  All external wallets' totals and transactions will  aggreated in WalleTx.\\
-        SQLite Database              & This actor is a database stored on each end user's phone. This will  contain data from wallets, transactions, and display information.  It  will interact soley with the application via code.\\
-        Bitcoin Blockchain           & The bitcoin blocktrain will provide transaction specific data for all  included wallets. This actor will interact with the application via  database backend.\\
-      \end{tabularx}
-    \end{table}
 
     \subsubsection{Screens and Reports with Navigation Matrix}
   \subsection{Other Appendices}
