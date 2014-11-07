@@ -1,17 +1,58 @@
 \section{Functional Requirements}
 \begin{adjustwidth}{1.5em}{0pt}
-    \begin{itemize}
-      \item Import \& delete public keys for balance\textbackslash{transaction} tracking
-      \item Define \& delete wallet groups
-      \item Group public keys based on user preference
-      \item Define \& delete transaction tags
-      \item Tag transactions
-      \item View single wallet (or group) balance \& transaction summaries
-      \item View single wallet (or group) balance \& transactions detail view
-      \item View single wallet (or group) balance \& transactions graphical views
-      \item View single wallet (or group) transaction trends using tags
-      \item View transactions details
 
-    \end{itemize}
-  \end{adjustwidth}
+	\begin{enumerate}
+	
+		\item The system shall allow users to manage their imported wallets or public keys
+		\begin{enumerate}
+			\item Users shall be able to add new single address wallets into the system
+			\item Users shall be able to edit previously existing wallets
+			\item Users shall be able to delete existing wallets from the system
+			\item Users shall be able to name individual wallets and assign them to a group
+			\item The system should be designed to allow for future integration with other wallet types such as deterministic seed wallets or service based wallets such as Coinbase and Circle
+		\end{enumerate}
+		
+		\item The system shall allow users to customize wallet groups
+		\begin{enumerate}
+			\item System shall designate a default wallet group
+			\item Users shall be able to add new wallet groups by name
+			\item Users shall be able to edit previously existing group names
+			\item Users shall be able to delete existing wallet groups, an action that should reassign all wallets associated with the group to the default group
+		\end{enumerate}
+		
+		\item The system shall allow users to manage transaction tag categories
+		\begin{enumerate}
+			\item User shall be able to define new tag categories by name
+			\item User shall be able to edit existing tag categories
+			\item User shall be able to delete existing tag categories, an action that should remove the tag from any transactions it has been assigned to
+		\end{enumerate}
+		
+		\item The system shall allow users to manage tags for individual transactions
+		\begin{enumerate}
+			\item User shall be able to add a tag to an individual transaction
+			\item User shall be able to remove a tag from an individual transaction
+		\end{enumerate}
 
+		\item System shall provide an aggregate view of all imported wallets that contains the total balance and number of transactions.
+		
+		\item System shall provide a summary view for each wallet group that provides an overview of the group balance, transactions, and charts
+		
+		\item System shall provide a summary view for individual wallets that provides an overall summary of its balance, transactions, and charts
+		
+		\item System shall provide a detail view for each wallet group and individual wallet that lists its associated transactions
+		
+		\item System shall provide graphical charts for identifying transaction trends
+		\begin{enumerate}
+			\item System shall provide pie charts views breaking down transaction percentage by tag for all wallet groups and for individual wallets
+			\item System should provide additional trend identifying charts for wallet groups and individual wallets
+		\end{enumerate}
+		
+		\item The system should provide a view of individual transaction information
+		
+		\item The system should allow users to backup their data to an external file and import data from a previously created backup file
+		
+		\item The system should allow users to passcode protect the application
+		
+	\end{enumerate}
+
+\end{adjustwidth}

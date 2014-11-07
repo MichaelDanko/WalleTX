@@ -1,18 +1,41 @@
 \section{Introduction}
-  \subsection{Purpose}
-  Bitcoin WalleTx is a bitcoin wallet tracker tool for Android that assists users in monitoring their bitcoin balance, transaction history, and spending trends across multiple wallets. It is common for bitcoin users to possess numerous wallets, yet there do not exist many services that are capable of aggregating wallet information in order to provide the user with an overall picture of their bitcoin funds. Bitcoin WalleTx solves this problem by allowing users to group or categorize their bitcoin wallets, as well as tag their transactions with real-world information related to how their bitcoins are being spent. Charts and graphs help to identify trends in both single wallet spending and across wallet groups, a useful feature that is essential for enabling users to integrate their bitcoin finances with a more traditional budget.\\
 
-  Bitcoin WalleTx is targeted toward all bitcoin users, as it is useful for identifying trends regardless of the number of wallets held. The average person is more concerned with budgeting than with hashes and confirmation numbers, and transaction tagging will enable users to identify trends in their spending. The concept of financial trackers has been extremely successful outside of the bitcoin space with services like Mint.com, and Bitcoin WalleTx aims to bring some of these needed features to bitcoin.\\
+	\subsection{Purpose} 
+	Bitcoin WalleTx (WalleTx) is a bitcoin wallet tracker tool for Android that assists users in monitoring their bitcoin balance, transaction history, and spending trends across multiple wallets. It is common for bitcoin users to possess numerous wallets, yet there do not exist many services that are capable of aggregating wallet information in order to provide the user with an overall picture of their bitcoin funds. Bitcoin WalleTx solves this problem by allowing users to group or categorize their bitcoin wallets, as well as tag their transactions with real-world information related to how their bitcoins are being spent. Charts and graphs help to identify trends in both single wallet spending and across wallet groups, a useful feature that is essential for enabling users to integrate their bitcoin finances with a more traditional budget.\\
 
-  \subsection{Scope}
-  Scope 
-  \subsection{Definitions}
-  Definitions
-  \subsection{Acronyms}
-  Acronyms
-  \subsection{References}
-  \begin{itemize}
-    \item Bitcoin: A Peer-to-Peer Electronic Cash System\\ \url{https://bitcoin.org/bitcoin.pdf}
-    \item Blockchain Data API\\ \url{https://blockchain.info/api/blockchain_api}
-  \end{itemize}
-  \subsection{Overview}
+	The purpose of this document is to define the requirements for Bitcoin WalleTx (WalleTx). The intended audience of this document includes the CEN4020 instructional staff at FSU and the end users of the WalleTx. It is also intended that this document serve as the principle point of reference for the Prestige Worldwide team throughout the development of WalleTx.\\
+
+	\subsection{Scope}
+
+	\begin{description}
+		\item[Product] Bitcoin WalleTx
+		\item[Scope of Work]WalleTx is an android application that enables users to import their bitcoin wallets by public key and tag their bitcoin transactions in order to obtain an aggregated overview of their bitcoin finances. WalleTx shall allow users to manage their public keys; manage wallet groups; manage transaction tags; tag individual transactions; and receive feedback regarding trends via charts and graphs. A full listing of functional requirements for WalleTx is located in section 3 Functional Requirements of this document.
+		\item[Out of Scope]WalleTx shall not provide any functionality allowing users to spend or receive bitcoins since only public keys shall be stored on the device.
+		\item[Application]Bitcoin is a new technology and the ecosystem is currently undergoing major infrastructure development. There currently do not exist any tools that allow users to label their bitcoin transaction in order to identify trends in their bitcoin spending behavior. WalleTx aims to bring this functionality to the Bitcoin space.
+	\end{description}
+    
+	\subsection{Definitions}
+
+	\begin{description}
+		\item[WalleTx] Shorthand for Bitcoin WalleTx
+		\item[Bitcoin] define...
+		\item[bitcoin] define...
+		\item[Blockchain] define...
+		\item[Public key] define...
+		\item[Tx] define...
+	\end{description}
+
+	\subsection{Acronyms}
+
+	\begin{description}
+		\item[BTC] Common unit of Bitcoin currency
+	\end{description}
+
+	\subsection{References}
+
+	\begin{itemize}
+		\item Bitcoin: A Peer-to-Peer Electronic Cash System\\ \url{https://bitcoin.org/bitcoin.pdf}
+		\item Blockchain Data API\\ \url{https://blockchain.info/api/blockchain_api}
+	\end{itemize}
+
+	\subsection{Overview}
