@@ -1,7 +1,7 @@
 \section{Functional Requirements}
 \begin{adjustwidth}{1.5em}{0pt}
 
-  THIS SECTION NEEDS EDITING AND FORMATTING. CAN WE DO A 3.1, 3.1.1, 3.1.2, 3.2... STYLE BULLETING??? OR MAYBE WE CAN BREAK THESE INTO SECTIONS SO EACH a, b, c, LISTING GETS ITS OWN NUMBER, THUS THE REQ COUNT WITH INCREASE. MICROSOFT WORD HAS NEVER SEEMED SO \st{WONDERFUL} \textbf{horrible} TO ME:)\\
+  %THIS SECTION NEEDS EDITING AND FORMATTING. CAN WE DO A 3.1, 3.1.1, 3.1.2, 3.2... STYLE BULLETING??? OR MAYBE WE CAN BREAK THESE INTO SECTIONS SO EACH a, b, c, LISTING GETS ITS OWN NUMBER, THUS THE REQ COUNT WITH INCREASE. MICROSOFT WORD HAS NEVER SEEMED SO \st{WONDERFUL} \textbf{horrible} TO ME:)\\
 
   \newlist{mainlist}{enumerate}{1}
   \setlist[mainlist]{label=3.\arabic*}
@@ -9,34 +9,35 @@
   \newlist{sub}{enumerate}{1}
   \setlist[sub]{label=3.1.\arabic*:}
 
-  \begin{mainlist}
-	
+  %\begin{mainlist}
+  \begin{enumerate}[label=3.\arabic*]	
 		\item The system shall allow users to manage their imported wallets or public keys
-		\begin{sub}
+      \begin{enumerate}[label*=.\arabic*.]
 			\item Users shall be able to add new single address wallets into the system
 			\item Users shall be able to edit previously existing wallets
 			\item Users shall be able to delete existing wallets from the system
 			\item Users shall be able to name individual wallets and assign them to a group
 			\item The system should be designed to allow for future integration with other wallet types such as deterministic seed wallets or service based wallets such as Coinbase and Circle
-		\end{sub}
+    \end{enumerate}
+	%	\end{sub}
 		
 		\item The system shall allow users to customize wallet groups
-		\begin{itemize}
+      \begin{enumerate}[label*=.\arabic*.]
 			\item System shall designate a default wallet group
 			\item Users shall be able to add new wallet groups by name
 			\item Users shall be able to edit previously existing group names
 			\item Users shall be able to delete existing wallet groups, an action that should reassign all wallets associated with the group to the default group
-		\end{itemize}
+		\end{enumerate}
 		
 		\item The system shall allow users to manage transaction tag categories
-		\begin{enumerate}
+      \begin{enumerate}[label*=.\arabic*.]
 			\item User shall be able to define new tag categories by name
 			\item User shall be able to edit existing tag categories
 			\item User shall be able to delete existing tag categories, an action that should remove the tag from any transactions it has been assigned to
 		\end{enumerate}
 		
 		\item The system shall allow users to manage tags for individual transactions
-		\begin{enumerate}
+      \begin{enumerate}[label*=.\arabic*.]
 			\item User shall be able to add a tag to an individual transaction
 			\item User shall be able to remove a tag from an individual transaction
 		\end{enumerate}
@@ -52,7 +53,7 @@
 		\item System shall provide a transactions detail view for each individual wallet that lists its transactions
 		
 		\item System shall provide graphical charts for identifying transaction trends
-		\begin{enumerate}
+      \begin{enumerate}[label*=.\arabic*.]
 			\item System shall provide pie charts views breaking down transaction percentage by tag for all wallet groups and for individual wallets
 			\item System should provide additional trend identifying charts for wallet groups and individual wallets
 		\end{enumerate}
@@ -63,7 +64,9 @@
 		
 		\item The system should allow users to passcode protect the application
 		
-	\end{mainlist}
+%	\end{mainlist}
+\end{enumerate}
+
 
 	
 \end{adjustwidth}
