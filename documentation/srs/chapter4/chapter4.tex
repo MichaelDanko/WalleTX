@@ -1,14 +1,19 @@
 \section{Non-Functional Requirements}
-Query and reporting times - this will be dependent on the end users RAM and processor speed. Also database placement and architecture. Must account for moderate processor speeds and run on little as RAM as possible. Android Framework provides tools to test and profile CPU and RAM usage. 
 
-Storage - this will be dependent on the end users storage memory on the phone. Must have small footprint on phone’s storage. Need to compare application size for similar available applications to scope size. 
 
-Response time (between activities) - this will be dependent on the end users RAM and design of UI.  Must account for low RAM and optimize UI for quick activity. This evaluation will fall under query and reporting time. 
+\begin{enumerate}[label=4.\arabic*] 
 
-Screen Resolution - dependent on end users phone. Must find resolution to work on most phones. (font, layout tweaks, image changes)
+\item Query and reporting times - this will be dependent on the end users RAM and processor speed. Also database placement and architecture. Must account for moderate processor speeds and run on little as RAM as possible. Android Framework provides tools to test and profile CPU and RAM usage.i Querying the blockchain will be done via the Blockchain API and speed to return a query will be dependent on outside services and network connection speed.
 
-Versions - Need to specify and target revision to reach optimal user targets. Evaluated by most popular revision available or with best compared resources. 
+\item Storage - this will be dependent on the end users storage memory on the phone. Must have small footprint on phone’s storage. Need to compare application size for similar available applications to scope size. Records will be stored locally to prevent repeated connections ot the blockchain network for duplicatin information. Records and their added tagging information will probably be measured in hunders of bytes meaning that the storage footprint will be very reasonable.
 
-No system downtime - All updates to the app will be done through Android updates pushed through Google Play Store. Standard update process for life of application on Android platform. 
+\item Response time (between activities) - this will be dependent on the end users RAM and design of UI.  Must account for low RAM and optimize UI for quick activity. This evaluation will fall under query and reporting time. 
 
-Battery Usage - this will be dependent on the end users battery size, installed applications, and screen size. Must try to minimize battery drain. Need to evaluate against controls to test battery usage. 
+\item Screen Resolution - dependent on end users phone. Must find resolution to work on most phones. (font, layout tweaks, image changes)
+
+\item Versions - Need to specify and target revision to reach optimal user targets. Evaluated by most popular revision available or with best compared resources. 
+
+\item No system downtime - All updates to the app will be done through Android updates pushed through Google Play Store. Standard update process for life of application on Android platform. 
+
+\item Battery Usage - this will be dependent on the end users battery size, installed applications, and screen size. Must try to minimize battery drain. Need to evaluate against controls to test battery usage. 
+\end{enumerate}
