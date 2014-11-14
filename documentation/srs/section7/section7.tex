@@ -19,15 +19,19 @@ Identifying actors:\\
 
 Actors will be the customer/user of the application.  Most interested in our application would be those interested in Bitcoin. Service and maintenance of the system will be performed by the developers(Prestige Worldwide). Systems external resources will be blockchain, SQLite, and other external wallets providing information. (Michael and Brian please confirm external resources of Bitcoin)
 
-    \subsubsection{Use Case Descriptions}
-    \begin{figure}[H]
-      \centering
-      \includegraphics[scale=0.6]{../diagrams/usecase_3_1.png}
-      \caption{Managing User Wallets}
-    \end{figure}
+  \subsubsection{Use Case Descriptions}
 
+  %-----------------------------------------------
+  % Use case 3.1 : Managing User Wallets
+  %-----------------------------------------------
 
- % -- Use Case : Add Wallet
+  \begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{../diagrams/usecase_3_1.png}
+    \caption{Managing User Wallets}
+  \end{figure}
+
+  % -- Use Case : Add Wallet
   \begin{table}[H]
     \centering
     \resizebox{0.8\columnwidth}{!}{%
@@ -51,12 +55,12 @@ Actors will be the customer/user of the application.  Most interested in our app
 
       \taburowcolors 1{green .. green}
       \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.1}}}}\\
-\hline
+      \hline
     \end{tabu}%
   }
   \end{table}
 
- % -- Use Case : Modify Wallet
+  % -- Use Case : Modify Wallet
   \begin{table}[H]
     \centering
     \resizebox{0.8\columnwidth}{!}{%
@@ -81,7 +85,7 @@ Actors will be the customer/user of the application.  Most interested in our app
   }
   \end{table}
 
- % -- Use Case : Remove Wallet
+  % -- Use Case : Remove Wallet
   \begin{table}[H]
     \tabulinesep=1.2mm
     \centering
@@ -105,6 +109,159 @@ Actors will be the customer/user of the application.  Most interested in our app
     \end{tabu}%
   }
   \end{table}
+
+  %-----------------------------------------------
+  % Use case 3.2 : Managing wallet groups
+  %-----------------------------------------------
+
+  %-----------------------------------------------
+  % Use case 3.3 : Managing tx tag categories
+  %-----------------------------------------------
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{../diagrams/usecase_3_3.png}
+    \caption{Managing Transaction Tag Categories}
+  \end{figure}
+
+  % -- Use Case 3.3 : View all tag categories
+  \begin{table}[H]
+    \tabulinesep=1.2mm
+    \centering
+    \resizebox{0.8\columnwidth}{!}{%
+    \rowcolors{2}{gray!25}{white}
+    \begin{tabu}{r | X}
+      \rowfont{\color{black}}
+      \taburulecolor{black}
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{l}{\textbf{\textsf{WalleTx: View all transaction tag categories}}}\\
+      \hline
+      \taburowcolors 2{light-gray .. white}
+      Actors & 
+        User, SQLite Database\\
+      Description & 
+        User is presented with a list view of all tags with options to: (1) Add a new tag, (2) Edit a tag, and (3) Delete a tag\\
+      Data & 
+        Tags categories\\
+      Stimulus & 
+        User initiated option. User selects Tx Tags from the menu\\
+      Response & 
+        Application opens CRUDTagsActivity and populates the list view with all tags in the Tag table\\
+      Comments & 
+        This is entry point for user to add, edit and delete tags\\
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \hline
+    \end{tabu}%
+  }
+  \end{table}
+
+  % -- Use Case 3.3.1 : Add tag category
+  \begin{table}[H]
+    \tabulinesep=1.2mm
+    \centering
+    \resizebox{0.8\columnwidth}{!}{%
+    \rowcolors{2}{gray!25}{white}
+    \begin{tabu}{r | X}
+      \rowfont{\color{black}}
+      \taburulecolor{black}
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Add transaction tag category}}}\\
+      \hline
+      \taburowcolors 2{light-gray .. white}
+      Actors & 
+        User, SQLite Database\\
+      Description & 
+        User adds a new tag category (by name) to the application\\
+      Data & 
+        Tag category name\\
+      Stimulus & 
+        User initiated option\\
+      Response & 
+        A dialog will open containing: (1) a text field for entering the new tag category, (2) a Cancel button, (3) and an Add button. If Add is selected, user entered tag category is inserted into the Tag table and user is returned to the CRUDTagsActivity. If cancel is selected, user is returned to the CRUDTagsActivity.\\
+      Comments & 
+        Response should validate for empty tag name. CRUDTagsActivity UI must be updated upon successful insertion of a new tag category\\
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \hline
+    \end{tabu}%
+  }
+  \end{table}
+
+  % -- Use Case 3.3.2 : Edit tag category
+  \begin{table}[H]
+    \tabulinesep=1.2mm
+    \centering
+    \resizebox{0.8\columnwidth}{!}{%
+    \rowcolors{2}{gray!25}{white}
+    \begin{tabu}{r | X}
+      \rowfont{\color{black}}
+      \taburulecolor{black}
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Edit transaction tag category}}}\\
+      \hline
+      \taburowcolors 2{light-gray .. white}
+      Actors & 
+        User, SQLite Database\\
+      Description & 
+        User edits an existing tag category\\
+      Data & 
+        Tag category name\\
+      Stimulus & 
+        User initiated option. User selects edit button from tags list view.\\
+      Response & 
+        A dialog will open containing: (1) an edit text field for updating tag category, (2) a Cancel button, (3) and an Edit button. If Edit is selected, the tag is updated in the Tag table and user is returned to the CRUDTagsActivity. If cancel is selected, user is returned to the CRUDTagsActivity.\\
+      Comments & 
+        Response should validate for empty tag name. CRUDTagsActivity UI must be updated upon successful update of a tag category\\
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \hline
+    \end{tabu}%
+  }
+  \end{table}
+
+  % -- Use Case 3.3.3 : Delete tag category
+  \begin{table}[H]
+    \tabulinesep=1.2mm
+    \centering
+    \resizebox{0.8\columnwidth}{!}{%
+    \rowcolors{2}{gray!25}{white}
+    \begin{tabu}{r | X}
+      \rowfont{\color{black}}
+      \taburulecolor{black}
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Delete transaction tag category}}}\\
+      \hline
+      \taburowcolors 2{light-gray .. white}
+      Actors & 
+        User, SQLite Database\\
+      Description & 
+        User deletes an existing tag category\\
+      Data & 
+        Tag category name\\
+      Stimulus & 
+        User initiated option. User selects delete button from tags list view.\\
+      Response & 
+        A dialog will open confirming if user wishes to delete the tag. If confirmed, the tag must be removed from any transactions onto which it is applied and then removed from the Tags table. User is then returned to the CRUDTagsActivity.\\
+      Comments & 
+        CRUDTagsActivity UI must be updated upon successful update of a tag category\\
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \hline
+    \end{tabu}%
+  }
+  \end{table}
+
+  %-----------------------------------------------
+  % Use case 3.4 : Tagging transactions
+  %-----------------------------------------------
+
+
+
+
+
+
+
 
     \begin{figure}[ht]
       \includegraphics[width=1.0\textwidth]{./section7/diagrams/use-case-backup.png}
