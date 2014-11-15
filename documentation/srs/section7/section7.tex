@@ -113,7 +113,141 @@ Actors will be the customer/user of the application.  Most interested in our app
   %-----------------------------------------------
   % Use case 3.2 : Managing wallet groups
   %-----------------------------------------------
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{../diagrams/usecase_3_2.png}
+    \caption{Managing Wallet Groups}
+  \end{figure}
+  
+  % -- Use Case 3.2 : View all wallet groups 
+  \begin{table}[H]
+    \tabulinesep=1.2mm
+    \centering
+    \resizebox{0.8\columnwidth}{!}{%
+    \rowcolors{2}{gray!25}{white}
+    \begin{tabu}{r | X}
+      \rowfont{\color{black}}
+      \taburulecolor{black}
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{l}{\textbf{\textsf{WalleTx: View all transaction tag categories}}}\\
+      \hline
+      \taburowcolors 2{light-gray .. white}
+      Actors & 
+        User, SQLite Database\\
+      Description & 
+        User is presented with a list view of wallet groups with options to: (1) Add a new wallet group, (2) Edit a wallet group, and (3) Delete a wallet group\\
+      Data & 
+        Wallet group categories\\
+      Stimulus & 
+        User initiated option. User selects Wallet Groups from the menu\\
+      Response & 
+        Application opens CRUDGroupActivity and populates the list view with all the groups in the group table\\
+      Comments & 
+        This is entry point for user to add, edit and delete wallet groups\\
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \hline
+    \end{tabu}%
+  }
+  \end{table}
 
+  % -- Use Case 3.2.2 : Add New Wallet Group 
+  \begin{table}[H]
+    \tabulinesep=1.2mm
+    \centering
+    \resizebox{0.8\columnwidth}{!}{%
+    \rowcolors{2}{gray!25}{white}
+    \begin{tabu}{r | X}
+      \rowfont{\color{black}}
+      \taburulecolor{black}
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Add wallet group category}}}\\
+      \hline
+      \taburowcolors 2{light-gray .. white}
+      Actors & 
+        User, SQLite Database\\
+      Description & 
+        User adds a new wallet group (by name) to the application\\
+      Data & 
+        Wallet group name\\
+      Stimulus & 
+        User initiated option\\
+      Response & 
+        A dialog will open containing: (1) a text field for entering the new wallet group, (2) a Cancel button, (3) and an Add button. If Add is selected, user entered wallet group name is inserted into the Wallet Group table and user is returned to the CRUDGroupActivity. If cancel is selected, user is returned to the CRUDGroupActivity.\\
+      Comments & 
+        Response should validate for empty wallet group name. CRUDGroupActivity UI must be updated upon successful insertion of a new tag category\\
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \hline
+    \end{tabu}%
+  }
+  \end{table}
+
+  % -- Use Case 3.2.3 : Edit Wallet Group
+  \begin{table}[H]
+    \tabulinesep=1.2mm
+    \centering
+    \resizebox{0.8\columnwidth}{!}{%
+    \rowcolors{2}{gray!25}{white}
+    \begin{tabu}{r | X}
+      \rowfont{\color{black}}
+      \taburulecolor{black}
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Edit wallet group category}}}\\
+      \hline
+      \taburowcolors 2{light-gray .. white}
+      Actors & 
+        User, SQLite Database\\
+      Description & 
+        User edits an existing wallet group\\
+      Data & 
+        Wallet group name\\
+      Stimulus & 
+        User initiated option. User selects edit button from wallet group view.\\
+      Response & 
+        A dialog will open containing: (1) an edit text field for updating wallet group, (2) a Cancel button, (3) and an Edit button. If Edit is selected, the wallet group is updated in the Wallet Group table and user is returned to the CRUDGroupActivity. If cancel is selected, user is returned to the CRUDGroupActivity.\\
+      Comments & 
+        Response should validate for empty wallet group name. CRUDGroupActivity UI must be updated upon successful update of a tag category\\
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \hline
+    \end{tabu}%
+  }
+  \end{table}
+
+  % -- Use Case 3.2.4 : Delete wallet group
+  \begin{table}[H]
+    \tabulinesep=1.2mm
+    \centering
+    \resizebox{0.8\columnwidth}{!}{%
+    \rowcolors{2}{gray!25}{white}
+    \begin{tabu}{r | X}
+      \rowfont{\color{black}}
+      \taburulecolor{black}
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Delete Wallet Group}}}\\
+      \hline
+      \taburowcolors 2{light-gray .. white}
+      Actors & 
+        User, SQLite Database\\
+      Description & 
+        User deletes an existing wallet group\\
+      Data & 
+        Wallet group name\\
+      Stimulus & 
+        User initiated option. User selects delete button from wallet group list view.\\
+      Response & 
+        A dialog will open confirming if user wishes to delete the wallet group. If confirmed, the wallet group must be removed then reassign all wallets associated with deleted group to the default group and then removed from the Wallet Group table. User is then returned to the CRUDGroupActivity.\\
+      Comments & 
+        CRUDGroupActivity UI must be updated upon successful update of the wallet groups\\
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \hline
+    \end{tabu}%
+  }
+  \end{table}
+  
+  
   %-----------------------------------------------
   % Use case 3.3 : Managing tx tag categories
   %-----------------------------------------------
