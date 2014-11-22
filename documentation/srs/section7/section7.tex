@@ -468,7 +468,7 @@ The primary task of the customer/user will be to interact with the application. 
 	
     \subsubsection{Class Descriptions}
       \begin{figure}[H]
-%        \includegraphics[width=1.0\textwidth]{../diagrams/classes.png}
+%        \includegraphics[width=1.0\textwidth]{../diagrams/classes_model.png}
       \end{figure}
 
     \subsubsection{Attribute Descriptions}
@@ -487,6 +487,39 @@ The primary task of the customer/user will be to interact with the application. 
     \end{table}
 
     \subsubsection{Use Case Summary Table}
+	\begin{table}[H]
+      \begin{tabularx}{\textwidth}{r | X}
+        Actor                       & Use-Case Summary\\
+        \hline
+        Customer/End User            & 1. adding a wallet
+									   2. removing a wallet
+									   3. adding a tag to a transaction
+									   4. removing a tag from a transaction
+									   5. viewing all wallets
+									   6. accessing application settings\\
+        Development Team/Maintenance & 1. update revisions
+									   2. maintain database structure\\
+        External Bitcoin Wallets     & 1. update added wallet information
+									   2. provide public key 
+									   3. provide transactions made by wallets\\
+        SQLite Database              & 1. store wallet data
+									   2. wallet data deleted
+									   3. wallet data added
+									   4. provide data for alerts
+									   5. supply data for graphs/charts\\
+        Bitcoin Blockchain           & 1. update wallet/DB transactions
+									   2. provide data for new wallet added\\
+      \end{tabularx}
+    \end{table}
 
     \subsubsection{Screens and Reports with Navigation Matrix}
+	
+	\begin{figure}[H]
+%        \includegraphics[width=1.0\textwidth]{../diagrams/storyboard.png}
+	*Need to create navigation matrix
+	*Need to create Reports
+
+      \end{figure}
+	
+	
   \subsection{Other Appendices}
