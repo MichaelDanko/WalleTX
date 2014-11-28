@@ -21,6 +21,47 @@ Actors will be the customer/user of the application.  Most interested in our app
 
   \subsubsection{Use Case Descriptions}
 
+  
+  %-----------------------------------------------
+  % Use case 3.6 : Aggreate Wallet View
+  %-----------------------------------------------
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{../diagrams/usecase_3_5.png}
+    \caption{Managing User Wallets}
+  \end{figure}
+
+  % -- Use Case : Aggreate Wallet View
+  \begin{table}[H]
+    \centering
+    \resizebox{0.8\columnwidth}{!}{%
+    \tabulinesep=1.2mm
+    \rowcolors{2}{gray!25}{white}
+    \begin{tabu}{| r | X |}
+      \rowfont{\color{black}}
+      \taburulecolor{black}
+      \hline
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{WalleTx: Aggregate Wallet View}}}\\
+      \hline
+
+      \taburowcolors 2{light-gray .. white}
+      Actors & User, SQLite Database, Blockchain API\\
+      Description & User will view an aggregate view of all imported wallets that contains the total balance and number of transactions\\
+      Data & all imported wallets, transaction hashes, and total balance of combined wallets\\
+      Stimulus & User initiated option\\
+      Response & Summary view for all wallets will be displayed showing a list of all imported wallets, total balance and number of transactions.\\
+      Comments & \\
+
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.1}}}}\\
+      \hline
+    \end{tabu}%
+  }
+  \end{table}
+  
+  
   %-----------------------------------------------
   % Use case 3.1 : Managing User Wallets
   %-----------------------------------------------
