@@ -1,5 +1,7 @@
 \section{General Description}
-  WalleTx is an internet connected, bitcoin connected software that is used as a financial managemnt tool. With this software you are able to review a history of spending with the option to categorize individual transactions. 
+  WalleTx is an internet connected, bitcoin connected software that is used as a financial managemnt tool. With this software you are able to review a history of spending with the option to categorize individual transactions.\\
+
+  The bitcoin network is a decentralized peer to peer network of computer systems that utilizes proof of work to create and maintain a database of virtual coins. Transferring these coins is done by authenticating with the system utilizing a type of public/private key authentication. The public key can also be used by other users in the network to as an address if other users with to 'send' you bitcoins. There is no physical ownership of bitcoins, it is merely the ability to sign transactions with your private keys that enable you to control and send bitcoins to other users. The database of transactions between bitcoin accounts is maintained in a database known as a blockchain. The blockchain contains the history of every bitcoin transaction from day 0 to today. Bitcoin miners are responsible for updating the database. On average, a block is mined every 10 minutes and any transactions that happen in that 10 minutes become added to the blockchain forever. In order to mine a block the miners must brute force reverse a hashing problem, in return for their brute force hashing, energy consumption, and proof of work the miner is rewarded with a 25 bitcoins.
   \subsection{Product Perspective}
   WalleTx is dependent on the bitcoin blockchain to source information regarding tranactions amounts, times, and dates. It is possible that manual data entry can be implemented for those transactions however it is assumed the blockchain access will be available at all times. If there is not internet, you cannot spend your bitcoin. Accessing this software will be completed through mobile smartphones with Android operating systems.
   \subsection{Product Functions}
@@ -7,29 +9,16 @@
   \subsection{User Characteristics}
   Users are from a broad spectrum of every day life. It is WalleTx's intention to be available to people of all ages from every corner of the globe. Bitcoin is a global network, with many users from young to old and WalleTx will be usuable by the same demographic.  Anyone who is capable of utilizing bitcoin technology to transact will be able to use WalleTx to manage their financial records. 
   \subsection{General Constraints}
-  The system will be designed by a group of 4 junior developers and this may impose constraints on development. The software will not be constrained by regulatory policies.
+  \begin{itemize}
 
-  To finish
+    \item Regulatory policies - the software currently reads data from a publicly available database known as the blockchain. The software does not transmit or receive bitcoin transactions and is therefore not subject to any monetary regulatory policy.
+    \item Hardware limitations; for example, signal timing requirements - there are no hardware limitations aside from being used on a smartphone with the Android Operating System
+    \item Interface to other applications - the software will interface with other API's to integrate with the bitcoin blockchain to download information.
+    \item Signal handshake protocols - communication with third party applications will take place over TCP/IP.
+    \item Criticality of the application - the application will hold data that is critical to the user and their personal financial planning. Loss of functionality will not result in a loss of access to their funds.
+    \item Safety and security considerations - a loss of the smartphone or exposure of data will result in persons being able to associate a bitcoin address with an individual and potentially exposing their financial history. Loss will not result in a loss of funds.
 
-  (1)  Regulatory policies
+  \end{itemize}
 
-  (2)  Hardware limitations; for example, signal timing requirements
-
-  (3)  Interface to other applications
-
-  (4)  Parallel operation
-
-  (5)  Audit functions
-
-  (6)  Control functions
-
-  (7)  Higher-order language requirements
-
-  (8)  Signal handshake protocols; for example, XON-XOFF, ACK-NACK.
-
-  (9)  Criticality of the application
-
-  (10) Safety and security considerations
   \subsection{Assumptions and Dependencies}
-
   The assumption is that the application will be used on a mobile device. The next assumption is that the mobile device is utilizing the Android operating system. At this time the application will only be able to run on the Android operating system.
