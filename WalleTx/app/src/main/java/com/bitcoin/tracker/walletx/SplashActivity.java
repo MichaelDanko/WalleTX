@@ -2,6 +2,7 @@ package com.bitcoin.tracker.walletx;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 /**
  * SplashActivity is the entry portal for Bitcoin WalleTx.
@@ -17,11 +18,17 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        hideStatusBar();
         setContentView(R.layout.activity_splash);
 
         // TODO - Start service to fetch new tx and price data
         // TODO - Add TaskTimer that redirects to main
 
+    }
+
+    private void hideStatusBar() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
 } // SplashActivity
