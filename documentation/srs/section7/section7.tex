@@ -18,7 +18,7 @@ Identifying actors:\\
 \end{itemize}
 
 Actors will be the customer/user of the application.  Most interested in our application would be those interested in Bitcoin. Service and maintenance of the system will be performed by the developers(Prestige Worldwide). Systems external resources will be blockchain, SQLite, and other external wallets providing information. (Michael and Brian please confirm external resources of Bitcoin)
-
+\clearpage
   \subsubsection{Use Case Descriptions}
 
   
@@ -55,12 +55,12 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & \\
 
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.1}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.7}}}}\\
       \hline
     \end{tabu}%
   }
   \end{table}
-  
+  \clearpage 
   
   %-----------------------------------------------
   % Use case 3.1 : Managing User Wallets
@@ -95,7 +95,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & \\
 
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.1}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.8}}}}\\
       \hline
     \end{tabu}%
   }
@@ -122,6 +122,9 @@ Actors will be the customer/user of the application.  Most interested in our app
       Stimulus & User initiated option\\
       Response & View will open allowing the user to change the name of the wallet.\\
       Comments & Changing the wallet address would only serve to change all the underlying transactions, therefore it may be a better idea to only allow adding or removing public wallet addresses to manipulate public wallet address data in the database. Other features not implemented by the Bitcoin blockchain, such as currency pair, wallet nickname, etc. can be modified here.\\
+      \taburowcolors{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.8}}}}\\
+
     \end{tabu}%
   }
   \end{table}
@@ -147,6 +150,9 @@ Actors will be the customer/user of the application.  Most interested in our app
       Stimulus & User initiated option\\
       Response & Dialog will pop up allowing the user to confirm (possibly have a text input required to continue) and when confirmed the data will be purged from the database.\\
       Comments & \\
+      \taburowcolors{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.8}}}}\\
+
     \end{tabu}%
   }
   \end{table}
@@ -186,7 +192,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         This is entry point for user to add, edit and delete wallet groups\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.9}}}}\\
       \hline
     \end{tabu}%
   }
@@ -218,7 +224,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         Response should validate for empty wallet group name. CRUDGroupActivity UI must be updated upon successful insertion of a new tag category\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.9}}}}\\
       \hline
     \end{tabu}%
   }
@@ -250,7 +256,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         Response should validate for empty wallet group name. CRUDGroupActivity UI must be updated upon successful update of a tag category\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.9}}}}\\
       \hline
     \end{tabu}%
   }
@@ -282,7 +288,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         CRUDGroupActivity UI must be updated upon successful update of the wallet groups\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.9}}}}\\
       \hline
     \end{tabu}%
   }
@@ -325,7 +331,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         This is entry point for user to add, edit and delete tags\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.10}}}}\\
       \hline
     \end{tabu}%
   }
@@ -357,7 +363,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         Response should validate for empty tag name. CRUDTagsActivity UI must be updated upon successful insertion of a new tag category\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.10}}}}\\
       \hline
     \end{tabu}%
   }
@@ -389,7 +395,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         Response should validate for empty tag name. CRUDTagsActivity UI must be updated upon successful update of a tag category\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.10}}}}\\
       \hline
     \end{tabu}%
   }
@@ -415,7 +421,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Response & A dialog will open confirming if user wishes to delete the tag. If confirmed, the tag must be removed from any transactions onto which it is applied and then removed from the Tags table. User is then returned to the CRUDTagsActivity.\\
       Comments & CRUDTagsActivity UI must be updated upon successful update of a tag category\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.10}}}}\\
       \hline
     \end{tabu}%
   }
@@ -554,10 +560,36 @@ The primary task of the customer/user will be to interact with the application. 
     \end{table}
 
     \subsubsection{Screens and Reports with Navigation Matrix}
-	
+
+  \begin{figure}[H]
+     \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_master.png}
+  \end{figure}
+  \begin{figure}[H]
+     \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_splash.png}
+  \end{figure}
 	\begin{figure}[H]
-     \includegraphics[width=1.0\textwidth]{../diagrams/storyboard.png}
-      \end{figure}
+     \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_main.png}
+  \end{figure}
+  \begin{figure}[H]
+     \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_summary.png}
+  \end{figure}
+  \begin{figure}[H]
+    \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_txs.png}
+  \end{figure}
+  \begin{figure}[H]
+    \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_txDetails.png}
+  \end{figure}
+  \begin{figure}[H]
+    \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_CRUDgroupTag_1.png}
+  \end{figure}
+  \begin{figure}[H]
+    \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_CRUDgroupTag_2.png}
+  \end{figure}
+
+  \begin{figure}[H]
+     \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_CRUDwallet.png}
+  \end{figure}
+  
 	*Need to create navigation matrix
 	*Need to create Reports
 	
