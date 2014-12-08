@@ -1,8 +1,10 @@
-package com.bitcoin.tracker.walletx;
+package com.bitcoin.tracker.walletx.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.WindowManager;
+
+import com.bitcoin.tracker.walletx.R;
 
 /**
  * SplashActivity is the entry portal for Bitcoin WalleTx.
