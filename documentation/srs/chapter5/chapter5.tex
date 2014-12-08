@@ -12,25 +12,25 @@
 The application will be accessed and stored on an Android phone.  The user will interact with application using touch screen.\\
 \begin{itemize}
 \item Environment is mobile, can be used anywhere 
-\item Users will have an existing bitcoin account(s)
+\item Users will have existing bitcoin address(es)
 \item Main functions consist of storing and organizing bitcoin wallet(s) information and displaying data
-\item Input is users bitcoin account(s), output is data organization and customization\\
+\item Input is users bitcoin address(es), output is data organization and customization\\
 \end{itemize}
 
 %--------Logical Overview
 \textbf{Logical Overview:}\\
 
 \begin{itemize}
-\item Utilizing Android OS on mobile phones (rev to be determined), developing in Android SDK framework using JAVA
+\item Utilizing Android OS on mobile phones (minimum Android SDK v4.0 Ice Cream Sandwich), developing in Android SDK framework using JAVA
 \item Data storage will be local, utilizing SQLite
-\item Data gathered form account(s) using blockchain and bitcoin API
+\item Data gathered form bitcoin address(es) using blockchain and bitcoin API
 \item IDE will Google's Android Studio\\
 \end{itemize}
 	
 %-------- UI/Activities Description
 \textbf{UI/Activities:}\\
 \begin{itemize}
-\item Will be designed using Android SDK standards kn XML mark-up 
+\item Will be designed using Android SDK standards in XML mark-up 
 \item Purpose provides interaction with end user
 \item Interactions include end user input and data binding with back-end/server manager\\
 \end{itemize}
@@ -38,7 +38,7 @@ The application will be accessed and stored on an Android phone.  The user will 
 %--------- Back-end/Server Description
 \textbf{Back-end/Server manager:}\\
 \begin{itemize}
-\item Will be designed using Android SDK standards in JAVA
+\item Will be designed using Android SDK standards in Java
 \item Purpose provides interaction between database, blockchain, bitcoin API, and UI/Activities
 \item Data binding will occur in this area
 \item Interactions include data management, activities controller, and external data management\\
@@ -56,9 +56,9 @@ The application will be accessed and stored on an Android phone.  The user will 
 \textbf{Blockchain/Bitcoin:}\\
 \begin{itemize}
 \item Bitcoin interaction in application will be limited to API interaction and blockchain interaction
-\item Will not need to be designed. Will be managed by Back-end/Server
+\item Will not need to be designed. Will be managed by Back-end/Server and BitcoinJ libraries.
 \item Purpose is to provide data and information from blockchain and user's existing bitcoin account(s)
-\item Interactions will occur with Back-end/Server\\
+\item Interactions will occur with designated API services.\\
 \end{itemize}
 
 

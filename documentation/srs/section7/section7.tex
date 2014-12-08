@@ -6,18 +6,18 @@
   \subsection{Data Dictionary}
     \subsubsection{Actor Descriptions}
 
-    
-Identifying actors:\\
-\begin{itemize}
-  \item Who will supply, use, or remove information from the system?
-  \item Who will use the system?
-  \item Who is interested in a certain feature or service provided by the system?
-  \item Who will support and maintain the system?
-  \item What are the system's external resources?
-  \item What other systems will need to interact with the system under development?
-\end{itemize}
+App users will be the primary actors of the application and they will generally fit into the same category. Users will want to interface with the application to allow it to pull their transaction history from the blockchain so that they can categorize their data. Professional financial management entities could conceivably use data created from our software and if time permits we will implement data formatting to work in conjunction with popular financial planning systems and software. 
 
-Actors will be the customer/user of the application.  Most interested in our application would be those interested in Bitcoin. Service and maintenance of the system will be performed by the developers(Prestige Worldwide). Systems external resources will be blockchain, SQLite, and other external wallets providing information. (Michael and Brian please confirm external resources of Bitcoin)
+Users will supply their information, such as bitcoin addresses and spending categories, this will allow them to graph their data, maintain balances, and users will also be able to delete all of their own data. 
+
+Individuals who own and spend bitcoin will be most interested in using our app. Financial management and planning is an important part of financial responsibilty and a ledger to report spending habits will be of use to many members of the bitcoin community.
+
+Support and maintenance of the system is mostly the users responsibility. Maintaining the hardware is the responsibility of the user, maintaining the operating system and related libraries will be the responsibility of Google and the phone manugacturer. Maintaining the software will primarily be done by Prestige Worldwide while any sub libraries and related software support will be maintained by their software development teams.
+
+The system will use blockchain APIs provided by a number of providers. Many of the APIs are free and there is even an option to run our own server, utilizing open source software to interface with the blockchain and provide API services to our app users. Final design and implementation will be decided on time to implement and performance to the user metric.
+
+No other systems will be dependent on our app. Therefore no functionality is critical for any downstream applications.
+
 \clearpage
   \subsubsection{Use Case Descriptions}
 
@@ -432,85 +432,113 @@ Actors will be the customer/user of the application.  Most interested in our app
   %-----------------------------------------------
 
     \begin{figure}[ht]
-      \includegraphics[width=1.0\textwidth]{../diagrams/use-case-backup.png}
+      \centering
+      \includegraphics[width=0.6\textwidth]{../diagrams/use-case-backup.png}
+      \caption{Backup Data}
     \end{figure}
 
 \begin{table}[H]
   \tabulinesep=1.2mm
       \rowcolors{2}{gray!25}{white}
+      \centering
+      \resizebox{0.8\columnwidth}{!}{%
+
       \begin{tabu}{r | X}
         \rowfont{\color{black}}
-        \taburulecolor{white}
-        \taburowcolors 2{light-gray .. white}
+        \taburulecolor{black}
+        \taburowcolors 1{green .. green}
+
         \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Backup Data}}}\\
         \hline
+        \taburowcolors 2{light-gray .. white}
+
         \textsf{Actors} & User\\
         Description & A user will be able to backup all wallet information, transaction hashes, and tags associate with those transactions to an XML or JSON file.\\
         Data & public wallet identification, transaction hashes, tags associate with transactions\\
         Stimulus & User initiates a data backup\\
         Response & Dialog box will confirm backup\\
         Comments & Is there any additional data that needs to be backed up? Where will the database backup be stored?\\
-      \end{tabu}
+        \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.11}}}}\\
+      \hline
+
+      \end{tabu}%
+    }
     \end{table}
 
 	
-    \begin{figure}[ht]
-      \includegraphics[width=1.0\textwidth]{../diagrams/usecase_3_6.png}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.8\textwidth]{../diagrams/usecase_3_6.png}
+      \caption{Wallet Summary View}
     \end{figure}
 
 \begin{table}[H]
   \tabulinesep=1.2mm
       \rowcolors{2}{gray!25}{white}
+      \centering
+      \resizebox{0.8\columnwidth}{!}{%
+
       \begin{tabu}{r | X}
         \rowfont{\color{black}}
         \taburulecolor{white}
-        \taburowcolors 2{light-gray .. white}
+        \taburowcolors 2{green .. green}
         \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Wallet Group Summary View}}}\\
         \hline
+        \taburowcolors 2{light-gray .. white}
         \textsf{Actors} & User\\
         Description & A user will be able to view a summary of all balances and transactions from created groups.\\
         Data & transactions and current balances within the wallet groups.\\
         Stimulus & User initiates summary view.\\
         Response & A detailed summary is presented to the user.\\
         Comments & The details can be refreshed as often as requested by the user.\\
-      \end{tabu}
+        \taburowcolors 1{green .. green}
+        \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.12}}}}\\
+      \end{tabu}%
+    }
     \end{table}
 	
-    \begin{figure}[ht]
-      \includegraphics[width=1.0\textwidth]{../diagrams/usecase_3_7.png}
-    \end{figure}
+   % \begin{figure}[H]
+   %   \includegraphics[width=1.0\textwidth]{../diagrams/usecase_3_7.png}
+   % \end{figure}
 
 \begin{table}[H]
   \tabulinesep=1.2mm
       \rowcolors{2}{gray!25}{white}
+      \centering
+      \resizebox{0.8\columnwidth}{!}{%
       \begin{tabu}{r | X}
         \rowfont{\color{black}}
         \taburulecolor{white}
-        \taburowcolors 2{light-gray .. white}
+        \taburowcolors 2{green .. green}
         \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Individual Wallet Summary View}}}\\
         \hline
+        \taburowcolors 2{light-gray .. white}
         \textsf{Actors} & User\\
         Description & A user will be able to view a summary of all balances and transactions from individual wallets.\\
         Data & transactions and current balances within the wallets.\\
         Stimulus & User initiates summary view.\\
         Response & A detailed summary is presented to the user.\\
         Comments & The details can be refreshed as often as requested by the user.\\
-      \end{tabu}
+        \taburowcolors 1{green .. green}
+        \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.12}}}}\\
+      \end{tabu}%
+    }
     \end{table}
 
-Identifying use cases:\\
-\begin{itemize}
-\item What are the goals that the actor will attempt to accomplish with the system?
-\item What are the primary tasks that the actor wants the system to perform?
-\item Will the actor create, store, change, remove, or read data in the system?
-\item Will the actor need to inform the system about sudden external changes?
-\item Does the actor need to be informed about certain occurrences, such as unavailability of a network resource, in the system?
-\item Will the actor perform a system startup or shutdown?
-\end{itemize}
+%Identifying use cases:\\
+%\begin{itemize}
+%\item What are the goals that the actor will attempt to accomplish with the system?
+%\item What are the primary tasks that the actor wants the system to perform?
+%\item Will the actor create, store, change, remove, or read data in the system?
+%\item Will the actor need to inform the system about sudden external changes?
+%\item Does the actor need to be informed about certain occurrences, such as unavailability of a network resource, in the system?
+%\item Will the actor perform a system startup or shutdown?
+%\end{itemize}
 
-Use cases will be outlined in diagrams provided.\\ 
+%Use cases will be outlined in diagrams provided.\\ 
 
-The primary task of the customer/user will be to interact with the application.  Their main purpose will be to monitor their bitcoin currency from multiple wallets and tag transactions to better organize all transactions.  The actor will have the ability to add and remove wallets/add and remove tags pertaining to transactions. The actor can observe aggregate information in the form of graphs, charts, etc.  The actor will be alerted to certain trigger events. (updated wallet info, specific transactions, etc).  The actor has the ability to close and open application in running OS and also has the ability to completely remove the application from existing OS. \\
+%The primary task of the customer/user will be to interact with the application.  Their main purpose will be to monitor their bitcoin currency from multiple wallets and tag transactions to better organize all transactions.  The actor will have the ability to add and remove wallets/add and remove tags pertaining to transactions. The actor can observe aggregate information in the form of graphs, charts, etc.  The actor will be alerted to certain trigger events. (updated wallet info, specific transactions, etc).  The actor has the ability to close and open application in running OS and also has the ability to completely remove the application from existing OS. \\
 	
 	
     \subsubsection{Class Descriptions}
