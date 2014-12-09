@@ -6,19 +6,19 @@
   \subsection{Data Dictionary}
     \subsubsection{Actor Descriptions}
 
-    
-Identifying actors:\\
-\begin{itemize}
-  \item Who will supply, use, or remove information from the system?
-  \item Who will use the system?
-  \item Who is interested in a certain feature or service provided by the system?
-  \item Who will support and maintain the system?
-  \item What are the system's external resources?
-  \item What other systems will need to interact with the system under development?
-\end{itemize}
+App users will be the primary actors of the application and they will generally fit into the same category. Users will want to interface with the application to allow it to pull their transaction history from the blockchain so that they can categorize their data. Professional financial management entities could conceivably use data created from our software and if time permits we will implement data formatting to work in conjunction with popular financial planning systems and software. 
 
-Actors will be the customer/user of the application.  Most interested in our application would be those interested in Bitcoin. Service and maintenance of the system will be performed by the developers(Prestige Worldwide). Systems external resources will be blockchain, SQLite, and other external wallets providing information. (Michael and Brian please confirm external resources of Bitcoin)
+Users will supply their information, such as bitcoin addresses and spending categories, this will allow them to graph their data, maintain balances, and users will also be able to delete all of their own data. 
 
+Individuals who own and spend bitcoin will be most interested in using our app. Financial management and planning is an important part of financial responsibility and a ledger to report spending habits will be of use to many members of the bitcoin community.
+
+Support and maintenance of the system is mostly the users responsibility. Maintaining the hardware is the responsibility of the user, maintaining the operating system and related libraries will be the responsibility of Google and the phone manufacturer. Maintaining the software will primarily be done by Prestige Worldwide while any sub libraries and related software support will be maintained by their software development teams.
+
+The system will use blockchain APIs provided by a number of providers. Many of the APIs are free and there is even an option to run our own server, utilizing open source software to interface with the blockchain and provide API services to our app users. Final design and implementation will be decided on time to implement and performance to the user metric.
+
+No other systems will be dependent on our app. Therefore no functionality is critical for any downstream applications.
+
+\clearpage
   \subsubsection{Use Case Descriptions}
 
   
@@ -55,12 +55,12 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & \\
 
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.1}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.7}}}}\\
       \hline
     \end{tabu}%
   }
   \end{table}
-  
+  \clearpage 
   
   %-----------------------------------------------
   % Use case 3.1 : Managing User Wallets
@@ -95,7 +95,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & \\
 
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.1}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.8}}}}\\
       \hline
     \end{tabu}%
   }
@@ -122,6 +122,9 @@ Actors will be the customer/user of the application.  Most interested in our app
       Stimulus & User initiated option\\
       Response & View will open allowing the user to change the name of the wallet.\\
       Comments & Changing the wallet address would only serve to change all the underlying transactions, therefore it may be a better idea to only allow adding or removing public wallet addresses to manipulate public wallet address data in the database. Other features not implemented by the Bitcoin blockchain, such as currency pair, wallet nickname, etc. can be modified here.\\
+      \taburowcolors{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.8}}}}\\
+
     \end{tabu}%
   }
   \end{table}
@@ -147,6 +150,9 @@ Actors will be the customer/user of the application.  Most interested in our app
       Stimulus & User initiated option\\
       Response & Dialog will pop up allowing the user to confirm (possibly have a text input required to continue) and when confirmed the data will be purged from the database.\\
       Comments & \\
+      \taburowcolors{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.8}}}}\\
+
     \end{tabu}%
   }
   \end{table}
@@ -186,7 +192,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         This is entry point for user to add, edit and delete wallet groups\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.9}}}}\\
       \hline
     \end{tabu}%
   }
@@ -218,7 +224,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         Response should validate for empty wallet group name. CRUDGroupActivity UI must be updated upon successful insertion of a new tag category\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.9}}}}\\
       \hline
     \end{tabu}%
   }
@@ -250,7 +256,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         Response should validate for empty wallet group name. CRUDGroupActivity UI must be updated upon successful update of a tag category\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.9}}}}\\
       \hline
     \end{tabu}%
   }
@@ -282,7 +288,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         CRUDGroupActivity UI must be updated upon successful update of the wallet groups\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.9}}}}\\
       \hline
     \end{tabu}%
   }
@@ -325,7 +331,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         This is entry point for user to add, edit and delete tags\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.10}}}}\\
       \hline
     \end{tabu}%
   }
@@ -357,7 +363,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         Response should validate for empty tag name. CRUDTagsActivity UI must be updated upon successful insertion of a new tag category\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.10}}}}\\
       \hline
     \end{tabu}%
   }
@@ -389,7 +395,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Comments & 
         Response should validate for empty tag name. CRUDTagsActivity UI must be updated upon successful update of a tag category\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.10}}}}\\
       \hline
     \end{tabu}%
   }
@@ -415,7 +421,7 @@ Actors will be the customer/user of the application.  Most interested in our app
       Response & A dialog will open confirming if user wishes to delete the tag. If confirmed, the tag must be removed from any transactions onto which it is applied and then removed from the Tags table. User is then returned to the CRUDTagsActivity.\\
       Comments & CRUDTagsActivity UI must be updated upon successful update of a tag category\\
       \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.3}}}}\\
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.10}}}}\\
       \hline
     \end{tabu}%
   }
@@ -426,85 +432,113 @@ Actors will be the customer/user of the application.  Most interested in our app
   %-----------------------------------------------
 
     \begin{figure}[ht]
-      \includegraphics[width=1.0\textwidth]{../diagrams/use-case-backup.png}
+      \centering
+      \includegraphics[width=0.6\textwidth]{../diagrams/use-case-backup.png}
+      \caption{Backup Data}
     \end{figure}
 
 \begin{table}[H]
   \tabulinesep=1.2mm
       \rowcolors{2}{gray!25}{white}
+      \centering
+      \resizebox{0.8\columnwidth}{!}{%
+
       \begin{tabu}{r | X}
         \rowfont{\color{black}}
-        \taburulecolor{white}
-        \taburowcolors 2{light-gray .. white}
+        \taburulecolor{black}
+        \taburowcolors 1{green .. green}
+
         \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Backup Data}}}\\
         \hline
+        \taburowcolors 2{light-gray .. white}
+
         \textsf{Actors} & User\\
         Description & A user will be able to backup all wallet information, transaction hashes, and tags associate with those transactions to an XML or JSON file.\\
         Data & public wallet identification, transaction hashes, tags associate with transactions\\
         Stimulus & User initiates a data backup\\
         Response & Dialog box will confirm backup\\
         Comments & Is there any additional data that needs to be backed up? Where will the database backup be stored?\\
-      \end{tabu}
+        \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.11}}}}\\
+      \hline
+
+      \end{tabu}%
+    }
     \end{table}
 
 	
-    \begin{figure}[ht]
-      \includegraphics[width=1.0\textwidth]{../diagrams/usecase_3_6.png}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.8\textwidth]{../diagrams/usecase_3_6.png}
+      \caption{Wallet Summary View}
     \end{figure}
 
 \begin{table}[H]
   \tabulinesep=1.2mm
       \rowcolors{2}{gray!25}{white}
+      \centering
+      \resizebox{0.8\columnwidth}{!}{%
+
       \begin{tabu}{r | X}
         \rowfont{\color{black}}
         \taburulecolor{white}
-        \taburowcolors 2{light-gray .. white}
+        \taburowcolors 2{green .. green}
         \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Wallet Group Summary View}}}\\
         \hline
+        \taburowcolors 2{light-gray .. white}
         \textsf{Actors} & User\\
         Description & A user will be able to view a summary of all balances and transactions from created groups.\\
         Data & transactions and current balances within the wallet groups.\\
         Stimulus & User initiates summary view.\\
         Response & A detailed summary is presented to the user.\\
         Comments & The details can be refreshed as often as requested by the user.\\
-      \end{tabu}
+        \taburowcolors 1{green .. green}
+        \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.12}}}}\\
+      \end{tabu}%
+    }
     \end{table}
 	
-    \begin{figure}[ht]
-      \includegraphics[width=1.0\textwidth]{../diagrams/usecase_3_7.png}
-    \end{figure}
+   % \begin{figure}[H]
+   %   \includegraphics[width=1.0\textwidth]{../diagrams/usecase_3_7.png}
+   % \end{figure}
 
 \begin{table}[H]
   \tabulinesep=1.2mm
       \rowcolors{2}{gray!25}{white}
+      \centering
+      \resizebox{0.8\columnwidth}{!}{%
       \begin{tabu}{r | X}
         \rowfont{\color{black}}
         \taburulecolor{white}
-        \taburowcolors 2{light-gray .. white}
+        \taburowcolors 2{green .. green}
         \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Individual Wallet Summary View}}}\\
         \hline
+        \taburowcolors 2{light-gray .. white}
         \textsf{Actors} & User\\
         Description & A user will be able to view a summary of all balances and transactions from individual wallets.\\
         Data & transactions and current balances within the wallets.\\
         Stimulus & User initiates summary view.\\
         Response & A detailed summary is presented to the user.\\
         Comments & The details can be refreshed as often as requested by the user.\\
-      \end{tabu}
+        \taburowcolors 1{green .. green}
+        \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.12}}}}\\
+      \end{tabu}%
+    }
     \end{table}
 
-Identifying use cases:\\
-\begin{itemize}
-\item What are the goals that the actor will attempt to accomplish with the system?
-\item What are the primary tasks that the actor wants the system to perform?
-\item Will the actor create, store, change, remove, or read data in the system?
-\item Will the actor need to inform the system about sudden external changes?
-\item Does the actor need to be informed about certain occurrences, such as unavailability of a network resource, in the system?
-\item Will the actor perform a system startup or shutdown?
-\end{itemize}
+%Identifying use cases:\\
+%\begin{itemize}
+%\item What are the goals that the actor will attempt to accomplish with the system?
+%\item What are the primary tasks that the actor wants the system to perform?
+%\item Will the actor create, store, change, remove, or read data in the system?
+%\item Will the actor need to inform the system about sudden external changes?
+%\item Does the actor need to be informed about certain occurrences, such as unavailability of a network resource, in the system?
+%\item Will the actor perform a system startup or shutdown?
+%\end{itemize}
 
-Use cases will be outlined in diagrams provided.\\ 
+%Use cases will be outlined in diagrams provided.\\ 
 
-The primary task of the customer/user will be to interact with the application.  Their main purpose will be to monitor their bitcoin currency from multiple wallets and tag transactions to better organize all transactions.  The actor will have the ability to add and remove wallets/add and remove tags pertaining to transactions. The actor can observe aggregate information in the form of graphs, charts, etc.  The actor will be alerted to certain trigger events. (updated wallet info, specific transactions, etc).  The actor has the ability to close and open application in running OS and also has the ability to completely remove the application from existing OS. \\
+%The primary task of the customer/user will be to interact with the application.  Their main purpose will be to monitor their bitcoin currency from multiple wallets and tag transactions to better organize all transactions.  The actor will have the ability to add and remove wallets/add and remove tags pertaining to transactions. The actor can observe aggregate information in the form of graphs, charts, etc.  The actor will be alerted to certain trigger events. (updated wallet info, specific transactions, etc).  The actor has the ability to close and open application in running OS and also has the ability to completely remove the application from existing OS. \\
 	
 	
     \subsubsection{Class Descriptions}
@@ -516,50 +550,101 @@ The primary task of the customer/user will be to interact with the application. 
   \subsection{Raw Use Case Point Analysis}
     \subsubsection{Actor Summary Table}
     \begin{table}[H]
-      \begin{tabularx}{\textwidth}{r | X}
-        Actors                       & Summary\\
+    \tabulinesep=1.2mm
+    \centering
+    \resizebox{0.8\columnwidth}{!}{%
+    \rowcolors{2}{gray!25}{white}
+    \begin{tabu}{r | X}
+      \rowfont{\color{black}}
+      \taburulecolor{black}
+      \taburowcolors 1{green .. green}
+      \textbf{\textsf{Actor}} & \textbf{\textsf{Summary}}\\
         \hline
-        Customer/End User            & This actor will be the end user.  They will interact with WalleTx,  providing it with wallet information, tagging transactions, and viewing  aggrated wallet information\\
-        Development Team/Maintenance & This actor will be interacting via the support and maintance of the  application.  They will maintain DB orginzation, revision handling, and  overall maintaince of the application\\
+        \taburowcolors 2{light-gray .. white}
+Customer/End User            & This actor will be the end user.  They will interact with WalleTx,  providing it with wallet information, tagging transactions, and viewing  aggregated wallet information\\
+        Development Team/Maintenance & This actor will be interacting via the support and maintenance of the  application.  They will maintain DB organization, revision handling, and  overall maintenance of the application\\
         External Bitcoin Wallets     & External Bitcoin Wallets will be providing our application with vital  information.  All external wallets' totals and transactions will  aggregated in WalleTx.\\
-        SQLite Database              & This actor is a database stored on each end user's phone. This will  contain data from wallets, transactions, and display information.  It  will interact soley with the application via code.\\
-        Bitcoin Blockchain           & The bitcoin blocktrain will provide transaction specific data for all  included wallets. This actor will interact with the application via  database backend.\\
-      \end{tabularx}
-    \end{table}
+        SQLite Database              & This actor is a database stored on each end user's phone. This will  contain data from wallets, transactions, and display information.  It  will interact solely with the application via code.\\
+        Bitcoin Blockchain           & The bitcoin blockchain will provide transaction specific data for all  included wallets. This actor will interact with the application via  database back-end.\\
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{}}}}\\
+      \hline
+    \end{tabu}%
+  }
+  \end{table}
 
     \subsubsection{Use Case Summary Table}
-	\begin{table}[H]
-      \begin{tabularx}{\textwidth}{r | X}
-        Actor                       & Use-Case Summary\\
+  \begin{table}[H]
+    \tabulinesep=1.2mm
+    \centering
+    \resizebox{0.8\columnwidth}{!}{%
+    \rowcolors{2}{gray!25}{white}
+    \begin{tabu}{r | X}
+      \rowfont{\color{black}}
+      \taburulecolor{black}
+      \taburowcolors 1{green .. green}
+      \textbf{\textsf{Actor}} & \textbf{\textsf{Use-Case Summary}}\\
         \hline
-        Customer/End User            & 1. adding a wallet
-									   2. removing a wallet
-									   3. adding a tag to a transaction
-									   4. removing a tag from a transaction
-									   5. viewing all wallets
+        \taburowcolors 2{light-gray .. white}
+        Customer/End User & 1. adding a wallet\newline
+									   2. removing a wallet\newline
+									   3. adding a tag to a transaction\newline
+									   4. removing a tag from a transaction\newline
+									   5. viewing all wallets\newline
 									   6. accessing application settings\\
-        Development Team/Maintenance & 1. update revisions
+        Development Team/Maintenance & 1. update revisions\newline
 									   2. maintain database structure\\
-        External Bitcoin Wallets     & 1. update added wallet information
-									   2. provide public key 
+        External Bitcoin Wallets     & 1. update added wallet information\newline
+									   2. provide public key\newline
 									   3. provide transactions made by wallets\\
-        SQLite Database              & 1. store wallet data
-									   2. wallet data deleted
-									   3. wallet data added
-									   4. provide data for alerts
+        SQLite Database              & 1. store wallet data\newline
+									   2. wallet data deleted\newline
+									   3. wallet data added\newline
+									   4. provide data for alerts\newline
 									   5. supply data for graphs/charts\\
-        Bitcoin Blockchain           & 1. update wallet/DB transactions
+        Bitcoin Blockchain           & 1. update wallet/DB transactions\newline
 									   2. provide data for new wallet added\\
-      \end{tabularx}
-    \end{table}
+
+      \taburowcolors 1{green .. green}
+      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{}}}}\\
+      \hline
+    \end{tabu}%
+  }
+  \end{table}
+
 
     \subsubsection{Screens and Reports with Navigation Matrix}
-	
+
+  \begin{figure}[H]
+     \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_master.png}
+  \end{figure}
+  \begin{figure}[H]
+     \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_splash.png}
+  \end{figure}
 	\begin{figure}[H]
-     \includegraphics[width=1.0\textwidth]{../diagrams/storyboard.png}
-      \end{figure}
-	*Need to create navigation matrix
-	*Need to create Reports
+     \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_main.png}
+  \end{figure}
+  \begin{figure}[H]
+     \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_summary.png}
+  \end{figure}
+  \begin{figure}[H]
+    \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_txs.png}
+  \end{figure}
+  \begin{figure}[H]
+    \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_txDetails.png}
+  \end{figure}
+  \begin{figure}[H]
+    \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_CRUDgroupTag_1.png}
+  \end{figure}
+  \begin{figure}[H]
+    \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_CRUDgroupTag_2.png}
+  \end{figure}
+
+  \begin{figure}[H]
+     \includegraphics[width=1.0\textwidth]{../diagrams/storyboard_CRUDwallet.png}
+  \end{figure}
+  
+	
 	
   \subsection{Other Appendices}
-  * will be discussed in next meeting 11/24/2014
+  \textsf Reserved for future additions and amendments. \\
