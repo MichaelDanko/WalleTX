@@ -6,7 +6,8 @@
     <string name="action_settings">Settings</string>
 
     <!-- Splash Activity -->
-    <string name="splash_logo">Bitcoin WalleTx</string> // content description
-    <string name="splash_text_label">Bitcoin Wallet Tracker</string>
+    <string name="splash_logo">Bitcoin WalleTx</string>
+ // content description    <string name="splash_text_label">Bitcoin Wallet Tracker</string>
+    <string name="title_activity_main">MainActivity</string>
 
 </resources>

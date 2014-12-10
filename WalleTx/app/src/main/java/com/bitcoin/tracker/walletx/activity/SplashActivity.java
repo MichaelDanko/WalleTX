@@ -1,10 +1,14 @@
 package com.bitcoin.tracker.walletx.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.bitcoin.tracker.walletx.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * SplashActivity is the entry portal for Bitcoin WalleTx.
@@ -23,9 +27,22 @@ public class SplashActivity extends Activity {
         hideStatusBar();
         setContentView(R.layout.activity_splash);
 
-        // TODO - Start service to fetch new tx and price data
-        // TODO - Add TaskTimer that redirects to main
+        //----------------------------------------------------------------
+        // TODO - Start background service to fetch new tx and price data
+        //----------------------------------------------------------------
 
+        timeDelaySplashScreen();
+    } // onCreate
+
+    private void timeDelaySplashScreen() {
+        new Timer().schedule( new TimerTask() {
+            @Override
+            public void run() {
+                finish();
+                Intent mainIntent = new Intent( SplashActivity.this, MainActivity.class );
+                startActivity( mainIntent );
+            }
+        }, this.delay );
     }
 
     private void hideStatusBar() {
