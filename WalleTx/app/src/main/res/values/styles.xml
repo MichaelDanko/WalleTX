@@ -2,7 +2,18 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+
+        <!-- Custom ActionBar -->
+        <item name="android:actionBarStyle">@style/WTXActionBar</item>
+        <item name="actionBarStyle">@style/WTXActionBar</item> <!-- support lib compat -->
+
+    </style>
+
+    <!-- WalleTx custom ActionBar styles -->
+    <style name="WTXActionBar"
+        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/wtx_green</item>
+        <item name="background">@color/wtx_green</item> <!-- support lib compat -->
     </style>
 
 </resources>
