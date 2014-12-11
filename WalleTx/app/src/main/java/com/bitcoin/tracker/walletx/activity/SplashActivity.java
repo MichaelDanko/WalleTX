@@ -27,9 +27,12 @@ public class SplashActivity extends Activity {
         hideStatusBar();
         setContentView(R.layout.activity_splash);
 
-        //----------------------------------------------------------------
-        // TODO - Start background service to fetch new tx and price data
-        //----------------------------------------------------------------
+        /*
+        TEST
+        ----------------------------------------------------------------
+        TODO - Start background service to fetch new tx and price data
+        ----------------------------------------------------------------
+        */
 
         timeDelaySplashScreen();
     } // onCreate
