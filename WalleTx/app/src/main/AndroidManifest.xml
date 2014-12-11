@@ -12,7 +12,7 @@
         <!-- ActiveAndroid database name, version, and models -->
         <meta-data android:name="AA_DB_NAME" android:value="Walletx.db" />
         <meta-data android:name="AA_DB_VERSION" android:value="1" />
-        <!-- TODO: models -->
+        <!-- TODO: specify models -->
 
         <activity
             android:name=".activity.SplashActivity"

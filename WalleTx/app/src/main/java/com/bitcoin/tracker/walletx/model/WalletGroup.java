@@ -17,7 +17,7 @@ public class WalletGroup extends Model {
     public String name;
 
     public List<Walletx> walletxs() {
-        return getMany(Walletx.class, "WalletGroup");
+        return getMany(Walletx.class, "WalletGroup"); // WalletGroup has many Walletx's
     }
 
     public WalletGroup() {
@@ -28,5 +28,8 @@ public class WalletGroup extends Model {
         super();
         this.name = name;
     }
+
+    // WalletGroup queries
+    // ...
 
 } // WalletGroup

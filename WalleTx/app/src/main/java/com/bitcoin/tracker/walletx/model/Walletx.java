@@ -17,8 +17,8 @@ public class Walletx extends Model {
     @Column(name = "Type")
     public WalletType type;
 
-    @Column(name = "Group")
-    public WalletGroup group; // Walletx has a group
+    @Column(name = "Group") // Walletx has one group
+    public WalletGroup group;
 
     public Walletx() {
         super();
@@ -32,9 +32,6 @@ public class Walletx extends Model {
     }
 
     // Walletx queries
-
-    //public static Walletx getRandom() {
-    //    return new Select().from(Walletx.class).orderBy("RANDOM()").executeSingle();
-    //}
+    // ...
 
 } // Walletx
