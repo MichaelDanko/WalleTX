@@ -20,6 +20,10 @@ public class Walletx extends Model {
     @Column(name = "Group") // Walletx has one group
     public WalletGroup group;
 
+    // TODO: Has many Txs
+
+    // TODO: Has many Balances
+
     public Walletx() {
         super();
     }
