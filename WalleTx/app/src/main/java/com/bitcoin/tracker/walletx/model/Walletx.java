@@ -31,7 +31,14 @@ public class Walletx extends Model {
         this.group = group;
     }
 
-    // Walletx queries
-    // ...
+    /*
+     * Walletx Queries
+     *
+     */
+
+
+
+
+
 
 } // Walletx

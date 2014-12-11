@@ -1,14 +1,16 @@
 package com.bitcoin.tracker.walletx.model;
 
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 /**
  * SingleAddressWallet table
+ * SingleAddressWallet is a supported WalletType that consist of a public key.
  *
  */
 @Table(name = "SingleAddressWallet")
-public class SingleAddressWallet {
+public class SingleAddressWallet extends Model {
 
     @Column(name = "PublicKey")
     public String publicKey;
@@ -26,7 +28,13 @@ public class SingleAddressWallet {
         this.publicKey = publicKey;
     }
 
-    // SingleAddressWallet Queries
-    // ...
+    /*
+     * SingleAddressWallet Queries
+     *
+     */
+
+
+
+
 
 } // SingleAddressWallet

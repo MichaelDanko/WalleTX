@@ -29,7 +29,14 @@ public class WalletGroup extends Model {
         this.name = name;
     }
 
-    // WalletGroup queries
-    // ...
+    /*
+     * WalletGroup Queries
+     *
+     */
+
+
+
+
+
 
 } // WalletGroup
