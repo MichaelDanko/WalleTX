@@ -18,11 +18,11 @@ public class SingleAddressWallet extends Model {
     @Column(name = "Walletx") // SAW belongs to one Walletx
     public Walletx wtx;
 
-    public Walletx() {
+    public SingleAddressWallet() {
         super();
     }
 
-    public Walletx(Walletx wtx, String publicKey) {
+    public SingleAddressWallet(Walletx wtx, String publicKey) {
         super();
         this.wtx = wtx;
         this.publicKey = publicKey;

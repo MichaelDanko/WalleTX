@@ -21,7 +21,7 @@ public class TxNote extends Model {
         super();
     }
 
-    public TxNote(Tx tx, TxNote note) {
+    public TxNote(Tx tx, String note) {
         super();
         this.tx = tx;
         this.note = note;

@@ -17,7 +17,7 @@ public class Walletx extends Model {
     @Column(name = "Type")
     public WalletType type;
 
-    @Column(name = "Group") // Walletx has one group
+    @Column(name = "WalletGroup") // Walletx has one group
     public WalletGroup group;
 
     // TODO: Has many Txs

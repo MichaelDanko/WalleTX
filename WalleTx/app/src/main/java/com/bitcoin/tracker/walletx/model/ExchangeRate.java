@@ -4,6 +4,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -15,13 +16,17 @@ import java.util.List;
 @Table(name = "ExhangeRate")
 public class ExchangeRate extends Model {
 
-    @Column(name = "timestamp", index = true)
+    @Column(name = "timestamp")
     private Date timestamp;
 
     public void setDateFromString(String date) {
         SimpleDateFormat sf = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
         sf.setLenient(true);
-        this.timestamp = sf.parse(date);
+        try {
+            this.timestamp = sf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Column(name = "USD")
