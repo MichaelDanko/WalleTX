@@ -4,8 +4,13 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import java.util.List;
+
 /**
- * Walletx table
+ * Walletx model.
+ *
+ * Walletx objects are central to the application as they represents
+ * the different wallets added by the user.
  *
  */
 @Table(name = "Walletx")
@@ -14,15 +19,22 @@ public class Walletx extends Model {
     @Column(name = "Name")
     public String name;
 
-    @Column(name = "Type")
+    @Column(name = "WalletType")
     public WalletType type;
 
-    @Column(name = "WalletGroup") // Walletx has one group
+    // Belongs to one WalletGroup (mandatory)
+    @Column(name = "WalletGroup")
     public WalletGroup group;
 
-    // TODO: Has many Txs
+    // Has many Txs
+    public List<Tx> txs() {
+        return getMany(Tx.class, "Walletx");
+    }
 
-    // TODO: Has many Balances
+    // Has many Balances
+    public List<Balance> balances() {
+        return getMany(Balance.class, "Walletx");
+    }
 
     public Walletx() {
         super();
@@ -35,10 +47,9 @@ public class Walletx extends Model {
         this.group = group;
     }
 
-    /*
-     * Walletx Queries
-     *
-     */
+    /*-------------------*
+     *  Walletx Queries  *
+     *-------------------*/
 
 
 
