@@ -5,7 +5,8 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 /**
- * SingleAddressWallet table
+ * SingleAddressWallet model.
+ *
  * SingleAddressWallet is a supported WalletType that consist of a public key.
  *
  */
@@ -15,7 +16,8 @@ public class SingleAddressWallet extends Model {
     @Column(name = "PublicKey")
     public String publicKey;
 
-    @Column(name = "Walletx") // SAW belongs to one Walletx
+    // SAW belongs to one Walletx (mandatory)
+    @Column(name = "Walletx")
     public Walletx wtx;
 
     public SingleAddressWallet() {
@@ -28,11 +30,9 @@ public class SingleAddressWallet extends Model {
         this.publicKey = publicKey;
     }
 
-    /*
-     * SingleAddressWallet Queries
-     *
-     */
-
+    /*-------------------------------*
+     *  SingleAddressWallet Queries  *
+     *-------------------------------*/
 
 
 
