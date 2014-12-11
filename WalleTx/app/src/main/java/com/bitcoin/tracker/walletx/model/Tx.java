@@ -42,11 +42,22 @@ public class Tx extends Model {
     @Column(name = "TxCategory") // Tx belongs to zero/one category (tag)
     public TxCategory category;
 
+    @Column(name = "TxNote") // Tx has zero/one note
+    public TxNote note;
+
     public Tx() {
         super();
     }
 
-    public Tx(Walletx wtx, String date, float amountBTC, float amountLC, int block, String hash, TxCategory category) {
+    public Tx(
+            Walletx wtx,
+            String date,
+            float amountBTC,
+            float amountLC,
+            int block,
+            String hash,
+            TxCategory category,
+            TxNote note) {
         super();
         this.wtx = wtx;
         this.setDateFromString(date);
