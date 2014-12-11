@@ -10,8 +10,7 @@
     </style>
 
     <!-- WalleTx custom ActionBar styles -->
-    <style name="WTXActionBar"
-        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+    <style name="WTXActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/wtx_green</item>
         <item name="background">@color/wtx_green</item> <!-- support lib compat -->
     </style>

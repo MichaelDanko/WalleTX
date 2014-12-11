@@ -8,6 +8,8 @@
     <!-- Splash Activity -->
     <string name="splash_logo">Bitcoin WalleTx</string> <!-- image content desc -->
     <string name="splash_text_label">Bitcoin Wallet Tracker</string>
-    <string name="title_activity_main">MainActivity</string>
+
+    <!-- Main Activity -->
+    <string name="title_activity_main">WalleTx</string>
 
 </resources>
