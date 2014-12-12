@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.model;
+package com.bitcoin.tracker.walletx.model.wallet;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
@@ -13,7 +13,7 @@ import com.activeandroid.annotation.Table;
  *
  */
 @Table(name = "SingleAddressWallet")
-public class SingleAddressWallet extends Model {
+public class SingleAddressWallet extends Model implements WalletxBlockchainInterface {
 
     @Column(name = "PublicKey")
     public String publicKey;
