@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Generic -->
     <color name="white">#FFFFFF</color>
 
     <!-- WalleTx Colors -->
     <color name="wtx_green">#27AE60</color>
     <color name="wtx_light_gray">#EEF0F1</color>
     <color name="wtx_gray">#454545</color>
+
+    <!-- Colors for specific elements -->
+    <color name="navigation_drawer_bg">#cccc</color>
 
 </resources>

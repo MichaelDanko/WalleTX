@@ -19,14 +19,12 @@ import com.bitcoin.tracker.walletx.ui.fragment.NavigationDrawerFragment;
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
+    // Fragment managing the behaviors, interactions and presentation
+    // of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
+    // Used to store the last screen title.
+    // For use in {@link #restoreActionBar()}.
     private CharSequence mTitle;
 
     @Override
@@ -56,13 +54,16 @@ public class MainActivity extends ActionBarActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.title_my_wallets);
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+                mTitle = getString(R.string.title_manage_wallet_groups);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.title_manage_tx_catgeories);
+                break;
+            case 4:
+                mTitle = getString(R.string.title_settings);
                 break;
         }
     }
