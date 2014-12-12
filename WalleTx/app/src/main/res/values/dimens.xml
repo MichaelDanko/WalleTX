@@ -7,4 +7,7 @@
     <!-- Splash Activity -->
     <dimen name="logo_bottom_padding">16dp</dimen>
 
+    <!-- Navigation Drawer -->
+    <dimen name="navigation_drawer_width">240dp</dimen>
+
 </resources>
