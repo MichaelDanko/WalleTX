@@ -12,12 +12,14 @@ import java.util.List;
  * Walletx objects are central to the application as they represents
  * the different wallets added by the user.
  *
+ * TODO Add indexes & constraints to columns (if any)
+ *
  */
 @Table(name = "Walletx")
 public class Walletx extends Model {
 
     @Column(name = "Name")
-    public String name;
+    String name;
 
     @Column(name = "WalletType")
     public WalletType type;

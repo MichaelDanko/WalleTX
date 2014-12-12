@@ -9,6 +9,8 @@ import com.activeandroid.annotation.Table;
  *
  * SingleAddressWallet is a supported WalletType that consist of a public key.
  *
+ * TODO Add indexes & constraints to columns (if any)
+ *
  */
 @Table(name = "SingleAddressWallet")
 public class SingleAddressWallet extends Model {

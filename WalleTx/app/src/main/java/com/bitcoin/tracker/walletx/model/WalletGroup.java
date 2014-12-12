@@ -12,6 +12,8 @@ import java.util.List;
  * A WalletGroup is nothing more than a group name that is applied
  * to various Walletx's.
  *
+ * TODO Add indexes & constraints to columns (if any)
+ *
  */
 @Table(name = "WalletGroup")
 public class WalletGroup extends Model {
