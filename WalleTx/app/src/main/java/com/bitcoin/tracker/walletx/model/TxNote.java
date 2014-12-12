@@ -5,7 +5,12 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 /**
- * TxNote table
+ * TxNote model.
+ *
+ * TxNote is simply a note that can be applied to
+ * individual transactions.
+ *
+ * TODO Add indexes & constraints to columns (if any)
  *
  */
 @Table(name = "TxNote")
@@ -27,10 +32,9 @@ public class TxNote extends Model {
         this.note = note;
     }
 
-    /*
-     * TxNote Queries
-     *
-     */
+    /*------------------*
+     *  TxNote Queries  *
+     *------------------*/
 
 
 

@@ -7,10 +7,14 @@ import com.activeandroid.annotation.Table;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
- * ExchangeRate table
+ * ExchangeRate model.
+ *
+ * ExchangeRate table will hold daily exchange rates from BTC to USD, EUR, and GBP.
+ *
+ * TODO Add indexes & constraints to columns (if any)
+ * TODO Investigate coindesk API to see how far back data goes. Will impact charts.
  *
  */
 @Table(name = "ExhangeRate")
@@ -38,11 +42,6 @@ public class ExchangeRate extends Model {
     @Column(name = "GBP")
     private float gbp;
 
-    // An ExchangeRate can be associated with many Balances
-    public List<Balance> balances() {
-        return getMany(Balance.class, "ExchangeRate");
-    }
-
     public ExchangeRate() {
         super();
     }
@@ -55,10 +54,10 @@ public class ExchangeRate extends Model {
         this.gbp = gbp;
     }
 
-    /*
-     * ExchangeRate Queries
-     *
-     */
+    /*------------------------*
+     *  ExchangeRate Queries  *
+     *------------------------*/
+
 
 
 

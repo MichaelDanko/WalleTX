@@ -9,17 +9,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Tx table
+ * Tx model.
  *
+ * Tx table stores all transactions associated with wallets added by the user.
+ *
+ * TODO Add indexes & constraints to columns (if any)
  *
  */
 @Table(name = "Tx")
 public class Tx extends Model {
 
-    @Column(name = "Walletx") // Tx belongs to one Walletx
-    public Walletx wtx;
-
-    @Column(name = "timestamp")
+    @Column(name = "timestamp", index = true)
     private Date timestamp;
 
     public void setDateFromString(String date) {
@@ -44,41 +44,38 @@ public class Tx extends Model {
     @Column(name = "hash")
     private String hash;
 
-    @Column(name = "TxCategory") // Tx belongs to zero/one category (tag)
+    // Belongs to one Walletx (mandatory)
+    @Column(name = "Walletx")
+    public Walletx wtx;
+
+    // Belongs to one category (optional)
+    @Column(name = "TxCategory")
     public TxCategory category;
 
-    @Column(name = "TxNote") // Tx has zero/one note
+    // Has one note (optional)
+    @Column(name = "TxNote")
     public TxNote note;
 
     public Tx() {
         super();
     }
 
-    public Tx(
-            Walletx wtx,
-            String date,
-            float amountBTC,
-            float amountLC,
-            int block,
-            String hash,
-            TxCategory category,
-            TxNote note) {
+    public Tx(String date, float amountBTC, float amountLC, int block, String hash,
+            Walletx wtx, TxCategory category, TxNote note) {
         super();
-        this.wtx = wtx;
         this.setDateFromString(date);
         this.amountBTC = amountBTC;
         this.amountLC = amountLC;
         this.block = block;
         this.hash = hash;
+        this.wtx = wtx;
         this.category = category;
+        this.note = note;
     }
 
-    /*
-     * Tx Queries
-     *
-     */
-
-
+    /*--------------*
+     *  Tx Queries  *
+     *--------------*/
 
 
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Walletx model.
- *
+
  * Walletx objects are central to the application as they represents
  * the different wallets added by the user.
  *

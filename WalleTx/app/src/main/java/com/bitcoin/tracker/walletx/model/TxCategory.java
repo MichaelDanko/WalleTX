@@ -7,7 +7,12 @@ import com.activeandroid.annotation.Table;
 import java.util.List;
 
 /**
- * TxCategory table
+ * TxCategory model.
+ *
+ * TxCategory is simply a category name that can be applied to
+ * individual transactions.
+ *
+ * TODO Add indexes & constraints to columns (if any)
  *
  */
 @Table(name = "TxCategory")
@@ -16,8 +21,9 @@ public class TxCategory extends Model {
     @Column(name = "Name")
     public String name;
 
+    // Has many Tx's
     public List<Tx> txs() {
-        return getMany(Tx.class, "TxCategory"); // TxCategory has many Tx's
+        return getMany(Tx.class, "TxCategory");
     }
 
     public TxCategory() {
@@ -29,10 +35,9 @@ public class TxCategory extends Model {
         this.name = name;
     }
 
-    /*
-     * TxCategory Queries
-     *
-     */
+    /*----------------------*
+     *  TxCategory Queries  *
+     *----------------------*/
 
 
 

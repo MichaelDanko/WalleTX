@@ -9,14 +9,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Balance table
+ * Balance model.
+ *
+ * A Balance is a snapshot of a Walletx balance at a given point in time.
+ * Each time there is a new transaction associated with a Walletx, a new balance should be added.
+ * Balance detail should not go into detail finer than a daily balance.
+ * If 2 balances occur on the same day the newest balance should overwrite the older balance.
+ * All Balances are in BTC.
+ *
+ * TODO Add indexes & constraints to columns (if any)
  *
  */
 @Table(name = "Balance")
 public class Balance extends Model {
-
-    @Column(name = "Walletx") // Balance belongs to a Walletx
-    public Walletx wtx;
 
     @Column(name = "timestamp")
     private Date timestamp;
@@ -34,25 +39,24 @@ public class Balance extends Model {
     @Column(name = "Balance")
     public float balance;
 
-    @Column(name = "ExchangeRate") // Balance has an exchange rate
-    public ExchangeRate eRate;
+    // Belongs to a Walletx
+    @Column(name = "Walletx")
+    public Walletx wtx;
 
     public Balance() {
         super();
     }
 
-    public Balance(Walletx wtx, String date, float balance, ExchangeRate eRate) {
+    public Balance(String date, float balance, Walletx wtx) {
         super();
-        this.wtx = wtx;
         this.setDateFromString(date);
         this.balance = balance;
-        this.eRate = eRate;
+        this.wtx = wtx;
     }
 
-    /*
-     * Balance Queries
-     *
-     */
+    /*-------------------*
+     *  Balance Queries  *
+     *-------------------*/
 
 
 
