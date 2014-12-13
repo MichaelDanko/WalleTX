@@ -11,7 +11,8 @@ import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.ui.activity.MainActivity;
 
 /**
- * A placeholder fragment containing a simple view.
+ * ManageWalletGroupsFragment allows user to perform
+ * CRUD operations on wallet groups.
  */
 public class ManageWalletGroupsFragment extends Fragment {
     /**

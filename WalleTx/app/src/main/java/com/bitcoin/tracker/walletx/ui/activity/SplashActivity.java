@@ -11,13 +11,14 @@ import java.util.TimerTask;
 
 /**
  * SplashActivity is the entry portal for Bitcoin WalleTx.
- *
- * Activity should start a background service to fetch new transactions & price data
- * before redirecting to the MainActivity. Display for a minimum of 2 seconds.
- *
+ * Starts a background service to fetch new transactions & price data
+ * before redirecting to the MainActivity.
  */
 public class SplashActivity extends Activity {
 
+    /**
+     * Time duration for displaying the splash activity.
+     */
     final private long SPLASH_TIME_OUT = 2000;
 
     @Override

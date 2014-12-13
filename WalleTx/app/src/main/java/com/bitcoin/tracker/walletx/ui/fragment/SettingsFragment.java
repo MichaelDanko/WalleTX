@@ -11,9 +11,10 @@ import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.ui.activity.MainActivity;
 
 /**
- * A placeholder fragment containing a simple view.
+ * SettingsFragment allows user to update their settings.
  */
 public class SettingsFragment extends Fragment {
+
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -48,4 +49,5 @@ public class SettingsFragment extends Fragment {
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
-}
+
+} // SettingsFragment

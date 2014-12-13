@@ -11,9 +11,11 @@ import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.ui.activity.MainActivity;
 
 /**
- *
+ * MyWalletsFragment acts as the home view for the application.
+ * Displays aggregations of wallets.
  */
 public class MyWalletsFragment extends Fragment {
+
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -48,4 +50,5 @@ public class MyWalletsFragment extends Fragment {
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
-}
+
+} // MyWallets

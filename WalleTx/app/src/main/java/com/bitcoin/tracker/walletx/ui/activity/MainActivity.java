@@ -16,6 +16,9 @@ import com.bitcoin.tracker.walletx.ui.fragment.MyWalletsFragment;
 import com.bitcoin.tracker.walletx.ui.fragment.NavigationDrawerFragment;
 import com.bitcoin.tracker.walletx.ui.fragment.SettingsFragment;
 
+/**
+ * MainActivity manages the navigation drawer and the fragments that is display.
+ */
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -29,6 +32,10 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    /**
+     * Sets up the navigation drawer.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +45,6 @@ public class MainActivity extends ActionBarActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
@@ -76,6 +82,10 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
+    /**
+     * Updates the ActionBar title depending upon active fragment.
+     * @param number
+     */
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
@@ -99,7 +109,6 @@ public class MainActivity extends ActionBarActivity
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,6 +1,5 @@
 package com.bitcoin.tracker.walletx.ui.fragment;
 
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,9 +11,11 @@ import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.ui.activity.MainActivity;
 
 /**
- * A placeholder fragment containing a simple view.
+ * ManageTxCategoriesFragment allows user to perform
+ * CRUD operations on tx categories.
  */
 public class ManageTxCategoriesFragment extends Fragment {
+
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -49,4 +50,5 @@ public class ManageTxCategoriesFragment extends Fragment {
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
-}
+
+} // ManageTxCategoriesFragment
