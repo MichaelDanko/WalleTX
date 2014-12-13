@@ -8,7 +8,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.api.BlockchainInfo;
@@ -17,8 +16,6 @@ import com.bitcoin.tracker.walletx.ui.fragment.ManageWalletGroupsFragment;
 import com.bitcoin.tracker.walletx.ui.fragment.MyWalletsFragment;
 import com.bitcoin.tracker.walletx.ui.fragment.NavigationDrawerFragment;
 import com.bitcoin.tracker.walletx.ui.fragment.SettingsFragment;
-
-import org.json.JSONException;
 
 /**
  * MainActivity manages the navigation drawer and the fragments that is display.
@@ -38,7 +35,7 @@ public class MainActivity extends ActionBarActivity
     BlockchainInfo Wallet;
 
 
-  /**
+    /**
      * Sets up the navigation drawer.
      * @param savedInstanceState
      */
@@ -55,12 +52,15 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-      try {
-        Wallet = new BlockchainInfo();
-      } catch (JSONException e) {
-        e.printStackTrace();
-      }
-      Toast.makeText(this, (int) Wallet.jsonFinalBalance, Toast.LENGTH_LONG).show();
+        /*
+        // Crashes app
+        try {
+            Wallet = new BlockchainInfo();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, (int) Wallet.jsonFinalBalance, Toast.LENGTH_LONG).show();
+        */
 
     }
 
