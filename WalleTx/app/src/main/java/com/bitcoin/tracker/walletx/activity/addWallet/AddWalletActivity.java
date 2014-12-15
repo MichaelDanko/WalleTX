@@ -1,5 +1,6 @@
 package com.bitcoin.tracker.walletx.activity.addWallet;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -16,16 +17,16 @@ import com.bitcoin.tracker.walletx.R;
  * Handles the form for adding new user wallets.
  */
 public class AddWalletActivity extends ActionBarActivity
-        implements AdapterView.OnItemSelectedListener {
+        implements AdapterView.OnItemSelectedListener,
+        AddWalletSingleAddressFragment.OnFragmentInteractionListener {
 
-    // Supported wallet types spinner
     Spinner walletTypeSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_wallet);
-        setTitle(R.string.add_wallet_activity_title);
+        setTitle(R.string.title_activity_add_wallet);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setupWalletTypeSpinner();
     }
@@ -33,7 +34,7 @@ public class AddWalletActivity extends ActionBarActivity
     private void setupWalletTypeSpinner() {
         walletTypeSpinner = (Spinner) findViewById(R.id.walletTypeSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.supported_wallet_type_options, android.R.layout.simple_spinner_item);
+                R.array.spinner_supported_wallet_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         walletTypeSpinner.setAdapter(adapter);
         walletTypeSpinner.setOnItemSelectedListener(this);
@@ -52,6 +53,10 @@ public class AddWalletActivity extends ActionBarActivity
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
+    }
+
+    public void onFragmentInteraction(Uri uri) {
+        Toast toast = Toast.makeText(this, "Wheeee!",Toast.LENGTH_SHORT); toast.show();
     }
 
     @Override

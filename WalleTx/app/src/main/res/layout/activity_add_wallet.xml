@@ -17,4 +17,13 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <fragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:name="com.bitcoin.tracker.walletx.activity.addWallet.AddWalletSingleAddressFragment"
+        android:id="@+id/fragment_add_single_wallet"
+        android:layout_below="@+id/walletTypeSpinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

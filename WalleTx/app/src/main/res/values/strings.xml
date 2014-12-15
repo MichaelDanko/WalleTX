@@ -39,10 +39,11 @@
     <string name="action_settings">Settings</string>
 
     <!-- Add wallets activity -->
-    <string name="add_wallet_activity_title">Add new wallet</string>
-    <string-array name="supported_wallet_type_options">
+    <string name="title_add_wallet_activity">Add new wallet</string>
+    <string-array name="spinner_supported_wallet_types">
         <item>Single address wallet</item>
         <item>Some other wallet type</item>
     </string-array>
+    <string name="hint_public_key">Public key</string>
 
 </resources>
