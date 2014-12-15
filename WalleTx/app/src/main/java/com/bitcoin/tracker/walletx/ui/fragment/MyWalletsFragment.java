@@ -1,6 +1,7 @@
 package com.bitcoin.tracker.walletx.ui.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.ui.activity.MainActivity;
+import com.bitcoin.tracker.walletx.ui.activity.AddWallet;
 
 /**
  * MyWalletsFragment acts as the home view for the application.
@@ -38,8 +40,7 @@ public class MyWalletsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View rootView = inflater.inflate(R.layout.fragment_my_wallets, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_my_wallets, container, false); // root view
     }
 
     @Override
@@ -62,8 +63,9 @@ public class MyWalletsFragment extends Fragment {
             Toast.makeText(getActivity(), "TODO: Sync data", Toast.LENGTH_SHORT).show();
             return true;
         } else if (item.getItemId() == R.id.action_add_wallet) {
-            Toast.makeText(getActivity(), "TODO: Add New Wallet", Toast.LENGTH_SHORT).show();
-            return true;
+            // open new activity
+            Intent intent = new Intent( getActivity(), AddWallet.class );
+            startActivity( intent );
         }
         return super.onOptionsItemSelected(item);
     }
