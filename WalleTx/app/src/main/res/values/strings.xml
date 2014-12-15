@@ -6,6 +6,7 @@
     <string name="dc">Carroll</string>
     <string name="bh">Howell</string>
     <string name="as">Solano</string>
+    <string name="temporary">TEMPORARY</string>
     <!-- TEMP STRINGS: END ################################################## -->
 
     <!-- App name -->
@@ -23,9 +24,11 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!-- ActionBar -->
-    <string name="action_example">Example action</string>
-    <string name="action_settings">Settings</string>
+    <!-- ActionBar menus -->
+    <string name="action_sync">Sync</string>
+    <string name="action_add_wallet">Add new wallet</string>
+    <string name="action_add_group">Add new wallet group</string>
+    <string name="action_add_tx_category">Add new tx category</string>
 
     <!-- Main view aggregating all wallets -->
     <string name="title_activity_main">WalleTx</string>

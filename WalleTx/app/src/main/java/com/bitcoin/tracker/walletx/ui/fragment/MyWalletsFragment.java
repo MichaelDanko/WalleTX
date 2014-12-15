@@ -4,8 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.ui.activity.MainActivity;
@@ -16,16 +20,10 @@ import com.bitcoin.tracker.walletx.ui.activity.MainActivity;
  */
 public class MyWalletsFragment extends Fragment {
 
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
+    // The fragment argument representing the section number for this fragment.
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
+    // Returns a new instance of this fragment for the given section number.
     public static MyWalletsFragment newInstance(int sectionNumber) {
         MyWalletsFragment fragment = new MyWalletsFragment();
         Bundle args = new Bundle();
@@ -34,12 +32,12 @@ public class MyWalletsFragment extends Fragment {
         return fragment;
     }
 
-    public MyWalletsFragment() {
-    }
+    public MyWalletsFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_my_wallets, container, false);
         return rootView;
     }
@@ -51,4 +49,23 @@ public class MyWalletsFragment extends Fragment {
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
 
-} // MyWallets
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Add fragment specific action bar items to activity action bar items.
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_sync) {
+            Toast.makeText(getActivity(), "TODO: Sync data", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (item.getItemId() == R.id.action_add_wallet) {
+            Toast.makeText(getActivity(), "TODO: Add New Wallet", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+} // MyWalletsFragment

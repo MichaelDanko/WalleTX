@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.api.BlockchainInfo;
 import com.bitcoin.tracker.walletx.ui.fragment.ManageTxCategoriesFragment;
 import com.bitcoin.tracker.walletx.ui.fragment.ManageWalletGroupsFragment;
 import com.bitcoin.tracker.walletx.ui.fragment.MyWalletsFragment;
@@ -27,21 +26,12 @@ import com.bitcoin.tracker.walletx.ui.fragment.TestingSolanoFragment;
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
+    // Fragment managing the behaviors, interactions and presentation of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
+    // Used to store the last screen title. For use in {@link #restoreActionBar()}.
     private CharSequence mTitle;
-    BlockchainInfo Wallet;
 
-    /**
-     * Sets up the navigation drawer.
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,19 +41,17 @@ public class MainActivity extends ActionBarActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
+        // Setup the navigation drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
-    /**
-     * Updates the main content by replacing fragments
-     * @param position
-     */
+    // Updates the main content by replacing fragments
     @Override
     public void onNavigationDrawerItemSelected(int position) {
 
-        Fragment fragment = null;
+        Fragment fragment;
         switch (position) {
             case 0:
                 fragment = MyWalletsFragment.newInstance(position + 1);
@@ -104,10 +92,7 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
-    /**
-     * Updates the ActionBar title depending upon active fragment.
-     * @param number
-     */
+    // Updates the action bar title depending upon active fragment.
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
@@ -148,33 +133,23 @@ public class MainActivity extends ActionBarActivity
         actionBar.setTitle(mTitle);
     }
 
+    // Applies the global menu to the action bar when navigation drawer is closed.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
+            getMenuInflater().inflate(R.menu.global, menu);
             restoreActionBar();
             return true;
         }
         return super.onCreateOptionsMenu(menu);
     }
 
+    // Handles action bar item clicks associated with the global menu.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
+        // global menu contains no actions
         return super.onOptionsItemSelected(item);
     }
 
 } // MainActivity
-

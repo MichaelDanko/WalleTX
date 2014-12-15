@@ -1,3 +1,6 @@
+<!-- This menu is displayed in the MyWalletsFragment and should be displayed
+     in all activities and/or fragments accessed from the MyWalletsFragment -->
+
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -5,12 +8,11 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/action_example"
-        android:title="@string/action_example"
-        android:showAsAction="withText|ifRoom" />
+        android:id="@+id/action_sync"
+        android:title="@string/action_sync" />
     <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
+        android:id="@+id/action_add_wallet"
+        android:title="@string/action_add_wallet"
+        android:orderInCategory="100" />
+
 </menu>

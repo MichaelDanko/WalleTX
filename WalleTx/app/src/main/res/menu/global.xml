@@ -1,7 +1,10 @@
-<!-- Global ActionBar menu.
-     Displays when the navigation drawer is open -->
+<!-- This menu is displayed across all activities
+     including when the navigation drawer is open. -->
+
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!-- no items required -->
+
+    <!-- there are no global items -->
+
 </menu>
