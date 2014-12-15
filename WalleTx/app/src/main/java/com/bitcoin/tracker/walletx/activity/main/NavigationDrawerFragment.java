@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.ui.fragment;
+package com.bitcoin.tracker.walletx.activity.main;
 
 import android.app.Activity;
 import android.content.SharedPreferences;

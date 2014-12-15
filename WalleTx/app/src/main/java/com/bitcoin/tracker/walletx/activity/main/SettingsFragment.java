@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.ui.fragment;
+package com.bitcoin.tracker.walletx.activity.main;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.ui.activity.MainActivity;
 
 /**
  * SettingsFragment allows user to update their settings.

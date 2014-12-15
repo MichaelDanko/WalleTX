@@ -1,10 +1,11 @@
-package com.bitcoin.tracker.walletx.ui.activity;
+package com.bitcoin.tracker.walletx.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.main.MainActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
