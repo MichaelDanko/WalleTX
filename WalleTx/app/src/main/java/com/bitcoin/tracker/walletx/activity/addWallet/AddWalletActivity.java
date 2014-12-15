@@ -26,8 +26,8 @@ public class AddWalletActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_wallet);
-        setTitle(R.string.title_activity_add_wallet);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.title_activity_add_wallet);
         setupWalletTypeSpinner();
     }
 
@@ -47,7 +47,7 @@ public class AddWalletActivity extends ActionBarActivity
             Toast toast = Toast.makeText(this, "TODO: Add Single Address Wallet Form",Toast.LENGTH_SHORT); toast.show();
         } else if ( pos == 1 ) {
             // Single address wallet
-            Toast toast = Toast.makeText(this, "Support for future wallet types",Toast.LENGTH_SHORT); toast.show();
+            Toast toast = Toast.makeText(this, "TODO: Form should swap out.",Toast.LENGTH_SHORT); toast.show();
         }
     }
 

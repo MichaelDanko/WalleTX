@@ -4,10 +4,17 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <!-- Forms -->
+    <dimen name="form_element_vertical_spacing">16dp</dimen>
+    <dimen name="form_element_horizontal_spacing">16dp</dimen>
+
     <!-- Splash Activity -->
     <dimen name="logo_bottom_padding">16dp</dimen>
 
     <!-- Navigation Drawer -->
     <dimen name="navigation_drawer_width">240dp</dimen>
+
+    <!-- Add new wallet -->
+    <dimen name="minimum_size_barcode_button">42dp</dimen>
 
 </resources>

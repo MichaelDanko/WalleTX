@@ -5,11 +5,51 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <EditText
-        android:layout_width="211dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_gravity="center_horizontal|top"
-        android:autoText="false"
-        android:hint="@string/hint_public_key" />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="left|top">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextPublicKey"
+            android:layout_gravity="center_horizontal|top"
+            android:autoText="false"
+            android:hint="@string/hint_public_key"
+            android:layout_alignBottom="@+id/scanQrCode"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/scanQrCode"
+            android:layout_toStartOf="@+id/scanQrCode"
+            android:paddingTop="@dimen/form_element_vertical_spacing" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/scanQrCode"
+            android:layout_gravity="left|top"
+            android:src="@drawable/ic_action_barcode_2"
+            android:minWidth="@dimen/minimum_size_barcode_button"
+            android:scaleType="fitCenter"
+            android:minHeight="@dimen/minimum_size_barcode_button"
+            android:background="@null"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:paddingTop="@dimen/form_element_vertical_spacing" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextSaWalletName"
+            android:layout_below="@+id/editTextPublicKey"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/scanQrCode"
+            android:layout_alignEnd="@+id/scanQrCode"
+            android:hint="@string/hint_single_address_wallet_name"
+            android:paddingTop="@dimen/form_element_vertical_spacing" />
+
+    </RelativeLayout>
 </FrameLayout>

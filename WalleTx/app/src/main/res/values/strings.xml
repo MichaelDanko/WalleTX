@@ -30,20 +30,18 @@
     <string name="action_add_wallet">Add new wallet</string>
     <string name="action_add_group">Add new wallet group</string>
     <string name="action_add_tx_category">Add new tx category</string>
+    <string name="action_settings">Settings</string>
 
     <!-- Main view aggregating all wallets -->
     <string name="title_activity_main">WalleTx</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_add_wallet">AddWallet</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
 
     <!-- Add wallets activity -->
-    <string name="title_add_wallet_activity">Add new wallet</string>
+    <string name="title_activity_add_wallet">Add new wallet</string>
     <string-array name="spinner_supported_wallet_types">
         <item>Single address wallet</item>
         <item>Some other wallet type</item>
     </string-array>
     <string name="hint_public_key">Public key</string>
+    <string name="hint_single_address_wallet_name">Name</string>
 
 </resources>
