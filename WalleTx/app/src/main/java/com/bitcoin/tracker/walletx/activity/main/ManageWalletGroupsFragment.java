@@ -58,7 +58,7 @@ public class ManageWalletGroupsFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_group) {
-            Toast.makeText(getActivity(), "TODO: Add New Wallet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "TODO: Add New Wallet Group", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);
