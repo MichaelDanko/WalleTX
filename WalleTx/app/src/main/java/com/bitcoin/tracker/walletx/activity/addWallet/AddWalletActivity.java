@@ -18,6 +18,7 @@ import com.bitcoin.tracker.walletx.R;
 public class AddWalletActivity extends ActionBarActivity
         implements AdapterView.OnItemSelectedListener {
 
+    // Supported wallet types spinner
     Spinner walletTypeSpinner;
 
     @Override
@@ -40,9 +41,13 @@ public class AddWalletActivity extends ActionBarActivity
 
     // Updates the form based on spinner selection.
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        // An item was selected.
-        // You can retrieve the selected item using parent.getItemAtPosition(pos)
-        Toast toast = Toast.makeText(this, "TODO: Update form based on spinner",Toast.LENGTH_SHORT); toast.show();
+        if ( pos == 0 ) {
+            // Single address wallet
+            Toast toast = Toast.makeText(this, "TODO: Add Single Address Wallet Form",Toast.LENGTH_SHORT); toast.show();
+        } else if ( pos == 1 ) {
+            // Single address wallet
+            Toast toast = Toast.makeText(this, "Support for future wallet types",Toast.LENGTH_SHORT); toast.show();
+        }
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
