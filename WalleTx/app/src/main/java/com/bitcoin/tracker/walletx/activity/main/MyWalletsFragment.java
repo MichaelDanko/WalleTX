@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.activity.AddWallet;
+import com.bitcoin.tracker.walletx.activity.addWallet.AddWalletActivity;
 
 /**
  * MyWalletsFragment acts as the home view for the application.
@@ -63,7 +63,7 @@ public class MyWalletsFragment extends Fragment {
             return true;
         } else if (item.getItemId() == R.id.action_add_wallet) {
             // open new activity
-            Intent intent = new Intent( getActivity(), AddWallet.class );
+            Intent intent = new Intent( getActivity(), AddWalletActivity.class );
             startActivity( intent );
         }
         return super.onOptionsItemSelected(item);

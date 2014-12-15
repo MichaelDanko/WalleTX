@@ -36,6 +36,10 @@
             android:name=".activity.AddWallet"
             android:label="@string/title_activity_add_wallet" >
         </activity>
+        <activity
+            android:name=".activity.addWallet.AddWalletActivity"
+            android:label="@string/title_activity_add_wallet" >
+        </activity>
     </application>
 
 </manifest>
