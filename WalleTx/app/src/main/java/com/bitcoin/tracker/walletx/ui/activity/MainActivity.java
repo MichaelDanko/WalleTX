@@ -16,9 +16,13 @@ import com.bitcoin.tracker.walletx.ui.fragment.ManageWalletGroupsFragment;
 import com.bitcoin.tracker.walletx.ui.fragment.MyWalletsFragment;
 import com.bitcoin.tracker.walletx.ui.fragment.NavigationDrawerFragment;
 import com.bitcoin.tracker.walletx.ui.fragment.SettingsFragment;
+import com.bitcoin.tracker.walletx.ui.fragment.TestingCarrollFragment;
+import com.bitcoin.tracker.walletx.ui.fragment.TestingDankoFragment;
+import com.bitcoin.tracker.walletx.ui.fragment.TestingHowellFragment;
+import com.bitcoin.tracker.walletx.ui.fragment.TestingSolanoFragment;
 
 /**
- * MainActivity manages the navigation drawer and the fragments that is display.
+ * Manages the navigation drawer and displays its associated fragments.
  */
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -33,7 +37,6 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
     BlockchainInfo Wallet;
-
 
     /**
      * Sets up the navigation drawer.
@@ -51,17 +54,6 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        /*
-        // Crashes app
-        try {
-            Wallet = new BlockchainInfo();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Toast.makeText(this, (int) Wallet.jsonFinalBalance, Toast.LENGTH_LONG).show();
-        */
-
     }
 
     /**
@@ -85,6 +77,22 @@ public class MainActivity extends ActionBarActivity
             case 3:
                 fragment = SettingsFragment.newInstance(position + 1);
                 break;
+
+            // TEMP: BEGIN TESTING CODE -------------------------------------------------
+            case 4:
+                fragment = TestingCarrollFragment.newInstance(position + 1);
+                break;
+            case 5:
+                fragment = TestingDankoFragment.newInstance(position + 1);
+                break;
+            case 6:
+                fragment = TestingHowellFragment.newInstance(position + 1);
+                break;
+            case 7:
+                fragment = TestingSolanoFragment.newInstance(position + 1);
+                break;
+            // TEMP: End testing fragments --------
+
             default:
                 fragment = MyWalletsFragment.newInstance(position + 1);
                 break;
@@ -114,6 +122,22 @@ public class MainActivity extends ActionBarActivity
             case 4:
                 mTitle = getString(R.string.title_settings);
                 break;
+
+            // TEMP: BEGIN TESTING CODE -------------------------------------------------
+            case 5:
+                mTitle = getString(R.string.dc);
+                break;
+            case 6:
+                mTitle = getString(R.string.md);
+                break;
+            case 7:
+                mTitle = getString(R.string.bh);
+                break;
+            case 8:
+                mTitle = getString(R.string.as);
+                break;
+            // TEMP: End testing fragments --------
+
         }
     }
 

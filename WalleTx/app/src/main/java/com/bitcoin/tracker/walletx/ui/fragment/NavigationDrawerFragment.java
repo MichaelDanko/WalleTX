@@ -100,7 +100,15 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_my_wallets),
                         getString(R.string.title_manage_wallet_groups),
                         getString(R.string.title_manage_tx_catgeories),
-                        getString(R.string.title_settings)
+                        getString(R.string.title_settings),
+
+                        // TEMP: BEGIN TESTING CODE -----------------------------------------
+                        "D. Carroll",
+                        "M. Danko",
+                        "B. Howell",
+                        "A. Solano"
+                        // TEMP: END TESTING CODE -------------------------------------------
+
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;

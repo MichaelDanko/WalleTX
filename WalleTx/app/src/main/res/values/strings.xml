@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- TEMP STRINGS: DELETE BEFORE LAUNCH ################################# -->
+    <string name="md">Danko</string>
+    <string name="dc">Carroll</string>
+    <string name="bh">Howell</string>
+    <string name="as">Solano</string>
+    <!-- TEMP STRINGS: END ################################################## -->
+
+    <!-- App name -->
     <string name="app_name">WalleTx</string>
 
     <!-- Splash Activity -->
