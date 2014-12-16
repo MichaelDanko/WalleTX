@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.MainActivity;
 
 /**
  * ManageTxCategoriesFragment allows user to perform

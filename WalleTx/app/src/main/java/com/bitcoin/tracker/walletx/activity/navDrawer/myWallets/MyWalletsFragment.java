@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.navDrawer;
+package com.bitcoin.tracker.walletx.activity.navDrawer.myWallets;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
 import com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.addWallet.AddWalletActivity;
-import com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.MainActivity;
 
 /**
  * MyWalletsFragment acts as the home view for the application.

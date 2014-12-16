@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.MainActivity;
 
 /**
  * Temporary testing class

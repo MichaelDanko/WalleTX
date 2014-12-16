@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.navDrawer.myWallets;
+package com.bitcoin.tracker.walletx.activity.navDrawer;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,21 +10,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.activity.navDrawer.ManageTxCategoriesFragment;
-import com.bitcoin.tracker.walletx.activity.navDrawer.ManageWalletGroupsFragment;
-import com.bitcoin.tracker.walletx.activity.navDrawer.MyWalletsFragment;
-import com.bitcoin.tracker.walletx.activity.navDrawer.NavigationDrawerFragment;
-import com.bitcoin.tracker.walletx.activity.navDrawer.SettingsFragment;
-import com.bitcoin.tracker.walletx.activity.navDrawer.TestingCarrollFragment;
-import com.bitcoin.tracker.walletx.activity.navDrawer.TestingDankoFragment;
-import com.bitcoin.tracker.walletx.activity.navDrawer.TestingHowellFragment;
-import com.bitcoin.tracker.walletx.activity.navDrawer.TestingSolanoFragment;
+import com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.MyWalletsFragment;
+import com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups.WalletGroupFragment;
 
 /**
- * Manages the navigation drawer and displays its associated fragments.
+ * Handles displaying the fragments accessed from within the navigation drawer.
  */
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+WalletGroupFragment.OnFragmentInteractionListener {
 
     // Fragment managing the behaviors, interactions and presentation of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
@@ -51,13 +45,15 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment;
+
         switch (position) {
             case 0:
                 fragment = MyWalletsFragment.newInstance(position + 1);
                 break;
             case 1:
-                fragment = ManageWalletGroupsFragment.newInstance(position + 1);
+                fragment = WalletGroupFragment.newInstance(position + 1);
                 break;
             case 2:
                 fragment = ManageTxCategoriesFragment.newInstance(position + 1);
@@ -86,7 +82,6 @@ public class MainActivity extends ActionBarActivity
                 break;
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
@@ -96,12 +91,15 @@ public class MainActivity extends ActionBarActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
+                System.out.println("HERE>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                 mTitle = getString(R.string.title_my_wallets);
                 break;
             case 2:
+                System.out.println("THERE>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                 mTitle = getString(R.string.title_manage_wallet_groups);
                 break;
             case 3:
+                System.out.println("HERE>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                 mTitle = getString(R.string.title_manage_tx_catgeories);
                 break;
             case 4:
@@ -150,6 +148,11 @@ public class MainActivity extends ActionBarActivity
         int id = item.getItemId();
         // global menu contains no actions
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void onFragmentInteraction(String id) {
+
     }
 
 } // MainActivity
