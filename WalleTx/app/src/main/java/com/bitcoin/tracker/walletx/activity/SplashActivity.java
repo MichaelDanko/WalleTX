@@ -6,7 +6,9 @@ import android.os.Bundle;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.main.MainActivity;
+import com.bitcoin.tracker.walletx.model.wallet.WalletGroup;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,12 +28,9 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        setupDefaultWalletGroup();
 
-        /*
-        ----------------------------------------------------------------
-        TODO - Start background service to fetch new tx and price data
-        ----------------------------------------------------------------
-        */
+        // TODO - Fetch new tx and price data?
 
         applySplashScreenTimeOut();
     } // onCreate
@@ -45,6 +44,19 @@ public class SplashActivity extends Activity {
                 finish();
             }
         }, SPLASH_TIME_OUT );
+    }
+
+    // Adds 'My Wallets' group to the WalletGroups table on first run
+    // and sets it as the default group.
+    private void setupDefaultWalletGroup() {
+        List<WalletGroup> groups = WalletGroup.getAll();
+        if ( groups.size() < 1 ) {
+            WalletGroup defaultGroup = new WalletGroup();
+            defaultGroup.name = getString(R.string.name_default_wallet_group);
+            defaultGroup.setAsDefault();
+            defaultGroup.displayOrder = 1;
+            defaultGroup.save();
+        }
     }
 
 } // SplashActivity
