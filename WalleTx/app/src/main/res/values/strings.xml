@@ -44,4 +44,7 @@
     <string name="hint_public_key">Public key</string>
     <string name="hint_single_address_wallet_name">Name</string>
 
+    <!-- Wallet groups -->
+    <string name="name_default_wallet_group">My Wallets</string>
+
 </resources>
