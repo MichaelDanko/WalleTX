@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "WalletGroup")
 public class WalletGroup extends Model {
 
-    //region WALLET GROUP TABLE
+    //region WALLET GROUP MODEL
 
     // Group name.
     @Column(name = "Name",   // group names are
@@ -54,11 +54,36 @@ public class WalletGroup extends Model {
         super();
     }
 
-    public WalletGroup(String name, int defaultGroup, int displayOrder) {
+    public WalletGroup(String name, int displayOrder) {
         super();
         this.name = name;
-        this.defaultGroup = defaultGroup;
         this.displayOrder = displayOrder;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    /**
+     * Dumps the WalletGroups table to console.
+     * For debugging purposes only.
+     */
+    public static void dump() {
+        String dividerCol1 = "------------------";
+        String dividerCol23 = "-------------";
+        System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
+        System.out.printf("%-20s %-15s %-16s\n", "Name", "DefaultGroup", "DisplayOrder");
+        System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
+        List<WalletGroup> groups = WalletGroup.getAll();
+        for (WalletGroup group : groups) {
+            System.out.printf(
+                    "%-20s %-15s %-16s\n",
+                    group.name,
+                    group.defaultGroup,
+                    group.displayOrder);
+        }
+        System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
     }
 
     //endregion
