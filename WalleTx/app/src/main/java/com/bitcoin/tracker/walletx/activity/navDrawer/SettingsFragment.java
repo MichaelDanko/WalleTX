@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.main;
+package com.bitcoin.tracker.walletx.activity.navDrawer;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,11 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.MainActivity;
 
 /**
- * Temporary testing class
+ * SettingsFragment allows user to update their settings.
  */
-public class TestingHowellFragment extends Fragment {
+public class SettingsFragment extends Fragment {
 
     /**
      * The fragment argument representing the section number for this
@@ -24,21 +25,21 @@ public class TestingHowellFragment extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static TestingHowellFragment newInstance(int sectionNumber) {
-        TestingHowellFragment fragment = new TestingHowellFragment();
+    public static SettingsFragment newInstance(int sectionNumber) {
+        SettingsFragment fragment = new SettingsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public TestingHowellFragment() {
+    public SettingsFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_testing_howell, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
         return rootView;
     }
 
@@ -49,4 +50,4 @@ public class TestingHowellFragment extends Fragment {
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
 
-}
+} // SettingsFragment

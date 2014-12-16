@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.addWallet;
+package com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.addWallet;
 
 import android.app.Activity;
 import android.net.Uri;

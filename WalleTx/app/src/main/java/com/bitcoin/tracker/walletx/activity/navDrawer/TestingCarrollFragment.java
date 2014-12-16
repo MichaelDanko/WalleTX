@@ -1,4 +1,5 @@
-package com.bitcoin.tracker.walletx.activity.main;
+package com.bitcoin.tracker.walletx.activity.navDrawer;
+
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,11 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.MainActivity;
 
 /**
- * SettingsFragment allows user to update their settings.
+ * Temporary testing class
  */
-public class SettingsFragment extends Fragment {
+public class TestingCarrollFragment extends Fragment {
 
     /**
      * The fragment argument representing the section number for this
@@ -24,21 +26,21 @@ public class SettingsFragment extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static SettingsFragment newInstance(int sectionNumber) {
-        SettingsFragment fragment = new SettingsFragment();
+    public static TestingCarrollFragment newInstance(int sectionNumber) {
+        TestingCarrollFragment fragment = new TestingCarrollFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public SettingsFragment() {
+    public TestingCarrollFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_testing_carroll, container, false);
         return rootView;
     }
 
@@ -49,4 +51,4 @@ public class SettingsFragment extends Fragment {
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
 
-} // SettingsFragment
+}

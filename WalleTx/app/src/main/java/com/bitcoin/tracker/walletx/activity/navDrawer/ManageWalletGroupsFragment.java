@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.main;
+package com.bitcoin.tracker.walletx.activity.navDrawer;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.MainActivity;
 
 /**
  * ManageWalletGroupsFragment allows user to perform

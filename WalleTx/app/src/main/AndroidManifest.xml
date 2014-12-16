@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.main.MainActivity"
+            android:name=".activity.navDrawer.myWallets.MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
         <activity
@@ -37,7 +37,7 @@
             android:label="@string/title_activity_add_wallet" >
         </activity>
         <activity
-            android:name=".activity.addWallet.AddWalletActivity"
+            android:name=".activity.navDrawer.myWallets.addWallet.AddWalletActivity"
             android:label="@string/title_activity_add_wallet" >
         </activity>
     </application>
