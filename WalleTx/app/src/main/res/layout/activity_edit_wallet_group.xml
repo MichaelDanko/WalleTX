@@ -38,12 +38,22 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_add_wallet_group"
-        android:id="@+id/buttonAddWalletGroup"
+        android:text="@string/button_edit_wallet_group"
+        android:id="@+id/buttonUpdateWalletGroup"
         android:layout_below="@+id/checkBoxSetAsDefault"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/checkBoxSetAsDefault"
-        android:layout_alignEnd="@+id/checkBoxSetAsDefault"
-        android:layout_marginBottom="@dimen/form_element_vertical_spacing" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_delete_wallet_group"
+        android:id="@+id/buttonDeleteWalletGroup"
+        android:layout_below="@+id/buttonUpdateWalletGroup"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

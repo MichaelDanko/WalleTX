@@ -106,8 +106,6 @@ public class AddWalletGroupActivity extends ActionBarActivity {
         newGroup.save();
     }
 
-
-
     /**
      * Closes activity when the home button is selected.
      */
@@ -119,7 +117,5 @@ public class AddWalletGroupActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
 } // AddWalletGroupActivity

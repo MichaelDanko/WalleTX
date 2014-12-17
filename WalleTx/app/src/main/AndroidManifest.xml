@@ -40,6 +40,10 @@
             android:name=".activity.navDrawer.walletGroups.AddWalletGroupActivity"
             android:label="@string/title_activity_add_wallet_group" >
         </activity>
+        <activity
+            android:name=".activity.navDrawer.walletGroups.EditWalletGroupActivity"
+            android:label="@string/title_activity_edit_wallet_group" >
+        </activity>
     </application>
 
 </manifest>

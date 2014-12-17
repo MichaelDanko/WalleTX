@@ -12,6 +12,7 @@
 
     <!-- APP -->
     <string name="app_name">WalleTx</string>
+    <string name="hello_world">Hello world!</string>
 
     <!-- SPLASH activity -->
     <string name="splash_logo">Bitcoin WalleTx</string> <!-- image content desc -->
@@ -35,12 +36,15 @@
 
     <!-- MY WALLETS fragment -->
 
+
     <!-- ADD NEW WALLET activity -->
     <string name="title_activity_add_wallet">Add new wallet</string>
+
     <string-array name="spinner_supported_wallet_types">
         <item>Single address wallet</item>
         <item>Some other wallet type</item>
     </string-array>
+
     <string name="hint_public_key">Public key</string>
     <string name="hint_single_address_wallet_name">Name</string>
 
@@ -48,11 +52,15 @@
     <string name="title_fragment_wallet_groups">Manage Wallet Groups</string>
     <string name="name_of_default_wallet_group">My Wallets</string>
     <!-- Add new wallet groups -->
-        <string name="title_activity_add_wallet_group">Add New Wallet Group</string>
-        <string name="hint_wallet_group_name">Wallet group name</string>
-        <string name="checkbox_set_as_default">Set as default group</string>
-        <string name="button_add_wallet_group">Add Wallet Group</string>
-        <string name="error_wallet_group_empty">Oops! Wallet group cannot be empty string</string>
-        <string name="error_wallet_group_exists">Oops! Wallet group already exists</string>
+    <string name="title_activity_add_wallet_group">Add New Wallet Group</string>
+    <string name="hint_wallet_group_name">Wallet group name</string>
+    <string name="checkbox_set_as_default">Set as default group</string>
+    <string name="button_add_wallet_group">Add Wallet Group</string>
+    <string name="error_wallet_group_empty">Oops! Wallet group cannot be empty string</string>
+    <string name="error_wallet_group_exists">Oops! Wallet group already exists</string>
+    <!-- Edit existing wallet group -->
+    <string name="title_activity_edit_wallet_group">Edit Wallet Group</string>
+    <string name="button_edit_wallet_group">Update</string>
+    <string name="button_delete_wallet_group">Delete</string>
 
 </resources>
