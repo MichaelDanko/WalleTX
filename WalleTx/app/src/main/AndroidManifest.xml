@@ -16,7 +16,7 @@
         <meta-data
             android:name="AA_DB_VERSION"
             android:value="1" />
-        <!-- TODO: specify models -->
+        <!-- TODO: specify AA models -->
 
         <activity
             android:name=".activity.SplashActivity"
@@ -31,10 +31,6 @@
         <activity
             android:name=".activity.navDrawer.MainActivity"
             android:label="@string/title_activity_main" >
-        </activity>
-        <activity
-            android:name=".activity.AddWallet"
-            android:label="@string/title_activity_add_wallet" >
         </activity>
         <activity
             android:name=".activity.navDrawer.myWallets.addWallet.AddWalletActivity"

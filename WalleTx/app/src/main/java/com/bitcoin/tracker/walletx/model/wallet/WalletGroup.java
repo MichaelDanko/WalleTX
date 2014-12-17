@@ -25,20 +25,27 @@ public class WalletGroup extends Model {
     @Column(name = "DefaultGroup")
     private int defaultGroup;
 
+    public int getDefaultGroup() {
+        return defaultGroup;
+    }
+
     /**
      * Sets the default wallet group.
      */
-    public void setAsDefault() {
-        // clear current default group
-        List<WalletGroup> groups = WalletGroup.getAll();
-        for (WalletGroup group : groups) {
-            if (group.defaultGroup == 1) {
-                group.defaultGroup = 0;
-                group.save();
+    public void setAsDefault(int isDefault) {
+        if (isDefault == 1) {
+            // clear current default group and set this as default
+            List<WalletGroup> groups = WalletGroup.getAll();
+            for (WalletGroup group : groups) {
+                if (group.defaultGroup == 1) {
+                    group.defaultGroup = 0;
+                    group.save();
+                }
             }
+            defaultGroup = 1;
+        } else {
+            defaultGroup = 0;
         }
-        // set this as default
-        defaultGroup = 1;
     }
 
     // Display order.
@@ -107,6 +114,13 @@ public class WalletGroup extends Model {
         return new Select()
                 .from(WalletGroup.class)
                 .where("DefaultGroup = ?", 1)
+                .executeSingle();
+    }
+
+    public static WalletGroup getLast() {
+        return new Select()
+                .from(WalletGroup.class)
+                .orderBy("DisplayOrder DESC")
                 .executeSingle();
     }
 

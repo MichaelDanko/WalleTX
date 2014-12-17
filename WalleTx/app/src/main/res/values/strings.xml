@@ -46,10 +46,13 @@
 
     <!-- WALLET GROUPS fragment -->
     <string name="title_fragment_wallet_groups">Manage Wallet Groups</string>
-    <string name="title_activity_add_wallet_group">Add New Wallet Group</string>
     <string name="name_of_default_wallet_group">My Wallets</string>
-    <string name="hint_wallet_group_name">Wallet group name</string>
-    <string name="checkbox_set_as_default">Set as default group</string>
-    <string name="button_add_wallet_group">Add Wallet Group</string>
+    <!-- Add new wallet groups -->
+        <string name="title_activity_add_wallet_group">Add New Wallet Group</string>
+        <string name="hint_wallet_group_name">Wallet group name</string>
+        <string name="checkbox_set_as_default">Set as default group</string>
+        <string name="button_add_wallet_group">Add Wallet Group</string>
+        <string name="error_wallet_group_empty">Oops! Wallet group cannot be empty string</string>
+        <string name="error_wallet_group_exists">Oops! Wallet group already exists</string>
 
 </resources>

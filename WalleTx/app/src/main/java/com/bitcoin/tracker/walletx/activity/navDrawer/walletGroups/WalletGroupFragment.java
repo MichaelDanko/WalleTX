@@ -73,7 +73,6 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
         // Setup Adapter to display wallet group titles.
         mAdapter = new ArrayAdapter<WalletGroup>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, WalletGroup.getAll());
-
     }
 
     @Override
@@ -115,6 +114,30 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
         mListener = null;
     }
 
+
+
+
+
+
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // TODO: I need to figure out how to update the list view immediately after adding a new group.
+
+    }
+
+
+
+
+
+
+
+
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
@@ -148,7 +171,6 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
     }
 
