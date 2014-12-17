@@ -96,8 +96,8 @@ public class NavigationDrawerFragment extends Fragment {
                 android.R.id.text1,
                 new String[]{
                         getString(R.string.title_my_wallets),
-                        getString(R.string.title_manage_wallet_groups),
-                        getString(R.string.title_manage_tx_catgeories),
+                        getString(R.string.title_wallet_groups),
+                        getString(R.string.title_tx_catgeories),
                         getString(R.string.title_settings),
 
                         // TEMP: BEGIN TESTING CODE -----------------------------------------

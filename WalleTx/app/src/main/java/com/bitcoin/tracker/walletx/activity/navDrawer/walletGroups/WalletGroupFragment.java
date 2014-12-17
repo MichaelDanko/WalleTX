@@ -1,6 +1,7 @@
 package com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,30 +15,25 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
-
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
-import com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups.dummy.DummyContent;
+import com.bitcoin.tracker.walletx.model.wallet.WalletGroup;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
+ * Displays a list of all wallet groups.
+ *
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
- * interface.
  */
 public class WalletGroupFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     /**
      * The fragment argument representing the section number for this fragment.
+     * Used to communicate to the MainActivity that WalletGroupFragment is currently active.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
-
-    private int argSectionNumber; // TODO delete mParam1, mParam2 ################################
+    private int argSectionNumber;
 
     private OnFragmentInteractionListener mListener;
 
@@ -52,7 +48,6 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
      */
     private ListAdapter mAdapter;
 
-    // TODO: Rename and change types of parameters
     public static WalletGroupFragment newInstance(int sectionNumber) {
         WalletGroupFragment fragment = new WalletGroupFragment();
         Bundle args = new Bundle();
@@ -75,9 +70,10 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
             argSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         }
 
-        // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
+        // Setup Adapter to display wallet group titles.
+        mAdapter = new ArrayAdapter<WalletGroup>(getActivity(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, WalletGroup.getAll());
+
     }
 
     @Override
@@ -119,13 +115,12 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
         mListener = null;
     }
 
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            mListener.onFragmentInteraction(WalletGroup.getAll().get(position).toString());
         }
     }
 
@@ -157,23 +152,29 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
         public void onFragmentInteraction(String id);
     }
 
+    //region OPTIONS MENU
 
-
-
+    /**
+     * Adds fragment specific menu options to action bar menu.
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Add fragment specific action bar items to activity action bar items.
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.groups, menu);
     }
 
+    /**
+     * Handles action bar menu interactions for this fragment.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_group) {
-            Toast.makeText(getActivity(), "TODO: Add New Wallet Group", Toast.LENGTH_SHORT).show();
-            return true;
+            Intent intent = new Intent( getActivity(), AddWalletGroupActivity.class );
+            startActivity( intent );
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //endregion
 
 }

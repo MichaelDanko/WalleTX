@@ -8,13 +8,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.MyWalletsFragment;
 import com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups.WalletGroupFragment;
 
 /**
- * Handles displaying the fragments accessed from within the navigation drawer.
+ * Handles the display of and interactions with the fragments
+ * accessed from within the navigation.
  */
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
@@ -62,7 +64,7 @@ WalletGroupFragment.OnFragmentInteractionListener {
                 fragment = SettingsFragment.newInstance(position + 1);
                 break;
 
-            // TEMP: BEGIN TESTING CODE -------------------------------------------------
+            //region TEMPORARY TESTING AREA. DELETE BEFORE LAUNCH.
             case 4:
                 fragment = TestingCarrollFragment.newInstance(position + 1);
                 break;
@@ -75,7 +77,7 @@ WalletGroupFragment.OnFragmentInteractionListener {
             case 7:
                 fragment = TestingSolanoFragment.newInstance(position + 1);
                 break;
-            // TEMP: End testing fragments --------
+            //endregion
 
             default:
                 fragment = MyWalletsFragment.newInstance(position + 1);
@@ -91,22 +93,19 @@ WalletGroupFragment.OnFragmentInteractionListener {
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                System.out.println("HERE>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                 mTitle = getString(R.string.title_my_wallets);
                 break;
             case 2:
-                System.out.println("THERE>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                mTitle = getString(R.string.title_manage_wallet_groups);
+                mTitle = getString(R.string.title_fragment_wallet_groups);
                 break;
             case 3:
-                System.out.println("HERE>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                mTitle = getString(R.string.title_manage_tx_catgeories);
+                mTitle = getString(R.string.title_tx_catgeories);
                 break;
             case 4:
                 mTitle = getString(R.string.title_settings);
                 break;
 
-            // TEMP: BEGIN TESTING CODE -------------------------------------------------
+            //region TEMPORARY TESTING AREA. DELETE BEFORE LAUNCH.
             case 5:
                 mTitle = getString(R.string.dc);
                 break;
@@ -119,7 +118,7 @@ WalletGroupFragment.OnFragmentInteractionListener {
             case 8:
                 mTitle = getString(R.string.as);
                 break;
-            // TEMP: End testing fragments --------
+            //endregion
 
         }
     }
@@ -150,9 +149,11 @@ WalletGroupFragment.OnFragmentInteractionListener {
         return super.onOptionsItemSelected(item);
     }
 
-
     public void onFragmentInteraction(String id) {
-
+        // Handle click events associated with WalletGroupFragment list items.
+        if (mTitle.toString().equals(getString(R.string.title_fragment_wallet_groups))) {
+            Toast.makeText(this, "TODO: Handle click event", Toast.LENGTH_SHORT).show();
+        }
     }
 
 } // MainActivity
