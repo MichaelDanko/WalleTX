@@ -114,29 +114,16 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
         mListener = null;
     }
 
-
-
-
-
-
-
-
-
+    /**
+     * Refreshes the list view to reflect changes.
+     */
     @Override
     public void onResume() {
         super.onResume();
-
-        // TODO: I need to figure out how to update the list view immediately after adding a new group.
-
+        mAdapter = new ArrayAdapter<WalletGroup>(getActivity(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, WalletGroup.getAll());
+        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
     }
-
-
-
-
-
-
-
-
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
