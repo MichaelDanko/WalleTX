@@ -91,11 +91,12 @@ public class WalletGroup extends Model {
     //region WALLET GROUP QUERIES
 
     /**
-     * @return List of all WalletGroups
+     * @return List of all WalletGroups in order.
      */
     public static List<WalletGroup> getAll() {
         return new Select()
                 .from(WalletGroup.class)
+                .orderBy("DisplayOrder ASC")
                 .execute();
     }
 
