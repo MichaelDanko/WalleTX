@@ -1,5 +1,6 @@
 package com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import com.bitcoin.tracker.walletx.R;
 public class EditWalletGroupActivity extends ActionBarActivity {
 
     private EditText mGroupName;
+    private String   mCurrentName;
     private CheckBox mSetAsDefault;
     private Button   mUpdate;
     private Button   mDelete;
@@ -22,6 +24,7 @@ public class EditWalletGroupActivity extends ActionBarActivity {
         setContentView(R.layout.activity_edit_wallet_group);
         setupActionBar();
         getViewsById();
+        addCurrentGroupNameToEditText();
     }
 
     private void setupActionBar() {
@@ -34,6 +37,12 @@ public class EditWalletGroupActivity extends ActionBarActivity {
         mSetAsDefault = (CheckBox) findViewById((R.id.checkBoxSetAsDefault));
         mUpdate = (Button) findViewById(R.id.buttonUpdateWalletGroup);
         mDelete = (Button) findViewById(R.id.buttonDeleteWalletGroup);
+    }
+
+    private void addCurrentGroupNameToEditText() {
+        Intent intent = getIntent();
+        mCurrentName = intent.getStringExtra("wallet_group_name");
+        mGroupName.setText(mCurrentName);
     }
 
     /**
