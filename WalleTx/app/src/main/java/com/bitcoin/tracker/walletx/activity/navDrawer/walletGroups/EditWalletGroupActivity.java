@@ -82,7 +82,7 @@ public class EditWalletGroupActivity extends ActionBarActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setMessage(R.string.alert_message_delete_wallet_group);
-                builder.setTitle("Delete " + mCurrentName);
+                builder.setTitle("Delete group '" + mCurrentName + "'?");
                 builder.setPositiveButton(R.string.confirm_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
