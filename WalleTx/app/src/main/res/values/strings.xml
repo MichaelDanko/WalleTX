@@ -12,6 +12,8 @@
 
     <!-- APP -->
     <string name="app_name">WalleTx</string>
+    <string name="confirm_yes">Yes</string>
+    <string name="confirm_no">No</string>
     <string name="hello_world">Hello world!</string>
 
     <!-- SPLASH activity -->
@@ -62,5 +64,9 @@
     <string name="title_activity_edit_wallet_group">Edit Wallet Group</string>
     <string name="button_edit_wallet_group">Update</string>
     <string name="button_delete_wallet_group">Delete</string>
+    <string name="checkbox_current_default_group">Current default group</string>
+    <string name="alert_message_delete_wallet_group">
+        All wallets in this group will be moved to the default group.
+    </string>
 
 </resources>

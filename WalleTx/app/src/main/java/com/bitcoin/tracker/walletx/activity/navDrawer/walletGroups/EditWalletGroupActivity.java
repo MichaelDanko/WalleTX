@@ -1,14 +1,20 @@
 package com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.model.wallet.WalletGroup;
+
+import static com.bitcoin.tracker.walletx.model.wallet.WalletGroup.*;
 
 public class EditWalletGroupActivity extends ActionBarActivity {
 
@@ -24,7 +30,9 @@ public class EditWalletGroupActivity extends ActionBarActivity {
         setContentView(R.layout.activity_edit_wallet_group);
         setupActionBar();
         getViewsById();
+        bindClickEvents();
         addCurrentGroupNameToEditText();
+        disableElementsForDefaultGroup();
     }
 
     private void setupActionBar() {
@@ -39,10 +47,90 @@ public class EditWalletGroupActivity extends ActionBarActivity {
         mDelete = (Button) findViewById(R.id.buttonDeleteWalletGroup);
     }
 
+    private void bindClickEvents() {
+
+        mUpdate.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * Updated the group name and default value before
+             * finishing this activity.
+             */
+            @Override
+            public void onClick(View v) {
+                WalletGroup group = getBy(mCurrentName);
+                group.name = mGroupName.getText().toString();
+                // Update default. Current default must be set to 0.
+                if (mSetAsDefault.isChecked()) {
+                    WalletGroup currentDefault = getDefault();
+                    currentDefault.setAsDefault(0);
+                    currentDefault.save();
+                    group.setAsDefault(1);
+                }
+                group.save();
+                finish();
+            }
+        });
+
+        mDelete.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * Creates and displays an AlertDialog
+             * asking user if they wish to delete the group.
+             */
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage(R.string.alert_message_delete_wallet_group);
+                builder.setTitle("Delete " + mCurrentName);
+                builder.setPositiveButton(R.string.confirm_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                        deleteWalletGroup();
+                    }
+                });
+                builder.setNegativeButton(R.string.confirm_no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+    } // bindClickEvents
+
+    private void deleteWalletGroup() {
+
+        //-------------------------------------------------------------------------------
+        // TODO Change the group of any Walletx's under this group to the default group.
+        //-------------------------------------------------------------------------------
+
+        WalletGroup group = getBy(mCurrentName);
+        group.delete();
+        finish();
+    }
+
     private void addCurrentGroupNameToEditText() {
         Intent intent = getIntent();
         mCurrentName = intent.getStringExtra("wallet_group_name");
         mGroupName.setText(mCurrentName);
+    }
+
+    /**
+     * Modifies form elements that should not be available to
+     * the default wallet group.
+     */
+    private void disableElementsForDefaultGroup() {
+        WalletGroup group = getBy(mCurrentName);
+        if (group.isDefault()) {
+            mSetAsDefault.setEnabled(false);
+            mSetAsDefault.setText(R.string.checkbox_current_default_group);
+            mDelete.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**

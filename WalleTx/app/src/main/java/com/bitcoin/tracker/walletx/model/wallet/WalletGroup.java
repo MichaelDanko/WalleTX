@@ -98,6 +98,17 @@ public class WalletGroup extends Model {
     //region WALLET GROUP QUERIES
 
     /**
+     * @param name
+     * @return WalletGroup selected by name
+     */
+    public static WalletGroup getBy(String name) {
+        return new Select()
+                .from(WalletGroup.class)
+                .where("Name = ?", name)
+                .executeSingle();
+    }
+
+    /**
      * @return List of all WalletGroups in order.
      */
     public static List<WalletGroup> getAll() {
@@ -115,6 +126,13 @@ public class WalletGroup extends Model {
                 .from(WalletGroup.class)
                 .where("DefaultGroup = ?", 1)
                 .executeSingle();
+    }
+
+    /**
+     * @return true is WalletGroup is the default group
+     */
+    public boolean isDefault() {
+        return this.defaultGroup == 1;
     }
 
     public static WalletGroup getLast() {
