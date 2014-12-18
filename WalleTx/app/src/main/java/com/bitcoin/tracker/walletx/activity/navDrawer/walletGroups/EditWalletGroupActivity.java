@@ -26,7 +26,7 @@ public class EditWalletGroupActivity extends ActionBarActivity {
 
     private void setupActionBar() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.title_activity_add_wallet_group);
+        getSupportActionBar().setTitle(R.string.title_activity_edit_wallet_group);
     }
 
     private void getViewsById() {

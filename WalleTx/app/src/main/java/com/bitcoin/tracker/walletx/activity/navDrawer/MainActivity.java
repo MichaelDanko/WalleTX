@@ -1,5 +1,6 @@
 package com.bitcoin.tracker.walletx.activity.navDrawer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.MyWalletsFragment;
+import com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups.EditWalletGroupActivity;
 import com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups.WalletGroupFragment;
 
 /**
@@ -152,7 +154,8 @@ WalletGroupFragment.OnFragmentInteractionListener {
     public void onFragmentInteraction(String id) {
         // Handle click events associated with WalletGroupFragment list items.
         if (mTitle.toString().equals(getString(R.string.title_fragment_wallet_groups))) {
-            Toast.makeText(this, "TODO: Handle click event", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent( this, EditWalletGroupActivity.class );
+            startActivity(intent);
         }
     }
 
