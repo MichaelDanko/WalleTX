@@ -14,6 +14,8 @@ import android.widget.EditText;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.wallet.WalletGroup;
 
+import java.util.List;
+
 import static com.bitcoin.tracker.walletx.model.wallet.WalletGroup.*;
 
 public class EditWalletGroupActivity extends ActionBarActivity {
@@ -104,13 +106,20 @@ public class EditWalletGroupActivity extends ActionBarActivity {
     } // bindClickEvents
 
     private void deleteWalletGroup() {
+        WalletGroup delete = getBy(mCurrentName);
 
         //-------------------------------------------------------------------------------
         // TODO Change the group of any Walletx's under this group to the default group.
         //-------------------------------------------------------------------------------
 
-        WalletGroup group = getBy(mCurrentName);
-        group.delete();
+        // Change the display order of groups after the deleted group
+        List<WalletGroup> groups = WalletGroup.getAllWithDisplayOrderGreaterThan(delete.displayOrder);
+        for (WalletGroup group : groups) {
+            group.displayOrder = group.displayOrder - 1;
+            group.save();
+        }
+
+        delete.delete();
         finish();
     }
 
