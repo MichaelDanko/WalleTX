@@ -142,6 +142,18 @@ public class WalletGroup extends Model {
                 .executeSingle();
     }
 
+    /**
+     * @param displayOrder
+     * @return Returns all WalletGroups with a displayOrder value > displayOrder param
+     */
+    public static List<WalletGroup> getAllWithDisplayOrderGreaterThan(int displayOrder) {
+        return new Select()
+                .from(WalletGroup.class)
+                .where("DisplayOrder > ?", displayOrder)
+                .orderBy("DisplayOrder ASC")
+                .execute();
+    }
+
     //endregion
 
 } // WalletGroup
