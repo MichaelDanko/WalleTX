@@ -29,7 +29,7 @@ public class EditWalletGroupActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_wallet_group);
+        setContentView(R.layout.activity_walletgroup_update);
         setupActionBar();
         getViewsById();
         bindClickEvents();

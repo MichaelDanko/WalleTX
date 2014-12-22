@@ -27,7 +27,7 @@ public class AddWalletGroupActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_wallet_group);
+        setContentView(R.layout.activity_walletgroup_create);
         setupActionBar();
         getViewsById();
         addSubmitButtonClickListener();

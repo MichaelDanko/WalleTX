@@ -1,6 +1,7 @@
 package com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,9 @@ import android.widget.TextView;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
 import com.bitcoin.tracker.walletx.model.wallet.WalletGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Displays a list of all wallet groups.
@@ -71,8 +75,9 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
         }
 
         // Setup Adapter to display wallet group titles.
-        mAdapter = new ArrayAdapter<WalletGroup>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, WalletGroup.getAll());
+        //mAdapter = new ArrayAdapter<WalletGroup>(getActivity(),
+        //        android.R.layout.simple_list_item_1, android.R.id.text1, WalletGroup.getAll());
+        setupAdapter();
     }
 
     @Override
@@ -89,6 +94,20 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
         mListView.setOnItemClickListener(this);
 
         return view;
+    }
+
+    private void setupAdapter() {
+
+        ArrayList<WalletGroupListItem> items = new ArrayList<WalletGroupListItem>();
+        List<WalletGroup> groups = WalletGroup.getAll();
+        for (WalletGroup group : groups) {
+            items.add(new WalletGroupListItem(group.name, group.name));
+        }
+
+
+        mAdapter = new WalletGroupAdapter(getActivity(), items);
+        //mAdapter = new ArrayAdapter<WalletGroup>(getActivity(),
+        //        android.R.layout.simple_list_item_1, android.R.id.text1, WalletGroup.getAll());
     }
 
     @Override
@@ -120,9 +139,15 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter = new ArrayAdapter<WalletGroup>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, WalletGroup.getAll());
+
+
+        setupAdapter();
+        //mAdapter = new ArrayAdapter<WalletGroup>(getActivity(),
+        //        android.R.layout.simple_list_item_1, android.R.id.text1, WalletGroup.getAll());
+
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+
+
     }
 
     @Override
