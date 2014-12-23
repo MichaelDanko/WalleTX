@@ -1,7 +1,6 @@
 package com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups;
 
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -69,14 +67,9 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             argSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         }
-
-        // Setup Adapter to display wallet group titles.
-        //mAdapter = new ArrayAdapter<WalletGroup>(getActivity(),
-        //        android.R.layout.simple_list_item_1, android.R.id.text1, WalletGroup.getAll());
         setupAdapter();
     }
 
@@ -97,17 +90,20 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     }
 
     private void setupAdapter() {
-
         ArrayList<WalletGroupListItem> items = new ArrayList<WalletGroupListItem>();
         List<WalletGroup> groups = WalletGroup.getAll();
         for (WalletGroup group : groups) {
-            items.add(new WalletGroupListItem(group.name, group.name));
+            WalletGroupListItem item;
+            // Hide form components.
+            if (group.isDefault()) {
+                item = new WalletGroupListItem(group.name,
+                        getString(R.string.custom_wallet_group_list_item_label_default_group));
+            } else {
+                item = new WalletGroupListItem(group.name, "");
+            }
+            items.add(item);
         }
-
-
         mAdapter = new WalletGroupAdapter(getActivity(), items);
-        //mAdapter = new ArrayAdapter<WalletGroup>(getActivity(),
-        //        android.R.layout.simple_list_item_1, android.R.id.text1, WalletGroup.getAll());
     }
 
     @Override
@@ -139,15 +135,8 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onResume() {
         super.onResume();
-
-
         setupAdapter();
-        //mAdapter = new ArrayAdapter<WalletGroup>(getActivity(),
-        //        android.R.layout.simple_list_item_1, android.R.id.text1, WalletGroup.getAll());
-
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
-
-
     }
 
     @Override
@@ -203,7 +192,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_group) {
-            Intent intent = new Intent( getActivity(), AddWalletGroupActivity.class );
+            Intent intent = new Intent( getActivity(), CreateWalletGroupActivity.class );
             startActivity( intent );
         }
         return super.onOptionsItemSelected(item);

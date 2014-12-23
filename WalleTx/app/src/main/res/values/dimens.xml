@@ -8,6 +8,9 @@
     <dimen name="form_element_vertical_spacing">8dp</dimen>
     <dimen name="form_element_horizontal_spacing">8dp</dimen>
 
+    <!-- Custom list views -->
+    <dimen name="custom_list_view_list_item_padding">16dp</dimen>
+
     <!-- Splash Activity -->
     <dimen name="logo_bottom_padding">16dp</dimen>
 
@@ -16,5 +19,8 @@
 
     <!-- Add new wallet -->
     <dimen name="minimum_size_barcode_button">42dp</dimen>
+
+    <!-- Wallet Groups -->
+    <dimen name="custom_wallet_group_list_item_left_padding_default_group_label">8dp</dimen>
 
 </resources>

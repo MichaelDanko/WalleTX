@@ -18,7 +18,7 @@ import java.util.List;
  * Displays and handles the form associated with adding
  * new WalletGroups to the WTX database.
  */
-public class AddWalletGroupActivity extends ActionBarActivity {
+public class CreateWalletGroupActivity extends ActionBarActivity {
 
     private EditText mGroupName;
     private CheckBox mSetAsDefault;
@@ -56,7 +56,8 @@ public class AddWalletGroupActivity extends ActionBarActivity {
     }
 
     /**
-     * Validates that the wallet group name entered does not already exist.
+     * Validates that the wallet group name entered does not already exist
+     * and is not an empty string.
      */
     private boolean validateGroupName() {
         List<WalletGroup> groups = WalletGroup.getAll();
@@ -77,7 +78,6 @@ public class AddWalletGroupActivity extends ActionBarActivity {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -99,10 +99,9 @@ public class AddWalletGroupActivity extends ActionBarActivity {
             newGroup.setAsDefault(0);
         }
 
-        // Set group display order.
+        // Set group display order and save.
         WalletGroup last = WalletGroup.getLast();
         newGroup.displayOrder = last.displayOrder + 1;
-
         newGroup.save();
     }
 
@@ -118,4 +117,4 @@ public class AddWalletGroupActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-} // AddWalletGroupActivity
+} // CreateWalletGroupActivity

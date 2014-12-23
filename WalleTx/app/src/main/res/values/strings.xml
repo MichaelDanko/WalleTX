@@ -53,6 +53,9 @@
     <!-- WALLET GROUPS fragment -->
     <string name="title_fragment_wallet_groups">Manage Wallet Groups</string>
     <string name="name_of_default_wallet_group">My Wallets</string>
+
+    <string name="custom_wallet_group_list_item_label_default_group">(default group)</string>
+
     <!-- Add new wallet groups -->
     <string name="title_activity_add_wallet_group">Add New Wallet Group</string>
     <string name="hint_wallet_group_name">Wallet group name</string>
@@ -64,9 +67,13 @@
     <string name="title_activity_edit_wallet_group">Edit Wallet Group</string>
     <string name="button_edit_wallet_group">Update</string>
     <string name="button_delete_wallet_group">Delete</string>
-    <string name="checkbox_current_default_group">Current default group</string>
     <string name="alert_message_delete_wallet_group">
         Wallets within this group will automatically be moved to the default group.
+    </string>
+
+    <string name="label_delete_default_group_note">
+        Current default group cannot be deleted. If you wish to remove this group please
+        set another wallet group as the default.
     </string>
 
 </resources>

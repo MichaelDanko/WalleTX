@@ -9,11 +9,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.MyWalletsFragment;
-import com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups.EditWalletGroupActivity;
+import com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups.UpdateWalletGroupActivity;
 import com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups.WalletGroupFragment;
 
 /**
@@ -154,7 +153,7 @@ WalletGroupFragment.OnFragmentInteractionListener {
     public void onFragmentInteraction(String id) {
         // Handle click events associated with WalletGroupFragment list items.
         if (mTitle.toString().equals(getString(R.string.title_fragment_wallet_groups))) {
-            Intent intent = new Intent( this, EditWalletGroupActivity.class );
+            Intent intent = new Intent( this, UpdateWalletGroupActivity.class );
             intent.putExtra("wallet_group_name", id);
             startActivity(intent);
         }

@@ -12,7 +12,7 @@ import com.bitcoin.tracker.walletx.R;
 import java.util.ArrayList;
 
 /**
- *
+ * Populates custom list items in the WalletGroup list view.
  */
 public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
 
@@ -20,9 +20,7 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
     private final ArrayList<WalletGroupListItem> itemsArrayList;
 
     public WalletGroupAdapter(Activity activity, ArrayList<WalletGroupListItem> itemsArrayList) {
-
         super(activity, R.layout.fragment_walletgroup_list_item, itemsArrayList);
-
         this.activity = activity;
         this.itemsArrayList = itemsArrayList;
     }
@@ -30,21 +28,20 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        // 1. Create inflater
+        // Create inflater
         LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
-        // 2. Get rowView from inflater
+        // Get rowView from inflater
         View rowView = inflater.inflate(R.layout.fragment_walletgroup_list_item, parent, false);
+        TextView groupName = (TextView) rowView.findViewById(R.id.groupNameLabel);
+        TextView defaultGroup = (TextView) rowView.findViewById(R.id.defaultGroupLabel);
 
-        TextView labelView = (TextView) rowView.findViewById(R.id.groupName);
-        TextView valueView = (TextView) rowView.findViewById(R.id.testView);
+        // Set the text for textView
+        groupName.setText(itemsArrayList.get(position).getName());
+        defaultGroup.setText(itemsArrayList.get(position).getIsDefault());
 
-        // 4. Set the text for textView
-        labelView.setText(itemsArrayList.get(position).getName());
-        valueView.setText(itemsArrayList.get(position).getTest());
-
-        // 5. retrn rowView
+        // Return rowView
         return rowView;
     }
 }

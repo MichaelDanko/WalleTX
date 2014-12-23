@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.wallet.WalletGroup;
@@ -18,13 +19,18 @@ import java.util.List;
 
 import static com.bitcoin.tracker.walletx.model.wallet.WalletGroup.*;
 
-public class EditWalletGroupActivity extends ActionBarActivity {
+/**
+ * Displays and handles the form associated with updating and deleting
+ * WalletGroups from the WTX database.
+ */
+public class UpdateWalletGroupActivity extends ActionBarActivity {
 
     private EditText mGroupName;
     private String   mCurrentName;
     private CheckBox mSetAsDefault;
     private Button   mUpdate;
     private Button   mDelete;
+    private TextView mCannotDeleteLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +53,12 @@ public class EditWalletGroupActivity extends ActionBarActivity {
         mSetAsDefault = (CheckBox) findViewById((R.id.checkBoxSetAsDefault));
         mUpdate = (Button) findViewById(R.id.buttonUpdateWalletGroup);
         mDelete = (Button) findViewById(R.id.buttonDeleteWalletGroup);
+        mCannotDeleteLabel = (TextView) findViewById(R.id.labelDefaultGroupCannotBeDeleted);
     }
 
     private void bindClickEvents() {
 
+        // Update button functionality.
         mUpdate.setOnClickListener(new View.OnClickListener() {
 
             /**
@@ -73,6 +81,7 @@ public class EditWalletGroupActivity extends ActionBarActivity {
             }
         });
 
+        // Delete button functionality.
         mDelete.setOnClickListener(new View.OnClickListener() {
 
             /**
@@ -130,15 +139,16 @@ public class EditWalletGroupActivity extends ActionBarActivity {
     }
 
     /**
-     * Modifies form elements that should not be available to
-     * the default wallet group.
+     * Modifies form elements that should not be available
+     * for this wallet group.
      */
     private void disableElementsForDefaultGroup() {
         WalletGroup group = getBy(mCurrentName);
         if (group.isDefault()) {
-            mSetAsDefault.setEnabled(false);
-            mSetAsDefault.setText(R.string.checkbox_current_default_group);
-            mDelete.setVisibility(View.INVISIBLE);
+            mSetAsDefault.setVisibility(View.GONE);
+            mDelete.setVisibility(View.GONE);
+        } else {
+            mCannotDeleteLabel.setVisibility(View.GONE);
         }
     }
 
