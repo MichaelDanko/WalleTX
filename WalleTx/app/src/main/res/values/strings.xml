@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- TEMP STRINGS: DELETE BEFORE LAUNCH ################################# -->
-    <string name="md">Danko</string>
-    <string name="dc">Carroll</string>
-    <string name="bh">Howell</string>
-    <string name="as">Solano</string>
-    <string name="temporary">TEMPORARY</string>
-    <!-- TEMP STRINGS: END ################################################## -->
+<!--|**************************************************************************|
+    |  TESTING : Temporary strings associated with testing.                    |
+    |**************************************************************************|!-->
+    <string name="testing_danko">Danko</string>
+    <string name="testing_carroll">Carroll</string>
+    <string name="testing_howell">Howell</string>
+    <string name="testing_solano">Solano</string>
+    <string name="testing_temp">TEMPORARY</string>
+    <string name="hello_world">Hello world!</string>
 
-
-    <!-- APP -->
+<!--|**************************************************************************|
+    |  APP : Generic strings or strings that can be applied anywhere           |
+    |        with the app.                                                     |
+    |**************************************************************************|!-->
     <string name="app_name">WalleTx</string>
     <string name="confirm_yes">Yes</string>
     <string name="confirm_no">Cancel</string>
-    <string name="hello_world">Hello world!</string>
 
-    <!-- SPLASH activity -->
-    <string name="splash_logo">Bitcoin WalleTx</string> <!-- image content desc -->
-    <string name="splash_text_label">Bitcoin Wallet Tracker</string>
-
-    <!-- NAVIGATION DRAWER -->
+<!--|**************************************************************************|
+    |  NAV DRAWER : Strings applied to the navigation drawer.                  |
+    |**************************************************************************|!-->
     <string name="title_activity_main">WalleTx</string>
     <string name="title_my_wallets">My Wallets</string>
     <string name="title_wallet_groups">Wallet Groups</string>
@@ -29,40 +30,51 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!-- ACTION BAR menus -->
+<!--|**************************************************************************|
+    |  MENUS : Strings associated with action bar menus                        |
+    |**************************************************************************|!-->
     <string name="action_sync">Sync</string>
     <string name="action_add_wallet">Add new wallet</string>
     <string name="action_add_group">Add new wallet group</string>
     <string name="action_add_tx_category">Add new tx category</string>
     <string name="action_settings">Settings</string>
 
-    <!-- MY WALLETS fragment -->
+<!--|**************************************************************************|
+    |  SPLASH Activity                                                         |
+    |**************************************************************************|!-->
+    <string name="content_desc_splash_logo">Bitcoin WalleTx</string>
+    <string name="label_splash">Bitcoin Wallet Tracker</string>
 
+<!--|**************************************************************************|
+    |  MY WALLETS Activity and related                                         |
+    |**************************************************************************|!-->
 
-    <!-- ADD NEW WALLET activity -->
+    <!-- Add new wallet activity -->
     <string name="title_activity_add_wallet">Add new wallet</string>
-
     <string-array name="spinner_supported_wallet_types">
         <item>Single address wallet</item>
         <item>Some other wallet type</item>
     </string-array>
-
     <string name="hint_public_key">Public key</string>
     <string name="hint_single_address_wallet_name">Name</string>
 
-    <!-- WALLET GROUPS fragment -->
+<!--|**************************************************************************|
+    |  WALLET GROUPS Activity and related                                      |
+    |**************************************************************************|!-->
+
+    <!-- WalletGroup list view -->
     <string name="title_fragment_wallet_groups">Manage Wallet Groups</string>
-    <string name="name_of_default_wallet_group">My Wallets</string>
+    <string name="wtx_default_wallet_group">My Wallets</string>
+    <string name="label_default_wallet_group">(default group)</string>
 
-    <string name="custom_wallet_group_list_item_label_default_group">(default group)</string>
-
-    <!-- Add new wallet groups -->
+    <!-- Add new wallet groups activity -->
     <string name="title_activity_add_wallet_group">Add New Wallet Group</string>
     <string name="hint_wallet_group_name">Wallet group name</string>
     <string name="checkbox_set_as_default">Set as default group</string>
     <string name="button_add_wallet_group">Add Wallet Group</string>
-    <string name="error_wallet_group_empty">Oops! Wallet group cannot be empty string</string>
-    <string name="error_wallet_group_exists">Oops! Wallet group already exists</string>
+    <string name="toast_wallet_group_empty">Oops! Wallet group cannot be empty string</string>
+    <string name="toast_wallet_group_exists">Oops! Wallet group already exists</string>
+
     <!-- Edit existing wallet group -->
     <string name="title_activity_edit_wallet_group">Edit Wallet Group</string>
     <string name="button_edit_wallet_group">Update</string>
@@ -70,7 +82,6 @@
     <string name="alert_message_delete_wallet_group">
         Wallets within this group will automatically be moved to the default group.
     </string>
-
     <string name="label_delete_default_group_note">
         Current default group cannot be deleted. If you wish to remove this group please
         set another wallet group as the default.

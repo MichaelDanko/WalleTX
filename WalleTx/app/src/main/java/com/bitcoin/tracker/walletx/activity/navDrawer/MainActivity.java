@@ -108,16 +108,16 @@ WalletGroupFragment.OnFragmentInteractionListener {
 
             //region TEMPORARY TESTING AREA. DELETE BEFORE LAUNCH.
             case 5:
-                mTitle = getString(R.string.dc);
+                mTitle = getString(R.string.testing_carroll);
                 break;
             case 6:
-                mTitle = getString(R.string.md);
+                mTitle = getString(R.string.testing_danko);
                 break;
             case 7:
-                mTitle = getString(R.string.bh);
+                mTitle = getString(R.string.testing_howell);
                 break;
             case 8:
-                mTitle = getString(R.string.as);
+                mTitle = getString(R.string.testing_solano);
                 break;
             //endregion
 

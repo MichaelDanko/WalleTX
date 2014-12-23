@@ -97,7 +97,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
             // Hide form components.
             if (group.isDefault()) {
                 item = new WalletGroupListItem(group.name,
-                        getString(R.string.custom_wallet_group_list_item_label_default_group));
+                        getString(R.string.label_default_wallet_group));
             } else {
                 item = new WalletGroupListItem(group.name, "");
             }

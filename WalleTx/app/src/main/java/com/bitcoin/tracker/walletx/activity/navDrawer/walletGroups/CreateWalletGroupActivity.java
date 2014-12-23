@@ -65,7 +65,7 @@ public class CreateWalletGroupActivity extends ActionBarActivity {
 
         // Cannot be empty string.
         if (nameEntered.isEmpty()) {
-            String error = getString(R.string.error_wallet_group_empty);
+            String error = getString(R.string.toast_wallet_group_empty);
             Toast.makeText(this, error, Toast.LENGTH_LONG).show();
             return false;
         }
@@ -73,7 +73,7 @@ public class CreateWalletGroupActivity extends ActionBarActivity {
         // Cannot already exist in the database.
         for (WalletGroup group : groups) {
             if (group.name.toLowerCase().equals(nameEntered)) {
-                String error = getString(R.string.error_wallet_group_exists);
+                String error = getString(R.string.toast_wallet_group_exists);
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show();
                 return false;
             }
