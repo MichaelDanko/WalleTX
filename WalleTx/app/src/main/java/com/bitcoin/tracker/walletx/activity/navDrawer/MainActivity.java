@@ -151,12 +151,7 @@ WalletGroupFragment.OnFragmentInteractionListener {
     }
 
     public void onFragmentInteraction(String id) {
-        // Handle click events associated with WalletGroupFragment list items.
-        if (mTitle.toString().equals(getString(R.string.title_fragment_wallet_groups))) {
-            Intent intent = new Intent( this, UpdateWalletGroupActivity.class );
-            intent.putExtra("wallet_group_name", id);
-            startActivity(intent);
-        }
+        // Handle click events associated with fragments.
     }
 
 } // MainActivity

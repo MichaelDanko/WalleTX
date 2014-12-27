@@ -142,9 +142,16 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
+            String name = WalletGroup.getAll().get(position).toString();
+
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(WalletGroup.getAll().get(position).toString());
+            mListener.onFragmentInteraction(name);
+
+            // Open update wallet activity.
+            Intent intent = new Intent( getActivity(), UpdateWalletGroupActivity.class );
+            intent.putExtra("wallet_group_name", name);
+            startActivity(intent);
         }
     }
 
