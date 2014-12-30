@@ -65,7 +65,7 @@
     <!-- WalletGroup list view -->
     <string name="title_fragment_wallet_groups">Manage Wallet Groups</string>
     <string name="wtx_default_wallet_group">My Wallets</string>
-    <string name="label_default_wallet_group">(default group)</string>
+    <string name="label_default_wallet_group">(default)</string>
 
     <!-- Add new wallet groups activity -->
     <string name="title_activity_add_wallet_group">Add New Wallet Group</string>
