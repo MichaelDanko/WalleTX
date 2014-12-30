@@ -1,6 +1,5 @@
-package com.bitcoin.tracker.walletx.activity.navDrawer;
+package com.bitcoin.tracker.walletx.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,9 +10,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.MyWalletsFragment;
-import com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups.UpdateWalletGroupActivity;
-import com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups.WalletGroupFragment;
+import com.bitcoin.tracker.walletx.activity.categories.ManageTxCategoriesFragment;
+import com.bitcoin.tracker.walletx.activity.myWallets.MyWalletsFragment;
+import com.bitcoin.tracker.walletx.activity.settings.SettingsFragment;
+import com.bitcoin.tracker.walletx.activity.testing.TestingCarrollFragment;
+import com.bitcoin.tracker.walletx.activity.testing.TestingDankoFragment;
+import com.bitcoin.tracker.walletx.activity.testing.TestingHowellFragment;
+import com.bitcoin.tracker.walletx.activity.testing.TestingSolanoFragment;
+import com.bitcoin.tracker.walletx.activity.walletGroups.WalletGroupFragment;
 
 /**
  * Handles the display of and interactions with the fragments

@@ -1,7 +1,6 @@
-package com.bitcoin.tracker.walletx.activity.navDrawer.myWallets;
+package com.bitcoin.tracker.walletx.activity.categories;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,34 +12,34 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
-import com.bitcoin.tracker.walletx.activity.navDrawer.myWallets.addWallet.AddWalletActivity;
+import com.bitcoin.tracker.walletx.activity.MainActivity;
 
 /**
- * MyWalletsFragment acts as the home view for the application.
- * Displays aggregations of wallets.
+ * ManageTxCategoriesFragment allows user to perform
+ * CRUD operations on tx categories.
  */
-public class MyWalletsFragment extends Fragment {
+public class ManageTxCategoriesFragment extends Fragment {
 
     // The fragment argument representing the section number for this fragment.
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     // Returns a new instance of this fragment for the given section number.
-    public static MyWalletsFragment newInstance(int sectionNumber) {
-        MyWalletsFragment fragment = new MyWalletsFragment();
+    public static ManageTxCategoriesFragment newInstance(int sectionNumber) {
+        ManageTxCategoriesFragment fragment = new ManageTxCategoriesFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public MyWalletsFragment() {}
+    public ManageTxCategoriesFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_my_wallets, container, false); // root view
+        View rootView = inflater.inflate(R.layout.fragment_category, container, false);
+        return rootView;
     }
 
     @Override
@@ -54,20 +53,16 @@ public class MyWalletsFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Add fragment specific action bar items to activity action bar items.
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main, menu);
+        inflater.inflate(R.menu.categories, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_sync) {
-            Toast.makeText(getActivity(), "TODO: Sync data", Toast.LENGTH_SHORT).show();
+        if (item.getItemId() == R.id.action_add_tx_category) {
+            Toast.makeText(getActivity(), "TODO: Add New Tx Category", Toast.LENGTH_SHORT).show();
             return true;
-        } else if (item.getItemId() == R.id.action_add_wallet) {
-            // open new activity
-            Intent intent = new Intent( getActivity(), AddWalletActivity.class );
-            startActivity( intent );
         }
         return super.onOptionsItemSelected(item);
     }
 
-} // MyWalletsFragment
+} // ManageTxCategoriesFragment

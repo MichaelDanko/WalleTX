@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups;
+package com.bitcoin.tracker.walletx.activity.walletGroups;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
+import com.bitcoin.tracker.walletx.activity.MainActivity;
 import com.bitcoin.tracker.walletx.model.wallet.WalletGroup;
 
 import java.util.ArrayList;

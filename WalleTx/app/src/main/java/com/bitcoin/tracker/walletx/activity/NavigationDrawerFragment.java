@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.navDrawer;
+package com.bitcoin.tracker.walletx.activity;
 
 import android.app.Activity;
 import android.content.SharedPreferences;

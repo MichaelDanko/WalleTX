@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.navDrawer.walletGroups;
+package com.bitcoin.tracker.walletx.activity.walletGroups;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;

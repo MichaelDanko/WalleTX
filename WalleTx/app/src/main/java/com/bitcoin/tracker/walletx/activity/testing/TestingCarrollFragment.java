@@ -1,4 +1,5 @@
-package com.bitcoin.tracker.walletx.activity.navDrawer;
+package com.bitcoin.tracker.walletx.activity.testing;
+
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,11 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.MainActivity;
 
 /**
  * Temporary testing class
  */
-public class TestingHowellFragment extends Fragment {
+public class TestingCarrollFragment extends Fragment {
 
     /**
      * The fragment argument representing the section number for this
@@ -24,21 +26,21 @@ public class TestingHowellFragment extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static TestingHowellFragment newInstance(int sectionNumber) {
-        TestingHowellFragment fragment = new TestingHowellFragment();
+    public static TestingCarrollFragment newInstance(int sectionNumber) {
+        TestingCarrollFragment fragment = new TestingCarrollFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public TestingHowellFragment() {
+    public TestingCarrollFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_testing_howell, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_testing_carroll, container, false);
         return rootView;
     }
 
