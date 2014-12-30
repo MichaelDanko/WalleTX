@@ -114,6 +114,9 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
      * @param parent
      */
     private void refreshListView(ViewGroup parent) {
+
+        // TODO Ensure that list view refreshes to last known position.
+
         ListAdapter adapter;
         ArrayList<WalletGroupListItem> items = new ArrayList<WalletGroupListItem>();
         List<WalletGroup> groups = WalletGroup.getAll();
