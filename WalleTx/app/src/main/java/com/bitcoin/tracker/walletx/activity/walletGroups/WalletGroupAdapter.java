@@ -52,28 +52,39 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
         moveUp.setFocusable(false);
         moveUp.setFocusableInTouchMode(false);
 
-        // Disable the up and down buttons for the first and last list items.
+        // Disable move down buttons for first list items.
         if (position == 0) {
             moveUp.setEnabled(false);
             moveUp.setVisibility(View.INVISIBLE);
         }
-        if (position + 1 == WalletGroup.getLast().displayOrder) {
+
+        // Disable move up button for last list item
+        int last = WalletGroup.getLast().displayOrder;
+        if (position + 1 == last) {
             moveDown.setEnabled(false);
             moveDown.setVisibility(View.INVISIBLE);
+            if (last == 2) moveDown.setVisibility(View.GONE);
         }
 
         // Set the text for textView
         groupName.setText(itemsArrayList.get(position).getName());
         defaultGroup.setText(itemsArrayList.get(position).getIsDefault());
 
-        // On click move the wallet group up or down and change its displayOrder.
+        // Set onClickListeners to move up/down buttons
         moveDown.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                // TODO ADD THIS FUNCTIONALITY
-                System.out.println("MOVE DOWN");
+                int displayOrder = position + 1;
+                WalletGroup clicked = WalletGroup.getByDisplayOrder(displayOrder);
+                WalletGroup swap = WalletGroup.getByDisplayOrder(displayOrder + 1);
+                swap.displayOrder = displayOrder;
+                clicked.displayOrder = displayOrder + 1;
+                swap.save();
+                clicked.save();
+                refreshListView(parent);
+                WalletGroup.dump();
             }
 
         });
@@ -84,24 +95,14 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
             public void onClick(View v)
             {
                 int displayOrder = position + 1;
-                WalletGroup clicked = new Select()
-                        .from(WalletGroup.class)
-                        .where("DisplayOrder = ?", position + 1)
-                        .executeSingle();
-                WalletGroup swap = new Select()
-                        .from(WalletGroup.class)
-                        .where("DisplayOrder = ?", position)
-                        .executeSingle();
-                swap.displayOrder = position + 1;
-                clicked.displayOrder = position;
+                WalletGroup clicked = WalletGroup.getByDisplayOrder(displayOrder);
+                WalletGroup swap = WalletGroup.getByDisplayOrder(displayOrder - 1);
+                swap.displayOrder = displayOrder;
+                clicked.displayOrder = displayOrder - 1;
                 swap.save();
                 clicked.save();
-
                 refreshListView(parent);
-
-
                 WalletGroup.dump();
-
             }
         });
 

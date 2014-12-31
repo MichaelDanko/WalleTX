@@ -154,6 +154,17 @@ public class WalletGroup extends Model {
                 .execute();
     }
 
+    /**
+     * @param displayOrder
+     * @return WalletGroup with display order equal to displayOrder
+     */
+    public static WalletGroup getByDisplayOrder(int displayOrder) {
+        return new Select()
+                .from(WalletGroup.class)
+                .where("DisplayOrder = ?", displayOrder)
+                .executeSingle();
+    }
+
     //endregion
 
 } // WalletGroup
