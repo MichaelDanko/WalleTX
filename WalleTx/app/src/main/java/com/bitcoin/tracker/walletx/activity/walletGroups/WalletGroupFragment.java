@@ -30,25 +30,20 @@ import java.util.List;
  */
 public class WalletGroupFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    /**
-     * The fragment argument representing the section number for this fragment.
-     * Used to communicate to the MainActivity that WalletGroupFragment is currently active.
-     */
+    // The fragment argument representing the section number for this fragment.
+    // Used to communicate to the MainActivity that WalletGroupFragment is currently active.
     private static final String ARG_SECTION_NUMBER = "section_number";
     private int argSectionNumber;
 
     private OnFragmentInteractionListener mListener;
-
-    /**
-     * The fragment's ListView/GridView.
-     */
     private AbsListView mListView;
-
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
     private ListAdapter mAdapter;
+
+    // Tracks the position of the listView such that it can be restored.
+    private int mRestorePosition;
+
+    // Tracks number of items in the list view
+    private int mListViewCount;
 
     public static WalletGroupFragment newInstance(int sectionNumber) {
         WalletGroupFragment fragment = new WalletGroupFragment();
@@ -74,8 +69,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_walletgroup, container, false);
 
@@ -90,6 +84,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     }
 
     private void setupAdapter() {
+
         ArrayList<WalletGroupListItem> items = new ArrayList<WalletGroupListItem>();
         List<WalletGroup> groups = WalletGroup.getAll();
         for (WalletGroup group : groups) {
@@ -98,6 +93,9 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
             items.add(item);
         }
         mAdapter = new WalletGroupAdapter(getActivity(), items);
+
+        if (mRestorePosition != 0)
+            mListView.setSelectionFromTop(mRestorePosition, 0);
     }
 
     @Override
@@ -131,6 +129,22 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
         super.onResume();
         setupAdapter();
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+
+        // Restores previous listView position.
+        if (mRestorePosition != 0)
+            mListView.setSelectionFromTop(mRestorePosition, 0);
+
+        // Goes to end of listView if new group was added.
+        if (mListViewCount == mListView.getCount() - 1) {
+            mListView.setSelection(mListView.getCount() - 1);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onResume();
+        mRestorePosition = mListView.getFirstVisiblePosition(); // save last visible position
+        mListViewCount = mListView.getCount(); // increment count
     }
 
     @Override
@@ -200,5 +214,4 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     }
 
     //endregion
-
 }

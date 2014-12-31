@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -24,12 +25,14 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
 
     private final Activity activity;
     private final ArrayList<WalletGroupListItem> itemsArrayList;
+
+    private View mRowView;
+    private LayoutInflater inflater;
+
     private TextView mGroupName;
     private TextView mDefaultGroup;
     private ImageButton mMoveDown;
     private ImageButton mMoveUp;
-    private View mRowView;
-    private LayoutInflater inflater;
 
     public WalletGroupAdapter(Activity activity, ArrayList<WalletGroupListItem> itemsArrayList) {
         super(activity, R.layout.fragment_walletgroup_list_item, itemsArrayList);
@@ -39,7 +42,6 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Create inflater
         inflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         getViewsById(parent);
         setupMoveButtons(position);
@@ -70,6 +72,7 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
         mMoveDown.setFocusableInTouchMode(false);
         mMoveUp.setFocusable(false);
         mMoveUp.setFocusableInTouchMode(false);
+
         // Disable move down buttons for first list items.
         if (position == 0) {
             mMoveUp.setEnabled(false);
@@ -102,17 +105,14 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
                 clicked.displayOrder = displayOrder + 1;
                 swap.save();
                 clicked.save();
-                refreshListView(parent);
-                WalletGroup.dump();
+                refreshListView(parent, clicked);
             }
 
         });
 
-        mMoveUp.setOnClickListener(new View.OnClickListener()
-        {
+        mMoveUp.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 int displayOrder = position + 1;
                 WalletGroup clicked = WalletGroup.getByDisplayOrder(displayOrder);
                 WalletGroup swap = WalletGroup.getByDisplayOrder(displayOrder - 1);
@@ -120,16 +120,15 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
                 clicked.displayOrder = displayOrder - 1;
                 swap.save();
                 clicked.save();
-                refreshListView(parent);
-                WalletGroup.dump();
+                refreshListView(parent, clicked);
             }
         });
     }
 
     private void setupTextLabels(int position) {
-        // Add group name
         mGroupName.setText(itemsArrayList.get(position).getName());
-        // Setup default label
+
+        // Hide default label for non-default groups
         WalletGroup current = WalletGroup.getByDisplayOrder(position + 1);
         if (!current.isDefault()) {
             mDefaultGroup.setVisibility(View.GONE);
@@ -138,14 +137,20 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
 
     /**
      * Refreshes the content of the parent list view
+     * while maintaining the current vertical position in the list view.
+     * Reference: http://stackoverflow.com/questions/22474779/listview-resets-after-update
      * @param parent
      */
-    private void refreshListView(ViewGroup parent) {
+    private void refreshListView(ViewGroup parent, WalletGroup updatedGroup) {
 
-        //--------------------------------------------------------------
-        // TODO Ensure that list view refreshes to last known position.
-        //--------------------------------------------------------------
+        // Get position of first and last visible list items
+        AbsListView parentListView = (AbsListView) parent.findViewById(android.R.id.list);
+        int firstVisible = parentListView.getFirstVisiblePosition();
+        int lastVisible = parentListView.getLastVisiblePosition();
+        View topListItem = parentListView.getChildAt(0);
+        int top = (topListItem == null) ? 0 : topListItem.getTop();
 
+        // Populate list view
         ListAdapter adapter;
         ArrayList<WalletGroupListItem> items = new ArrayList<WalletGroupListItem>();
         List<WalletGroup> groups = WalletGroup.getAll();
@@ -156,5 +161,15 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
         }
         adapter = new WalletGroupAdapter(activity, items);
         ((AdapterView<ListAdapter>) parent).setAdapter(adapter);
+
+        // Position the listView based on user interaction.
+        // (i.e. handle viewable edge cases when changing disply order)
+        if (firstVisible >= updatedGroup.displayOrder) {
+            parentListView.setSelectionFromTop(updatedGroup.displayOrder - 1, top);
+        } else if (lastVisible < updatedGroup.displayOrder - 1) {
+            parentListView.setSelectionFromTop(firstVisible + 1, top);
+        } else {
+            parentListView.setSelectionFromTop(firstVisible, top);
+        }
     }
 }
