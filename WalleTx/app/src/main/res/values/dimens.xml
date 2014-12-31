@@ -20,7 +20,4 @@
     <!-- Add new wallet -->
     <dimen name="minimum_size_barcode_button">42dp</dimen>
 
-    <!-- Wallet Groups -->
-    <dimen name="custom_wallet_group_list_item_left_padding_default_group_label">8dp</dimen>
-
 </resources>

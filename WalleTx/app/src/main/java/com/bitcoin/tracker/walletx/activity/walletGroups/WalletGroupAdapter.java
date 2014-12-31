@@ -24,6 +24,12 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
 
     private final Activity activity;
     private final ArrayList<WalletGroupListItem> itemsArrayList;
+    private TextView mGroupName;
+    private TextView mDefaultGroup;
+    private ImageButton mMoveDown;
+    private ImageButton mMoveUp;
+    private View mRowView;
+    private LayoutInflater inflater;
 
     public WalletGroupAdapter(Activity activity, ArrayList<WalletGroupListItem> itemsArrayList) {
         super(activity, R.layout.fragment_walletgroup_list_item, itemsArrayList);
@@ -32,50 +38,63 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
     }
 
     @Override
-    public View getView(final int position, View convertView, final ViewGroup parent) {
-
+    public View getView(int position, View convertView, ViewGroup parent) {
         // Create inflater
-        LayoutInflater inflater = (LayoutInflater) activity
-                .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        getViewsById(parent);
+        setupMoveButtons(position);
+        bindClickListeners(parent, position);
+        setupTextLabels(position);
+        return mRowView;
+    }
 
-        // Get rowView from inflater
-        View rowView = inflater.inflate(R.layout.fragment_walletgroup_list_item, parent, false);
-        TextView groupName = (TextView) rowView.findViewById(R.id.groupNameLabel);
-        TextView defaultGroup = (TextView) rowView.findViewById(R.id.defaultGroupLabel);
-        ImageButton moveDown = (ImageButton) rowView.findViewById(R.id.imageButtonMoveDown);
-        ImageButton moveUp = (ImageButton) rowView.findViewById(R.id.imageButtonMoveUp);
+    /**
+     * Gets rowView form inflater.
+     * @param parent
+     */
+    private void getViewsById(ViewGroup parent) {
+        mRowView = inflater.inflate(R.layout.fragment_walletgroup_list_item, parent, false);
+        mGroupName = (TextView) mRowView.findViewById(R.id.groupNameLabel);
+        mDefaultGroup = (TextView) mRowView.findViewById(R.id.defaultGroupLabel);
+        mMoveDown = (ImageButton) mRowView.findViewById(R.id.imageButtonMoveDown);
+        mMoveUp = (ImageButton) mRowView.findViewById(R.id.imageButtonMoveUp);
+    }
 
+    /**
+     * Sets up the buttons for changing the display order.
+     */
+    private void setupMoveButtons(int position) {
         // Stop buttons from preventing list item click event
         // http://stackoverflow.com/questions/11160639/list-item-with-button-not-clickable-anymore
-        moveDown.setFocusable(false);
-        moveDown.setFocusableInTouchMode(false);
-        moveUp.setFocusable(false);
-        moveUp.setFocusableInTouchMode(false);
-
+        mMoveDown.setFocusable(false);
+        mMoveDown.setFocusableInTouchMode(false);
+        mMoveUp.setFocusable(false);
+        mMoveUp.setFocusableInTouchMode(false);
         // Disable move down buttons for first list items.
         if (position == 0) {
-            moveUp.setEnabled(false);
-            moveUp.setVisibility(View.INVISIBLE);
+            mMoveUp.setEnabled(false);
+            mMoveUp.setVisibility(View.INVISIBLE);
         }
 
         // Disable move up button for last list item
         int last = WalletGroup.getLast().displayOrder;
         if (position + 1 == last) {
-            moveDown.setEnabled(false);
-            moveDown.setVisibility(View.INVISIBLE);
-            if (last == 2) moveDown.setVisibility(View.GONE);
+            mMoveDown.setEnabled(false);
+            mMoveDown.setVisibility(View.INVISIBLE);
+            if (last == 2) mMoveDown.setVisibility(View.GONE);
         }
+    }
 
-        // Set the text for textView
-        groupName.setText(itemsArrayList.get(position).getName());
-        defaultGroup.setText(itemsArrayList.get(position).getIsDefault());
+    /**
+     * Binds on click listener to the move up and move down display order buttons.
+     * @param parent
+     * @param position
+     */
+    private void bindClickListeners(final ViewGroup parent, final int position) {
 
-        // Set onClickListeners to move up/down buttons
-        moveDown.setOnClickListener(new View.OnClickListener()
-        {
+        mMoveDown.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 int displayOrder = position + 1;
                 WalletGroup clicked = WalletGroup.getByDisplayOrder(displayOrder);
                 WalletGroup swap = WalletGroup.getByDisplayOrder(displayOrder + 1);
@@ -89,7 +108,7 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
 
         });
 
-        moveUp.setOnClickListener(new View.OnClickListener()
+        mMoveUp.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -105,9 +124,16 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
                 WalletGroup.dump();
             }
         });
+    }
 
-        // Return rowView
-        return rowView;
+    private void setupTextLabels(int position) {
+        // Add group name
+        mGroupName.setText(itemsArrayList.get(position).getName());
+        // Setup default label
+        WalletGroup current = WalletGroup.getByDisplayOrder(position + 1);
+        if (!current.isDefault()) {
+            mDefaultGroup.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -116,24 +142,19 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
      */
     private void refreshListView(ViewGroup parent) {
 
+        //--------------------------------------------------------------
         // TODO Ensure that list view refreshes to last known position.
+        //--------------------------------------------------------------
 
         ListAdapter adapter;
         ArrayList<WalletGroupListItem> items = new ArrayList<WalletGroupListItem>();
         List<WalletGroup> groups = WalletGroup.getAll();
         for (WalletGroup group : groups) {
             WalletGroupListItem item;
-            // Hide form components.
-            if (group.isDefault()) {
-                item = new WalletGroupListItem(group.name,
-                        activity.getString(R.string.label_default_wallet_group));
-            } else {
-                item = new WalletGroupListItem(group.name, "");
-            }
+            item = new WalletGroupListItem(group.name);
             items.add(item);
         }
         adapter = new WalletGroupAdapter(activity, items);
         ((AdapterView<ListAdapter>) parent).setAdapter(adapter);
     }
-
 }

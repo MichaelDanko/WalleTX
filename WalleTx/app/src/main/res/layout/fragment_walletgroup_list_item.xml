@@ -9,38 +9,36 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:weightSum="1">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center_vertical">
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceListItem"
             android:id="@+id/groupNameLabel"
             android:text="@string/hello_world"
-            android:gravity="center_vertical" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/label_default_wallet_group"
             android:id="@+id/defaultGroupLabel"
             android:textStyle="italic"
-            android:paddingLeft="@dimen/custom_wallet_group_list_item_left_padding_default_group_label"
             android:layout_weight="1"
-            android:layout_alignParentTop="false"
-            android:layout_toRightOf="@+id/groupNameLabel"
-            android:layout_toEndOf="@+id/groupNameLabel"
-            android:gravity="center_vertical"
-            android:layout_alignWithParentIfMissing="false"
-            android:layout_alignParentBottom="true"
-            android:layout_centerVertical="true" />
+            android:layout_gravity="center_vertical"
+            android:layout_below="@+id/groupNameLabel"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
     </RelativeLayout>
 
     <ImageButton
