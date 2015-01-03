@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
-import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.MainActivity;
@@ -75,7 +74,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
@@ -85,7 +84,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
 
     private void setupAdapter() {
 
-        ArrayList<WalletGroupListItem> items = new ArrayList<WalletGroupListItem>();
+        ArrayList<WalletGroupListItem> items = new ArrayList<>();
         List<WalletGroup> groups = WalletGroup.getAll();
         for (WalletGroup group : groups) {
             WalletGroupListItem item;
@@ -95,7 +94,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
         mAdapter = new WalletGroupAdapter(getActivity(), items);
 
         if (mRestorePosition != 0)
-            mListView.setSelectionFromTop(mRestorePosition, 0);
+            mListView.setSelection(mRestorePosition);
     }
 
     @Override
@@ -128,11 +127,11 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     public void onResume() {
         super.onResume();
         setupAdapter();
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        mListView.setAdapter(mAdapter);
 
         // Restores previous listView position.
         if (mRestorePosition != 0)
-            mListView.setSelectionFromTop(mRestorePosition, 0);
+            mListView.setSelection(mRestorePosition);
 
         // Goes to end of listView if new group was added.
         if (mListViewCount == mListView.getCount() - 1) {
@@ -160,19 +159,6 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
             Intent intent = new Intent( getActivity(), UpdateWalletGroupActivity.class );
             intent.putExtra("wallet_group_name", name);
             startActivity(intent);
-        }
-    }
-
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
         }
     }
 

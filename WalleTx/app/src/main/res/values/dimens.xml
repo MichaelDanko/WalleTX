@@ -10,6 +10,7 @@
 
     <!-- Custom list views -->
     <dimen name="custom_list_view_list_item_padding">16dp</dimen>
+    <dimen name="custom_list_view_move_arrow_spacing">12dp</dimen>
 
     <!-- Splash Activity -->
     <dimen name="logo_bottom_padding">16dp</dimen>

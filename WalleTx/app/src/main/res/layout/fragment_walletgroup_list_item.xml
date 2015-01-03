@@ -43,15 +43,26 @@
 
     <ImageButton
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:id="@+id/imageButtonMoveUp"
-        android:src="@android:drawable/arrow_up_float"
-        android:layout_gravity="center_vertical" />
+        android:src="@drawable/wtx_pointer_up"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:adjustViewBounds="true"
+        android:maxWidth="22dp"
+        android:scaleType="fitCenter"
+        android:layout_marginRight="@dimen/custom_list_view_move_arrow_spacing" />
 
     <ImageButton
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:id="@+id/imageButtonMoveDown"
-        android:src="@android:drawable/arrow_down_float" />
+        android:src="@drawable/wtx_pointer_down"
+        android:background="@android:color/transparent"
+        android:adjustViewBounds="true"
+        android:maxWidth="22dp"
+        android:cropToPadding="false"
+        android:scaleType="fitCenter"
+        android:layout_marginLeft="@dimen/custom_list_view_move_arrow_spacing" />
 
 </LinearLayout>
