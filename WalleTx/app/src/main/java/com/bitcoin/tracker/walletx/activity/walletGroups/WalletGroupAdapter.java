@@ -169,7 +169,5 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
         } else {
             parentListView.setSelection(firstVisible);
         }
-
-        WalletGroup.dump();
     }
 }
