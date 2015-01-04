@@ -51,7 +51,7 @@
         android:adjustViewBounds="true"
         android:maxWidth="22dp"
         android:scaleType="fitCenter"
-        android:layout_marginRight="@dimen/custom_list_view_move_arrow_spacing" />
+        android:layout_marginLeft="@dimen/custom_list_view_move_arrow_spacing" />
 
     <ImageButton
         android:layout_width="wrap_content"
