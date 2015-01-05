@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.model.wallet.WalletGroup;
+import com.bitcoin.tracker.walletx.model.WalletGroup;
 
 import java.util.List;
 import java.util.Timer;

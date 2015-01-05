@@ -17,7 +17,7 @@ import com.bitcoin.tracker.walletx.R;
  * Handles the form for adding new user wallets.
  */
 public class WalletxCreateActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener,
-        CreateSingleAddressWalletFragment.OnFragmentInteractionListener {
+        WalletxCreateSingleAddressWalletFragment.OnFragmentInteractionListener {
 
     //region FIELDS
 

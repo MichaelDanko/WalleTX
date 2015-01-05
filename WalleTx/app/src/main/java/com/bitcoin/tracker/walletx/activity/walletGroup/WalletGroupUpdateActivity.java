@@ -13,11 +13,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.model.wallet.WalletGroup;
+import com.bitcoin.tracker.walletx.model.WalletGroup;
 
 import java.util.List;
 
-import static com.bitcoin.tracker.walletx.model.wallet.WalletGroup.*;
+import static com.bitcoin.tracker.walletx.model.WalletGroup.*;
 
 /**
  * Displays and handles the form associated with updating and deleting

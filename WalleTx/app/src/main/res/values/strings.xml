@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<!--|**************************************************************************|
-    |  TESTING : Temporary strings associated with testing.                    |
-    |**************************************************************************|!-->
-    <string name="testing_danko">Danko</string>
-    <string name="testing_carroll">Carroll</string>
-    <string name="testing_howell">Howell</string>
-    <string name="testing_solano">Solano</string>
-    <string name="testing_temp">TEMPORARY</string>
     <string name="hello_world">Hello world!</string>
 
 <!--|**************************************************************************|

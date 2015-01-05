@@ -1,5 +1,5 @@
-<!-- This menu is displayed in the MyWalletsFragment and should be displayed
-     in all activities and/or fragments accessed from the MyWalletsFragment -->
+<!-- This menu is displayed in the WalletxFragment and should be displayed
+     in all activities and/or fragments accessed from the WalletxFragment -->
 
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"

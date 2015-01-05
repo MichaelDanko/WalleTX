@@ -16,7 +16,7 @@ import android.widget.ListAdapter;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.MainActivity;
-import com.bitcoin.tracker.walletx.model.wallet.WalletGroup;
+import com.bitcoin.tracker.walletx.model.WalletGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,7 +156,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
             mListener.onFragmentInteraction(name);
 
             // Open update wallet activity.
-            Intent intent = new Intent( getActivity(), UpdateWalletGroupActivity.class );
+            Intent intent = new Intent( getActivity(), WalletGroupUpdateActivity.class );
             intent.putExtra("wallet_group_name", name);
             startActivity(intent);
         }
@@ -193,7 +193,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_group) {
-            Intent intent = new Intent( getActivity(), CreateWalletxGroupActivity.class );
+            Intent intent = new Intent( getActivity(), WalletGroupCreateActivity.class );
             startActivity( intent );
         }
         return super.onOptionsItemSelected(item);

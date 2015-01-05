@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.MainActivity;
-import com.bitcoin.tracker.walletx.activity.walletx.createWallet.CreateWalletActivity;
+import com.bitcoin.tracker.walletx.activity.walletx.create.WalletxCreateActivity;
 
 /**
  * WalletxFragment acts as the home view for the application.
@@ -40,7 +40,7 @@ public class WalletxFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_my_wallets, container, false); // root view
+        return inflater.inflate(R.layout.fragment_walletx, container, false); // root view
     }
 
     @Override
@@ -64,7 +64,7 @@ public class WalletxFragment extends Fragment {
             return true;
         } else if (item.getItemId() == R.id.action_add_wallet) {
             // open new activity
-            Intent intent = new Intent( getActivity(), CreateWalletActivity.class );
+            Intent intent = new Intent( getActivity(), WalletxCreateActivity.class );
             startActivity( intent );
         }
         return super.onOptionsItemSelected(item);

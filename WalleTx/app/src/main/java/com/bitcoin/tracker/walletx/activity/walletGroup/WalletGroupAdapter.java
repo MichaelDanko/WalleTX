@@ -12,7 +12,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.model.wallet.WalletGroup;
+import com.bitcoin.tracker.walletx.model.WalletGroup;
 
 import java.util.ArrayList;
 import java.util.List;

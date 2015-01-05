@@ -33,15 +33,15 @@
             android:label="@string/title_activity_main" >
         </activity>
         <activity
-            android:name=".activity.myWallets.addWallet.AddWalletActivity"
+            android:name=".activity.walletx.create.WalletxCreateActivity"
             android:label="@string/title_activity_add_wallet" >
         </activity>
         <activity
-            android:name=".activity.walletGroups.CreateWalletGroupActivity"
+            android:name=".activity.walletGroup.WalletGroupCreateActivity"
             android:label="@string/title_activity_add_wallet_group" >
         </activity>
         <activity
-            android:name=".activity.walletGroups.UpdateWalletGroupActivity"
+            android:name=".activity.walletGroup.WalletGroupUpdateActivity"
             android:label="@string/title_activity_edit_wallet_group" >
         </activity>
     </application>

@@ -10,14 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.activity.categories.ManageTxCategoriesFragment;
-import com.bitcoin.tracker.walletx.activity.myWallets.MyWalletsFragment;
+import com.bitcoin.tracker.walletx.activity.txCategories.TxCategoriesFragment;
+import com.bitcoin.tracker.walletx.activity.walletx.WalletxFragment;
 import com.bitcoin.tracker.walletx.activity.settings.SettingsFragment;
-import com.bitcoin.tracker.walletx.activity.testing.TestingCarrollFragment;
-import com.bitcoin.tracker.walletx.activity.testing.TestingDankoFragment;
-import com.bitcoin.tracker.walletx.activity.testing.TestingHowellFragment;
-import com.bitcoin.tracker.walletx.activity.testing.TestingSolanoFragment;
-import com.bitcoin.tracker.walletx.activity.walletGroups.WalletGroupFragment;
+import com.bitcoin.tracker.walletx.activity.walletGroup.WalletGroupFragment;
 
 /**
  * Handles the display of and interactions with the fragments
@@ -57,35 +53,19 @@ WalletGroupFragment.OnFragmentInteractionListener {
 
         switch (position) {
             case 0:
-                fragment = MyWalletsFragment.newInstance(position + 1);
+                fragment = WalletxFragment.newInstance(position + 1);
                 break;
             case 1:
                 fragment = WalletGroupFragment.newInstance(position + 1);
                 break;
             case 2:
-                fragment = ManageTxCategoriesFragment.newInstance(position + 1);
+                fragment = TxCategoriesFragment.newInstance(position + 1);
                 break;
             case 3:
                 fragment = SettingsFragment.newInstance(position + 1);
                 break;
-
-            //region TEMPORARY TESTING AREA. DELETE BEFORE LAUNCH.
-            case 4:
-                fragment = TestingCarrollFragment.newInstance(position + 1);
-                break;
-            case 5:
-                fragment = TestingDankoFragment.newInstance(position + 1);
-                break;
-            case 6:
-                fragment = TestingHowellFragment.newInstance(position + 1);
-                break;
-            case 7:
-                fragment = TestingSolanoFragment.newInstance(position + 1);
-                break;
-            //endregion
-
             default:
-                fragment = MyWalletsFragment.newInstance(position + 1);
+                fragment = WalletxFragment.newInstance(position + 1);
                 break;
         }
 
@@ -109,22 +89,6 @@ WalletGroupFragment.OnFragmentInteractionListener {
             case 4:
                 mTitle = getString(R.string.title_settings);
                 break;
-
-            //region TEMPORARY TESTING AREA. DELETE BEFORE LAUNCH.
-            case 5:
-                mTitle = getString(R.string.testing_carroll);
-                break;
-            case 6:
-                mTitle = getString(R.string.testing_danko);
-                break;
-            case 7:
-                mTitle = getString(R.string.testing_howell);
-                break;
-            case 8:
-                mTitle = getString(R.string.testing_solano);
-                break;
-            //endregion
-
         }
     }
 
