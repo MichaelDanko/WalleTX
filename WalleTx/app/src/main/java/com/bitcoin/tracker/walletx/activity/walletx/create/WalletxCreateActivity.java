@@ -1,6 +1,7 @@
 package com.bitcoin.tracker.walletx.activity.walletx.create;
 
-import android.net.Uri;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -9,14 +10,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 
 /**
  * Handles the form for adding new user wallets.
  */
-public class WalletxCreateActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener,
+public class WalletxCreateActivity extends ActionBarActivity implements
+        AdapterView.OnItemSelectedListener,
         WalletxCreateSingleAddressWalletFragment.OnFragmentInteractionListener {
 
     //region FIELDS
@@ -31,40 +32,60 @@ public class WalletxCreateActivity extends ActionBarActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walletx_create);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.title_activity_add_wallet);
+        getSupportActionBar().setTitle(R.string.walletx_create_title_activity);
         setupWalletTypeSpinner();
+        displayCreateWalletTypeFragment(0); // display default wallet type
     }
 
     private void setupWalletTypeSpinner() {
         walletTypeSpinner = (Spinner) findViewById(R.id.walletTypeSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.spinner_supported_wallet_types, android.R.layout.simple_spinner_item);
+                R.array.walletx_create_spinner_supported_wallet_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         walletTypeSpinner.setAdapter(adapter);
         walletTypeSpinner.setOnItemSelectedListener(this);
     }
 
+    /**
+     * Changes which wallet type form fragment is displayed in response to the spinner selection.
+     */
+    private void displayCreateWalletTypeFragment(int walletTypeFragmentLayoutResource) {
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        switch (walletTypeFragmentLayoutResource) {
+            case R.layout.fragment_walletx_create_single_address_wallet:
+                ft.replace(R.id.walletTypeFragmentContainer, WalletxCreateSingleAddressWalletFragment.newInstance());
+                break;
+            default:
+                ft.replace(R.id.walletTypeFragmentContainer, WalletxCreateSingleAddressWalletFragment.newInstance());
+                break;
+        }
+        ft.commit();
+    }
+
     //endregion
     //region EVENT HANDLING
 
-    // Updates the form based on spinner selection.
+    /**
+     * Updates the form based on spinner selection.
+     */
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        int walletTypeFragmentLayoutResource = 0;
         if ( pos == 0 ) {
-            // Single address wallet
-            Toast toast = Toast.makeText(this, "TODO: Add Single Address Wallet Form",Toast.LENGTH_SHORT); toast.show();
-
-        } else if ( pos == 1 ) {
-            // Single address wallet
-            Toast toast = Toast.makeText(this, "TODO: Form should swap out.",Toast.LENGTH_SHORT); toast.show();
+            walletTypeFragmentLayoutResource = R.layout.fragment_walletx_create_single_address_wallet;
         }
+        displayCreateWalletTypeFragment(walletTypeFragmentLayoutResource);
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
 
-    public void onFragmentInteraction(Uri uri) {
-        Toast toast = Toast.makeText(this, "Wheeee!",Toast.LENGTH_SHORT); toast.show();
+    /**
+     * Closes the activity in response an onSubmit event in a wallet type fragment.
+     */
+    public void onFragmentInteraction() {
+        finish();
     }
 
     //endregion

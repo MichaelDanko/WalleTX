@@ -35,7 +35,7 @@ public class WalletGroupCreateActivity extends ActionBarActivity {
 
     private void setupActionBar() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.title_activity_add_wallet_group);
+        getSupportActionBar().setTitle(R.string.wallet_group_create_title_activity);
     }
 
     private void getViewsById() {
@@ -65,7 +65,7 @@ public class WalletGroupCreateActivity extends ActionBarActivity {
 
         // Cannot be empty string.
         if (nameEntered.isEmpty()) {
-            String error = getString(R.string.toast_wallet_group_empty);
+            String error = getString(R.string.wallet_group_create_toast_name_empty);
             Toast.makeText(this, error, Toast.LENGTH_LONG).show();
             return false;
         }
@@ -73,7 +73,7 @@ public class WalletGroupCreateActivity extends ActionBarActivity {
         // Cannot already exist in the database.
         for (WalletGroup group : groups) {
             if (group.name.toLowerCase().equals(nameEntered)) {
-                String error = getString(R.string.toast_wallet_group_exists);
+                String error = getString(R.string.wallet_group_create_toast_name_exists);
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show();
                 return false;
             }

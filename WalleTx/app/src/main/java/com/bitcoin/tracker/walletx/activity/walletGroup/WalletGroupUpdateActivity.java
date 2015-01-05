@@ -45,7 +45,7 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
 
     private void setupActionBar() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.title_activity_edit_wallet_group);
+        getSupportActionBar().setTitle(R.string.wallet_group_update_title_activity);
     }
 
     private void getViewsById() {
@@ -92,16 +92,16 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
             public void onClick(View v) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage(R.string.alert_message_delete_wallet_group);
+                builder.setMessage(R.string.wallet_group_update_alert_message_delete);
                 builder.setTitle("Delete group '" + mCurrentName + "'?");
-                builder.setPositiveButton(R.string.confirm_yes, new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(R.string.app_confirm_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
                         deleteWalletGroup();
                     }
                 });
-                builder.setNegativeButton(R.string.confirm_no, new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(R.string.app_confirm_no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
                     }

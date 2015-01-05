@@ -95,10 +95,10 @@ public class NavigationDrawerFragment extends Fragment {
                 R.layout.fragment_navigation_drawer_list_item,
                 android.R.id.text1,
                 new String[]{
-                        getString(R.string.title_my_wallets),
-                        getString(R.string.title_wallet_groups),
-                        getString(R.string.title_tx_catgeories),
-                        getString(R.string.title_settings),
+                        getString(R.string.navigation_drawer_title_my_wallets),
+                        getString(R.string.navigation_drawer_title_wallet_groups),
+                        getString(R.string.navigation_drawer_title_tx_catgeories),
+                        getString(R.string.navigation_drawer_title_settings),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;

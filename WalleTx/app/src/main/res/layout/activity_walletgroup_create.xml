@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/editTextWalletGroupName"
         android:layout_gravity="center_horizontal|top"
-        android:hint="@string/hint_wallet_group_name"
+        android:hint="@string/wallet_group_create_hint_name"
         android:paddingTop="@dimen/form_element_vertical_spacing"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -25,7 +25,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/checkbox_set_as_default"
+        android:text="@string/wallet_group_create_checkbox_set_as_default"
         android:id="@+id/checkBoxSetAsDefault"
         android:layout_below="@+id/editTextWalletGroupName"
         android:layout_alignParentLeft="true"
@@ -38,7 +38,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_add_wallet_group"
+        android:text="@string/wallet_group_create_button_add"
         android:id="@+id/buttonAddWalletGroup"
         android:layout_below="@+id/checkBoxSetAsDefault"
         android:layout_alignParentLeft="true"

@@ -78,16 +78,16 @@ WalletGroupFragment.OnFragmentInteractionListener {
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_my_wallets);
+                mTitle = getString(R.string.navigation_drawer_title_my_wallets);
                 break;
             case 2:
-                mTitle = getString(R.string.title_fragment_wallet_groups);
+                mTitle = getString(R.string.wallet_group_title_fragment);
                 break;
             case 3:
-                mTitle = getString(R.string.title_tx_catgeories);
+                mTitle = getString(R.string.navigation_drawer_title_tx_catgeories);
                 break;
             case 4:
-                mTitle = getString(R.string.title_settings);
+                mTitle = getString(R.string.navigation_drawer_title_settings);
                 break;
         }
     }

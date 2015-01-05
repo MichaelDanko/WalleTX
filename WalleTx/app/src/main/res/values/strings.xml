@@ -1,82 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- TEMP -->
     <string name="hello_world">Hello world!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-<!--|**************************************************************************|
-    |  APP : Generic strings or strings that can be applied anywhere           |
-    |        with the app.                                                     |
-    |**************************************************************************|!-->
+    <!-- APP -->
     <string name="app_name">WalleTx</string>
-    <string name="confirm_yes">Yes</string>
-    <string name="confirm_no">Cancel</string>
+    <string name="app_confirm_yes">Yes</string>
+    <string name="app_confirm_no">Cancel</string>
 
-<!--|**************************************************************************|
-    |  NAV DRAWER : Strings applied to the navigation drawer.                  |
-    |**************************************************************************|!-->
-    <string name="title_activity_main">WalleTx</string>
-    <string name="title_my_wallets">My Wallets</string>
-    <string name="title_wallet_groups">Wallet Groups</string>
-    <string name="title_tx_catgeories">Tx Categories</string>
-    <string name="title_settings">Settings</string>
+    <!-- NAV DRAWER -->
+    <string name="navigation_drawer_title_activity_main">WalleTx</string>
+    <string name="navigation_drawer_title_my_wallets">My Wallets</string>
+    <string name="navigation_drawer_title_wallet_groups">Wallet Groups</string>
+    <string name="navigation_drawer_title_tx_catgeories">Tx Categories</string>
+    <string name="navigation_drawer_title_settings">Settings</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-<!--|**************************************************************************|
-    |  MENUS : Strings associated with action bar menus                        |
-    |**************************************************************************|!-->
-    <string name="action_sync">Sync</string>
-    <string name="action_add_wallet">Add new wallet</string>
-    <string name="action_add_group">Add new wallet group</string>
-    <string name="action_add_tx_category">Add new tx category</string>
-    <string name="action_settings">Settings</string>
+    <!-- MENUS -->
+    <string name="menu_action_sync">Sync</string>
+    <string name="menu_action_add_wallet">Add new wallet</string>
+    <string name="menu_action_add_group">Add new wallet group</string>
+    <string name="menu_action_add_tx_category">Add new tx category</string>
+    <string name="menu_action_settings">Settings</string>
 
-<!--|**************************************************************************|
-    |  SPLASH Activity                                                         |
-    |**************************************************************************|!-->
-    <string name="content_desc_splash_logo">Bitcoin WalleTx</string>
-    <string name="label_splash">Bitcoin Wallet Tracker</string>
+    <!-- SPLASH Activity -->
+    <string name="splash_logo_content_description">Bitcoin WalleTx</string>
+    <string name="splash_label">Bitcoin Wallet Tracker</string>
 
-<!--|**************************************************************************|
-    |  MY WALLETS Activity and related                                         |
-    |**************************************************************************|!-->
-
-    <!-- Add new wallet activity -->
-    <string name="title_activity_add_wallet">Add new wallet</string>
-    <string-array name="spinner_supported_wallet_types">
+    <!-- WALLETX -->
+    <!-- Create new wallet activity -->
+    <string name="walletx_create_title_activity">Add new wallet</string>
+    <string-array name="walletx_create_spinner_supported_wallet_types">
         <item>Single address wallet</item>
-        <item>Some other wallet type</item>
     </string-array>
-    <string name="hint_public_key">Public key</string>
-    <string name="hint_single_address_wallet_name">Name</string>
+    <string name="walletx_create_hint_public_key">Public key</string>
+    <string name="walletx_create_hint_single_address_wallet_name">Name</string>
+    <string name="walletx_create_submit_button">Add Wallet</string>
 
-<!--|**************************************************************************|
-    |  WALLET GROUPS Activity and related                                      |
-    |**************************************************************************|!-->
-
+    <!-- WALLET GROUPS -->
     <!-- WalletGroup list view -->
-    <string name="title_fragment_wallet_groups">Manage Wallet Groups</string>
-    <string name="wtx_default_wallet_group">My Wallets</string>
-    <string name="label_default_wallet_group">(default)</string>
-
-    <!-- Add new wallet groups activity -->
-    <string name="title_activity_add_wallet_group">Add New Wallet Group</string>
-    <string name="hint_wallet_group_name">Wallet group name</string>
-    <string name="checkbox_set_as_default">Set as default group</string>
-    <string name="button_add_wallet_group">Add Wallet Group</string>
-    <string name="toast_wallet_group_empty">Oops! Wallet group cannot be empty string</string>
-    <string name="toast_wallet_group_exists">Oops! Wallet group already exists</string>
-
-    <!-- Edit existing wallet group -->
-    <string name="title_activity_edit_wallet_group">Edit Wallet Group</string>
-    <string name="button_edit_wallet_group">Update</string>
-    <string name="button_delete_wallet_group">Delete</string>
-    <string name="alert_message_delete_wallet_group">
-        Wallets within this group will automatically be moved to the default group.
-    </string>
-    <string name="label_delete_default_group_note">
-        Current default group cannot be deleted. If you wish to remove this group please
-        set another wallet group as the default.
-    </string>
+    <string name="wallet_group_title_fragment">Manage Wallet Groups</string>
+    <string name="wallet_group_wtx_default_group">My Wallets</string>
+    <string name="wallet_group_label_default">(default)</string>
+    <!-- Create new wallet group activity -->
+    <string name="wallet_group_create_title_activity">Add New Wallet Group</string>
+    <string name="wallet_group_create_hint_name">Wallet group name</string>
+    <string name="wallet_group_create_checkbox_set_as_default">Set as default group</string>
+    <string name="wallet_group_create_button_add">Add Wallet Group</string>
+    <string name="wallet_group_create_toast_name_empty">Oops! Wallet group cannot be empty string</string>
+    <string name="wallet_group_create_toast_name_exists">Oops! Wallet group already exists</string>
+    <!-- Update existing wallet group -->
+    <string name="wallet_group_update_title_activity">Edit Wallet Group</string>
+    <string name="wallet_group_update_button_update">Update</string>
+    <string name="wallet_group_update_button_delete">Delete</string>
+    <string name="wallet_group_update_alert_message_delete">Wallets within this group will automatically be moved to the default group.</string>
+    <string name="wallet_group_update_label_delete_default_group_note">Current default group cannot be deleted. If you wish to remove this group please set another wallet group as the default.</string>
 
 </resources>

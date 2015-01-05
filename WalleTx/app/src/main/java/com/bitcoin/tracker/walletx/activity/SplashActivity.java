@@ -51,7 +51,7 @@ public class SplashActivity extends Activity {
         List<WalletGroup> groups = WalletGroup.getAll();
         if ( groups.size() < 1 ) {
             WalletGroup defaultGroup = new WalletGroup();
-            defaultGroup.name = getString(R.string.wtx_default_wallet_group);
+            defaultGroup.name = getString(R.string.wallet_group_wtx_default_group);
             defaultGroup.setAsDefault(1);
             defaultGroup.displayOrder = 1;
             defaultGroup.save();

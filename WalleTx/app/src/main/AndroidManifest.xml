@@ -30,19 +30,19 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/navigation_drawer_title_activity_main" >
         </activity>
         <activity
             android:name=".activity.walletx.create.WalletxCreateActivity"
-            android:label="@string/title_activity_add_wallet" >
+            android:label="@string/walletx_create_title_activity" >
         </activity>
         <activity
             android:name=".activity.walletGroup.WalletGroupCreateActivity"
-            android:label="@string/title_activity_add_wallet_group" >
+            android:label="@string/wallet_group_create_title_activity" >
         </activity>
         <activity
             android:name=".activity.walletGroup.WalletGroupUpdateActivity"
-            android:label="@string/title_activity_edit_wallet_group" >
+            android:label="@string/wallet_group_update_title_activity" >
         </activity>
     </application>
 
