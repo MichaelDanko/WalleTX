@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.walletGroups;
+package com.bitcoin.tracker.walletx.activity.walletGroup;
 
 /**
  * Custom WalletGroup list item.

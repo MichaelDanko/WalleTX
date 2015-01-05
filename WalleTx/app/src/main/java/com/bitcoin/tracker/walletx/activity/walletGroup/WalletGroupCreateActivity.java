@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.walletGroups;
+package com.bitcoin.tracker.walletx.activity.walletGroup;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -18,7 +18,7 @@ import java.util.List;
  * Displays and handles the form associated with adding
  * new WalletGroups to the WTX database.
  */
-public class CreateWalletGroupActivity extends ActionBarActivity {
+public class WalletGroupCreateActivity extends ActionBarActivity {
 
     private EditText mGroupName;
     private CheckBox mSetAsDefault;
@@ -117,4 +117,4 @@ public class CreateWalletGroupActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-} // CreateWalletGroupActivity
+} // WalletGroupCreateActivity

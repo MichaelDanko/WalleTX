@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.walletGroups;
+package com.bitcoin.tracker.walletx.activity.walletGroup;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -193,7 +193,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_group) {
-            Intent intent = new Intent( getActivity(), CreateWalletGroupActivity.class );
+            Intent intent = new Intent( getActivity(), CreateWalletxGroupActivity.class );
             startActivity( intent );
         }
         return super.onOptionsItemSelected(item);

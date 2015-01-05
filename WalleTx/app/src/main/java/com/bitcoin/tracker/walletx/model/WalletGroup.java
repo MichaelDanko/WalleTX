@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.model.wallet;
+package com.bitcoin.tracker.walletx.model;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;

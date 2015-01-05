@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.myWallets.addWallet;
+package com.bitcoin.tracker.walletx.activity.walletx.create;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,16 +16,20 @@ import com.bitcoin.tracker.walletx.R;
 /**
  * Handles the form for adding new user wallets.
  */
-public class AddWalletActivity extends ActionBarActivity
-        implements AdapterView.OnItemSelectedListener,
-        AddWalletSingleAddressFragment.OnFragmentInteractionListener {
+public class WalletxCreateActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener,
+        CreateSingleAddressWalletFragment.OnFragmentInteractionListener {
+
+    //region FIELDS
 
     Spinner walletTypeSpinner;
+
+    //endregion
+    //region ACTIVITY LIFECYCLE
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_wallets_create);
+        setContentView(R.layout.activity_walletx_create);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.title_activity_add_wallet);
         setupWalletTypeSpinner();
@@ -40,11 +44,15 @@ public class AddWalletActivity extends ActionBarActivity
         walletTypeSpinner.setOnItemSelectedListener(this);
     }
 
+    //endregion
+    //region EVENT HANDLING
+
     // Updates the form based on spinner selection.
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         if ( pos == 0 ) {
             // Single address wallet
             Toast toast = Toast.makeText(this, "TODO: Add Single Address Wallet Form",Toast.LENGTH_SHORT); toast.show();
+
         } else if ( pos == 1 ) {
             // Single address wallet
             Toast toast = Toast.makeText(this, "TODO: Form should swap out.",Toast.LENGTH_SHORT); toast.show();
@@ -59,18 +67,28 @@ public class AddWalletActivity extends ActionBarActivity
         Toast toast = Toast.makeText(this, "Wheeee!",Toast.LENGTH_SHORT); toast.show();
     }
 
+    //endregion
+    //region OPTIONS MENU
+
+    /**
+     * Display the global options menu.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.global, menu);
         return true;
     }
 
+    /**
+     * Home button closes the activity.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-             finish();
-        }
+        if (id == android.R.id.home)
+            finish();
         return super.onOptionsItemSelected(item);
     }
+
+    //endregion
 }

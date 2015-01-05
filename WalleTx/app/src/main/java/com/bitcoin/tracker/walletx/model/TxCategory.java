@@ -1,9 +1,8 @@
-package com.bitcoin.tracker.walletx.model.tx;
+package com.bitcoin.tracker.walletx.model;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
-import com.bitcoin.tracker.walletx.model.tx.Tx;
 
 import java.util.List;
 

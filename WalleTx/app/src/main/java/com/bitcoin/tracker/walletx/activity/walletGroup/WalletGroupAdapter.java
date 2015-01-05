@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.walletGroups;
+package com.bitcoin.tracker.walletx.activity.walletGroup;
 
 import android.app.Activity;
 import android.view.LayoutInflater;

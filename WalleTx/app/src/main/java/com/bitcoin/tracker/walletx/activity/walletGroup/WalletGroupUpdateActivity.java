@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.walletGroups;
+package com.bitcoin.tracker.walletx.activity.walletGroup;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -23,7 +23,7 @@ import static com.bitcoin.tracker.walletx.model.wallet.WalletGroup.*;
  * Displays and handles the form associated with updating and deleting
  * WalletGroups from the WTX database.
  */
-public class UpdateWalletGroupActivity extends ActionBarActivity {
+public class WalletGroupUpdateActivity extends ActionBarActivity {
 
     private EditText mGroupName;
     private String   mCurrentName;
