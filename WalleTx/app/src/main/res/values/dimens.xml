@@ -5,7 +5,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <!-- Forms -->
-    <dimen name="form_element_vertical_spacing">8dp</dimen>
+    <dimen name="form_element_bottom_margin">8dp</dimen>
     <dimen name="form_element_horizontal_spacing">8dp</dimen>
 
     <!-- Custom list views -->

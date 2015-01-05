@@ -3,6 +3,7 @@ package com.bitcoin.tracker.walletx.model;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 import java.util.List;
 
@@ -17,6 +18,8 @@ import java.util.List;
  */
 @Table(name = "Walletx")
 public class Walletx extends Model {
+
+    //region WALLETX MODEL
 
     @Column(name = "Name")
     String name;
@@ -49,13 +52,18 @@ public class Walletx extends Model {
         this.group = group;
     }
 
-    /*-------------------*
-     *  Walletx Queries  *
-     *-------------------*/
+    //endregion
+    //region WALLETX QUERIES
 
+    /**
+     * @return List of all Walletxs.
+     */
+    public static List<Walletx> getAll() {
+        return new Select()
+                .from(Walletx.class)
+                .execute();
+    }
 
-
-
-
+    //endregion
 
 } // Walletx

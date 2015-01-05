@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
+import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.List;
 
@@ -156,9 +157,15 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
     private void deleteWalletGroup() {
         WalletGroup delete = getBy(mCurrentName);
 
-        //-------------------------------------------------------------------------------
-        // TODO Change the group of any Walletx's under this group to the default group.
-        //-------------------------------------------------------------------------------
+        // TODO Verify that this functionality is implemented correctly once Walletx implementation is complete.
+        List<Walletx> wallets = Walletx.getAll();
+        WalletGroup defaultGroup = WalletGroup.getDefault();
+        for (Walletx wtx : wallets) {
+            if (wtx.group == delete) {
+                wtx.group = defaultGroup;
+                wtx.save();
+            }
+        }
 
         // Change the display order of groups after the deleted group
         List<WalletGroup> groups = WalletGroup.getAllWithDisplayOrderGreaterThan(delete.displayOrder);
