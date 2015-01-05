@@ -12,6 +12,6 @@
         android:id="@+id/textView2"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="Manage Transaction Categories" />
+        android:text="@string/menu_action_add_tx_category" />
 
 </RelativeLayout>

@@ -37,6 +37,7 @@
         <item>Single address wallet</item>
     </string-array>
     <string name="walletx_create_hint_public_key">Public key</string>
+    <string name="walletx_create_content_description_barcode">Scan public key</string>
     <string name="walletx_create_hint_single_address_wallet_name">Name</string>
     <string name="walletx_create_submit_button">Add Wallet</string>
 
@@ -45,6 +46,8 @@
     <string name="wallet_group_title_fragment">Manage Wallet Groups</string>
     <string name="wallet_group_wtx_default_group">My Wallets</string>
     <string name="wallet_group_label_default">(default)</string>
+    <string name="wallet_group_content_description_up_arrow">Move group name up</string>
+    <string name="wallet_group_content_description_down_arrow">Move group name down</string>
     <!-- Create new wallet group activity -->
     <string name="wallet_group_create_title_activity">Add New Wallet Group</string>
     <string name="wallet_group_create_hint_name">Wallet group name</string>
