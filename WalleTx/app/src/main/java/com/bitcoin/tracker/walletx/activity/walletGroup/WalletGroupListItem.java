@@ -6,7 +6,6 @@ package com.bitcoin.tracker.walletx.activity.walletGroup;
 public class WalletGroupListItem {
 
     private String name;
-    private String defaultGroupLabel;
 
     public WalletGroupListItem(String name) {
         super();

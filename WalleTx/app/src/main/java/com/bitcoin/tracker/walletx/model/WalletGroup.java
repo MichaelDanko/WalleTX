@@ -98,7 +98,6 @@ public class WalletGroup extends Model {
     //region WALLET GROUP QUERIES
 
     /**
-     * @param name
      * @return WalletGroup selected by name
      */
     public static WalletGroup getBy(String name) {

@@ -50,6 +50,8 @@ public class WalletxFragment extends Fragment {
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
 
+    //region OPTIONS MENU
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Add fragment specific action bar items to activity action bar items.
@@ -69,5 +71,7 @@ public class WalletxFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //endregion
 
 } // WalletxFragment

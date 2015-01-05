@@ -29,10 +29,11 @@ import java.util.List;
  */
 public class WalletGroupFragment extends Fragment implements AbsListView.OnItemClickListener {
 
+    //region FIELDS
+
     // The fragment argument representing the section number for this fragment.
     // Used to communicate to the MainActivity that WalletGroupFragment is currently active.
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private int argSectionNumber;
 
     private OnFragmentInteractionListener mListener;
     private AbsListView mListView;
@@ -43,6 +44,9 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
 
     // Tracks number of items in the list view
     private int mListViewCount;
+
+    //endregion
+    //region FRAGMENT LIFECYCLE
 
     public static WalletGroupFragment newInstance(int sectionNumber) {
         WalletGroupFragment fragment = new WalletGroupFragment();
@@ -61,9 +65,6 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            argSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-        }
         setupAdapter();
     }
 
@@ -162,20 +163,20 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
         }
     }
 
+    //endregion
+    //region EVENT HANDLING
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(String id);
     }
 
+    //endregion
     //region OPTIONS MENU
 
     /**

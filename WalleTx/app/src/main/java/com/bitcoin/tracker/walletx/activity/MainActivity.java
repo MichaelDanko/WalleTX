@@ -19,9 +19,9 @@ import com.bitcoin.tracker.walletx.activity.walletGroup.WalletGroupFragment;
  * Handles the display of and interactions with the fragments
  * accessed from within the navigation.
  */
-public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-WalletGroupFragment.OnFragmentInteractionListener {
+public class MainActivity extends ActionBarActivity implements
+        NavigationDrawerFragment.NavigationDrawerCallbacks,
+        WalletGroupFragment.OnFragmentInteractionListener {
 
     // Fragment managing the behaviors, interactions and presentation of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
@@ -94,7 +94,6 @@ WalletGroupFragment.OnFragmentInteractionListener {
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
@@ -113,7 +112,6 @@ WalletGroupFragment.OnFragmentInteractionListener {
     // Handles action bar item clicks associated with the global menu.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
         // global menu contains no actions
         return super.onOptionsItemSelected(item);
     }

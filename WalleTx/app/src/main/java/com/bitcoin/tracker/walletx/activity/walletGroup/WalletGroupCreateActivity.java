@@ -20,9 +20,14 @@ import java.util.List;
  */
 public class WalletGroupCreateActivity extends ActionBarActivity {
 
+    //region FIELDS
+
     private EditText mGroupName;
     private CheckBox mSetAsDefault;
     private Button   mSubmit;
+
+    //endregion
+    //region ACTIVITY LIFECYCLE
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,9 @@ public class WalletGroupCreateActivity extends ActionBarActivity {
         mSetAsDefault = (CheckBox) findViewById((R.id.checkBoxSetAsDefault));
         mSubmit = (Button) findViewById(R.id.buttonAddWalletGroup);
     }
+
+    //endregion
+    //region EVENT HANDLING
 
     private void addSubmitButtonClickListener() {
         mSubmit.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +113,9 @@ public class WalletGroupCreateActivity extends ActionBarActivity {
         newGroup.save();
     }
 
+    //endregion
+    //region OPTIONS MENU
+
     /**
      * Closes activity when the home button is selected.
      */
@@ -116,5 +127,7 @@ public class WalletGroupCreateActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //endregion
 
 } // WalletGroupCreateActivity
