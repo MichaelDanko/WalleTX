@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.2"
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "com.bitcoin.tracker.walletx"
@@ -21,7 +21,6 @@ android {
 
 repositories {
     mavenCentral()
-
     maven {
         url "http://dl.bintray.com/journeyapps/maven"
     }
@@ -29,9 +28,8 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:21.0.2'
+    compile 'com.android.support:appcompat-v7:21.0.3'
     compile files('libs/ActiveAndroid.jar')
-    compile files('libs/bitcoinj-core-0.12-bundled.jar')
 
     // https://github.com/journeyapps/zxing-android-embedded
     compile 'com.journeyapps:zxing-android-embedded:2.0.1@aar'
