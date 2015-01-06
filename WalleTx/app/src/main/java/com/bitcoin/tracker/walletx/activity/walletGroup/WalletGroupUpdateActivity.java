@@ -76,31 +76,32 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
              */
             @Override
             public void onClick(View v) {
-                String nameEntered = mGroupName.getText().toString().toLowerCase();
-                String nameExisting = mCurrentName.toLowerCase();
 
-                if (nameEntered.equals(nameExisting)) {
-                    // Update default field only.
-                    WalletGroup group = getBy(mCurrentName);
-                    if (mSetAsDefault.isChecked()) {
-                        WalletGroup currentDefault = getDefault();
-                        currentDefault.setAsDefault(0);
-                        currentDefault.save();
-                        group.setAsDefault(1);
-                    }
-                    group.save();
+                WalletGroup groupBeingUpdated = WalletGroup.getBy(mCurrentName);
+                String nameInEditText = mGroupName.getText().toString().toLowerCase();
+                String nameOfGroupBeingUpdated = mCurrentName.toLowerCase();
+                boolean nameNotChanged = nameInEditText.equals(nameOfGroupBeingUpdated);
+
+                if (groupBeingUpdated.isDefault() && nameNotChanged) {
+                    // default group name not changed. do nothing.
+                    finish();
+                } else if (groupBeingUpdated.isDefault() && validateGroupName()) {
+                    // default group name changed. update name.
+                    updateWalletGroupName();
+                    finish();
+                } else if (nameNotChanged && !mSetAsDefault.isChecked() && !groupBeingUpdated.isDefault()) {
+                    // not default group and name not changed. do nothing.
+                    finish();
+                } else if (nameNotChanged && mSetAsDefault.isChecked()) {
+                    // not default group and name not changed. set as default.
+                    setAsDefaultGroup();
                     finish();
                 } else if (validateGroupName()) {
-                    // Update name and default field.
-                    WalletGroup group = getBy(mCurrentName);
-                    group.name = mGroupName.getText().toString();
+                    // not default group and name changed. update name and set as default.
                     if (mSetAsDefault.isChecked()) {
-                        WalletGroup currentDefault = getDefault();
-                        currentDefault.setAsDefault(0);
-                        currentDefault.save();
-                        group.setAsDefault(1);
+                        setAsDefaultGroup();
                     }
-                    group.save();
+                    updateWalletGroupName();
                     finish();
                 }
             }
@@ -139,21 +140,56 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
     } // bindClickEvents
 
     /**
-     * Validates that the wallet group name entered does not already exist
-     * and is not an empty string.
+     * Updates a wallet group's name in the WalletGroup table.
+     */
+    private void updateWalletGroupName() {
+        WalletGroup group = getBy(mCurrentName);
+        group.name = mGroupName.getText().toString();
+        group.save();
+    }
+
+    /**
+     * Sets as wallet group as the default and removes default status from all others.
+     */
+    private void setAsDefaultGroup() {
+        WalletGroup group = getBy(mCurrentName);
+        WalletGroup currentDefault = getDefault();
+        currentDefault.setAsDefault(0);
+        currentDefault.save();
+        group.setAsDefault(1);
+        group.save();
+    }
+
+    /**
+     * Validates that the wallet group name entered
+     * is not empty and does not already exist.
      */
     private boolean validateGroupName() {
+        if (validateGroupNameIsNotEmpty() && validateGroupNameDoesNotAlreadyExist())
+            return true;
+        return false;
+    }
+
+    /**
+     * Validates that the wallet group name entered is not an empty string.
+     */
+    private boolean validateGroupNameIsNotEmpty() {
         List<WalletGroup> groups = WalletGroup.getAll();
         String nameEntered = mGroupName.getText().toString().toLowerCase();
-
-        // Cannot be empty string.
         if (nameEntered.isEmpty()) {
             String error = getString(R.string.wallet_group_create_toast_name_empty);
             Toast.makeText(this, error, Toast.LENGTH_LONG).show();
             return false;
         }
+        return true;
+    }
 
-        // Cannot already exist in the database.
+    /**
+     * Validates that the wallet group name entered does not already exist.
+     */
+    private boolean validateGroupNameDoesNotAlreadyExist() {
+        List<WalletGroup> groups = WalletGroup.getAll();
+        String nameEntered = mGroupName.getText().toString().toLowerCase();
         for (WalletGroup group : groups) {
             if (group.name.toLowerCase().equals(nameEntered)) {
                 String error = getString(R.string.wallet_group_create_toast_name_exists);
