@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,17 +15,17 @@ import android.widget.Spinner;
 import com.bitcoin.tracker.walletx.R;
 
 /**
- * Handles the form for adding new user wallets.
+ * Handles the forms for adding new user wallets of various types.
  */
 public class WalletxCreateActivity extends ActionBarActivity implements
         AdapterView.OnItemSelectedListener,
         WalletxCreateSingleAddressWalletFragment.OnFragmentInteractionListener {
 
-    //region FIELDS
+    private Spinner walletTypeSpinner;
 
-    Spinner walletTypeSpinner;
+    // Blocks spinner onItemSelected from firing without user interaction.
+    private boolean isUserInteraction = false;
 
-    //endregion
     //region ACTIVITY LIFECYCLE
 
     @Override
@@ -34,7 +35,8 @@ public class WalletxCreateActivity extends ActionBarActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.walletx_create_title_activity);
         setupWalletTypeSpinner();
-        displayCreateWalletTypeFragment(0); // display default wallet type
+        if (savedInstanceState == null)
+            displayCreateWalletTypeFragment(0);
     }
 
     private void setupWalletTypeSpinner() {
@@ -44,10 +46,11 @@ public class WalletxCreateActivity extends ActionBarActivity implements
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         walletTypeSpinner.setAdapter(adapter);
         walletTypeSpinner.setOnItemSelectedListener(this);
+        walletTypeSpinner.setOnTouchListener(spinnerOnTouchListener);
     }
 
     /**
-     * Changes which wallet type form fragment is displayed in response to the spinner selection.
+     * Changes type wallet type form fragment that is displayed in response to the spinner selection.
      */
     private void displayCreateWalletTypeFragment(int walletTypeFragmentLayoutResource) {
         FragmentManager fm = getFragmentManager();
@@ -56,6 +59,9 @@ public class WalletxCreateActivity extends ActionBarActivity implements
             case R.layout.fragment_walletx_create_single_address_wallet:
                 ft.replace(R.id.walletTypeFragmentContainer, WalletxCreateSingleAddressWalletFragment.newInstance());
                 break;
+            // case R.layout.fragment_future_wallet_type:
+            //     ft.replace(R.id.walletTypeFragmentContainer, FutureWalletTypeFragment.newInstance());
+            //     break;
             default:
                 ft.replace(R.id.walletTypeFragmentContainer, WalletxCreateSingleAddressWalletFragment.newInstance());
                 break;
@@ -66,15 +72,36 @@ public class WalletxCreateActivity extends ActionBarActivity implements
     //endregion
     //region EVENT HANDLING
 
+    private View.OnTouchListener spinnerOnTouchListener = new View.OnTouchListener() {
+        public boolean onTouch(    View v,    MotionEvent event){
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                isUserInteraction = true;
+            }
+            return false;
+        }
+    };
+
     /**
-     * Updates the form based on spinner selection.
+     * Updates the form fragment based on spinner selection.
+     * isUserInteraction is required because orientation changes cause the fragment to be
+     * replaced multiple times and thus any content added to EditText fields is lost.
      */
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        int walletTypeFragmentLayoutResource = 0;
-        if ( pos == 0 ) {
-            walletTypeFragmentLayoutResource = R.layout.fragment_walletx_create_single_address_wallet;
+        if (isUserInteraction) {
+            int walletTypeFragmentLayoutResource = 0;
+            switch (pos) {
+                case 0:
+                    walletTypeFragmentLayoutResource = R.layout.fragment_walletx_create_single_address_wallet;
+                    break;
+                // case 1:
+                //     walletTypeFragmentLayoutResource = R.layout.fragment_walletx_create_future_wallet_type;
+                //     break;
+                default:
+                    walletTypeFragmentLayoutResource = R.layout.fragment_walletx_create_single_address_wallet;
+                    break;
+            }
+            displayCreateWalletTypeFragment(walletTypeFragmentLayoutResource);
         }
-        displayCreateWalletTypeFragment(walletTypeFragmentLayoutResource);
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
