@@ -24,12 +24,7 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment {
 
     private Fragment fragment;
     private OnFragmentInteractionListener mListener;
-    private ImageButton qrCode;
-    private Button submitButton;
-
-    // EditText fields with content that needs to persist after orientation changes.
     private EditText publicKey;
-    private EditText name;
 
     //endregion
     //region FRAGMENT LIFECYCLE
@@ -54,10 +49,10 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_walletx_create_single_address_wallet, container, false);
         publicKey = (EditText) view.findViewById(R.id.editTextPublicKey);
-        qrCode = (ImageButton) view.findViewById(R.id.scanQrCode);
+        ImageButton qrCode = (ImageButton) view.findViewById(R.id.scanQrCode);
         qrCode.setOnClickListener(qrCodeListener);
-        name = (EditText) view.findViewById(R.id.editTextSaWalletName);
-        submitButton = (Button) view.findViewById(R.id.submitButton);
+        EditText name = (EditText) view.findViewById(R.id.editTextSaWalletName);
+        Button submitButton = (Button) view.findViewById(R.id.submitButton);
         submitButton.setOnClickListener(submitButtonListener);
         return view;
     }

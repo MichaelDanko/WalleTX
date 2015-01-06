@@ -21,8 +21,6 @@ public class WalletxCreateActivity extends ActionBarActivity implements
         AdapterView.OnItemSelectedListener,
         WalletxCreateSingleAddressWalletFragment.OnFragmentInteractionListener {
 
-    private Spinner walletTypeSpinner;
-
     // Blocks spinner onItemSelected from firing without user interaction.
     private boolean isUserInteraction = false;
 
@@ -40,7 +38,7 @@ public class WalletxCreateActivity extends ActionBarActivity implements
     }
 
     private void setupWalletTypeSpinner() {
-        walletTypeSpinner = (Spinner) findViewById(R.id.walletTypeSpinner);
+        Spinner walletTypeSpinner = (Spinner) findViewById(R.id.walletTypeSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.walletx_create_spinner_supported_wallet_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
