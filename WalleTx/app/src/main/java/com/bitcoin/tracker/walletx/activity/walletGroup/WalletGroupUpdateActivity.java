@@ -78,12 +78,22 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
             public void onClick(View v) {
                 String nameEntered = mGroupName.getText().toString().toLowerCase();
                 String nameExisting = mCurrentName.toLowerCase();
+
                 if (nameEntered.equals(nameExisting)) {
+                    // Update default field only.
+                    WalletGroup group = getBy(mCurrentName);
+                    if (mSetAsDefault.isChecked()) {
+                        WalletGroup currentDefault = getDefault();
+                        currentDefault.setAsDefault(0);
+                        currentDefault.save();
+                        group.setAsDefault(1);
+                    }
+                    group.save();
                     finish();
                 } else if (validateGroupName()) {
+                    // Update name and default field.
                     WalletGroup group = getBy(mCurrentName);
                     group.name = mGroupName.getText().toString();
-                    // Update default. Current default must be set to 0.
                     if (mSetAsDefault.isChecked()) {
                         WalletGroup currentDefault = getDefault();
                         currentDefault.setAsDefault(0);

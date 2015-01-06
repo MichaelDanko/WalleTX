@@ -43,7 +43,7 @@
 
     <!-- WALLET GROUPS -->
     <!-- WalletGroup list view -->
-    <string name="wallet_group_title_fragment">Manage Wallet Groups</string>
+    <string name="wallet_group_title_fragment">Organize Wallet Groups</string>
     <string name="wallet_group_wtx_default_group">My Wallets</string>
     <string name="wallet_group_label_default">(default)</string>
     <string name="wallet_group_content_description_up_arrow">Move group name up</string>
