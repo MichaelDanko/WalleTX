@@ -35,6 +35,8 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
     private OnFragmentInteractionListener mListener;
     private EditText mPublicKey;
     private EditText mWalletName;
+    private Spinner mGroupNameSpinner;
+    private ArrayAdapter<CharSequence> mAdapter;
 
     //endregion
     //region FRAGMENT LIFECYCLE
@@ -65,14 +67,17 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
         setupGroupNameSpinner(view);
         Button submitButton = (Button) view.findViewById(R.id.submitButton);
         submitButton.setOnClickListener(submitButtonListener);
+
+        // Set the wallet group spinner to the default wallet group only
+        // when activity is first created.
+        if (savedInstanceState == null) {
+            WalletGroup defaultGroup = WalletGroup.getDefault();
+            int pos = mAdapter.getPosition(defaultGroup.name);
+            mGroupNameSpinner.setSelection(pos);
+        }
+
         return view;
     }
-
-
-
-
-// ArrayAdapter(Context context, int resource, List<T> objects)
-
 
     private void setupGroupNameSpinner(View view) {
 
@@ -83,29 +88,12 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
             groupNames.add(group.name);
         }
 
-        Spinner groupNameSpinner = (Spinner) view.findViewById(R.id.groupSpinner);
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, groupNames);
-        // .createFromResource(getActivity(),
-              //  R.array.walletx_create_spinner_supported_wallet_types, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        groupNameSpinner.setAdapter(adapter);
-        groupNameSpinner.setOnItemSelectedListener(this);
-
-        // TODO Set initial selection to default group
-
-        //walletTypeSpinner.setOnTouchListener(spinnerOnTouchListener);
+        mGroupNameSpinner = (Spinner) view.findViewById(R.id.groupSpinner);
+        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, groupNames);
+        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mGroupNameSpinner.setAdapter(mAdapter);
+        mGroupNameSpinner.setOnItemSelectedListener(this);
     }
-
-    /*
-    private View.OnTouchListener spinnerOnTouchListener = new View.OnTouchListener() {
-        public boolean onTouch(    View v,    MotionEvent event){
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                isUserInteraction = true;
-            }
-            return false;
-        }
-    };
-    */
 
     /**
      * Updates the form fragment based on spinner selection.
@@ -113,13 +101,12 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
      * replaced multiple times and thus any content added to EditText fields is lost.
      */
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-
+        // Handle on item selection
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
-
 
     @Override
     public void onAttach(Activity activity) {
