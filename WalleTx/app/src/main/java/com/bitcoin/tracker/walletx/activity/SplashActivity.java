@@ -48,7 +48,7 @@ public class SplashActivity extends Activity {
     // Adds 'My Wallets' group to the WalletGroups table on first run
     // and sets it as the default group.
     private void setupDefaultWalletGroup() {
-        List<WalletGroup> groups = WalletGroup.getAll();
+        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
         if ( groups.size() < 1 ) {
             WalletGroup defaultGroup = new WalletGroup();
             defaultGroup.name = getString(R.string.wallet_group_wtx_default_group);

@@ -7,20 +7,27 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
+import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Manages form elements associated with adding a new single address wallet.
  */
-public class WalletxCreateSingleAddressWalletFragment extends Fragment {
+public class WalletxCreateSingleAddressWalletFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     //region FIELDS
 
@@ -55,10 +62,64 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment {
         ImageButton qrCode = (ImageButton) view.findViewById(R.id.scanQrCode);
         qrCode.setOnClickListener(qrCodeListener);
         mWalletName = (EditText) view.findViewById(R.id.editTextSaWalletName);
+        setupGroupNameSpinner(view);
         Button submitButton = (Button) view.findViewById(R.id.submitButton);
         submitButton.setOnClickListener(submitButtonListener);
         return view;
     }
+
+
+
+
+// ArrayAdapter(Context context, int resource, List<T> objects)
+
+
+    private void setupGroupNameSpinner(View view) {
+
+        List<WalletGroup> groups = WalletGroup.getAllSortedByName();
+
+        ArrayList<String> groupNames = new ArrayList<>();
+        for (WalletGroup group : groups) {
+            groupNames.add(group.name);
+        }
+
+        Spinner groupNameSpinner = (Spinner) view.findViewById(R.id.groupSpinner);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, groupNames);
+        // .createFromResource(getActivity(),
+              //  R.array.walletx_create_spinner_supported_wallet_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        groupNameSpinner.setAdapter(adapter);
+        groupNameSpinner.setOnItemSelectedListener(this);
+
+        // TODO Set initial selection to default group
+
+        //walletTypeSpinner.setOnTouchListener(spinnerOnTouchListener);
+    }
+
+    /*
+    private View.OnTouchListener spinnerOnTouchListener = new View.OnTouchListener() {
+        public boolean onTouch(    View v,    MotionEvent event){
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                isUserInteraction = true;
+            }
+            return false;
+        }
+    };
+    */
+
+    /**
+     * Updates the form fragment based on spinner selection.
+     * isUserInteraction is required because orientation changes cause the fragment to be
+     * replaced multiple times and thus any content added to EditText fields is lost.
+     */
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -116,6 +177,10 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment {
         boolean nameIsEmptyString = mWalletName.getText().toString().equals("");
 
         if (addressIsValid && !nameIsEmptyString) {
+
+            //Walletx wtx = new Walletx();
+            //wtx.name = mWalletName.getText().toString();
+            //wtx.type = WalletType.SINGLE_ADDRESS_WALLET;
 
             //----------------------------------------
             // TODO Add new SAWallet to the database

@@ -68,7 +68,7 @@ public class WalletGroupCreateActivity extends ActionBarActivity {
      * and is not an empty string.
      */
     private boolean validateGroupName() {
-        List<WalletGroup> groups = WalletGroup.getAll();
+        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
         String nameEntered = mGroupName.getText().toString().toLowerCase();
 
         // Cannot be empty string.
@@ -95,7 +95,7 @@ public class WalletGroupCreateActivity extends ActionBarActivity {
 
         // Set group as default.
         if (mSetAsDefault.isChecked()) {
-            List<WalletGroup> existingGroups = WalletGroup.getAll();
+            List<WalletGroup> existingGroups = WalletGroup.getAllSortedByDisplayOrder();
             for (WalletGroup group : existingGroups) {
                 if (group.getDefaultGroup() == 1) {
                     group.setAsDefault(0);

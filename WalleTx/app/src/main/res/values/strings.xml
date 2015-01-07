@@ -39,6 +39,7 @@
     <string name="walletx_create_hint_public_key">Public key</string>
     <string name="walletx_create_content_description_barcode">Scan public key</string>
     <string name="walletx_create_hint_single_address_wallet_name">Wallet name</string>
+    <string name="walletx_create_label_group_spinner">Add in group: </string>
     <string name="walletx_create_submit_button">Add Wallet</string>
     <string name="walletx_create_toast_invalid_public_key">Oops! Invalid public key</string>
     <string name="walletx_create_toast_name_is_empty_string">Please provide a name for this wallet</string>

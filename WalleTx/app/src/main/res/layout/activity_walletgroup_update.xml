@@ -12,13 +12,13 @@
         android:id="@+id/editTextWalletGroupName"
         android:layout_gravity="center_horizontal|top"
         android:hint="@string/wallet_group_create_hint_name"
-        android:paddingTop="@dimen/form_element_bottom_margin"
+        android:paddingTop="@dimen/form_spacer_small"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="@dimen/form_element_bottom_margin"
+        android:layout_marginBottom="@dimen/form_spacer_small"
         android:singleLine="true"
         android:inputType="textCapWords" />
 
@@ -33,7 +33,7 @@
         android:layout_alignRight="@+id/editTextWalletGroupName"
         android:layout_alignEnd="@+id/editTextWalletGroupName"
         android:checked="false"
-        android:layout_marginBottom="@dimen/form_element_bottom_margin" />
+        android:layout_marginBottom="@dimen/form_spacer_small" />
 
     <Button
         android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="@dimen/form_element_bottom_margin" />
+        android:layout_marginBottom="@dimen/form_spacer_small" />
 
     <Button
         android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="@dimen/form_element_bottom_margin" />
+        android:layout_marginBottom="@dimen/form_spacer_small" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -16,8 +16,8 @@
         android:spinnerMode="dropdown"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:paddingBottom="@dimen/form_element_bottom_margin"
-        android:layout_marginBottom="@dimen/form_element_bottom_margin" />
+        android:paddingBottom="@dimen/form_spacer_small"
+        android:layout_marginBottom="@dimen/form_spacer_small" />
 
     <RelativeLayout
         android:layout_width="fill_parent"

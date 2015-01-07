@@ -22,7 +22,7 @@ public class Walletx extends Model {
     //region WALLETX MODEL
 
     @Column(name = "Name")
-    String name;
+    public String name;
 
     @Column(name = "WalletType")
     public WalletType type;

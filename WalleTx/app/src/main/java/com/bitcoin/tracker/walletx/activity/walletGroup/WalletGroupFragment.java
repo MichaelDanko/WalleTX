@@ -86,7 +86,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     private void setupAdapter() {
 
         ArrayList<WalletGroupListItem> items = new ArrayList<>();
-        List<WalletGroup> groups = WalletGroup.getAll();
+        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
         for (WalletGroup group : groups) {
             WalletGroupListItem item;
             item = new WalletGroupListItem(group.name);
@@ -150,7 +150,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
-            String name = WalletGroup.getAll().get(position).toString();
+            String name = WalletGroup.getAllSortedByDisplayOrder().get(position).toString();
 
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.

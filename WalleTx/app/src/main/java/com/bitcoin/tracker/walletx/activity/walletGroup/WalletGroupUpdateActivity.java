@@ -174,7 +174,7 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
      * Validates that the wallet group name entered is not an empty string.
      */
     private boolean validateGroupNameIsNotEmpty() {
-        List<WalletGroup> groups = WalletGroup.getAll();
+        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
         String nameEntered = mGroupName.getText().toString().toLowerCase();
         if (nameEntered.isEmpty()) {
             String error = getString(R.string.wallet_group_create_toast_name_empty);
@@ -188,7 +188,7 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
      * Validates that the wallet group name entered does not already exist.
      */
     private boolean validateGroupNameDoesNotAlreadyExist() {
-        List<WalletGroup> groups = WalletGroup.getAll();
+        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
         String nameEntered = mGroupName.getText().toString().toLowerCase();
         for (WalletGroup group : groups) {
             if (group.name.toLowerCase().equals(nameEntered)) {

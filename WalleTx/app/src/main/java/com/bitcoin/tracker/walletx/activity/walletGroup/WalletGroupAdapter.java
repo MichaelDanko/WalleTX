@@ -150,7 +150,7 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
         // Populate list view
         ListAdapter adapter;
         ArrayList<WalletGroupListItem> items = new ArrayList<>();
-        List<WalletGroup> groups = WalletGroup.getAll();
+        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
         for (WalletGroup group : groups) {
             WalletGroupListItem item;
             item = new WalletGroupListItem(group.name);

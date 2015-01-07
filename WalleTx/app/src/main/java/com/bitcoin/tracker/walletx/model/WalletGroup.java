@@ -35,7 +35,7 @@ public class WalletGroup extends Model {
     public void setAsDefault(int isDefault) {
         if (isDefault == 1) {
             // clear current default group and set this as default
-            List<WalletGroup> groups = WalletGroup.getAll();
+            List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
             for (WalletGroup group : groups) {
                 if (group.defaultGroup == 1) {
                     group.defaultGroup = 0;
@@ -82,7 +82,7 @@ public class WalletGroup extends Model {
         System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
         System.out.printf("%-20s %-15s %-16s\n", "Name", "DefaultGroup", "DisplayOrder");
         System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
-        List<WalletGroup> groups = WalletGroup.getAll();
+        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
         for (WalletGroup group : groups) {
             System.out.printf(
                     "%-20s %-15s %-16s\n",
@@ -110,10 +110,17 @@ public class WalletGroup extends Model {
     /**
      * @return List of all WalletGroups in order.
      */
-    public static List<WalletGroup> getAll() {
+    public static List<WalletGroup> getAllSortedByDisplayOrder() {
         return new Select()
                 .from(WalletGroup.class)
                 .orderBy("DisplayOrder ASC")
+                .execute();
+    }
+
+    public static List<WalletGroup> getAllSortedByName() {
+        return new Select()
+                .from(WalletGroup.class)
+                .orderBy("Name ASC")
                 .execute();
     }
 
