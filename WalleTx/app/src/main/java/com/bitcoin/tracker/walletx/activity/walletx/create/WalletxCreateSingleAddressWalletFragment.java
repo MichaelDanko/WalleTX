@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -81,7 +83,7 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment {
         public void onClick(View v) {
             IntentIntegrator integrator = IntentIntegrator.forFragment(fragment);
             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-            integrator.setPrompt("Scan public key");
+            integrator.setPrompt("");
             integrator.setResultDisplayDuration(0);
             integrator.initiateScan();
         }
@@ -109,14 +111,23 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment {
      */
     public void onSubmit() {
 
-        //----------------------------------------
-        // TODO Add new SAWallet to the database
-        // Remember to fetch txs too
-        //----------------------------------------
+        if (SingleAddressWallet.isValidAddress(publicKey.getText().toString())) {
 
-        if (mListener != null) {
-            mListener.onFragmentInteraction();
+            //----------------------------------------
+            // TODO Add new SAWallet to the database
+            // Remember to fetch txs too
+            //----------------------------------------
+
+            if (mListener != null) {
+                mListener.onFragmentInteraction();
+            }
+        } else {
+            // Alert user that public key is invalid
+            Toast.makeText(getActivity(),
+                    R.string.walletx_create_toast_invalid_public_key,
+                    Toast.LENGTH_SHORT).show();
         }
+
     }
 
     /**

@@ -3,6 +3,8 @@ package com.bitcoin.tracker.walletx.model;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.google.bitcoin.core.Address;
+import com.google.bitcoin.core.AddressFormatException;
 
 /**
  * SingleAddressWallet model.
@@ -32,11 +34,16 @@ public class SingleAddressWallet extends Model implements WalletxBlockchainInter
         this.publicKey = publicKey;
     }
 
-    /*-------------------------------*
-     *  SingleAddressWallet Queries  *
-     *-------------------------------*/
-
-
-
+    /**
+     * Validates if a string is a valid public key.
+     */
+    public static boolean isValidAddress(String address) {
+        try {
+            new Address(null, address);
+            return true;
+        } catch(AddressFormatException e) {
+            return false;
+        }
+    }
 
 } // SingleAddressWallet
