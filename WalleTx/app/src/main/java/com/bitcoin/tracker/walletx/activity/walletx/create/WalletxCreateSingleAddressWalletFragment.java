@@ -26,7 +26,8 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment {
 
     private Fragment fragment;
     private OnFragmentInteractionListener mListener;
-    private EditText publicKey;
+    private EditText mPublicKey;
+    private EditText mWalletName;
 
     //endregion
     //region FRAGMENT LIFECYCLE
@@ -50,10 +51,10 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_walletx_create_single_address_wallet, container, false);
-        publicKey = (EditText) view.findViewById(R.id.editTextPublicKey);
+        mPublicKey = (EditText) view.findViewById(R.id.editTextPublicKey);
         ImageButton qrCode = (ImageButton) view.findViewById(R.id.scanQrCode);
         qrCode.setOnClickListener(qrCodeListener);
-        EditText name = (EditText) view.findViewById(R.id.editTextSaWalletName);
+        mWalletName = (EditText) view.findViewById(R.id.editTextSaWalletName);
         Button submitButton = (Button) view.findViewById(R.id.submitButton);
         submitButton.setOnClickListener(submitButtonListener);
         return view;
@@ -101,7 +102,7 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanResult != null) {
-            publicKey.setText(scanResult.getContents()); // add code to edit text field
+            mPublicKey.setText(scanResult.getContents()); // add code to edit text field
         }
     }
 
@@ -111,20 +112,30 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment {
      */
     public void onSubmit() {
 
-        if (SingleAddressWallet.isValidAddress(publicKey.getText().toString())) {
+        boolean addressIsValid = SingleAddressWallet.isValidAddress(mPublicKey.getText().toString());
+        boolean nameIsEmptyString = mWalletName.getText().toString().equals("");
+
+        if (addressIsValid && !nameIsEmptyString) {
 
             //----------------------------------------
             // TODO Add new SAWallet to the database
+            // TODO Add new Walletx for this SAWallet
+            // TODO Upon returning to WalletxActivity fetch transactions and update list view.
             // Remember to fetch txs too
             //----------------------------------------
 
             if (mListener != null) {
                 mListener.onFragmentInteraction();
             }
-        } else {
+        } else if (!addressIsValid) {
             // Alert user that public key is invalid
             Toast.makeText(getActivity(),
                     R.string.walletx_create_toast_invalid_public_key,
+                    Toast.LENGTH_SHORT).show();
+        } else if (nameIsEmptyString) {
+            // Alert user that name field is required
+            Toast.makeText(getActivity(),
+                    R.string.walletx_create_toast_name_is_empty_string,
                     Toast.LENGTH_SHORT).show();
         }
 
