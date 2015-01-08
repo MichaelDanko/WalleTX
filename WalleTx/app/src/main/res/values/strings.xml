@@ -9,6 +9,8 @@
     <string name="app_name">WalleTx</string>
     <string name="app_confirm_yes">Yes</string>
     <string name="app_confirm_no">Cancel</string>
+    <string name="app_btc_currency_label">BTC</string>
+    <string name="app_lc_currency_label">LC</string>
 
     <!-- NAV DRAWER -->
     <string name="navigation_drawer_title_activity_main">WalleTx</string>
@@ -31,6 +33,11 @@
     <string name="splash_label">Bitcoin Wallet Tracker</string>
 
     <!-- WALLETX -->
+    <!-- Walletx main activity -->
+    <string name="walletx_main_label_all_wallets_aggreation">All Wallets</string>
+    <string name="walletx_main_label_all_wallets_bitcoin_balance">0.0</string>
+    <string name="walletx_main_label_all_wallets_lc_balance">0.0</string>
+
     <!-- Create new wallet activity -->
     <string name="walletx_create_title_activity">Add new wallet</string>
     <string-array name="walletx_create_spinner_supported_wallet_types">
