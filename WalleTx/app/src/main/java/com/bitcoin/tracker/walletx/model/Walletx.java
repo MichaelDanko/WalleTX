@@ -52,6 +52,26 @@ public class Walletx extends Model {
         this.group = group;
     }
 
+    /**
+     * Dumps the Walletx table to console.
+     * For debugging purposes only.
+     */
+    public static void dump() {
+        String dividerCol1 = "------------------";
+        String dividerCol23 = "---------------------------------";
+        System.out.printf("%-20s %-35s %-36s\n", dividerCol1, dividerCol23, dividerCol23);
+        System.out.printf("%-20s %-35s %-36s\n", "Name", "WalletType", "WalletGroup");
+        System.out.printf("%-20s %-35s %-36s\n", dividerCol1, dividerCol23, dividerCol23);
+        List<Walletx> wtxs = Walletx.getAll();
+        for (Walletx wtx : wtxs) {
+            System.out.printf(
+                    "%-20s %-35s %-36s\n",
+                    wtx.name,
+                    wtx.type,
+                    wtx.group);
+        }
+    }
+
     //endregion
     //region WALLETX QUERIES
 

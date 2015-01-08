@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
+import com.bitcoin.tracker.walletx.model.WalletType;
+import com.bitcoin.tracker.walletx.model.Walletx;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -165,32 +167,51 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
 
         if (addressIsValid && !nameIsEmptyString) {
 
-            //Walletx wtx = new Walletx();
-            //wtx.name = mWalletName.getText().toString();
-            //wtx.type = WalletType.SINGLE_ADDRESS_WALLET;
+            Spinner walletTypeSpinner = (Spinner) getActivity().findViewById(R.id.walletTypeSpinner);
+            String selection = walletTypeSpinner.getSelectedItem().toString().toLowerCase();
 
-            //----------------------------------------
-            // TODO Add new SAWallet to the database
-            // TODO Add new Walletx for this SAWallet
-            // TODO Upon returning to WalletxActivity fetch transactions and update list view.
-            // Remember to fetch txs too
-            //----------------------------------------
+            switch (selection) {
+                case "single address wallet":
 
+                    // TODO Validate that public key doesn't already exist before adding.
+
+                    Walletx wtx = new Walletx();
+                    wtx.name = mWalletName.getText().toString();
+                    wtx.type = WalletType.SINGLE_ADDRESS_WALLET;
+                    String groupName = mGroupNameSpinner.getSelectedItem().toString();
+                    WalletGroup group = WalletGroup.getBy(groupName);
+                    wtx.group = group;
+                    wtx.save();
+
+                    SingleAddressWallet saWallet = new SingleAddressWallet();
+                    saWallet.publicKey = mPublicKey.getText().toString();
+                    saWallet.wtx = wtx;
+                    saWallet.save();
+
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+
+            // Notify parent activity
             if (mListener != null) {
                 mListener.onFragmentInteraction();
             }
+
         } else if (!addressIsValid) {
+
             // Alert user that public key is invalid
             Toast.makeText(getActivity(),
                     R.string.walletx_create_toast_invalid_public_key,
                     Toast.LENGTH_SHORT).show();
+
         } else if (nameIsEmptyString) {
+
             // Alert user that name field is required
             Toast.makeText(getActivity(),
                     R.string.walletx_create_toast_name_is_empty_string,
                     Toast.LENGTH_SHORT).show();
         }
-
     }
 
     /**

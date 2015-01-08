@@ -90,7 +90,6 @@ public class WalletGroup extends Model {
                     group.defaultGroup,
                     group.displayOrder);
         }
-        System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
     }
 
     //endregion

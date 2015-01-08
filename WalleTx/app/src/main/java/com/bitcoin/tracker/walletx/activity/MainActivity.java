@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.txCategories.TxCategoriesFragment;
-import com.bitcoin.tracker.walletx.activity.walletx.WalletxFragment;
+import com.bitcoin.tracker.walletx.activity.walletx.main.WalletxFragment;
 import com.bitcoin.tracker.walletx.activity.settings.SettingsFragment;
 import com.bitcoin.tracker.walletx.activity.walletGroup.WalletGroupFragment;
 

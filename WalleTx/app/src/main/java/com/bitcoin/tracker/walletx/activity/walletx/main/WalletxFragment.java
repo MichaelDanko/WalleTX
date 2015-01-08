@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.walletx;
+package com.bitcoin.tracker.walletx.activity.walletx.main;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,11 +10,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.MainActivity;
 import com.bitcoin.tracker.walletx.activity.walletx.create.WalletxCreateActivity;
+import com.bitcoin.tracker.walletx.model.WalletGroup;
+import com.bitcoin.tracker.walletx.model.Walletx;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * WalletxFragment acts as the home view for the application.
@@ -22,8 +29,17 @@ import com.bitcoin.tracker.walletx.activity.walletx.create.WalletxCreateActivity
  */
 public class WalletxFragment extends Fragment {
 
+    //region FIELDS
+
+    WalletxExpandableListAdapter mListApapter;
+    ExpandableListView mExpListView;
+    List<String> mGroupHeader;
+    HashMap<String, List<String>> mListDataChild;
+
     // The fragment argument representing the section number for this fragment.
     private static final String ARG_SECTION_NUMBER = "section_number";
+
+    //endregion
 
     // Returns a new instance of this fragment for the given section number.
     public static WalletxFragment newInstance(int sectionNumber) {
@@ -37,10 +53,48 @@ public class WalletxFragment extends Fragment {
     public WalletxFragment() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+
+        mExpListView = (ExpandableListView) container.findViewById(android.R.id.list);
+
+
+        prepareData();
+
+
+
+
+        mListApapter = new WalletxExpandableListAdapter(getActivity(), mGroupHeader, mListDataChild);
+
+        if (mExpListView != null) {
+            mExpListView.setAdapter(mListApapter);
+        }
+
+
+
         return inflater.inflate(R.layout.fragment_walletx, container, false); // root view
+    }
+
+    private void prepareData() {
+
+        mGroupHeader = new ArrayList<>();
+        mListDataChild = new HashMap<String, List<String>>();
+
+        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
+        for (WalletGroup group : groups) {
+
+            mGroupHeader.add(group.name);
+
+            List<Walletx> wtxs = group.walletxs(); // get all wtxs in this group
+            List<String> wtxsInThisGroup = new ArrayList<>(); // names of all wtx in group
+
+            for (Walletx wtx : wtxs) {
+                wtxsInThisGroup.add(wtx.name);
+            }
+
+            mListDataChild.put(group.name, wtxsInThisGroup);
+
+        }
     }
 
     @Override
