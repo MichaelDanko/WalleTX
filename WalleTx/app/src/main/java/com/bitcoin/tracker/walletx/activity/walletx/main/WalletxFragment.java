@@ -58,11 +58,11 @@ public class WalletxFragment extends Fragment {
 
         mExpListView = (ExpandableListView) container.findViewById(android.R.id.list);
 
-
+        /*---------------------
+         * TODO Working here
+         * --------------------
+         */
         prepareData();
-
-
-
 
         mListApapter = new WalletxExpandableListAdapter(getActivity(), mGroupHeader, mListDataChild);
 
@@ -70,11 +70,13 @@ public class WalletxFragment extends Fragment {
             mExpListView.setAdapter(mListApapter);
         }
 
-
-
         return inflater.inflate(R.layout.fragment_walletx, container, false); // root view
     }
 
+    /*---------------------
+     * TODO Working here
+     * --------------------
+     */
     private void prepareData() {
 
         mGroupHeader = new ArrayList<>();
