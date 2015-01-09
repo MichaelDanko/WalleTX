@@ -31,6 +31,7 @@ public class WalletxFragment extends Fragment {
 
     //region FIELDS
 
+    // Walletx custom expandable list
     WalletxExpandableListAdapter mListApapter;
     ExpandableListView mExpListView;
     List<String> mGroupHeader;
@@ -40,6 +41,7 @@ public class WalletxFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     //endregion
+    //region FRAGMENT LIFECYCLE
 
     // Returns a new instance of this fragment for the given section number.
     public static WalletxFragment newInstance(int sectionNumber) {
@@ -56,46 +58,42 @@ public class WalletxFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
 
-        mExpListView = (ExpandableListView) container.findViewById(android.R.id.list);
-
-        /*---------------------
-         * TODO Working here
-         * --------------------
-         */
+        View view = inflater.inflate(R.layout.fragment_walletx, container, false);
+        mExpListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
         prepareData();
-
         mListApapter = new WalletxExpandableListAdapter(getActivity(), mGroupHeader, mListDataChild);
-
         if (mExpListView != null) {
             mExpListView.setAdapter(mListApapter);
         }
 
-        return inflater.inflate(R.layout.fragment_walletx, container, false); // root view
+        //
+        View header = inflater.inflate(R.layout.fragment_walletx_list_item_all_wallets, container, false);
+        mExpListView.addHeaderView(header);
+
+        return view; // root view
     }
 
-    /*---------------------
-     * TODO Working here
-     * --------------------
+    /**
+     * Prepares wallet group / wallet data for the expandable list view.
      */
     private void prepareData() {
-
         mGroupHeader = new ArrayList<>();
         mListDataChild = new HashMap<String, List<String>>();
 
+        // For each wallet group
         List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
         for (WalletGroup group : groups) {
-
-            mGroupHeader.add(group.name);
-
             List<Walletx> wtxs = group.walletxs(); // get all wtxs in this group
-            List<String> wtxsInThisGroup = new ArrayList<>(); // names of all wtx in group
 
-            for (Walletx wtx : wtxs) {
-                wtxsInThisGroup.add(wtx.name);
+            // Setup only if the wallet group has at least 1 wallet
+            if (wtxs.size() > 0) {
+                mGroupHeader.add(group.name);
+                List<String> wtxsInThisGroup = new ArrayList<>(); // names of all wtx in group
+                for (Walletx wtx : wtxs) {
+                    wtxsInThisGroup.add(wtx.name);
+                }
+                mListDataChild.put(group.name, wtxsInThisGroup);
             }
-
-            mListDataChild.put(group.name, wtxsInThisGroup);
-
         }
     }
 
@@ -106,6 +104,7 @@ public class WalletxFragment extends Fragment {
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
 
+    //endregion
     //region OPTIONS MENU
 
     @Override

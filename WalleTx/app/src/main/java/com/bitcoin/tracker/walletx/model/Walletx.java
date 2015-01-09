@@ -84,6 +84,17 @@ public class Walletx extends Model {
                 .execute();
     }
 
+    /**
+     * @return Walletx selected by name
+     */
+    public static Walletx getBy(String name) {
+        return new Select()
+                .from(Walletx.class)
+                .where("Name = ?", name)
+                .executeSingle();
+    }
+
+
     //endregion
 
 } // Walletx

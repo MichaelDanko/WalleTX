@@ -66,6 +66,17 @@ public class SingleAddressWallet extends Model implements WalletxBlockchainInter
     }
 
     /**
+     * @param wtx Walletx
+     * @return SingleAddressWallet associated with the Walletx.
+     */
+    public static SingleAddressWallet getByWalletx(Walletx wtx) {
+        return new Select()
+                .from(SingleAddressWallet.class)
+                .where("Walletx = ?", wtx.getId())
+                .executeSingle();
+    }
+
+    /**
      * Validates if a string is a valid public key.
      */
     public static boolean isValidAddress(String address) {

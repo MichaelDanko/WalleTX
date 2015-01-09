@@ -2,11 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@color/white"
-    android:id="@+id/singleWalletListItem">
+    android:id="@+id/singleWalletListItem"
+    android:gravity="center_vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/gen_spacer_medium"
+    android:paddingBottom="@dimen/gen_spacer_medium">
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/walletNameContainer">
 
         <TextView
@@ -16,9 +21,9 @@
             android:text="@string/walletx_main_label_group_placeholder"
             android:id="@+id/walletName"
             android:background="@color/white"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="@dimen/gen_spacer_xsmall" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,12 +34,13 @@
             android:layout_below="@+id/walletName"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
+
     </RelativeLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/balanceInfo">
 
         <RelativeLayout
@@ -42,7 +48,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:layout_weight=".5"
-            android:id="@+id/btcBalanceInfo">
+            android:id="@+id/btcBalanceInfo"
+            android:layout_marginBottom="@dimen/gen_spacer_xsmall">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -79,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/app_lc_currency_label"
-                android:id="@+id/lcBalance"
+                android:id="@+id/lcLabel"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
@@ -91,8 +98,8 @@
                 android:text="@string/walletx_main_label_empty_lc_balance"
                 android:id="@+id/lcLabel"
                 android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/lcBalance"
-                android:layout_toStartOf="@+id/lcBalance"
+                android:layout_toLeftOf="@+id/lcLabel"
+                android:layout_toStartOf="@+id/lcLabel"
                 android:layout_marginRight="@dimen/gen_spacer_small"
                 android:layout_marginEnd="@dimen/gen_spacer_small"/>
         </RelativeLayout>
