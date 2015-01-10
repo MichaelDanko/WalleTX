@@ -22,6 +22,8 @@ import java.util.List;
  */
 public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
 
+    //region FIELDS
+
     private final Activity activity;
     private final ArrayList<WalletGroupListItem> itemsArrayList;
 
@@ -32,6 +34,9 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
     private TextView mDefaultGroup;
     private ImageButton mMoveDown;
     private ImageButton mMoveUp;
+
+    //endregion
+    //region ADAPTER
 
     public WalletGroupAdapter(Activity activity, ArrayList<WalletGroupListItem> itemsArrayList) {
         super(activity, R.layout.fragment_walletgroup_list_item, itemsArrayList);
@@ -49,10 +54,6 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
         return mRowView;
     }
 
-    /**
-     * Gets rowView form inflater.
-     * @param parent listview
-     */
     private void getViewsById(ViewGroup parent) {
         mRowView = inflater.inflate(R.layout.fragment_walletgroup_list_item, parent, false);
         mGroupName = (TextView) mRowView.findViewById(R.id.groupNameLabel);
@@ -86,6 +87,19 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
             if (last == 2) mMoveDown.setVisibility(View.GONE);
         }
     }
+
+    private void setupTextLabels(int position) {
+        mGroupName.setText(itemsArrayList.get(position).getName());
+
+        // Hide default label for non-default groups
+        WalletGroup current = WalletGroup.getByDisplayOrder(position + 1);
+        if (!current.isDefault()) {
+            mDefaultGroup.setVisibility(View.GONE);
+        }
+    }
+
+    //endregion
+    //region EVENT HANDLING
 
     /**
      * Binds on click listener to the move up and move down display order buttons.
@@ -124,16 +138,6 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
         });
     }
 
-    private void setupTextLabels(int position) {
-        mGroupName.setText(itemsArrayList.get(position).getName());
-
-        // Hide default label for non-default groups
-        WalletGroup current = WalletGroup.getByDisplayOrder(position + 1);
-        if (!current.isDefault()) {
-            mDefaultGroup.setVisibility(View.GONE);
-        }
-    }
-
     /**
      * Refreshes the content of the parent list view
      * while maintaining the current vertical position in the list view.
@@ -170,4 +174,6 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
             parentListView.setSelection(firstVisible);
         }
     }
+
+    //endregion
 }
