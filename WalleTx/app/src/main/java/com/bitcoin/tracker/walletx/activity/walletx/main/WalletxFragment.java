@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
@@ -63,6 +64,7 @@ public class WalletxFragment extends Fragment {
         mExpListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
         mExpListView.setOnGroupClickListener(groupClickListener);
         mExpListView.setOnChildClickListener(childWalletClickListener);
+        mExpListView.setOnItemLongClickListener(childWalletLongClickListener);
 
         prepareData();
         mListApapter = new WalletxExpandableListAdapter(getActivity(), mGroupHeader, mListDataChild);
@@ -133,6 +135,29 @@ public class WalletxFragment extends Fragment {
         public boolean onChildClick (ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
             Toast.makeText(getActivity(), "TODO: Handle child wallet clicks", Toast.LENGTH_SHORT).show();
             return true;
+        }
+    };
+
+    private ExpandableListView.OnItemLongClickListener childWalletLongClickListener = new ExpandableListView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            int itemType = ExpandableListView.getPackedPositionType(id);
+
+            if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                // TODO Open activity to edit/delete this wallet
+                Toast.makeText(getActivity(), "TODO: Open activity to edit/delete this wallet.", Toast.LENGTH_SHORT).show();
+                return true;
+
+            } else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+                // TODO Group: Open CRUD group activity here or do nothing?
+                Toast.makeText(getActivity(), "TODO: Decide if long clicks on groups should open update wallet activity. I think no.", Toast.LENGTH_LONG).show();
+                return true;
+
+            } else {
+                // TODO edit code in block
+                Toast.makeText(getActivity(), "Should Never Happen. Throw error", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
     };
 
