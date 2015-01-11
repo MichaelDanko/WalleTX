@@ -36,6 +36,7 @@ public class WalletxFragment extends Fragment {
     ExpandableListView mExpListView;
     List<String> mGroupHeader;
     HashMap<String, List<String>> mListDataChild;
+    View mHeader; // all wallets header for exp. list view
 
     // The fragment argument representing the section number for this fragment.
     private static final String ARG_SECTION_NUMBER = "section_number";
@@ -60,17 +61,22 @@ public class WalletxFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_walletx, container, false);
         mExpListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
+        mExpListView.setOnGroupClickListener(groupClickListener);
+        mExpListView.setOnChildClickListener(childWalletClickListener);
+
         prepareData();
         mListApapter = new WalletxExpandableListAdapter(getActivity(), mGroupHeader, mListDataChild);
         if (mExpListView != null) {
             mExpListView.setAdapter(mListApapter);
         }
 
-        //
+        // Add All Wallets header to expandable list view.
         View header = inflater.inflate(R.layout.fragment_walletx_list_item_all_wallets, container, false);
         mExpListView.addHeaderView(header);
+        mHeader = header.findViewById(R.id.allWalletsContainer);
+        mHeader.setOnClickListener(allWalletsOnClickListener);
 
-        return view; // root view
+        return view;
     }
 
     /**
@@ -103,6 +109,32 @@ public class WalletxFragment extends Fragment {
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
+
+    //endregion
+    //region EVENT HANDLING
+
+    private View.OnClickListener allWalletsOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(), "TODO: Handle All Wallets click", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private ExpandableListView.OnGroupClickListener groupClickListener = new ExpandableListView.OnGroupClickListener() {
+        @Override
+        public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+            Toast.makeText(getActivity(), "TODO: Handle group clicks", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+    };
+
+    private ExpandableListView.OnChildClickListener childWalletClickListener = new ExpandableListView.OnChildClickListener() {
+        @Override
+        public boolean onChildClick (ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+            Toast.makeText(getActivity(), "TODO: Handle child wallet clicks", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+    };
 
     //endregion
     //region OPTIONS MENU

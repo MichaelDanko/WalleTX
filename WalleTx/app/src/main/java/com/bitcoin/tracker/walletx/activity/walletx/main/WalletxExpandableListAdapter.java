@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
@@ -31,12 +32,12 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
     private HashMap<String, List<String>> mSingleWalletChild;
 
     // Views within the list items.
-    TextView name;
-    TextView description; // wallet only
-    TextView btcBalance;
-    TextView btcBalanceLabel;
-    TextView lcBalance;
-    TextView lcBalanceLabel;
+    TextView mName;
+    TextView mDescription; // wallet only
+    TextView mBtcBalance;
+    TextView mBtcBalanceLabel;
+    TextView mLocalCurrencyBalance;
+    TextView mLocalCurrencyBalanceLabel;
 
     //endregion
 
@@ -48,7 +49,7 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         this.mSingleWalletChild = singleWalletChild;
     }
 
-    //region CHILD (Single walletx row in exp. list view)
+    //region CHILD ROWS (Rows pertaining to wallets within groups)
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
@@ -76,28 +77,28 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     private void getViewsInChild(View convertView) {
-        name = (TextView) convertView.findViewById(R.id.walletName);
-        description = (TextView) convertView.findViewById(R.id.walletDescription);
-        btcBalance = (TextView) convertView.findViewById(R.id.btcBalance);
-        btcBalanceLabel = (TextView) convertView.findViewById(R.id.btcCurrencyLabel);
-        lcBalance = (TextView) convertView.findViewById(R.id.lcLabel);
-        lcBalanceLabel = (TextView) convertView.findViewById(R.id.lcLabel);
+        mName = (TextView) convertView.findViewById(R.id.walletName);
+        mDescription = (TextView) convertView.findViewById(R.id.walletDescription);
+        mBtcBalance = (TextView) convertView.findViewById(R.id.btcBalance);
+        mBtcBalanceLabel = (TextView) convertView.findViewById(R.id.btcCurrencyLabel);
+        mLocalCurrencyBalance = (TextView) convertView.findViewById(R.id.lcLabel);
+        mLocalCurrencyBalanceLabel = (TextView) convertView.findViewById(R.id.lcLabel);
     }
 
     private void styleViewsInChild() {
-        btcBalanceLabel.setTypeface(null, Typeface.ITALIC);
-        lcBalanceLabel.setTypeface(null, Typeface.ITALIC);
+        mBtcBalanceLabel.setTypeface(null, Typeface.ITALIC);
+        mLocalCurrencyBalanceLabel.setTypeface(null, Typeface.ITALIC);
     }
 
     private void prepareChildData(int groupPosition, int childPosition) {
         final String walletName = (String) getChild(groupPosition, childPosition);
-        Walletx wtx = Walletx.getBy(walletName); // get walletx by name
-        name.setText(wtx.name);
+        Walletx wtx = Walletx.getBy(walletName); // get walletx by mName
+        mName.setText(wtx.name);
         if (wtx.type.equals(WalletType.SINGLE_ADDRESS_WALLET)) {
             // Get the SAWallet associated with this WTX
             SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
             if (saw != null)
-                description.setText(saw.publicKey);
+                mDescription.setText(saw.publicKey);
         }
 
         //------------------------
@@ -110,8 +111,13 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         return this.mSingleWalletChild.get(this.mGroupHeader.get(groupPosition)).size();
     }
 
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
+    }
+
     //endregion
-    // GROUP (Group header rows)
+    //region GROUP (Group header rows)
 
     @Override
     public Object getGroup(int groupPosition) {
@@ -140,32 +146,33 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         styleViewsInGroupHeader();
         prepareGroupHeaderData(groupPosition, parent);
 
-        // TODO Do we want groups to remain expanded? As coded they do.
-        // ExpandableListView elv = (ExpandableListView) parent;
-        // elv.expandGroup(groupPosition);
+        // Prevent group collapsing
+        ExpandableListView elv = (ExpandableListView) parent;
+        elv.expandGroup(groupPosition);
+        elv.setGroupIndicator(null);
 
         return convertView;
     }
 
     private void getViewsInGroupHeader(View convertView) {
-        name = (TextView) convertView.findViewById(R.id.groupName);
-        btcBalance = (TextView) convertView.findViewById(R.id.btcBalance);
-        btcBalanceLabel = (TextView) convertView.findViewById(R.id.btcCurrencyLabel);
-        lcBalance = (TextView) convertView.findViewById(R.id.lcBalance);
-        lcBalanceLabel = (TextView) convertView.findViewById(R.id.lcLabel);
+        mName = (TextView) convertView.findViewById(R.id.groupName);
+        mBtcBalance = (TextView) convertView.findViewById(R.id.btcBalance);
+        mBtcBalanceLabel = (TextView) convertView.findViewById(R.id.btcCurrencyLabel);
+        mLocalCurrencyBalance = (TextView) convertView.findViewById(R.id.lcBalance);
+        mLocalCurrencyBalanceLabel = (TextView) convertView.findViewById(R.id.lcLabel);
     }
 
     private void styleViewsInGroupHeader() {
-        btcBalanceLabel.setTypeface(null, Typeface.ITALIC);
-        btcBalance.setTypeface(null, Typeface.BOLD_ITALIC);
-        lcBalance.setTypeface(null, Typeface.BOLD_ITALIC);
-        lcBalanceLabel.setTypeface(null, Typeface.ITALIC);
+        mBtcBalanceLabel.setTypeface(null, Typeface.ITALIC);
+        mBtcBalance.setTypeface(null, Typeface.BOLD_ITALIC);
+        mLocalCurrencyBalance.setTypeface(null, Typeface.BOLD_ITALIC);
+        mLocalCurrencyBalanceLabel.setTypeface(null, Typeface.ITALIC);
     }
 
     private void prepareGroupHeaderData(int groupPosition, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
         WalletGroup group = WalletGroup.getBy(headerTitle);
-        name.setText(group.name);
+        mName.setText(group.name);
 
         //-------------------------------------------------
         // TODO Modify BTC and LC balances for this group
@@ -175,11 +182,6 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean hasStableIds() {
         return false;
-    }
-
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
     }
 
     //endregion
