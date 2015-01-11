@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="fill_parent" android:layout_height="wrap_content"
     android:background="@color/white"
     android:id="@+id/singleWalletListItem"
     android:gravity="center_vertical"
@@ -10,9 +10,10 @@
     android:paddingBottom="@dimen/gen_spacer_small">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/walletNameContainer">
+        android:id="@+id/walletNameContainer"
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,15 +40,15 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
-        android:id="@+id/balanceInfo">
+        android:id="@+id/balanceInfo"
+        android:layout_marginLeft="@dimen/gen_spacer_small">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_weight=".5"
             android:id="@+id/btcBalanceInfo"
             android:layout_marginBottom="@dimen/gen_spacer_xsmall">
 
@@ -76,8 +77,8 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight=".5"
             android:id="@+id/lcBalanceInfo">
 
