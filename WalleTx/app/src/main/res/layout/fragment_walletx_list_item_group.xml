@@ -5,8 +5,8 @@
     android:id="@+id/groupListItem"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/gen_spacer_medium"
-    android:paddingBottom="@dimen/gen_spacer_medium"
+    android:paddingTop="@dimen/gen_spacer_small"
+    android:paddingBottom="@dimen/gen_spacer_small"
     android:gravity="center_vertical">
 
     <TextView
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/walletx_main_label_empty_lc_balance"
-                android:id="@+id/lcBalance"
+                android:id="@+id/lcLabel"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/lcLabel"
                 android:layout_toStartOf="@+id/lcLabel"

@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
@@ -81,7 +80,7 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         mDescription = (TextView) convertView.findViewById(R.id.walletDescription);
         mBtcBalance = (TextView) convertView.findViewById(R.id.btcBalance);
         mBtcBalanceLabel = (TextView) convertView.findViewById(R.id.btcCurrencyLabel);
-        mLocalCurrencyBalance = (TextView) convertView.findViewById(R.id.lcLabel);
+        mLocalCurrencyBalance = (TextView) convertView.findViewById(R.id.lcBalance);
         mLocalCurrencyBalanceLabel = (TextView) convertView.findViewById(R.id.lcLabel);
     }
 
@@ -158,7 +157,7 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         mName = (TextView) convertView.findViewById(R.id.groupName);
         mBtcBalance = (TextView) convertView.findViewById(R.id.btcBalance);
         mBtcBalanceLabel = (TextView) convertView.findViewById(R.id.btcCurrencyLabel);
-        mLocalCurrencyBalance = (TextView) convertView.findViewById(R.id.lcBalance);
+        mLocalCurrencyBalance = (TextView) convertView.findViewById(R.id.lcLabel);
         mLocalCurrencyBalanceLabel = (TextView) convertView.findViewById(R.id.lcLabel);
     }
 

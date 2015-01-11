@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="1000"
+                android:text="@string/walletx_main_label_empty_lc_balance"
                 android:id="@+id/textView4"
                 android:layout_below="@+id/textView3"
                 android:layout_alignParentLeft="true"
