@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="@color/wtx_light_gray"
+    android:id="@+id/groupListItem"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/gen_spacer_small"
+    android:paddingBottom="@dimen/gen_spacer_small"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/walletx_main_label_group_placeholder"
+        android:id="@+id/groupName"
+        android:layout_gravity="center_vertical" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/balanceInfo">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_weight=".5"
+            android:id="@+id/btcBalanceInfo"
+            android:layout_marginBottom="@dimen/gen_spacer_xsmall">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/walletx_main_label_empty_bitcoin_balance"
+                android:id="@+id/btcBalance"
+                android:layout_alignTop="@+id/btcCurrencyLabel"
+                android:layout_toLeftOf="@+id/btcCurrencyLabel"
+                android:layout_toStartOf="@+id/btcCurrencyLabel"
+                android:layout_marginRight="@dimen/gen_spacer_small"
+                android:layout_marginEnd="@dimen/gen_spacer_small"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/app_btc_currency_label"
+                android:id="@+id/btcCurrencyLabel"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight=".5"
+            android:id="@+id/lcBalanceInfo">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/walletx_main_label_empty_lc_balance"
+                android:id="@+id/lcLabel"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/lcLabel"
+                android:layout_toStartOf="@+id/lcLabel"
+                android:layout_marginRight="@dimen/gen_spacer_small"
+                android:layout_marginEnd="@dimen/gen_spacer_small" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/app_lc_currency_label"
+                android:id="@+id/lcLabel"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -4,10 +4,28 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <!-- General -->
+    <dimen name="gen_spacer_xsmall">4dp</dimen>
+    <dimen name="gen_spacer_small">8dp</dimen>
+    <dimen name="gen_spacer_medium">16dp</dimen>
+    <dimen name="gen_spacer_large">24dp</dimen>
+
+    <!-- Forms -->
+    <dimen name="form_spacer_small">8dp</dimen>
+    <dimen name="form_spacer_medium">16dp</dimen>
+    <dimen name="form_spacer_large">24dp</dimen>
+
+    <!-- Custom list views -->
+    <dimen name="custom_list_view_list_item_padding">16dp</dimen>
+    <dimen name="custom_list_view_move_arrow_spacing">16dp</dimen>
+
     <!-- Splash Activity -->
     <dimen name="logo_bottom_padding">16dp</dimen>
 
     <!-- Navigation Drawer -->
     <dimen name="navigation_drawer_width">240dp</dimen>
+
+    <!-- Add new wallet -->
+    <dimen name="minimum_size_barcode_button">42dp</dimen>
 
 </resources>

@@ -5,15 +5,21 @@ import com.activeandroid.ActiveAndroid;
 
 /**
  * A custom application class is required to initialize Active Android.
- *
- * Active Android jar available at https://github.com/pardom/ActiveAndroid/downloads
  */
 public class WTXApplication extends Application {
 
+    /**
+     * Shared preferences file key
+     */
+    public static final String SP_FILE_KEY = "com.bitcoin.tracker.walletx";
+
+    /**
+     * Initializes Active Android
+     */
     @Override
     public void onCreate() {
         super.onCreate();
         ActiveAndroid.initialize(this);
     }
 
-} // WTXApplication
+}

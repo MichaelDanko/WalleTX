@@ -10,12 +10,16 @@
         android:theme="@style/AppTheme" >
 
         <!-- ActiveAndroid database name, version, and models -->
-        <meta-data android:name="AA_DB_NAME" android:value="Walletx.db" />
-        <meta-data android:name="AA_DB_VERSION" android:value="1" />
-        <!-- TODO: specify models -->
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="Walletx.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
+        <!-- TODO: specify AA models -->
 
         <activity
-            android:name=".ui.activity.SplashActivity"
+            android:name=".activity.SplashActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
@@ -24,12 +28,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".ui.activity.MainActivity"
-            android:label="@string/title_activity_main" >
+            android:name=".activity.MainActivity"
+            android:label="@string/navigation_drawer_title_activity_main" >
         </activity>
-
+        <activity
+            android:name=".activity.walletx.create.WalletxCreateActivity"
+            android:label="@string/walletx_create_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.walletGroup.WalletGroupCreateActivity"
+            android:label="@string/wallet_group_create_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.walletGroup.WalletGroupUpdateActivity"
+            android:label="@string/wallet_group_update_title_activity" >
+        </activity>
     </application>
 
 </manifest>

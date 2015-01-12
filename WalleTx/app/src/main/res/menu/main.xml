@@ -1,3 +1,6 @@
+<!-- This menu is displayed in the WalletxFragment and should be displayed
+     in all activities and/or fragments accessed from the WalletxFragment -->
+
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -5,12 +8,15 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/action_example"
-        android:title="@string/action_example"
-        android:showAsAction="withText|ifRoom" />
+        android:id="@+id/action_sync"
+        android:title="@string/menu_action_sync"
+        android:icon="@drawable/ic_action_reload"
+        app:showAsAction="always" />
     <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+        android:id="@+id/action_add_wallet"
+        android:title="@string/menu_action_add_wallet"
         android:orderInCategory="100"
-        android:showAsAction="never" />
+        android:icon="@drawable/ic_action_add"
+        app:showAsAction="always" />
+
 </menu>
