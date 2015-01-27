@@ -71,7 +71,8 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View view = inflater.inflate(R.layout.fragment_walletgroup, container, false);
+        // added _list
+        View view = inflater.inflate(R.layout.fragment_walletgroup_list, container, false);
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);

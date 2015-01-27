@@ -53,12 +53,12 @@ public class MainActivity extends ActionBarActivity implements
 
         switch (position) {
             case 0:
-                fragment = SettingsFragment.newInstance(position + 1);
-                //fragment = WalletxFragment.newInstance(position + 1);
+                //fragment = SettingsFragment.newInstance(position + 1);
+                fragment = WalletxFragment.newInstance(position + 1);
                 break;
             case 1:
-                fragment = SettingsFragment.newInstance(position + 1);
-                //fragment = WalletGroupFragment.newInstance(position + 1);
+                //fragment = SettingsFragment.newInstance(position + 1);
+                fragment = WalletGroupFragment.newInstance(position + 1);
                 break;
             case 2:
                 fragment = SettingsFragment.newInstance(position + 1);
