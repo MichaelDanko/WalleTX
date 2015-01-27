@@ -73,8 +73,14 @@ public class WalletxFragment extends Fragment {
         }
 
         // Add All Wallets header to expandable list view.
+        // Had to disable addHeaderView, aparently since version 2.3 you cannot add a header after
+        // the list has been created (inflated?) according to this source
+        // http://stackoverflow.com/questions/19583961/cannot-add-header-view-to-list-setadapter-has-already-been-called
+        // The fix is described here, however I am unsure how to re-work the code to re-create a
+        // list with a header... MD
+        // http://pivotallabs.com/android-tidbits-6-22-2011-hiding-header-views/
         View header = inflater.inflate(R.layout.fragment_walletx_list_item_all_wallets, container, false);
-        mExpListView.addHeaderView(header);
+        //mExpListView.addHeaderView(header);
         mHeader = header.findViewById(R.id.allWalletsContainer);
         mHeader.setOnClickListener(allWalletsOnClickListener);
 
