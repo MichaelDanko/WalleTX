@@ -66,17 +66,17 @@ public class WalletxFragment extends Fragment {
         mExpListView.setOnChildClickListener(childWalletClickListener);
         mExpListView.setOnItemLongClickListener(childWalletLongClickListener);
 
+        // Add All Wallets header to expandable list view.
+        View header = inflater.inflate(R.layout.fragment_walletx_list_item_all_wallets, null);
+        mExpListView.addHeaderView(header);
+        mHeader = header.findViewById(R.id.allWalletsContainer);
+        mHeader.setOnClickListener(allWalletsOnClickListener);
+
         prepareData();
         mListApapter = new WalletxExpandableListAdapter(getActivity(), mGroupHeader, mListDataChild);
         if (mExpListView != null) {
             mExpListView.setAdapter(mListApapter);
         }
-
-        // Add All Wallets header to expandable list view.
-        View header = inflater.inflate(R.layout.fragment_walletx_list_item_all_wallets, container, false);
-        mExpListView.addHeaderView(header);
-        mHeader = header.findViewById(R.id.allWalletsContainer);
-        mHeader.setOnClickListener(allWalletsOnClickListener);
 
         return view;
     }
