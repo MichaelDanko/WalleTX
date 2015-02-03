@@ -5,7 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.api.BlockchainInfo;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
+import com.google.bitcoin.core.BlockChain;
+
+import org.json.JSONException;
 
 import java.util.List;
 import java.util.Timer;
@@ -30,8 +34,13 @@ public class SplashActivity extends Activity {
         setupDefaultWalletGroup();
 
         // TODO - Fetch new tx and price data?
+      try {
+        BlockchainInfo bci = new BlockchainInfo();
+      } catch (JSONException e) {
+        e.printStackTrace();
+      }
 
-        applySplashScreenTimeOut();
+      applySplashScreenTimeOut();
     } // onCreate
 
     private void applySplashScreenTimeOut() {
@@ -45,7 +54,7 @@ public class SplashActivity extends Activity {
         }, SPLASH_TIME_OUT );
     }
 
-    // Adds 'My Wallets' group to the WalletGroups table on first run
+    // Adds 'My Wallets' group to the WalletGrjoups table on first run
     // and sets it as the default group.
     private void setupDefaultWalletGroup() {
         List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();

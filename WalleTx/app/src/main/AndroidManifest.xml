@@ -45,5 +45,6 @@
             android:label="@string/wallet_group_update_title_activity" >
         </activity>
     </application>
-
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

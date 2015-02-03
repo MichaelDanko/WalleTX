@@ -1,6 +1,10 @@
 package com.bitcoin.tracker.walletx.api;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -11,49 +15,106 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 
 /**
  * Fetches Blockchain and wallet data from Blockchain.info using the Blockchain.info API.
  */
 public class BlockchainInfo {
 
-  public long jsonFinalBalance = 0;
-  private static final String TAG = "Blockchain.info API";
-  public BlockchainInfo() throws JSONException {
-    DefaultHttpClient httpclient = new DefaultHttpClient(new BasicHttpParams());
-    HttpPost httppost = new HttpPost("http://blockchain.info/rawaddr/19JbiksWxF7oJpEBRZrWH3FTNvaUBrrSqa");
-    // Depends on your web service
-    //httppost.setHeader("Content-type", "application/json");
+  private static class RetrieveBlockchainJSON extends AsyncTask<String, String, String> {
 
-    InputStream inputStream = null;
-    String result = null;
+    private ProgressDialog QueryProgressDialog;
 
-    try {
-      HttpResponse response = httpclient.execute(httppost);
-      HttpEntity entity = response.getEntity();
+    private static final String logInfo = "Blockchain API";
 
-      inputStream = entity.getContent();
-      // json is UTF-8 by default
-      BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
-      StringBuilder sb = new StringBuilder();
-
-      String line = null;
-      while ((line = reader.readLine()) != null) {
-        sb.append(line + "\n");
-      }
-      result = sb.toString();
-    } catch (Exception e) {
-      Log.v(TAG, "HTTP Failed");
-    } finally {
-      try {
-        if (inputStream != null) inputStream.close();
-      } catch (Exception squish) {
-      }
+    static class Transaction {
+      String address;
+      String final_balance;
     }
 
-    JSONObject jObject = new JSONObject(result);
-    jsonFinalBalance = jObject.getLong("final_balance");
+
+    @Override
+    protected String doInBackground(String...strings) {
+      // redditList = readRedditFeed();
+
+      String json = "";
+      //System.out.println("Hello");
+      try {
+        json = readUrl("https://blockchain.info/address/1E6QRQG9KR6WfxU4fmRLzjyHDkeDCtjGoR?format=json");
+              Gson gson = new Gson();
+      Transaction transaction = gson.fromJson(json, Transaction.class);
+
+      Log.v(logInfo, transaction.address);
+      } catch (Exception e) {
+        Log.v(logInfo, "did not work");
+      };
+      // String json = readUrl("http://www.javascriptkit.com/"+ "dhtmltutors/javascriptkit.json");
+
+
+
+      //for (Item item : page.items)
+      //  System.out.println("    " + item.title);
+
+      return "String";
+   }
+
+      private static String readUrl (String urlString) throws Exception {
+        BufferedReader reader = null;
+        try {
+          URL url = new URL(urlString);
+          try {
+            reader = new BufferedReader(new InputStreamReader(url.openStream()));
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+          StringBuffer buffer = new StringBuffer();
+          int read;
+          char[] chars = new char[1024];
+          try {
+            while ((read = reader.read(chars)) != -1)
+              buffer.append(chars, 0, read);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+
+          System.out.println(buffer.toString());
+          return buffer.toString();
+        } finally {
+          if (reader != null)
+            try {
+              reader.close();
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+        }
+      }
+
+    @Override
+    protected void onProgressUpdate(String... values) {
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+      //pdia.dismiss();
+      //adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, redditList);
+      //redditView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onPreExecute() {
+      // super.onPreExecute();
+      //ProgressDialog pdia = new ProgressDialog(MainActivity.this);
+      //pdia.setMessage("Doing background..");
+      //pdia.show();
+    }
+
+  }
+
+  public BlockchainInfo() throws JSONException {
+    new RetrieveBlockchainJSON().execute();
   }
 } // BlockchainInfo
