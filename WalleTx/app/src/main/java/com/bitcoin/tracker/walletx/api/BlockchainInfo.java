@@ -4,6 +4,10 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
+import com.bitcoin.tracker.walletx.model.WalletGroup;
+import com.bitcoin.tracker.walletx.model.WalletType;
+import com.bitcoin.tracker.walletx.model.Walletx;
 import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
@@ -45,10 +49,13 @@ public class BlockchainInfo {
       //System.out.println("Hello");
       try {
         json = readUrl("https://blockchain.info/address/1E6QRQG9KR6WfxU4fmRLzjyHDkeDCtjGoR?format=json");
-              Gson gson = new Gson();
-      Transaction transaction = gson.fromJson(json, Transaction.class);
-
-      Log.v(logInfo, transaction.address);
+        Gson gson = new Gson();
+        Transaction transaction = gson.fromJson(json, Transaction.class);
+        WalletGroup wtg = new WalletGroup("Test Group", 0);
+        Walletx wtx = new Walletx("First Wallet", WalletType.SINGLE_ADDRESS_WALLET, wtg);
+        SingleAddressWallet saw = new SingleAddressWallet(wtx, "1E6QRQG9KR6WfxU4fmRLzjyHDkeDCtjGoR");
+        saw.dump();
+        Log.v(logInfo, transaction.address);
       } catch (Exception e) {
         Log.v(logInfo, "did not work");
       };
