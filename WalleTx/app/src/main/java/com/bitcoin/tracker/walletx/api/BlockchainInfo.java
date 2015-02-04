@@ -1,33 +1,20 @@
 package com.bitcoin.tracker.walletx.api;
 
 import android.app.ProgressDialog;
-import android.content.ClipData;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Table;
-import com.bitcoin.tracker.walletx.activity.MainActivity;
+import com.bitcoin.tracker.walletx.model.Balance;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.WalletType;
 import com.bitcoin.tracker.walletx.model.Walletx;
-import com.google.bitcoin.core.Wallet;
 import com.google.gson.Gson;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
@@ -35,32 +22,32 @@ import java.util.List;
 /**
  * Fetches Blockchain and wallet data from Blockchain.info using the Blockchain.info API.
  */
-public class BlockchainInfo {
+  public class BlockchainInfo extends AsyncTask<String, String, String> {
 
-  private static class RetrieveBlockchainJSON extends AsyncTask<String, String, String> {
-
-    private ProgressDialog QueryProgressDialog;
+      private final Walletx wtx;
+      private final String publicAddress;
+      private ProgressDialog QueryProgressDialog;
 
     private static final String logInfo = "Blockchain API";
-      private Context applicationContext;
 
-      public Context getApplicationContext() {
-          return applicationContext;
-      }
-
-      static class Transaction {
+    static class Transaction {
       String address;
       String final_balance;
     }
 
+    public BlockchainInfo(String publicAddress, Walletx wtx) {
+        super();
+        this.publicAddress = new String(publicAddress);
+        this.wtx = wtx;
+    }
 
       @Override
       protected String doInBackground(String... strings) {
 
-          String json = "";
-          WalletGroup wtg = new WalletGroup();
+          String json = null;
+          /* WalletGroup wtg = new WalletGroup();
           Walletx wtx = new Walletx();
-          SingleAddressWallet saw = new SingleAddressWallet();
+          SingleAddressWallet saw = new SingleAddressWallet(); */
 
           //WalletGroup wtg2 = WalletGroup.load(WalletGroup.class, 2 );
           //Log.e("test", wtg2.name);
@@ -72,7 +59,7 @@ public class BlockchainInfo {
               foundSAW = 0;
 
           // Search if WalletGroup exists, saving an existing wallet group fails?
-          List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
+          /* List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
           for (WalletGroup group : groups) {
               Log.e("WalletG", group.name);
               if (group.name.equals("Test Group")) {
@@ -126,33 +113,28 @@ public class BlockchainInfo {
               saw = new SingleAddressWallet(wtx, "1E6QRQG9KR6WfxU4fmRLzjyHDkeDCtjGoR");
               saw.save();
           }
+*/
+          WalletGroup.dump();
+          Walletx.dump();
+          SingleAddressWallet.dump();
 
-          wtg.dump();
-          wtx.dump();
-          saw.dump();
           try {
-              json = readUrl("https://blockchain.info/address/1E6QRQG9KR6WfxU4fmRLzjyHDkeDCtjGoR?format=json");
+              json = readUrl("https://blockchain.info/address/" + publicAddress + "?format=json");
               Gson gson = new Gson();
               Transaction transaction = gson.fromJson(json, Transaction.class);
-
 
               Log.v(logInfo, transaction.address);
           } catch (Exception e) {
               Log.v(logInfo, "did not work");
           }
-          ;
-          // String json = readUrl("http://www.javascriptkit.com/"+ "dhtmltutors/javascriptkit.json");
 
-
-          //for (Item item : page.items)
-          //  System.out.println("    " + item.title);
-          saw.dump();
           return "String";
       }
 
       private static String readUrl (String urlString) throws Exception {
         BufferedReader reader = null;
         try {
+          Log.v("Blockchain API", urlString);
           URL url = new URL(urlString);
           try {
             reader = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -200,9 +182,4 @@ public class BlockchainInfo {
       //pdia.show();
     }
 
-  }
-
-  public BlockchainInfo() throws JSONException {
-    new RetrieveBlockchainJSON().execute();
-  }
-} // BlockchainInfo
+  } // BlockchainInfo

@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.api.BlockchainInfo;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.WalletType;
@@ -187,6 +188,8 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
                     saWallet.publicKey = mPublicKey.getText().toString();
                     saWallet.wtx = wtx;
                     saWallet.save();
+
+                    new BlockchainInfo(saWallet.publicKey, wtx).execute();
 
                     break;
                 default:

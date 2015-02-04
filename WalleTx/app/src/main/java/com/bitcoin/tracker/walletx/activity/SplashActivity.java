@@ -34,11 +34,6 @@ public class SplashActivity extends Activity {
         setupDefaultWalletGroup();
 
         // TODO - Fetch new tx and price data?
-      try {
-        BlockchainInfo bci = new BlockchainInfo();
-      } catch (JSONException e) {
-        e.printStackTrace();
-      }
 
       applySplashScreenTimeOut();
     } // onCreate
