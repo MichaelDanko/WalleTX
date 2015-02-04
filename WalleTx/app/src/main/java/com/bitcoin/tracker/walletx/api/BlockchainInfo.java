@@ -47,14 +47,23 @@ public class BlockchainInfo {
 
       String json = "";
       //System.out.println("Hello");
+
+      WalletGroup wtg = new WalletGroup("Test Group", 1);
+      wtg.save();
+      wtg.dump();
+      Walletx wtx = new Walletx("First Wallet", WalletType.SINGLE_ADDRESS_WALLET, wtg);
+      wtx.save();
+      SingleAddressWallet saw = new SingleAddressWallet();
+      saw.publicKey = "1E6QRQG9KR6WfxU4fmRLzjyHDkeDCtjGoR";
+      saw.wtx = wtx;
+      saw.save();
       try {
         json = readUrl("https://blockchain.info/address/1E6QRQG9KR6WfxU4fmRLzjyHDkeDCtjGoR?format=json");
         Gson gson = new Gson();
         Transaction transaction = gson.fromJson(json, Transaction.class);
-        WalletGroup wtg = new WalletGroup("Test Group", 0);
-        Walletx wtx = new Walletx("First Wallet", WalletType.SINGLE_ADDRESS_WALLET, wtg);
-        SingleAddressWallet saw = new SingleAddressWallet(wtx, "1E6QRQG9KR6WfxU4fmRLzjyHDkeDCtjGoR");
-        saw.dump();
+
+
+
         Log.v(logInfo, transaction.address);
       } catch (Exception e) {
         Log.v(logInfo, "did not work");
@@ -65,7 +74,7 @@ public class BlockchainInfo {
 
       //for (Item item : page.items)
       //  System.out.println("    " + item.title);
-
+      saw.dump();
       return "String";
    }
 
