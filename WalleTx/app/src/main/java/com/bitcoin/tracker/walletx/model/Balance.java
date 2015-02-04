@@ -57,6 +57,7 @@ public class Balance extends Model {
     /*-------------------*
      *  Balance Queries  *
      *-------------------*/
+    // TODO @dc need a way to pull balances so we can spend some btcs!
 
 
 
