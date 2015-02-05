@@ -80,7 +80,7 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
         }
 
         // Disable move up button for last list item
-        int last = WalletGroup.getLast().displayOrder;
+        int last = WalletGroup.getLast().getDisplayOrder();
         if (position + 1 == last) {
             mMoveDown.setEnabled(false);
             mMoveDown.setVisibility(View.INVISIBLE);
@@ -114,10 +114,7 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
                 int displayOrder = position + 1;
                 WalletGroup clicked = WalletGroup.getByDisplayOrder(displayOrder);
                 WalletGroup swap = WalletGroup.getByDisplayOrder(displayOrder + 1);
-                swap.displayOrder = displayOrder;
-                clicked.displayOrder = displayOrder + 1;
-                swap.save();
-                clicked.save();
+                WalletGroup.swap(clicked, swap);
                 refreshListView(parent, clicked);
             }
 
@@ -129,10 +126,7 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
                 int displayOrder = position + 1;
                 WalletGroup clicked = WalletGroup.getByDisplayOrder(displayOrder);
                 WalletGroup swap = WalletGroup.getByDisplayOrder(displayOrder - 1);
-                swap.displayOrder = displayOrder;
-                clicked.displayOrder = displayOrder - 1;
-                swap.save();
-                clicked.save();
+                WalletGroup.swap(clicked, swap);
                 refreshListView(parent, clicked);
             }
         });
@@ -164,10 +158,10 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
         ((AdapterView<ListAdapter>) parent).setAdapter(adapter);
 
         // Handle case where item is at visible top and moved up.
-        if (firstVisible >= updatedGroup.displayOrder) {
-            parentListView.setSelection(updatedGroup.displayOrder - 1);
+        if (firstVisible >= updatedGroup.getDisplayOrder()) {
+            parentListView.setSelection(updatedGroup.getDisplayOrder() - 1);
         // Handle case where item is at visible bottom and moved down.
-        } else if (lastVisible < updatedGroup.displayOrder) {
+        } else if (lastVisible < updatedGroup.getDisplayOrder()) {
             parentListView.setSelection(firstVisible + 1);
         // Handle move cases in the middle of viewable listview.
         } else {
