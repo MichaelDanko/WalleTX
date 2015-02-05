@@ -3,10 +3,12 @@ package com.bitcoin.tracker.walletx.model;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Balance model.
@@ -57,9 +59,49 @@ public class Balance extends Model {
     /*-------------------*
      *  Balance Queries  *
      *-------------------*/
+    /**
+    * @return Balance selected by wtx
+    *
+    */
+    public static Balance getBalance(Walletx wtx){
+    return new Select()
+        .from(Balance.class)
+        .where("Walletx = ?", wtx)
+        .executeSingle();
+    }
+
+    /**
+     *
+     * @return list of balances (debug)
+     */
+    public static List<Balance> getAllBalances(){
+        return new Select()
+                .from(Balance.class)
+                .orderBy("timestamp")
+                .execute();
+
+    }
 
 
-
-
+    /**
+     * dumps all the balances table to console
+     * debug only
+     */
+   public static void dump(){
+       String dividerCol1 = "------------------";
+       String dividerCol23 = "-------------";
+       System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
+       System.out.printf("%-20s %-15s %-16s\n", "Name", "DefaultGroup", "DisplayOrder");
+       System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
+       //List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
+       List<Balance> balances = Balance.getAllBalances();
+       for (Balance balance1 : balances) {
+           System.out.printf(
+                   "%-20s %-15s %-16s\n",
+                   balance1.balance,
+                   balance1.timestamp,
+                   balance1.wtx);
+       }
+   }
 
 } // Balance
