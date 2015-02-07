@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.walletGroup;
+package com.bitcoin.tracker.walletx.activity.walletGroup.create;
 
 import android.content.Intent;
 import android.os.Bundle;

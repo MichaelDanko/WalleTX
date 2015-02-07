@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.walletGroup;
+package com.bitcoin.tracker.walletx.activity.walletGroup.updateDelete;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.walletx.main;
+package com.bitcoin.tracker.walletx.activity.walletx.read;
 
 import android.app.Activity;
 import android.content.Intent;

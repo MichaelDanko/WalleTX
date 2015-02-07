@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.walletGroup;
+package com.bitcoin.tracker.walletx.activity.walletGroup.read;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.MainActivity;
+import com.bitcoin.tracker.walletx.activity.walletGroup.create.WalletGroupCreateActivity;
+import com.bitcoin.tracker.walletx.activity.walletGroup.updateDelete.WalletGroupUpdateActivity;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 
 import java.util.ArrayList;
@@ -140,7 +142,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
             // Open update wallet activity.
             Intent intent = new Intent( getActivity(), WalletGroupUpdateActivity.class );
             intent.putExtra("wallet_group_name", name);
-            startActivityForResult( intent, WALLET_GROUP_UPDATED );
+            startActivityForResult(intent, WALLET_GROUP_UPDATED);
         }
     }
 
