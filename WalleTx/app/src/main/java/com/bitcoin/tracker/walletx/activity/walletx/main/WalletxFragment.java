@@ -32,7 +32,8 @@ public class WalletxFragment extends Fragment {
 
     //region FIELDS
 
-    private static final int NEW_WALLET_ADDED = 1;
+    private static final int NEW_WALLETX_ADDED = 1;
+    private static final int WALLETX_UPDATED = 2;
 
     // Walletx custom expandable list
     WalletxExpandableListAdapter mListApapter;
@@ -165,16 +166,44 @@ public class WalletxFragment extends Fragment {
         }
     };
 
+    /**
+     * Refreshes the expListView and initiates a data sync
+     * when changes have been made (i.e. new Walletx added or deleted)
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
-        if (requestCode == NEW_WALLET_ADDED) {
+        if (requestCode == NEW_WALLETX_ADDED) {
             // Make sure the request was successful
             if (resultCode == getActivity().RESULT_OK) {
                 // Refresh the expListView to display the newly added wallet
                 prepareData();
                 mListApapter.updateData(mGroupHeader, mListDataChild);
 
+                /*
+                 * TODO @md Initiate a sync for the new wallet
+                 *          A new wallet has been added so we'll need to initiate a data sync on
+                 *          a background thread. The sync will pull all transactions and update
+                 *          the Tx and Balance tables. The user should receive feedback that a
+                 *          sync is occurring (I'm thinking the refresh icon in the action bar
+                 *          can rotate, which as UI guy @bh will handle). Upon successfully
+                 *          completion, when data is added to db, the background thread created by
+                 *          the sync helper class should notify this fragment so that the
+                 *          expListView can be updated to show new data.
+                 *
+                 *          A group discussion is probably req'd about the design of the sync
+                 *          helper class.
+                 *
+                 *          Also, for starters we can probably begin with a single method that
+                 *          updates (syncs) all Walletxs and use it here. Time permitting we
+                 *          can tweak things to make it more efficient.
+                 *
+                 */
+
+            }
+        } else if (requestCode == WALLETX_UPDATED) {
+            if (resultCode == getActivity().RESULT_OK) {
+                // DO STUFF .....
             }
         }
     }
@@ -197,7 +226,7 @@ public class WalletxFragment extends Fragment {
         } else if (item.getItemId() == R.id.action_add_wallet) {
             // open new activity
             Intent intent = new Intent( getActivity(), WalletxCreateActivity.class );
-            startActivityForResult( intent, NEW_WALLET_ADDED );
+            startActivityForResult( intent, NEW_WALLETX_ADDED );
         }
         return super.onOptionsItemSelected(item);
     }
