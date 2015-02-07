@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.MainActivity;
+import com.bitcoin.tracker.walletx.activity.walletGroup.updateDelete.WalletGroupUpdateActivity;
 import com.bitcoin.tracker.walletx.activity.walletx.create.WalletxCreateActivity;
 import com.bitcoin.tracker.walletx.activity.walletx.updateDelete.WalletxUpdateActivity;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
@@ -36,6 +37,7 @@ public class WalletxFragment extends Fragment {
 
     private static final int NEW_WALLETX_ADDED = 1;
     private static final int WALLETX_UPDATED = 2;
+    private static final int WALLET_GROUP_UPDATED = 3;
 
     // Walletx custom expandable list
     WalletxExpandableListAdapter mListApapter;
@@ -123,6 +125,12 @@ public class WalletxFragment extends Fragment {
     private View.OnClickListener allWalletsOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+            /*
+             * TODO @bh
+             *
+             */
+
             Toast.makeText(getActivity(), "TODO: Handle All Wallets click", Toast.LENGTH_SHORT).show();
         }
     };
@@ -130,6 +138,12 @@ public class WalletxFragment extends Fragment {
     private ExpandableListView.OnGroupClickListener groupClickListener = new ExpandableListView.OnGroupClickListener() {
         @Override
         public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+
+            /*
+             * TODO @bh
+             *
+             */
+
             Toast.makeText(getActivity(), "TODO: Handle group clicks", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -159,13 +173,17 @@ public class WalletxFragment extends Fragment {
                 return true;
 
             } else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-                // TODO Group: Open CRUD group activity here or do nothing?
-                Toast.makeText(getActivity(), "TODO: Decide if long clicks on groups should open update wallet activity. I think no.", Toast.LENGTH_LONG).show();
+
+                // open activity to update the wallet group name
+                TextView group = (TextView) view.findViewById(R.id.groupName);
+                String name = group.getText().toString();
+                Intent intent = new Intent( getActivity(), WalletGroupUpdateActivity.class );
+                intent.putExtra("wallet_group_name", name);
+                startActivityForResult( intent, WALLET_GROUP_UPDATED );
                 return true;
 
             } else {
-                // TODO edit code in block
-                Toast.makeText(getActivity(), "Should Never Happen. Throw error", Toast.LENGTH_SHORT).show();
+                // Should Never Happen. TODO Throw error / write to log
                 return false;
             }
         }
@@ -206,7 +224,7 @@ public class WalletxFragment extends Fragment {
                  */
 
             }
-        } else if (requestCode == WALLETX_UPDATED) {
+        } else if (requestCode == WALLETX_UPDATED || requestCode == WALLET_GROUP_UPDATED) {
             if (resultCode == getActivity().RESULT_OK) {
                 prepareData();
                 mListApapter.updateData(mGroupHeader, mListDataChild);
