@@ -12,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.MainActivity;
-import com.bitcoin.tracker.walletx.activity.SplashActivity;
 import com.bitcoin.tracker.walletx.activity.walletx.create.WalletxCreateActivity;
 import com.bitcoin.tracker.walletx.activity.walletx.updateDelete.WalletxUpdateActivity;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
@@ -150,48 +150,12 @@ public class WalletxFragment extends Fragment {
 
             if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
 
-
-
-
-
-
-
-
-
-
-                Intent intent = new Intent( getActivity(), SplashActivity.class );
-                startActivity( intent );
-
-
-
-
-
-
-
-
-                //String name = WalletGroup.getAllSortedByDisplayOrder().get(position).toString();
-                //System.out.print(name);
-                /*
                 // open new activity to edit single walletx
+                TextView tv = (TextView) view.findViewById(R.id.walletName);
+                String name = tv.getText().toString();
                 Intent intent = new Intent( getActivity(), WalletxUpdateActivity.class );
                 intent.putExtra("walletx_name", name);
                 startActivityForResult( intent, WALLETX_UPDATED );
-                */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 return true;
 
             } else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
@@ -244,7 +208,8 @@ public class WalletxFragment extends Fragment {
             }
         } else if (requestCode == WALLETX_UPDATED) {
             if (resultCode == getActivity().RESULT_OK) {
-                // DO STUFF .....
+                prepareData();
+                mListApapter.updateData(mGroupHeader, mListDataChild);
             }
         }
     }

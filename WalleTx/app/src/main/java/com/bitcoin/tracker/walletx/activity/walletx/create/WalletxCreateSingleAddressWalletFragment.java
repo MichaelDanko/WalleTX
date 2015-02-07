@@ -168,6 +168,9 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
         // TODO @dc @as Add validation (in Walletx model) that the public key entered does not
         //              already exist. If it does display a toast message notifying the user of
         //              the error.
+        // TODO @dc @as Add validation that the Walletx name is unique. This will allow us to
+        //              query Walletx's by name. Can anyone think of a better way to access
+        //              wtxs from list view.
         //----------------------------------------------------------------------------------------
 
         boolean addressIsValid = SingleAddressWallet.isValidAddress(mPublicKey.getText().toString());

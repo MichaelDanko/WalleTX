@@ -37,6 +37,10 @@
             android:label="@string/walletx_create_title_activity" >
         </activity>
         <activity
+            android:name=".activity.walletx.updateDelete.WalletxUpdateActivity"
+            android:label="@string/walletx_update_title_activity" >
+        </activity>
+        <activity
             android:name=".activity.walletGroup.create.WalletGroupCreateActivity"
             android:label="@string/wallet_group_create_title_activity" >
         </activity>
