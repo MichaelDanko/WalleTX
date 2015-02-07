@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.MainActivity;
+import com.bitcoin.tracker.walletx.activity.SplashActivity;
 import com.bitcoin.tracker.walletx.activity.walletx.create.WalletxCreateActivity;
+import com.bitcoin.tracker.walletx.activity.walletx.updateDelete.WalletxUpdateActivity;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
@@ -74,8 +76,6 @@ public class WalletxFragment extends Fragment {
         mExpListView.addHeaderView(header);
         mHeader = header.findViewById(R.id.allWalletsContainer);
         mHeader.setOnClickListener(allWalletsOnClickListener);
-
-        System.out.println("CALLEd");
 
         prepareData();
         if (mListApapter == null)
@@ -149,8 +149,49 @@ public class WalletxFragment extends Fragment {
             int itemType = ExpandableListView.getPackedPositionType(id);
 
             if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                // TODO Open activity to edit/delete this wallet
-                Toast.makeText(getActivity(), "TODO: Open activity to edit/delete this wallet.", Toast.LENGTH_SHORT).show();
+
+
+
+
+
+
+
+
+
+
+                Intent intent = new Intent( getActivity(), SplashActivity.class );
+                startActivity( intent );
+
+
+
+
+
+
+
+
+                //String name = WalletGroup.getAllSortedByDisplayOrder().get(position).toString();
+                //System.out.print(name);
+                /*
+                // open new activity to edit single walletx
+                Intent intent = new Intent( getActivity(), WalletxUpdateActivity.class );
+                intent.putExtra("walletx_name", name);
+                startActivityForResult( intent, WALLETX_UPDATED );
+                */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 return true;
 
             } else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
