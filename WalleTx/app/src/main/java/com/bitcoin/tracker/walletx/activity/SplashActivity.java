@@ -29,7 +29,10 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         WalletGroup.initDefaultGroup(this);
 
-        // TODO - Fetch new tx and price data?
+        /*
+         * TODO @md Initiate a data sync
+         *
+         */
 
         applySplashScreenTimeOut();
     } // onCreate
