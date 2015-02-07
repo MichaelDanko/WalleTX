@@ -8,12 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
-
-import java.util.List;
 
 /**
  * Displays and handles the form associated with adding
