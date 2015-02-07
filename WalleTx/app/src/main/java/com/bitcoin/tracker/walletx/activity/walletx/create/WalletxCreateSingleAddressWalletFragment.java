@@ -162,6 +162,14 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
      */
     public void onSubmit() {
 
+        //----------------------------------------------------------------------------------------
+        // TODO @dc @as Refactor this method so that all Walletx CRUD and validation functionality
+        //              is in the Walletx model.
+        // TODO @dc @as Add validation (in Walletx model) that the public key entered does not
+        //              already exist. If it does display a toast message notifying the user of
+        //              the error.
+        //----------------------------------------------------------------------------------------
+
         boolean addressIsValid = SingleAddressWallet.isValidAddress(mPublicKey.getText().toString());
         boolean nameIsEmptyString = mWalletName.getText().toString().equals("");
 

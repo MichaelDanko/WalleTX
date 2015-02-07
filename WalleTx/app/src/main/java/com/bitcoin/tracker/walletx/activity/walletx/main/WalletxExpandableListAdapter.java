@@ -100,9 +100,10 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
                 mDescription.setText(saw.publicKey);
         }
 
-        //------------------------
-        // TODO Modify Balances
-        //------------------------
+        //----------------------------------------------------------------------------------------
+        // TODO @dc @as Update the BTC current balance, update the LC current balance & LC label
+        //              for this walletx
+        //----------------------------------------------------------------------------------------
     }
 
     @Override
@@ -173,9 +174,10 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         WalletGroup group = WalletGroup.getBy(headerTitle);
         mName.setText(group.name);
 
-        //-------------------------------------------------
-        // TODO Modify BTC and LC balances for this group
-        //-------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        // TODO @dc @as Update the BTC current balance, update the LC current balance & LC label
+        //              for this wallet group
+        //----------------------------------------------------------------------------------------
     }
 
     @Override
