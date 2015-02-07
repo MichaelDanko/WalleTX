@@ -1,5 +1,6 @@
 package com.bitcoin.tracker.walletx.activity.walletGroup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
@@ -60,6 +61,9 @@ public class WalletGroupCreateActivity extends ActionBarActivity {
                 if (dataIsValid) {
                     String name = mGroupName.getText().toString();
                     WalletGroup.createWalletGroup(name, mSetAsDefault.isChecked());
+
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }

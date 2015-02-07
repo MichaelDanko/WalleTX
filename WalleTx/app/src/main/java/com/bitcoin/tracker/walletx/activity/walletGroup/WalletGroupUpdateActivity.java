@@ -92,7 +92,7 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
                     // default group name changed. update name only.
                     WalletGroup update = WalletGroup.getBy(mCurrentName);
                     update.updateName(mGroupName.getText().toString());
-                    finish();
+                    finishWithResultOk();
 
                 } else if (nameNotChanged && !mSetAsDefault.isChecked() && !groupBeingUpdated.isDefault()) {
 
@@ -104,7 +104,7 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
                     // not default group and name not changed. set as default.
                     WalletGroup update = WalletGroup.getBy(mCurrentName);
                     update.updateDefault(true);
-                    finish();
+                    finishWithResultOk();
 
                 } else if (WalletGroup.validate(getBaseContext(), nameInEditText)) {
 
@@ -114,7 +114,7 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
                         update.update(mGroupName.getText().toString(), true);
                     else
                         update.updateName(mGroupName.getText().toString());
-                    finish();
+                    finishWithResultOk();
 
                 }
             }
@@ -137,7 +137,7 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
                         dialog.dismiss();
                         WalletGroup toDelete = WalletGroup.getBy(mCurrentName);
                         WalletGroup.deleteGroup(toDelete);
-                        finish();
+                        finishWithResultOk();
                     }
                 });
                 builder.setNegativeButton(R.string.app_confirm_no, new DialogInterface.OnClickListener() {
@@ -170,6 +170,12 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
         } else {
             mCannotDeleteLabel.setVisibility(View.GONE);
         }
+    }
+
+    private void finishWithResultOk() {
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     //endregion

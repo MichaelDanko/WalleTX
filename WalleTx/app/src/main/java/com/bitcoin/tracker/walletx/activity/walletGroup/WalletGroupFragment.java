@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.MainActivity;
@@ -31,19 +30,20 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
 
     //region FIELDS
 
+    private static final int NEW_GROUP_ADDED = 1;
+    private static final int WALLET_GROUP_UPDATED = 2;
+
     // The fragment argument representing the section number for this fragment.
     // Used to communicate to the MainActivity that WalletGroupFragment is currently active.
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private OnFragmentInteractionListener mListener;
     private AbsListView mListView;
-    private ListAdapter mAdapter;
+    private WalletGroupAdapter mAdapter;
+    private ArrayList<WalletGroupListItem> mItems = new ArrayList<>();
 
     // Tracks the position of the listView such that it can be restored.
     private int mRestorePosition;
-
-    // Tracks number of items in the list view
-    private int mListViewCount;
 
     //endregion
     //region FRAGMENT LIFECYCLE
@@ -65,7 +65,12 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupAdapter();
+        if (mAdapter == null) {
+            prepareData();
+            mAdapter = new WalletGroupAdapter(getActivity(), mItems);
+        }
+        if (mRestorePosition != 0)
+            mListView.setSelection(mRestorePosition);
     }
 
     @Override
@@ -84,19 +89,14 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
         return view;
     }
 
-    private void setupAdapter() {
-
-        ArrayList<WalletGroupListItem> items = new ArrayList<>();
+    private void prepareData() {
+        mItems.clear();
         List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
         for (WalletGroup group : groups) {
             WalletGroupListItem item;
             item = new WalletGroupListItem(group.name);
-            items.add(item);
+            mItems.add(item);
         }
-        mAdapter = new WalletGroupAdapter(getActivity(), items);
-
-        if (mRestorePosition != 0)
-            mListView.setSelection(mRestorePosition);
     }
 
     @Override
@@ -122,30 +122,10 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
         mListener = null;
     }
 
-    /**
-     * Refreshes the list view to reflect changes.
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-        setupAdapter();
-        mListView.setAdapter(mAdapter);
-
-        // Restores previous listView position.
-        if (mRestorePosition != 0)
-            mListView.setSelection(mRestorePosition);
-
-        // Goes to end of listView if new group was added.
-        if (mListViewCount == mListView.getCount() - 1) {
-            mListView.setSelection(mListView.getCount() - 1);
-        }
-    }
-
     @Override
     public void onPause() {
         super.onResume();
         mRestorePosition = mListView.getFirstVisiblePosition(); // save last visible position
-        mListViewCount = mListView.getCount(); // increment count
     }
 
     @Override
@@ -160,7 +140,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
             // Open update wallet activity.
             Intent intent = new Intent( getActivity(), WalletGroupUpdateActivity.class );
             intent.putExtra("wallet_group_name", name);
-            startActivity(intent);
+            startActivityForResult( intent, WALLET_GROUP_UPDATED );
         }
     }
 
@@ -175,6 +155,29 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
      */
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(String id);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == NEW_GROUP_ADDED) {
+            // Make sure the request was successful
+            if (resultCode == getActivity().RESULT_OK) {
+                // Refresh the expListView to display the newly added wallet
+                prepareData();
+                mAdapter.updateData(mItems);
+                // Goes to end of listView if new group was added.
+                mListView.setSelection(mListView.getCount());
+            }
+        } else if (requestCode == WALLET_GROUP_UPDATED) {
+            if (resultCode == getActivity().RESULT_OK) {
+                prepareData();
+                mAdapter.updateData(mItems);
+                // Restores previous listView position.
+                if (mRestorePosition != 0)
+                    mListView.setSelection(mRestorePosition);
+            }
+        }
     }
 
     //endregion
@@ -196,7 +199,7 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_group) {
             Intent intent = new Intent( getActivity(), WalletGroupCreateActivity.class );
-            startActivity( intent );
+            startActivityForResult( intent, NEW_GROUP_ADDED );
         }
         return super.onOptionsItemSelected(item);
     }
