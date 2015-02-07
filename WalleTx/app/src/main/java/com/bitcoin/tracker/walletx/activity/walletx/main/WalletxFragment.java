@@ -32,6 +32,8 @@ public class WalletxFragment extends Fragment {
 
     //region FIELDS
 
+    private static final int NEW_WALLET_ADDED = 1;
+
     // Walletx custom expandable list
     WalletxExpandableListAdapter mListApapter;
     ExpandableListView mExpListView;
@@ -72,11 +74,13 @@ public class WalletxFragment extends Fragment {
         mHeader = header.findViewById(R.id.allWalletsContainer);
         mHeader.setOnClickListener(allWalletsOnClickListener);
 
+        System.out.println("CALLEd");
+
         prepareData();
-        mListApapter = new WalletxExpandableListAdapter(getActivity(), mGroupHeader, mListDataChild);
-        if (mExpListView != null) {
+        if (mListApapter == null)
+            mListApapter = new WalletxExpandableListAdapter(getActivity(), mGroupHeader, mListDataChild);
+        if (mExpListView != null)
             mExpListView.setAdapter(mListApapter);
-        }
 
         return view;
     }
@@ -161,6 +165,20 @@ public class WalletxFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == NEW_WALLET_ADDED) {
+            // Make sure the request was successful
+            if (resultCode == getActivity().RESULT_OK) {
+                // Refresh the expListView to display the newly added wallet
+                prepareData();
+                mListApapter.updateData(mGroupHeader, mListDataChild);
+
+            }
+        }
+    }
+
     //endregion
     //region OPTIONS MENU
 
@@ -179,7 +197,7 @@ public class WalletxFragment extends Fragment {
         } else if (item.getItemId() == R.id.action_add_wallet) {
             // open new activity
             Intent intent = new Intent( getActivity(), WalletxCreateActivity.class );
-            startActivity( intent );
+            startActivityForResult( intent, NEW_WALLET_ADDED );
         }
         return super.onOptionsItemSelected(item);
     }

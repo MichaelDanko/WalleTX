@@ -48,6 +48,13 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         this.mSingleWalletChild = singleWalletChild;
     }
 
+    public void updateData(List<String> groupHeader,
+                                  HashMap<String, List<String>> singleWalletChild) {
+        mGroupHeader = groupHeader;
+        mSingleWalletChild = singleWalletChild;
+        notifyDataSetChanged();
+    }
+
     //region CHILD ROWS (Rows pertaining to wallets within groups)
 
     @Override
