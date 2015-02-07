@@ -91,7 +91,7 @@ public class Balance extends Model {
        String dividerCol1 = "------------------";
        String dividerCol23 = "-------------";
        System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
-       System.out.printf("%-20s %-15s %-16s\n", "Name", "DefaultGroup", "DisplayOrder");
+       System.out.printf("%-20s %-15s %-16s\n", "Timestamp", "Balance", "WalleTx");
        System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
        //List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
        List<Balance> balances = Balance.getAllBalances();
