@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.walletx.main;
+package com.bitcoin.tracker.walletx.activity.walletx.read;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,11 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.MainActivity;
+import com.bitcoin.tracker.walletx.activity.walletGroup.updateDelete.WalletGroupUpdateActivity;
 import com.bitcoin.tracker.walletx.activity.walletx.create.WalletxCreateActivity;
+import com.bitcoin.tracker.walletx.activity.walletx.updateDelete.WalletxUpdateActivity;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
@@ -31,6 +34,10 @@ import java.util.List;
 public class WalletxFragment extends Fragment {
 
     //region FIELDS
+
+    private static final int NEW_WALLETX_ADDED = 1;
+    private static final int WALLETX_UPDATED = 2;
+    private static final int WALLET_GROUP_UPDATED = 3;
 
     // Walletx custom expandable list
     WalletxExpandableListAdapter mListApapter;
@@ -73,10 +80,10 @@ public class WalletxFragment extends Fragment {
         mHeader.setOnClickListener(allWalletsOnClickListener);
 
         prepareData();
-        mListApapter = new WalletxExpandableListAdapter(getActivity(), mGroupHeader, mListDataChild);
-        if (mExpListView != null) {
+        if (mListApapter == null)
+            mListApapter = new WalletxExpandableListAdapter(getActivity(), mGroupHeader, mListDataChild);
+        if (mExpListView != null)
             mExpListView.setAdapter(mListApapter);
-        }
 
         return view;
     }
@@ -118,6 +125,12 @@ public class WalletxFragment extends Fragment {
     private View.OnClickListener allWalletsOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+            /*
+             * TODO @bh
+             *
+             */
+
             Toast.makeText(getActivity(), "TODO: Handle All Wallets click", Toast.LENGTH_SHORT).show();
         }
     };
@@ -125,6 +138,12 @@ public class WalletxFragment extends Fragment {
     private ExpandableListView.OnGroupClickListener groupClickListener = new ExpandableListView.OnGroupClickListener() {
         @Override
         public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+
+            /*
+             * TODO @bh
+             *
+             */
+
             Toast.makeText(getActivity(), "TODO: Handle group clicks", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -144,22 +163,74 @@ public class WalletxFragment extends Fragment {
             int itemType = ExpandableListView.getPackedPositionType(id);
 
             if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                // TODO Open activity to edit/delete this wallet
-                Toast.makeText(getActivity(), "TODO: Open activity to edit/delete this wallet.", Toast.LENGTH_SHORT).show();
+
+                // open new activity to edit single walletx
+                TextView tv = (TextView) view.findViewById(R.id.walletName);
+                String name = tv.getText().toString();
+                Intent intent = new Intent( getActivity(), WalletxUpdateActivity.class );
+                intent.putExtra("walletx_name", name);
+                startActivityForResult( intent, WALLETX_UPDATED );
                 return true;
 
             } else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-                // TODO Group: Open CRUD group activity here or do nothing?
-                Toast.makeText(getActivity(), "TODO: Decide if long clicks on groups should open update wallet activity. I think no.", Toast.LENGTH_LONG).show();
+
+                // open activity to update the wallet group name
+                TextView group = (TextView) view.findViewById(R.id.groupName);
+                String name = group.getText().toString();
+                Intent intent = new Intent( getActivity(), WalletGroupUpdateActivity.class );
+                intent.putExtra("wallet_group_name", name);
+                startActivityForResult( intent, WALLET_GROUP_UPDATED );
                 return true;
 
             } else {
-                // TODO edit code in block
-                Toast.makeText(getActivity(), "Should Never Happen. Throw error", Toast.LENGTH_SHORT).show();
+                // Should Never Happen. TODO Throw error / write to log
                 return false;
             }
         }
     };
+
+    /**
+     * Refreshes the expListView and initiates a data sync
+     * when changes have been made (i.e. new Walletx added or deleted)
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == NEW_WALLETX_ADDED) {
+            // Make sure the request was successful
+            if (resultCode == getActivity().RESULT_OK) {
+                // Refresh the expListView to display the newly added wallet
+                prepareData();
+                mListApapter.updateData(mGroupHeader, mListDataChild);
+
+                /*
+                 * TODO @md Initiate a sync for the new wallet
+                 *          A new wallet has been added so we'll need to initiate a data sync on
+                 *          a background thread. The sync will pull all transactions and update
+                 *          the Tx and Balance tables. The user should receive feedback that a
+                 *          sync is occurring (I'm thinking the refresh icon in the action bar
+                 *          can rotate, which as UI guy @bh will handle). Upon successfully
+                 *          completion, when data is added to db, the background thread created by
+                 *          the sync helper class should notify this fragment so that the
+                 *          expListView can be updated to show new data.
+                 *
+                 *          A group discussion is probably req'd about the design of the sync
+                 *          helper class.
+                 *
+                 *          Also, for starters we can probably begin with a single method that
+                 *          updates (syncs) all Walletxs and use it here. Time permitting we
+                 *          can tweak things to make it more efficient.
+                 *
+                 */
+
+            }
+        } else if (requestCode == WALLETX_UPDATED || requestCode == WALLET_GROUP_UPDATED) {
+            if (resultCode == getActivity().RESULT_OK) {
+                prepareData();
+                mListApapter.updateData(mGroupHeader, mListDataChild);
+            }
+        }
+    }
 
     //endregion
     //region OPTIONS MENU
@@ -179,7 +250,7 @@ public class WalletxFragment extends Fragment {
         } else if (item.getItemId() == R.id.action_add_wallet) {
             // open new activity
             Intent intent = new Intent( getActivity(), WalletxCreateActivity.class );
-            startActivity( intent );
+            startActivityForResult( intent, NEW_WALLETX_ADDED );
         }
         return super.onOptionsItemSelected(item);
     }

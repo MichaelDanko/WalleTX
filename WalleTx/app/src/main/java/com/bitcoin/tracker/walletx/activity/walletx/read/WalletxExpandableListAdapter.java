@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.walletx.main;
+package com.bitcoin.tracker.walletx.activity.walletx.read;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +46,13 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         this.mContext = context;
         this.mGroupHeader = groupHeader;
         this.mSingleWalletChild = singleWalletChild;
+    }
+
+    public void updateData(List<String> groupHeader,
+                                  HashMap<String, List<String>> singleWalletChild) {
+        mGroupHeader = groupHeader;
+        mSingleWalletChild = singleWalletChild;
+        notifyDataSetChanged();
     }
 
     //region CHILD ROWS (Rows pertaining to wallets within groups)
@@ -100,9 +107,10 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
                 mDescription.setText(saw.publicKey);
         }
 
-        //------------------------
-        // TODO Modify Balances
-        //------------------------
+        //----------------------------------------------------------------------------------------
+        // TODO @dc @as Update the BTC current balance, update the LC current balance & LC label
+        //              for this walletx
+        //----------------------------------------------------------------------------------------
     }
 
     @Override
@@ -173,9 +181,10 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         WalletGroup group = WalletGroup.getBy(headerTitle);
         mName.setText(group.name);
 
-        //-------------------------------------------------
-        // TODO Modify BTC and LC balances for this group
-        //-------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        // TODO @dc @as Update the BTC current balance, update the LC current balance & LC label
+        //              for this wallet group
+        //----------------------------------------------------------------------------------------
     }
 
     @Override

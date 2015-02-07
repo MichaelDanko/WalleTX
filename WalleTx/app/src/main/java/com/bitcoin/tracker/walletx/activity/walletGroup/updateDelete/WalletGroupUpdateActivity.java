@@ -1,4 +1,4 @@
-package com.bitcoin.tracker.walletx.activity.walletGroup;
+package com.bitcoin.tracker.walletx.activity.walletGroup.updateDelete;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -11,13 +11,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
-import com.bitcoin.tracker.walletx.model.Walletx;
-
-import java.util.List;
 
 import static com.bitcoin.tracker.walletx.model.WalletGroup.*;
 
@@ -82,27 +78,44 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
                 String nameOfGroupBeingUpdated = mCurrentName.toLowerCase();
                 boolean nameNotChanged = nameInEditText.equals(nameOfGroupBeingUpdated);
 
+                // There are quite a few different scenarios for updating groups
+                // based on user input.
+                // This probably can be cleaned up and be made more concise,
+                // but at the moment it is functional and working correctly.
                 if (groupBeingUpdated.isDefault() && nameNotChanged) {
-                    // default group name not changed. do nothing.
+
+                    // default group name not changed. do nothing...
                     finish();
-                } else if (groupBeingUpdated.isDefault() && validateGroupName()) {
-                    // default group name changed. update name.
-                    updateWalletGroupName();
-                    finish();
+
+                } else if (groupBeingUpdated.isDefault() && WalletGroup.validate(getBaseContext(), nameInEditText)) {
+
+                    // default group name changed. update name only.
+                    WalletGroup update = WalletGroup.getBy(mCurrentName);
+                    update.updateName(mGroupName.getText().toString());
+                    finishWithResultOk();
+
                 } else if (nameNotChanged && !mSetAsDefault.isChecked() && !groupBeingUpdated.isDefault()) {
+
                     // not default group and name not changed. do nothing.
                     finish();
+
                 } else if (nameNotChanged && mSetAsDefault.isChecked()) {
+
                     // not default group and name not changed. set as default.
-                    setAsDefaultGroup();
-                    finish();
-                } else if (validateGroupName()) {
-                    // not default group and name changed. update name and set as default.
-                    if (mSetAsDefault.isChecked()) {
-                        setAsDefaultGroup();
-                    }
-                    updateWalletGroupName();
-                    finish();
+                    WalletGroup update = WalletGroup.getBy(mCurrentName);
+                    update.updateDefault(true);
+                    finishWithResultOk();
+
+                } else if (WalletGroup.validate(getBaseContext(), nameInEditText)) {
+
+                    // not default group and name changed. update name and defaultGroup.
+                    WalletGroup update = WalletGroup.getBy(mCurrentName);
+                    if (mSetAsDefault.isChecked())
+                        update.update(mGroupName.getText().toString(), true);
+                    else
+                        update.updateName(mGroupName.getText().toString());
+                    finishWithResultOk();
+
                 }
             }
         });
@@ -115,7 +128,6 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
              */
             @Override
             public void onClick(View v) {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setMessage(R.string.wallet_group_update_alert_message_delete);
                 builder.setTitle("Delete group '" + mCurrentName + "'?");
@@ -123,7 +135,9 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
-                        deleteWalletGroup();
+                        WalletGroup toDelete = WalletGroup.getBy(mCurrentName);
+                        WalletGroup.deleteGroup(toDelete);
+                        finishWithResultOk();
                     }
                 });
                 builder.setNegativeButton(R.string.app_confirm_no, new DialogInterface.OnClickListener() {
@@ -131,98 +145,12 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
                         dialog.dismiss();
                     }
                 });
-
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
         });
 
     } // bindClickEvents
-
-    /**
-     * Updates a wallet group's name in the WalletGroup table.
-     */
-    private void updateWalletGroupName() {
-        WalletGroup group = getBy(mCurrentName);
-        group.name = mGroupName.getText().toString();
-        group.save();
-    }
-
-    /**
-     * Sets as wallet group as the default and removes default status from all others.
-     */
-    private void setAsDefaultGroup() {
-        WalletGroup group = getBy(mCurrentName);
-        WalletGroup currentDefault = getDefault();
-        currentDefault.setAsDefault(0);
-        currentDefault.save();
-        group.setAsDefault(1);
-        group.save();
-    }
-
-    /**
-     * Validates that the wallet group name entered
-     * is not empty and does not already exist.
-     */
-    private boolean validateGroupName() {
-        if (validateGroupNameIsNotEmpty() && validateGroupNameDoesNotAlreadyExist())
-            return true;
-        return false;
-    }
-
-    /**
-     * Validates that the wallet group name entered is not an empty string.
-     */
-    private boolean validateGroupNameIsNotEmpty() {
-        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
-        String nameEntered = mGroupName.getText().toString().toLowerCase();
-        if (nameEntered.isEmpty()) {
-            String error = getString(R.string.wallet_group_create_toast_name_empty);
-            Toast.makeText(this, error, Toast.LENGTH_LONG).show();
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Validates that the wallet group name entered does not already exist.
-     */
-    private boolean validateGroupNameDoesNotAlreadyExist() {
-        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
-        String nameEntered = mGroupName.getText().toString().toLowerCase();
-        for (WalletGroup group : groups) {
-            if (group.name.toLowerCase().equals(nameEntered)) {
-                String error = getString(R.string.wallet_group_create_toast_name_exists);
-                Toast.makeText(this, error, Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void deleteWalletGroup() {
-        WalletGroup delete = getBy(mCurrentName);
-
-        // TODO Verify that this functionality is implemented correctly once Walletx implementation is complete.
-        List<Walletx> wallets = Walletx.getAll();
-        WalletGroup defaultGroup = WalletGroup.getDefault();
-        for (Walletx wtx : wallets) {
-            if (wtx.group == delete) {
-                wtx.group = defaultGroup;
-                wtx.save();
-            }
-        }
-
-        // Change the display order of groups after the deleted group
-        List<WalletGroup> groups = WalletGroup.getAllWithDisplayOrderGreaterThan(delete.displayOrder);
-        for (WalletGroup group : groups) {
-            group.displayOrder = group.displayOrder - 1;
-            group.save();
-        }
-
-        delete.delete();
-        finish();
-    }
 
     private void addCurrentGroupNameToEditText() {
         Intent intent = getIntent();
@@ -242,6 +170,12 @@ public class WalletGroupUpdateActivity extends ActionBarActivity {
         } else {
             mCannotDeleteLabel.setVisibility(View.GONE);
         }
+    }
+
+    private void finishWithResultOk() {
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     //endregion
