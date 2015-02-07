@@ -1,11 +1,17 @@
 package com.bitcoin.tracker.walletx.model;
 
+import android.content.Context;
+import android.content.res.Resources;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.bitcoin.tracker.walletx.R;
 
 import java.util.List;
+
+import static android.content.res.Resources.*;
 
 /**
  * Manages wallet groups
@@ -94,7 +100,7 @@ public class WalletGroup extends Model {
 
     //endregion
 
-    //region WALLET GROUP QUERIES
+    //region READ
 
     /**
      * @return WalletGroup selected by name
@@ -169,6 +175,30 @@ public class WalletGroup extends Model {
                 .where("DisplayOrder = ?", displayOrder)
                 .executeSingle();
     }
+
+    //endregion
+    //region WRITE
+
+    /**
+     * Adds 'My Wallets' group as a default group if WalletGroup table is empty.
+     * This method is used to ensure that there is always at least one wallet group
+     * in the WalletGroup table.
+     */
+    public static void initDefaultGroup(Context context) {
+        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
+        if ( groups.size() < 1 ) {
+            WalletGroup defaultGroup = new WalletGroup();
+            defaultGroup.name = context.getResources().getString(R.string.wallet_group_wtx_default_group);
+            defaultGroup.setAsDefault(1);
+            defaultGroup.displayOrder = 1;
+            defaultGroup.save();
+        }
+    }
+
+    //endregion
+    //region VALIDATE
+
+    // TODO Data validation goes here.
 
     //endregion
 
