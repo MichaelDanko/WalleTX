@@ -45,6 +45,7 @@ public class WalletxUpdateActivity extends ActionBarActivity {
         setupGroupNameSpinner();
         bindClickEvents();
         addCurrentGroupNameToEditText();
+        setSpinnerToCurrentGroup();
     }
 
     private void setupActionBar() {
@@ -74,6 +75,12 @@ public class WalletxUpdateActivity extends ActionBarActivity {
         Intent intent = getIntent();
         mCurrentName = intent.getStringExtra("walletx_name");
         mWalletxName.setText(mCurrentName);
+    }
+
+    private void setSpinnerToCurrentGroup() {
+        Walletx wtx = Walletx.getBy(mCurrentName);
+        int pos = mAdapter.getPosition((wtx.group).toString());
+        mGroupNameSpinner.setSelection(pos);
     }
 
     //endregion
