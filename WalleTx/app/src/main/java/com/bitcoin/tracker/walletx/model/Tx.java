@@ -3,10 +3,12 @@ package com.bitcoin.tracker.walletx.model;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Tx model.
@@ -76,6 +78,67 @@ public class Tx extends Model {
     /*--------------*
      *  Tx Queries  *
      *--------------*/
+
+    /**
+     * @return all rows with query of WalleTx
+     */
+
+    public static List<Tx> getAllTxWalleTx(Walletx _wtx){
+        return new Select()
+                .from(Tx.class)
+                .where("Walletx = ?", _wtx)
+                .orderBy("timestamp DESC")
+                .execute();
+    }
+
+    /**
+     *
+     * @param _category
+     * @return all transactions with param of catagory
+     */
+
+    public static List<Tx> getAllTxCategory(TxCategory _category){
+        return new Select()
+                .from(Tx.class)
+                .where("TxCategory = ?", _category)
+                .orderBy("timestamp DESC")
+                .execute();
+
+    }
+
+    /**
+     *
+     * @return queries entire table for dump method
+     */
+
+    public static List<Tx> getAllTxTest(){
+        return new Select()
+                .from(Tx.class)
+                .orderBy("timestamp DESC")
+                .execute();
+
+
+    }
+
+    /**
+     * dump method for testing
+     */
+
+    public static void dump() {
+        String dividerCol1 = "------------------";
+        String dividerCol23 = "-------------";
+        System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
+        System.out.printf("%-20s %-15s %-16s\n", "Amount", "timestamp", "note");
+        System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
+        List<Tx> txs = Tx.getAllTxTest();
+        for (Tx tx : txs) {
+            System.out.printf(
+                    "%-20s %-15s %-16s\n",
+                    tx.amountBTC,
+                    tx.timestamp,
+                    tx.note);
+        }
+    }
 
 
 
