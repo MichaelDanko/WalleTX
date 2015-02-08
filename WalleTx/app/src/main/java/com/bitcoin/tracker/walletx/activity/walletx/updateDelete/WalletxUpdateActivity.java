@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -97,42 +96,54 @@ public class WalletxUpdateActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
+                Walletx walletBeingUpdated = Walletx.getBy(mCurrentName);
                 String nameInEditText = mWalletxName.getText().toString().toLowerCase();
                 String nameOfWalletxBeingUpdated = mCurrentName.toLowerCase();
                 boolean nameNotChanged = nameInEditText.equals(nameOfWalletxBeingUpdated);
+                String groupSelected = mGroupNameSpinner.getSelectedItem().toString();
+                boolean groupNotChanged = groupSelected.equals(walletBeingUpdated.group.toString());
 
-                if (nameNotChanged) {
-                    // walletx name not changed. do nothing...
-                    System.out.println("NOT EDITED");
+                if (nameNotChanged && groupNotChanged) {
+                    // do nothing ...
                     finish();
-
-                 /*
-                  * TODO @dc @as Add static Walletx method to validate name. Validation should
-                  *              ensure the name is unique and not an empty string. Any invalid data
-                  *              should display a toast message regarding error and return false.
-                  *              Replace 'true' below with method call, something like
-                  *              Walletx.validateName(nameInEditText);
-                  *
-                  *              Note: I've already added to strings to the string.xml file
-                  *              for being displayed in toast messages
-                  */
-                } else if (true) {
-                    System.out.println("EDITED");
-                    // valid update made.
-                    Walletx wtx = Walletx.getBy(mCurrentName);
+                } else if (nameNotChanged && !groupNotChanged) {
+                    // update group only ...
 
                     /*
-                     * TODO @ dc @as Refactor this code into a Walletx method with usage:
-                     *               wtx.updateName(mWalletxName.getText().toString());
-                     *               Walletx will handle the name update and save.
+                     * TODO @dc @as Refactor this into Walletx model
                      *
                      */
-                    wtx.name = mWalletxName.getText().toString();
-                    wtx.save();
+                    walletBeingUpdated.group = WalletGroup.getBy(groupSelected);
+                    walletBeingUpdated.save();
 
-                    Intent intent = new Intent();
-                    setResult(RESULT_OK, intent);
-                    finish();
+
+                    finishWithResultOk();
+
+                /*
+                 * TODO @dc @as Add static Walletx method to validate name. Validation should
+                 *              ensure the name is unique and not an empty string. Any invalid data
+                 *              should display a toast message regarding error and return false.
+                 *              Replace 'true' below with method call, something like
+                 *              Walletx.validateName(nameInEditText);
+                 *
+                 *              Note: I've already added to strings to the string.xml file
+                 *              for being displayed in toast messages
+                 */
+                } else if (true) {
+                    // name was changed and it is valid. update name and group.
+
+                    /*
+                     * TODO @ dc @as Refactor this code into a Walletx update method
+                     *               Walletx should handle the name, group update and save.
+                     *
+                     */
+                    walletBeingUpdated.name = mWalletxName.getText().toString();
+                    WalletGroup group = WalletGroup.getBy(groupSelected);
+                    walletBeingUpdated.group = group;
+                    walletBeingUpdated.save();
+
+
+                    finishWithResultOk();
                 }
 
             }
@@ -170,9 +181,7 @@ public class WalletxUpdateActivity extends ActionBarActivity {
                         wtx.delete();
 
                         // Return to parent activity
-                        Intent intent = new Intent();
-                        setResult(RESULT_OK, intent);
-                        finish();
+                        finishWithResultOk();
                     }
                 });
                 builder.setNegativeButton(R.string.app_confirm_no, new DialogInterface.OnClickListener() {
@@ -187,6 +196,12 @@ public class WalletxUpdateActivity extends ActionBarActivity {
         });
 
     } // bindClickEvents
+
+    private void finishWithResultOk() {
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
+    }
 
     //endregion
     //region OPTIONS MENU
