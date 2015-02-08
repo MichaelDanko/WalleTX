@@ -7,22 +7,31 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
+import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.WalletType;
 import com.bitcoin.tracker.walletx.model.Walletx;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WalletxUpdateActivity extends ActionBarActivity {
 
     //region FIELDS
 
     private EditText mWalletxName;
-    private String   mCurrentName;
-    private Button   mUpdate;
-    private Button   mDelete;
+    private String mCurrentName;
+    private Spinner mGroupNameSpinner;
+    private ArrayAdapter<CharSequence> mAdapter;
+    private Button mUpdate;
+    private Button mDelete;
 
     //endregion
     //region ACTIVITY LIFECYCLE
@@ -33,6 +42,7 @@ public class WalletxUpdateActivity extends ActionBarActivity {
         setContentView(R.layout.activity_walletx_update);
         setupActionBar();
         getViewsById();
+        setupGroupNameSpinner();
         bindClickEvents();
         addCurrentGroupNameToEditText();
     }
@@ -44,8 +54,26 @@ public class WalletxUpdateActivity extends ActionBarActivity {
 
     private void getViewsById() {
         mWalletxName = (EditText) findViewById(R.id.editTextWalletxName);
+        mGroupNameSpinner = (Spinner) findViewById(R.id.groupSpinner);
         mUpdate = (Button) findViewById(R.id.buttonUpdateWalletx);
         mDelete = (Button) findViewById(R.id.buttonDeleteWalletx);
+    }
+
+    private void setupGroupNameSpinner() {
+        List<WalletGroup> groups = WalletGroup.getAllSortedByName();
+        ArrayList<String> groupNames = new ArrayList<>();
+        for (WalletGroup group : groups) {
+            groupNames.add(group.name);
+        }
+        mAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, groupNames);
+        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mGroupNameSpinner.setAdapter(mAdapter);
+    }
+
+    private void addCurrentGroupNameToEditText() {
+        Intent intent = getIntent();
+        mCurrentName = intent.getStringExtra("walletx_name");
+        mWalletxName.setText(mCurrentName);
     }
 
     //endregion
@@ -152,12 +180,6 @@ public class WalletxUpdateActivity extends ActionBarActivity {
         });
 
     } // bindClickEvents
-
-    private void addCurrentGroupNameToEditText() {
-        Intent intent = getIntent();
-        mCurrentName = intent.getStringExtra("walletx_name");
-        mWalletxName.setText(mCurrentName);
-    }
 
     //endregion
     //region OPTIONS MENU

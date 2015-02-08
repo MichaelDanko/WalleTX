@@ -55,6 +55,7 @@
     <!-- Update existing walletx activity -->
     <string name="walletx_update_title_activity">Update wallet</string>
     <string name="walletx_update_hint_name">Name of your wallet</string>
+    <string name="walletx_update_label_group_spinner">In group: </string>
     <string name="walletx_update_alert_message_delete">All data associated with this wallet will be removed from device. This action cannot be undone.</string>
     <string name="walletx_update_toast_name_empty">Oops! Wallet name cannot be empty string</string>
     <string name="walletx_update_toast_name_exists">Oops! Wallet name already exists</string>
