@@ -6,7 +6,10 @@ import android.os.Bundle;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.api.BlockchainInfo;
+import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
+import com.bitcoin.tracker.walletx.model.WalletType;
+import com.bitcoin.tracker.walletx.model.Walletx;
 import com.google.bitcoin.core.BlockChain;
 
 import org.json.JSONException;
@@ -35,18 +38,25 @@ public class SplashActivity extends Activity {
 
         // TODO - Fetch new tx and price data?
 
-      applySplashScreenTimeOut();
+
+        Walletx wtx = new Walletx("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", WalletType.SINGLE_ADDRESS_WALLET, WalletGroup.getBy("My Wallets"));
+        SingleAddressWallet saw = new SingleAddressWallet(wtx, "1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy");
+        new BlockchainInfo("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", wtx).execute();
+        wtx.save();
+        saw.save();
+
+        applySplashScreenTimeOut();
     } // onCreate
 
     private void applySplashScreenTimeOut() {
-        new Timer().schedule( new TimerTask() {
+        new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                Intent mainIntent = new Intent( SplashActivity.this, MainActivity.class );
-                startActivity( mainIntent );
+                Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(mainIntent);
                 finish();
             }
-        }, SPLASH_TIME_OUT );
+        }, SPLASH_TIME_OUT);
     }
 
     // Adds 'My Wallets' group to the WalletGrjoups table on first run

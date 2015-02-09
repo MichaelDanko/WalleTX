@@ -6,10 +6,13 @@ import android.util.Log;
 
 import com.bitcoin.tracker.walletx.model.Balance;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
+import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.WalletType;
 import com.bitcoin.tracker.walletx.model.Walletx;
+
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONException;
 
@@ -17,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,13 +30,51 @@ import java.util.List;
 
       private final Walletx wtx;
       private final String publicAddress;
-      private ProgressDialog QueryProgressDialog;
+
 
     private static final String logInfo = "Blockchain API";
 
-    static class Transaction {
+    static class jsonInputs {
+        String sequence;
+    }
+
+    static class jsonOutputs {
+
+    }
+
+
+
+
+    static class jsonTransaction {
+      @SerializedName("hash160")
+      String hash160;
+      @SerializedName("n_tx")
+      String n_tx;
+      @SerializedName("total_received")
+      String total_received;
+      @SerializedName("total_sent")
+      String total_sent;
+      @SerializedName("address")
       String address;
+      @SerializedName("final_balance")
       String final_balance;
+      @SerializedName("txs")
+      jsonTxs txs;
+
+      public static class jsonTxs {
+        public String ver;
+    }
+      // List<jsonTxs> txs;
+
+      String time;
+      String amountBTC;
+      String amountLC;
+      String block;
+      String hash;
+      String wtx;
+      String category;
+      String note;
+
     }
 
     public BlockchainInfo(String publicAddress, Walletx wtx) {
@@ -45,75 +87,7 @@ import java.util.List;
       protected String doInBackground(String... strings) {
 
           String json = null;
-          /* WalletGroup wtg = new WalletGroup();
-          Walletx wtx = new Walletx();
-          SingleAddressWallet saw = new SingleAddressWallet(); */
 
-          //WalletGroup wtg2 = WalletGroup.load(WalletGroup.class, 2 );
-          //Log.e("test", wtg2.name);
-          //wtg2.displayOrder= 2;
-          //wtg2.save();
-
-          int foundGroup  = 0,
-              foundWallet = 0,
-              foundSAW = 0;
-
-          // Search if WalletGroup exists, saving an existing wallet group fails?
-          /* List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
-          for (WalletGroup group : groups) {
-              Log.e("WalletG", group.name);
-              if (group.name.equals("Test Group")) {
-                  wtg.name = group.name;
-                  wtg.displayOrder = group.displayOrder;
-//                  wtg.save();
-                  //wtg.displayOrder = group.displayOrder;
-                  Log.e("WalletG", "Group Exists");
-                  foundGroup = 1;
-                  break;
-              }
-              else
-                  Log.e("WalletG", "Group Does Not Exist...yet");
-          }
-          if (foundGroup == 0){
-            wtg = new WalletGroup("Unsorted", 0);
-            wtg.save();
-          }
-
-          List<Walletx> wallets = Walletx.getAll();
-          for (Walletx wallet : wallets) {
-              Log.e("WalletX", wallet.name);
-              if (wallet.name.equals("First Wallet")) {
-                  wtx.name = wallet.name;
-                  wtx.type = wallet.type;
-                  wtx.group = wallet.group;
-                  Log.e("WalletX", "Wallet Exists");
-                  foundWallet = 1;
-                  break;
-              } else
-                  Log.e("WalletX", "Wallet Does Not Exist...yet");
-          }
-          if (foundWallet == 0) {
-              wtx = new Walletx("First Wallet", WalletType.SINGLE_ADDRESS_WALLET, wtg);
-              wtx.save();
-          }
-
-          List<SingleAddressWallet> listOfIndividualSAW = SingleAddressWallet.getAll();
-          for (SingleAddressWallet individualSAW : listOfIndividualSAW) {
-              Log.e("Saw", individualSAW.publicKey);
-              if (individualSAW.publicKey.equals("1E6QRQG9KR6WfxU4fmRLzjyHDkeDCtjGoR")) {
-                 saw.publicKey = individualSAW.publicKey;
-                 saw.wtx = individualSAW.wtx;
-                 Log.e("SAW", "SAW Exists!");
-                 foundSAW = 1;
-                 break;
-              } else
-                  Log.e("SAW", "SAW Does Not Exist...yet");
-          }
-          if (foundSAW == 0) {
-              saw = new SingleAddressWallet(wtx, "1E6QRQG9KR6WfxU4fmRLzjyHDkeDCtjGoR");
-              saw.save();
-          }
-*/
           WalletGroup.dump();
           Walletx.dump();
           SingleAddressWallet.dump();
@@ -121,11 +95,32 @@ import java.util.List;
           try {
               json = readUrl("https://blockchain.info/address/" + publicAddress + "?format=json");
               Gson gson = new Gson();
-              Transaction transaction = gson.fromJson(json, Transaction.class);
+              jsonTransaction transaction = gson.fromJson(json, jsonTransaction.class);
 
-              Log.v(logInfo, transaction.address);
+              // try {
+              //   Walletx.getBy(transaction.address);
+              // } catch (Exception e) {
+              //    Log.v(logInfo, "could not find address");
+              // }
+
+//               Log.v(logInfo, transaction.time + '\n' +
+  //                           transaction.address);
+              Log.v("hasher160", transaction.hash160);
+              Log.v("address", transaction.address);
+              Log.v("n_tx", transaction.n_tx);
+              Log.v("total received", transaction.total_received);
+              Log.v("total send", transaction.total_sent);
+              Log.v("final balance", transaction.final_balance);
+              Log.v("did it work?", transaction.txs.ver);
+              // Log.v(logInfo, transaction.wtx);
+              // Log.v(logInfo, transaction.address);
+              // Tx tx = new Tx(transaction.timestamp, transaction.wtx, transaction.block,
+              //               transaction.hash, transaction.category, transaction.note,
+              //             transaction.amountBTC, transaction.amountLC, transaction.final_balance );
+
           } catch (Exception e) {
               Log.v(logInfo, "did not work");
+              Log.v(logInfo, "" + e);
           }
 
           return "String";

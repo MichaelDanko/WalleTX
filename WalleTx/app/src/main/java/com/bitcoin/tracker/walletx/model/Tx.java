@@ -33,13 +33,13 @@ public class Tx extends Model {
     }
 
     @Column(name = "amountBTC")
-    private float amountBTC;
+    private long amountBTC;
 
     @Column(name = "amountLC")
-    private float amountLC;
+    private long amountLC;
 
     @Column(name = "block")
-    private int block;
+    private String block;
 
     @Column(name = "hash")
     private String hash;
@@ -60,8 +60,8 @@ public class Tx extends Model {
         super();
     }
 
-    public Tx(String date, float amountBTC, float amountLC, int block, String hash,
-            Walletx wtx, TxCategory category, TxNote note) {
+    public Tx(String date, Walletx wtx, String block, String hash, TxCategory category,
+              TxNote note, long amountBTC, long amountLC) {
         super();
         this.setDateFromString(date);
         this.amountBTC = amountBTC;
