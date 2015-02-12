@@ -23,8 +23,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Fetches Blockchain and wallet data from Blockchain.info using the Blockchain.info API.
+/*
+ * Fetches Blockchain and wallet data from Blockchain.info usin*g the Blockchain.info API.
  */
   public class BlockchainInfo extends AsyncTask<String, String, String> {
 
@@ -34,7 +34,7 @@ import java.util.List;
 
     private static final String logInfo = "Blockchain API";
 
-    static class jsonInputs {
+    static public class jsonInputs {
         String sequence;
     }
 
@@ -42,8 +42,10 @@ import java.util.List;
 
     }
 
-
-
+    static public class jsonTxs {
+        public int ver;
+        List<jsonInputs> inputs;
+    }
 
     static class jsonTransaction {
       @SerializedName("hash160")
@@ -58,12 +60,9 @@ import java.util.List;
       String address;
       @SerializedName("final_balance")
       String final_balance;
-      @SerializedName("txs")
-      jsonTxs txs;
+      //@SerializedName("txs")
+      List<jsonTxs> txs;
 
-      public static class jsonTxs {
-        public String ver;
-    }
       // List<jsonTxs> txs;
 
       String time;
@@ -111,7 +110,12 @@ import java.util.List;
               Log.v("total received", transaction.total_received);
               Log.v("total send", transaction.total_sent);
               Log.v("final balance", transaction.final_balance);
-              Log.v("did it work?", transaction.txs.ver);
+              for (int i=0; i < transaction.txs.size(); i++) {
+                  Log.v("txs " + i, "" + transaction.txs.get(i).ver);
+                  for (int j=0; j < transaction.txs.get(i).inputs.size(); j++) {
+                      Log.v("sequence:" + j + ":", "" + transaction.txs.get(i).inputs.get(j).sequence);
+                  }
+              }
               // Log.v(logInfo, transaction.wtx);
               // Log.v(logInfo, transaction.address);
               // Tx tx = new Tx(transaction.timestamp, transaction.wtx, transaction.block,
