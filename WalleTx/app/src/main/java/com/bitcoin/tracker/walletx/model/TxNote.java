@@ -3,6 +3,9 @@ package com.bitcoin.tracker.walletx.model;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+
+import java.util.List;
 
 /**
  * TxNote model.
@@ -36,6 +39,29 @@ public class TxNote extends Model {
      *  TxNote Queries  *
      *------------------*/
 
+
+    /**
+     *
+     * @return list of all notes
+     */
+    public static List<TxNote> getAll(){
+        return new Select()
+                .from(TxNote.class)
+                .execute();
+    }
+
+    /**
+     *
+     * @param tx
+     * @return note related to transaction 
+     */
+
+    public static TxNote getBy(Tx tx){
+        return new Select()
+                .from(TxNote)
+                .where("tx = ?", tx)
+                .executeSingle();
+    }
 
 
 } // TxNote
