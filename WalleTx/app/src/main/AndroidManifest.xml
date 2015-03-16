@@ -18,6 +18,7 @@
             android:value="1" />
         <!-- TODO: specify AA models -->
 
+
         <activity
             android:name=".activity.SplashActivity"
             android:label="@string/app_name"
@@ -28,6 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/navigation_drawer_title_activity_main" >
@@ -40,6 +43,22 @@
             android:name=".activity.walletx.updateDelete.WalletxUpdateActivity"
             android:label="@string/walletx_update_title_activity" >
         </activity>
+
+
+        <activity
+            android:name=".activity.walletxSummary.WalletxSummaryAllActivity"
+            android:label="@string/walletx_summary_all_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.walletxSummary.WalletxSummaryGroupActivity"
+            android:label="@string/walletx_summary_group_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.walletxSummary.WalletxSummarySingleActivity"
+            android:label="@string/walletx_summary_single_title_activity" >
+        </activity>
+
+
         <activity
             android:name=".activity.walletGroup.create.WalletGroupCreateActivity"
             android:label="@string/wallet_group_create_title_activity" >
@@ -48,6 +67,8 @@
             android:name=".activity.walletGroup.updateDelete.WalletGroupUpdateActivity"
             android:label="@string/wallet_group_update_title_activity" >
         </activity>
+
+
     </application>
 
 </manifest>

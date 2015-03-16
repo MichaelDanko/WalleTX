@@ -60,6 +60,12 @@
     <string name="walletx_update_toast_name_empty">Oops! Wallet name cannot be empty string</string>
     <string name="walletx_update_toast_name_exists">Oops! Wallet name already exists</string>
 
+    <!-- WALLETX SUMMARIES -->
+    <string name="walletx_summary_all_title_activity">All Wallets Summary</string>
+    <string name="walletx_summary_all_title_activity_shortened">All Wallets</string>
+    <string name="walletx_summary_group_title_activity">Wallet Group Summary</string>
+    <string name="walletx_summary_single_title_activity">Single Walletx Summary</string>
+
     <!-- WALLET GROUPS -->
     <!-- Read list view -->
     <string name="wallet_group_title_fragment">Organize Wallet Groups</string>

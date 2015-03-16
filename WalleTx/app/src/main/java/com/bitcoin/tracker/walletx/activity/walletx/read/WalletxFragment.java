@@ -20,6 +20,9 @@ import com.bitcoin.tracker.walletx.activity.MainActivity;
 import com.bitcoin.tracker.walletx.activity.walletGroup.updateDelete.WalletGroupUpdateActivity;
 import com.bitcoin.tracker.walletx.activity.walletx.create.WalletxCreateActivity;
 import com.bitcoin.tracker.walletx.activity.walletx.updateDelete.WalletxUpdateActivity;
+import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummaryAllActivity;
+import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummaryGroupActivity;
+import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummarySingleActivity;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
@@ -125,26 +128,18 @@ public class WalletxFragment extends Fragment {
     private View.OnClickListener allWalletsOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-            /*
-             * TODO @bh
-             *
-             */
-
-            Toast.makeText(getActivity(), "TODO: Handle All Wallets click", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent( getActivity(), WalletxSummaryAllActivity.class );
+            startActivity(intent);
         }
     };
 
     private ExpandableListView.OnGroupClickListener groupClickListener = new ExpandableListView.OnGroupClickListener() {
         @Override
         public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-
-            /*
-             * TODO @bh
-             *
-             */
-
-            Toast.makeText(getActivity(), "TODO: Handle group clicks", Toast.LENGTH_SHORT).show();
+            TextView tv = (TextView) v.findViewById(R.id.groupName);
+            Intent intent = new Intent( getActivity(), WalletxSummaryGroupActivity.class );
+            intent.putExtra("group_name", tv.getText().toString());
+            startActivity( intent );
             return true;
         }
     };
@@ -152,7 +147,10 @@ public class WalletxFragment extends Fragment {
     private ExpandableListView.OnChildClickListener childWalletClickListener = new ExpandableListView.OnChildClickListener() {
         @Override
         public boolean onChildClick (ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-            Toast.makeText(getActivity(), "TODO: Handle child wallet clicks", Toast.LENGTH_SHORT).show();
+            TextView tv = (TextView) v.findViewById(R.id.walletName);
+            Intent intent = new Intent( getActivity(), WalletxSummarySingleActivity.class );
+            intent.putExtra("walletx_name", tv.getText().toString());
+            startActivity(intent);
             return true;
         }
     };
