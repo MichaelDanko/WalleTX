@@ -4,20 +4,19 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AbsListView;
 
 import com.bitcoin.tracker.walletx.R;
 
+import com.bitcoin.tracker.walletx.activity.walletxSummary.module.WalletxSummaryModuleTxs;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.List;
 
 /**
  * Walletx summary abstract super class.
- * Define the summary modules that will be displayed
- * for group of walletxs to summarize.
  */
-public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity {
+public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
+        implements WalletxSummaryModuleTxs.OnFragmentInteractionListener {
 
     /**
      * The list of walletx's that we are going to summarize.
@@ -25,9 +24,11 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity {
      */
     protected List<Walletx> wtxs;
 
-    /**
-     * Require implementation by child classes
-     */
+    public List<Walletx> getWtxs() {
+        return wtxs;
+    }
+
+    // Required implementation by child classes
     protected abstract void populateWalletxList();
     protected abstract void setActivityTitle();
 
@@ -64,5 +65,4 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity {
     }
 
     //endregion
-
 }
