@@ -1,6 +1,7 @@
 package com.bitcoin.tracker.walletx.activity.walletxSummary.module;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummaryAbstractActivity;
 import com.bitcoin.tracker.walletx.model.SupportedSummaryType;
@@ -28,7 +30,8 @@ import lecho.lib.hellocharts.view.PieChartView;
 public class WalletxSummaryModuleTxs extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-    private RelativeLayout mModuleContainer;
+    private MaterialRippleLayout mModuleContainer;
+    private MaterialRippleLayout mChartContainer;
     private PieChartView mChart;
     private PieChartData mData;
     private int mSentCount;
@@ -56,7 +59,8 @@ public class WalletxSummaryModuleTxs extends Fragment {
 
     private void getViewsFrom (View v) {
         mChart = (PieChartView) v.findViewById(R.id.chart);
-        mModuleContainer = (RelativeLayout) v.findViewById(R.id.module);
+        mModuleContainer = (MaterialRippleLayout) v.findViewById(R.id.ripple);
+        mChartContainer = (MaterialRippleLayout) v.findViewById(R.id.ripple1);
     }
 
     private void setPieChartData() {
@@ -95,7 +99,7 @@ public class WalletxSummaryModuleTxs extends Fragment {
                 mListener.onFragmentInteraction(SupportedSummaryType.TRANSACTION_SUMMARY);
             }
         });
-        mChart.setOnClickListener(new View.OnClickListener() {
+        mChartContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onFragmentInteraction(SupportedSummaryType.TRANSACTION_SUMMARY);

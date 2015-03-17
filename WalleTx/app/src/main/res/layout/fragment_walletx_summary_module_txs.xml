@@ -5,50 +5,72 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:id="@+id/module"
-    android:padding="@dimen/gen_spacer_medium"
     android:background="@color/white"
     android:clickable="true"
     android:focusable="false"
     android:focusableInTouchMode="false">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/walletx_summary_module_txs_title"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textColor="@color/wtx_gray"
-        android:textStyle="bold" />
+    <com.balysv.materialripple.MaterialRippleLayout
+        android:id="@+id/ripple"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <lecho.lib.hellocharts.view.PieChartView
-        android:id="@+id/chart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:minHeight="250dp"
-        android:enabled="false"
-        android:layout_below="@+id/textView"
-        android:layout_marginTop="@dimen/gen_spacer_small"
-        android:clickable="false"
-        android:minWidth="250dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:padding="@dimen/gen_spacer_medium">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/walletx_summary_module_txs_subtitle"
-        android:id="@+id/textView6"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_alignRight="@+id/chart"
-        android:layout_alignEnd="@+id/chart"
-        android:paddingLeft="@dimen/gen_spacer_xsmall" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/walletx_summary_module_txs_title"
+                android:id="@+id/textView"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:textColor="@color/wtx_gray"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/walletx_summary_module_txs_subtitle"
+                android:id="@+id/textView6"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="@dimen/gen_spacer_xsmall"
+                android:layout_alignRight="@+id/ripple1"
+                android:layout_alignEnd="@+id/ripple1"
+                android:layout_toRightOf="@+id/textView"
+                android:layout_toEndOf="@+id/textView" />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/ripple1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView">
+
+                <lecho.lib.hellocharts.view.PieChartView
+                    android:id="@+id/chart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:minHeight="250dp"
+                    android:enabled="false"
+                    android:layout_below="@+id/textView"
+                    android:layout_marginTop="@dimen/gen_spacer_small"
+                    android:clickable="false"
+                    android:minWidth="250dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+        </RelativeLayout>
+
+    </com.balysv.materialripple.MaterialRippleLayout>
 
 </RelativeLayout>
