@@ -1,19 +1,33 @@
 package com.bitcoin.tracker.walletx.activity.walletxSummary.module;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummaryAbstractActivity;
 import com.bitcoin.tracker.walletx.model.SupportedSummaryType;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.util.ChartUtils;
+import lecho.lib.hellocharts.view.LineChartView;
+import lecho.lib.hellocharts.view.PieChartView;
 
 /**
  * Fragment that displays an overview summary of transactions
@@ -22,6 +36,18 @@ import java.util.List;
 public class WalletxSummaryModuleTxs extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+
+
+
+
+
+    private PieChartView chart;
+    private PieChartData data;
+
+
+
+
+
 
     // Required empty public constructor
     public WalletxSummaryModuleTxs() {}
@@ -35,26 +61,40 @@ public class WalletxSummaryModuleTxs extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_walletx_summary_module_txs, container, false);
-        bindClickEvents(view);
-        updateUI(view);
-        return view;
-    }
+        View v = inflater.inflate(R.layout.fragment_walletx_summary_module_txs, container, false);
 
-    // Binds listener to this module
-    private void bindClickEvents(View view) {
-        RelativeLayout module = (RelativeLayout) view.findViewById(R.id.txsModuleContainer);
+        // binds listener to this module
+        LinearLayout module = (LinearLayout) v.findViewById(R.id.module);
         module.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mListener.onFragmentInteraction(SupportedSummaryType.TRANSACTION_SUMMARY);
             }
         });
-    }
 
-    // Updates the module so that it reflects the model.
-    private void updateUI(View view) {
         // get the list of walletxs being summarized from parent activity
         List<Walletx> wtxs = ((WalletxSummaryAbstractActivity)this.getActivity()).getWtxs();
+
+//////////
+        chart = (PieChartView) v.findViewById(R.id.chart);
+
+        int numValues = 6;
+
+        List<SliceValue> values = new ArrayList<>();
+        for (int i = 0; i < numValues; ++i) {
+            SliceValue sliceValue = new SliceValue((float) Math.random() * 30 + 15, ChartUtils.pickColor());
+            values.add(sliceValue);
+        }
+
+        data = new PieChartData(values);
+        data.setHasLabels(false);
+        data.setHasLabelsOnlyForSelected(false);
+        data.setHasLabelsOutside(false);
+        data.setHasCenterCircle(false);
+
+        chart.setPieChartData(data);
+////////////
+
+        return v;
     }
 
     @Override
