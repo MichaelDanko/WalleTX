@@ -67,6 +67,12 @@
     <string name="walletx_summary_single_title_activity">Single Walletx Summary</string>
     <!-- Summary modules -->
     <string name="walletx_summary_module_txs_title">Transactions</string>
+    <string name="walletx_summary_module_txs_subtitle">| Sent and Received</string>
+    <string name="walletx_summary_module_txs_pie_chart_center">Total Txs</string>
+
+    <!-- WALLETX TXS -->
+    <string name="title_activity_walletx_txs_title_activity">Tx Listing</string>
+
 
     <!-- WALLET GROUPS -->
     <!-- Read list view -->
@@ -88,5 +94,6 @@
     <string name="wallet_group_update_button_delete">Delete</string>
     <string name="wallet_group_update_alert_message_delete">Wallets within this group will automatically be moved to the default group.</string>
     <string name="wallet_group_update_label_delete_default_group_note">Current default group cannot be deleted. If you wish to remove this group please set another wallet group as the default.</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

@@ -1,13 +1,17 @@
 package com.bitcoin.tracker.walletx.activity.walletxSummary;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 
 import com.bitcoin.tracker.walletx.activity.walletxSummary.module.WalletxSummaryModuleTxs;
+import com.bitcoin.tracker.walletx.activity.walletxTxs.WalletxTxs;
+import com.bitcoin.tracker.walletx.model.SupportedSummaryType;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.List;
@@ -65,4 +69,10 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
     }
 
     //endregion
+
+    @Override
+    public void onFragmentInteraction(SupportedSummaryType type){
+        Intent intent = new Intent( this, WalletxTxs.class );
+        startActivity( intent );
+    }
 }

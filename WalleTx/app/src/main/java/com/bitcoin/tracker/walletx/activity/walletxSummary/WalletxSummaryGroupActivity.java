@@ -2,9 +2,7 @@ package com.bitcoin.tracker.walletx.activity.walletxSummary;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
-import com.bitcoin.tracker.walletx.model.SupportedSummaryType;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 
 /**
@@ -36,11 +34,5 @@ public class WalletxSummaryGroupActivity extends WalletxSummaryAbstractActivity 
     }
 
     //endregion
-
-    @Override
-    public void onFragmentInteraction(SupportedSummaryType type){
-        Toast toast = Toast.makeText(this, "TODO: Go to detail activity for transactions associated with WALLET GROUP!",Toast.LENGTH_SHORT);
-        toast.show();
-    }
 
 }
