@@ -58,7 +58,7 @@ public class TxNote extends Model {
 
     public static TxNote getBy(Tx tx){
         return new Select()
-                .from(TxNote)
+                .from(TxNote.class)
                 .where("tx = ?", tx)
                 .executeSingle();
     }
