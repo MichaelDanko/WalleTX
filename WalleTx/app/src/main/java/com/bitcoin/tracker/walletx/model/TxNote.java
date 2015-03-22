@@ -53,12 +53,12 @@ public class TxNote extends Model {
     /**
      *
      * @param tx
-     * @return note related to transaction 
+     * @return note related to transaction
      */
 
     public static TxNote getBy(Tx tx){
         return new Select()
-                .from(TxNote)
+                .from(TxNote.class)
                 .where("tx = ?", tx)
                 .executeSingle();
     }
