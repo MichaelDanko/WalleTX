@@ -34,8 +34,7 @@ public class QueryModelTest {
         }
 
 
-      String query1 = WalletGroup.getBy("test3").name;
-       System.out.printf(query1, "\n");
+
 
        List<WalletGroup> query2 = WalletGroup.getAllSortedByName();
         for(WalletGroup group : query2){
@@ -48,15 +47,7 @@ public class QueryModelTest {
 
 
 
-       query1 = WalletGroup.getDefault().name;
-      System.out.printf(query1, "\n");
 
-
-       query1 = WalletGroup.getLast().name;
-       System.out.printf(query1, "\n");
-
-      query1 = WalletGroup.getByDisplayOrder(3).name;
-       System.out.printf(query1, "\n");
 
 
 
@@ -95,7 +86,7 @@ public class QueryModelTest {
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    //builds fake db for balances
+    //builds  balances
     ///////////////////////////////////////////////////////////////////////////////////////////////
     public void addBalanceTestDB() throws ParseException {
         float[] balances = new float[5];

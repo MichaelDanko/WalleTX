@@ -116,9 +116,9 @@ public class WalletGroupCreateActivity extends ActionBarActivity {
         /*
         Table and query test
          */
-        QueryModelTest test1 = new QueryModelTest();
-        test1.addGroupsTestDB();
-        newGroup.dump();
+        //QueryModelTest test1 = new QueryModelTest();
+       // test1.addGroupsTestDB();
+        //newGroup.dump();
 
 
     }
