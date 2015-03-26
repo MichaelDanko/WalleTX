@@ -22,17 +22,21 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 /*
  * Fetches Blockchain and wallet data from Blockchain.info usin*g the Blockchain.info API.
  */
-  public class BlockchainInfo extends AsyncTask<String, String, String> {
+  public class BlockchainInfo extends AsyncTask<String, String, BlockchainInfo> {
 
-      private final Walletx wtx;
-      private final String publicAddress;
+    private final Walletx wtx;
+    private final String publicAddress;
 
+    public btcTransactionJSON transaction = new btcTransactionJSON();
 
     private static final String logInfo = "Blockchain API";
+
+    final CountDownLatch signal = new CountDownLatch(1);
 
     static public class jsonInputs {
         String sequence;
@@ -47,13 +51,13 @@ import java.util.List;
         List<jsonInputs> inputs;
     }
 
-    static class jsonTransaction {
+    static public class jsonTransaction {
       @SerializedName("hash160")
-      String hash160;
+      public String hash160;
       @SerializedName("n_tx")
-      String n_tx;
+      public String n_tx;
       @SerializedName("total_received")
-      String total_received;
+      public String total_received;
       @SerializedName("total_sent")
       String total_sent;
       @SerializedName("address")
@@ -82,8 +86,15 @@ import java.util.List;
         this.wtx = wtx;
     }
 
+    public BlockchainInfo(String publicAddress, Walletx wtx, btcTransactionJSON incomingTransaction) {
+        super();
+        this.publicAddress = new String(publicAddress);
+        this.wtx = wtx;
+        this.transaction = incomingTransaction;
+    }
+
       @Override
-      protected String doInBackground(String... strings) {
+      protected BlockchainInfo doInBackground(String... strings) {
 
           String json = null;
 
@@ -94,8 +105,8 @@ import java.util.List;
           try {
               json = readUrl("https://blockchain.info/address/" + publicAddress + "?format=json");
               Gson gson = new Gson();
-              jsonTransaction transaction = gson.fromJson(json, jsonTransaction.class);
-
+              btcTransactionJSON transactionIn = gson.fromJson(json, btcTransactionJSON.class);
+              this.transaction = transactionIn;
               // try {
               //   Walletx.getBy(transaction.address);
               // } catch (Exception e) {
@@ -127,7 +138,8 @@ import java.util.List;
               Log.v(logInfo, "" + e);
           }
 
-          return "String";
+         return this;
+          // return "String";
       }
 
       private static String readUrl (String urlString) throws Exception {
@@ -167,7 +179,7 @@ import java.util.List;
     }
 
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(BlockchainInfo result) {
       //pdia.dismiss();
       //adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, redditList);
       //redditView.setAdapter(adapter);
