@@ -1,3 +1,13 @@
+/* Michael Danko
+ * CEN4021 Software Engineering II
+ * Pretige Worldwide
+ * Blockchain API Source Code for Assignment 7
+ * Created 03-20-2015
+ * Copyright 2015
+ */
+
+/* Data structure to hold data from API call, combine with API call class */
+
 package com.bitcoin.tracker.walletx.api;
 
 import com.google.gson.annotations.SerializedName;
@@ -11,7 +21,7 @@ import java.util.List;
 public class btcTransactionJSON {
 
     static public class jsonInputs {
-        String sequence;
+        public String sequence;
     }
 
     static class jsonOutputs {
@@ -20,33 +30,35 @@ public class btcTransactionJSON {
 
     static public class jsonTxs {
         public int ver;
-        List<jsonInputs> inputs;
+        public List<jsonInputs> inputs;
     }
 
-      @SerializedName("hash160")
-      public String hash160 = "default";
-      @SerializedName("n_tx")
-      public String n_tx;
-      @SerializedName("total_received")
-      String total_received;
-      @SerializedName("total_sent")
-      String total_sent;
-      @SerializedName("address")
-      String address;
-      @SerializedName("final_balance")
-      String final_balance;
-      //@SerializedName("txs")
-      List<jsonTxs> txs;
+    public btcTransactionJSON()
+    {
+    }
 
-      // List<jsonTxs> txs;
+    @SerializedName("hash160")
+    public String hash160 = "default";
+    @SerializedName("n_tx")
+    public String n_tx = "";
+    @SerializedName("total_received")
+    public String total_received = "";
+    @SerializedName("total_sent")
+    public String total_sent = "";
+    @SerializedName("address")
+    public String address = "";
+    @SerializedName("final_balance")
+    public String final_balance = "";
+    //@SerializedName("txs")
+    public List<jsonTxs> txs;
 
-      String time;
-      String amountBTC;
-      String amountLC;
-      String block;
-      String hash;
-      String wtx;
-      String category;
-      String note;
-
+    // Additional Fields
+    String time;
+    String amountBTC;
+    String amountLC;
+    String block;
+    String hash;
+    String wtx;
+    String category;
+    String note;
 }
