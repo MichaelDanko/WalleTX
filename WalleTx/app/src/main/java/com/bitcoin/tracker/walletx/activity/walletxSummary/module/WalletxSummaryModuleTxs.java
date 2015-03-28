@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -37,6 +38,9 @@ public class WalletxSummaryModuleTxs extends Fragment {
     private int mSentCount;
     private int mReceivedCount;
 
+    private RelativeLayout mReceivedLegend;
+    private RelativeLayout mSentLegend;
+
     // Required empty public constructor
     public WalletxSummaryModuleTxs() {}
 
@@ -51,6 +55,7 @@ public class WalletxSummaryModuleTxs extends Fragment {
         // inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_walletx_summary_module_txs, container, false);
         getViewsFrom(v);
+        setupChartLegend();
         setPieChartData();
         createPieChart();
         bindClickEvents();
@@ -61,6 +66,13 @@ public class WalletxSummaryModuleTxs extends Fragment {
         mChart = (PieChartView) v.findViewById(R.id.chart);
         mModuleContainer = (MaterialRippleLayout) v.findViewById(R.id.ripple);
         mChartContainer = (MaterialRippleLayout) v.findViewById(R.id.ripple1);
+        mReceivedLegend = (RelativeLayout) v.findViewById(R.id.tx_module_legend_received_box);
+        mSentLegend = (RelativeLayout) v.findViewById(R.id.tx_module_legend_sent_box);
+    }
+
+    private void setupChartLegend() {
+        mReceivedLegend.setBackgroundColor(ChartUtils.COLOR_GREEN);
+        mSentLegend.setBackgroundColor(ChartUtils.COLOR_RED);
     }
 
     private void setPieChartData() {
@@ -84,7 +96,7 @@ public class WalletxSummaryModuleTxs extends Fragment {
         mData.setHasCenterCircle(true);
         mData.setCenterText1(Integer.toString(mSentCount + mReceivedCount));
         mData.setCenterText2(getString(R.string.walletx_summary_module_txs_pie_chart_center));
-        mData.setCenterText1FontSize(45);
+        mData.setCenterText1FontSize(25);
         mChart.setChartRotationEnabled(false);
         mChart.setPieChartData(mData);
     }

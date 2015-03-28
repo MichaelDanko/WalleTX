@@ -67,8 +67,9 @@
     <string name="walletx_summary_single_title_activity">Single Walletx Summary</string>
     <!-- Summary modules -->
     <string name="walletx_summary_module_txs_title">Transactions</string>
-    <string name="walletx_summary_module_txs_subtitle">| Sent and Received</string>
-    <string name="walletx_summary_module_txs_pie_chart_center">Total Txs</string>
+    <string name="walletx_summary_module_txs_pie_chart_center">Total</string>
+    <string name="walletx_summary_module_txs_received">Received</string>
+    <string name="walletx_summary_module_txs_sent">Sent</string>
 
     <!-- WALLETX TXS -->
     <string name="title_activity_walletx_txs_title_activity">Tx Listing</string>
