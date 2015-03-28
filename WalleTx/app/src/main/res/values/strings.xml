@@ -72,8 +72,16 @@
     <string name="walletx_summary_module_txs_sent">Sent</string>
 
     <!-- WALLETX TXS -->
-    <string name="title_activity_walletx_txs_title_activity">Tx Listing</string>
-
+    <string name="title_activity_walletx_txs_title_activity">Transactions</string>
+    <string name="txs_list_header_group_name_placeholder">WalleTx Group Name</string>
+    <string name="txs_list_header_txs_placeholder">0</string>
+    <string name="txs_list_header_txs_label">Txs</string>
+    <string name="txs_list_item_date">Date of tx</string>
+    <string name="txs_list_item_category">Uncategorized</string>
+    <string name="txs_list_item_amount">0</string>
+    <string name="txs_list_item_amount_label">BTC</string>
+    <string name="txs_list_item_confirmations">0</string>
+    <string name="txs_list_item_confirmations_label">Confs</string>
 
     <!-- WALLET GROUPS -->
     <!-- Read list view -->

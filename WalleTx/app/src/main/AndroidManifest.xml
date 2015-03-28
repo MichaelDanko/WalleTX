@@ -61,7 +61,7 @@
             android:label="@string/wallet_group_update_title_activity" >
         </activity>
         <activity
-            android:name=".activity.walletxTxs.WalletxTxs"
+            android:name=".activity.walletxTxs.TxsActivity"
             android:label="@string/title_activity_walletx_txs_title_activity" >
         </activity>
     </application>
