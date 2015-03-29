@@ -81,7 +81,7 @@
     <string name="txs_list_item_amount">0</string>
     <string name="txs_list_item_amount_label">BTC</string>
     <string name="txs_list_item_confirmations">0</string>
-    <string name="txs_list_item_confirmations_label">Confs</string>
+    <string name="txs_list_item_confirmations_label">Confirmations</string>
 
     <!-- WALLET GROUPS -->
     <!-- Read list view -->

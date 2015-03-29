@@ -13,6 +13,7 @@ import com.bitcoin.tracker.walletx.activity.walletxTxs.TxsActivity;
 import com.bitcoin.tracker.walletx.model.SupportedSummaryType;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -71,7 +72,23 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
 
     @Override
     public void onFragmentInteraction(SupportedSummaryType type){
-        Intent intent = new Intent( this, TxsActivity.class );
-        startActivity( intent );
+        switch (type) {
+            case TRANSACTION_SUMMARY:
+                Intent intent = new Intent( this, TxsActivity.class );
+                intent.putExtra("group_name", getSupportActionBar().getTitle().toString());
+                // The proper was to do this would be to make Walletx model parcelable so
+                // we can pass the wtxs list to the new intent, but we're short on time
+                // and the use of Active Android complicates things a little. For purposes of
+                // course I'm using a little hack, passing ArrayList<String> containing
+                // the names of each wtx in wtxs. The new intent can then re-query them
+                // since there shouldn't be too many, and then get the tx list.
+                // TODO Time permitting please DO replace this with proper method to passing parcelable
+                ArrayList<String> wtxNames = new ArrayList<>(wtxs.size());
+                for ( Walletx w : wtxs ) {
+                    wtxNames.add(w.name);
+                }
+                intent.putStringArrayListExtra("wtx_names", wtxNames);
+                startActivity(intent);
+        }
     }
 }
