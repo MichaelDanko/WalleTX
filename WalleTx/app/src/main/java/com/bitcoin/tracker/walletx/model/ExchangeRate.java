@@ -37,13 +37,16 @@ public class ExchangeRate extends Model {
     }
 
     @Column(name = "USD")
-    private float usd;
+    //private float usd;
+    public float usd;
 
     @Column(name = "EUR")
-    private float eur;
+    //private float eur;
+    public float eur;
 
     @Column(name = "GBP")
-    private float gbp;
+    //private float gbp;
+    public float gbp;
 
     public ExchangeRate() {
         super();
@@ -75,9 +78,10 @@ public class ExchangeRate extends Model {
 
     /**
      * @return EUR with specific date
+     * @param date
      */
 
-    public static ExchangeRate fromDateEUR(Date date){
+    public static ExchangeRate fromDateEUR(String date){
         return new Select("EUR")
                 .from(ExchangeRate.class)
                 .where("timestamp = ?", date)

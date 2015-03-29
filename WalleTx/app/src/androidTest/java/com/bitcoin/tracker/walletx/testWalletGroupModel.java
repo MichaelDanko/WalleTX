@@ -15,7 +15,7 @@ import java.text.ParseException;
 This test will test building part of the database (specifically the WalletGroup) then test the
 results of the queries in the WalletGroup Model
  */
-public class testWalletGroupModelTest extends ApplicationTest {
+public class testWalletGroupModel extends ApplicationTest {
 
     //will throw exception if setup incorrectly
     @Override
@@ -26,7 +26,7 @@ public class testWalletGroupModelTest extends ApplicationTest {
 
     //run small test against WalletGroup Query model
     @SmallTest
-    public void testBalanceQueryTest() throws ParseException {
+    public void testWalletGroup() throws ParseException {
 
 
         QueryModelTest newTest = new QueryModelTest();

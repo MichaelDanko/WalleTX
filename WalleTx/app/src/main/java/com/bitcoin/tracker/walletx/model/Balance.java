@@ -87,21 +87,21 @@ public class Balance extends Model {
      * dumps all the balances table to console
      * debug only
      */
-   public static void dump(){
-       String dividerCol1 = "------------------";
-       String dividerCol23 = "-------------";
-       System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
-       System.out.printf("%-20s %-15s %-16s\n", "Timestamp", "Balance", "WalleTx");
-       System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
-       //List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
-       List<Balance> balances = Balance.getAllBalances();
-       for (Balance balance1 : balances) {
-           System.out.printf(
-                   "%-20s %-15s %-16s\n",
-                   balance1.balance,
-                   balance1.timestamp,
-                   balance1.wtx);
-       }
-   }
+    public static void dump(){
+        String dividerCol1 = "------------------";
+        String dividerCol23 = "-------------";
+        System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
+        System.out.printf("%-20s %-15s %-16s\n", "Timestamp", "Balance", "WalleTx");
+        System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
+        //List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
+        List<Balance> balances = Balance.getAllBalances();
+        for (Balance balance1 : balances) {
+            System.out.printf(
+                    "%-20s %-15s %-16s\n",
+                    balance1.balance,
+                    balance1.timestamp,
+                    balance1.wtx);
+        }
+    }
 
 } // Balance

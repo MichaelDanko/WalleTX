@@ -46,16 +46,10 @@ public class QueryModelTest {
         }
 
 
-
-
-
-
-
-
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
-    //builds TX
+    //builds WalleTx
     //////////////////////////////////////////////////////////////////////////////////////////////
     public void addWTXTestDB(){
 
@@ -89,28 +83,61 @@ public class QueryModelTest {
     //builds  balances
     ///////////////////////////////////////////////////////////////////////////////////////////////
     public void addBalanceTestDB() throws ParseException {
-        float[] balances = new float[5];
+        float[] balances = new float[6];
+
+        for (int j = 0; j < 6; j++){
+            balances[j] += 1.00;
+        }
+
+        addWTXTestDB();
 
         String dt = "2008-01-01";  // Start date
-        SimpleDateFormat sf = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZ yyyy");
-
-        Calendar c =  Calendar.getInstance();
-        c.setTime(sf.parse(dt));
 
 
-
+        Balance newBalance = new Balance();
         for(int j = 0; j < 6; j++) {
-            Balance newBalance = new Balance();
+
             newBalance.balance = balances[j];
             newBalance.setDateFromString(dt);
 
-            c.add(Calendar.DATE, 1);  // number of days to add
-            dt = sf.format(c.getTime());  // dt is now the new dat
+
+
+        }
+
+        newBalance.dump();
+
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    //builds Exchange Rate
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    public void addExchangeRateDB() throws ParseException {
+
+
+
+        String dt = "2008-01-01";  // Start date
+
+
+
+        List<Float> USDexchange = Arrays.asList(1f, 2f, 3f, 4f, 5f, 6f);
+        List<Float> EURexchange = Arrays.asList(7f, 8f, 9f, 10f, 11f, 12f);
+        List<Float> GBPexchange = Arrays.asList(13f, 14f, 15f, 16f, 17f, 18f);
+
+        ExchangeRate newExchangeRate = new ExchangeRate();
+
+        for (int j = 0; j < 6; j++){
+
+            newExchangeRate.setDateFromString(dt);
+            newExchangeRate.usd = USDexchange.get(j);
+            newExchangeRate.eur = EURexchange.get(j);
+            newExchangeRate.gbp = GBPexchange.get(j);
+            newExchangeRate.save();
+
+
 
         }
 
     }
-
 
 
 
