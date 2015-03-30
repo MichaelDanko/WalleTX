@@ -18,7 +18,7 @@ import android.util.Log;
 
 import com.bitcoin.tracker.walletx.activity.SplashActivity;
 import com.bitcoin.tracker.walletx.api.BlockchainInfo;
-import com.bitcoin.tracker.walletx.api.btcTransactionJSON;
+import com.bitcoin.tracker.walletx.api.btcTransaction;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.WalletType;
@@ -30,10 +30,11 @@ import java.util.concurrent.CountDownLatch;
 /**
  * Created by michael on 3/27/15.
  */
+
 public class BlockchainInfoTestActivity extends ActivityUnitTestCase<SplashActivity> {
     private Intent _startIntent;
     final CountDownLatch signal = BlockchainInfo.signal;
-    final static btcTransactionJSON blockChainInfoTest = new btcTransactionJSON();
+    final static btcTransaction blockChainInfoTest = new btcTransaction();
 
     // Set activity to test with, avtivity is needed to provide a UI thread to run tests on.
     // If a true async thread is used the tests may fail due to conditions being tested prior

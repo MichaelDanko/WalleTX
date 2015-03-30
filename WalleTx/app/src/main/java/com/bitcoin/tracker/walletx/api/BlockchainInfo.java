@@ -13,8 +13,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 // Data Model Functionality
-import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
-import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 // Gson library convert JSON to an object class
@@ -29,7 +27,6 @@ import java.net.URL;
 import java.io.IOException;
 
 // Java Lists
-import java.util.List;
 
 // Used to determine when an asynchrnous call has been completed
 import java.util.concurrent.CountDownLatch;
@@ -47,7 +44,7 @@ import java.util.concurrent.CountDownLatch;
     private Walletx wtx = null;
 
     // Data will be pushed into an object that models the JSON received
-    public static btcTransactionJSON transaction = null;
+    public static btcTransaction transaction = null;
 
     // Logging
     private static final String logInfo = "Blockchain API";
@@ -64,7 +61,7 @@ import java.util.concurrent.CountDownLatch;
     }
 
     // Three parameter constructor, address, wallet, and object to dump data into.
-    public BlockchainInfo(String publicAddress, Walletx wtx, btcTransactionJSON incomingTransaction) {
+    public BlockchainInfo(String publicAddress, Walletx wtx, btcTransaction incomingTransaction) {
         super();
         this.publicAddress = new String(publicAddress);
         this.wtx = wtx;
@@ -84,7 +81,7 @@ import java.util.concurrent.CountDownLatch;
           try {
               json = readUrl("https://blockchain.info/address/" + publicAddress + "?format=json");
               Gson gson = new Gson();
-              btcTransactionJSON newTransaction = gson.fromJson(json, btcTransactionJSON.class);
+              btcTransaction newTransaction = gson.fromJson(json, btcTransaction.class);
 
               // Copy downloaded values to original object
               transaction.hash160 = newTransaction.hash160;

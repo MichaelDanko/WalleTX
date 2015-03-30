@@ -18,7 +18,7 @@ import java.util.List;
  * Created by michael on 3/25/15.
  */
 
-public class btcTransactionJSON {
+public class btcTransaction {
 
     static public class jsonInputs {
         public String sequence;
@@ -33,7 +33,7 @@ public class btcTransactionJSON {
         public List<jsonInputs> inputs;
     }
 
-    public btcTransactionJSON()
+    public btcTransaction()
     {
     }
 
