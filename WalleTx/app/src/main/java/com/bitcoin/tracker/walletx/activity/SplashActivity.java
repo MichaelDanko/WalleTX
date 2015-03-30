@@ -34,7 +34,7 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        setupDefaultWalletGroup();
+        WalletGroup.initDefaultGroup(this);
 
         // TODO - Fetch new tx and price data?
 
@@ -49,27 +49,16 @@ public class SplashActivity extends Activity {
     } // onCreate
 
     private void applySplashScreenTimeOut() {
-        new Timer().schedule(new TimerTask() {
+        new Timer().schedule( new TimerTask() {
             @Override
             public void run() {
-                Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(mainIntent);
+                Intent mainIntent = new Intent( SplashActivity.this, MainActivity.class );
+                startActivity( mainIntent );
                 finish();
             }
-        }, SPLASH_TIME_OUT);
+        }, SPLASH_TIME_OUT );
     }
 
-    // Adds 'My Wallets' group to the WalletGrjoups table on first run
-    // and sets it as the default group.
-    private void setupDefaultWalletGroup() {
-        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
-        if ( groups.size() < 1 ) {
-            WalletGroup defaultGroup = new WalletGroup();
-            defaultGroup.name = getString(R.string.wallet_group_wtx_default_group);
-            defaultGroup.setAsDefault(1);
-            defaultGroup.displayOrder = 1;
-            defaultGroup.save();
-        }
-    }
-
+=======
+>>>>>>> models
 } // SplashActivity

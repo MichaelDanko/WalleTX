@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.model.QueryModelTest;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 
 import java.util.List;
@@ -111,6 +112,15 @@ public class WalletGroupCreateActivity extends ActionBarActivity {
         WalletGroup last = WalletGroup.getLast();
         newGroup.displayOrder = last.displayOrder + 1;
         newGroup.save();
+
+        /*
+        Table and query test
+         */
+        //QueryModelTest test1 = new QueryModelTest();
+       // test1.addGroupsTestDB();
+        //newGroup.dump();
+
+
     }
 
     //endregion
