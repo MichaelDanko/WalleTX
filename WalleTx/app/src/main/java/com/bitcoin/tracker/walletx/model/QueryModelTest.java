@@ -26,10 +26,10 @@ public class QueryModelTest {
         for (int j = 0; j < 6; j++){
             WalletGroup newGroup = new WalletGroup();
             newGroup.name = groupNames.get(j);
-            newGroup.setAsDefault(0);
+            //newGroup.setAsDefault(0);
 
             WalletGroup last = WalletGroup.getLast();
-            newGroup.displayOrder = last.displayOrder + 1;
+            //newGroup.displayOrder = last.displayOrder + 1;
             newGroup.save();
         }
 
@@ -41,8 +41,9 @@ public class QueryModelTest {
             System.out.printf(
                     "%-20s %-15s %-16s\n",
                     group.name,
-                    group.getDefaultGroup(),
-                    group.displayOrder);
+                    group.getDefaultGroup()
+                   // group.displayOrder
+            );
         }
 
 
@@ -65,10 +66,10 @@ public class QueryModelTest {
             //adds new group for each tx
             WalletGroup newGroup = new WalletGroup();
             newGroup.name = groupNames.get(j);
-            newGroup.setAsDefault(0);
+            //newGroup.setAsDefault(0);
 
             WalletGroup last = WalletGroup.getLast();
-            newGroup.displayOrder = last.displayOrder + 1;
+            //newGroup.displayOrder = last.displayOrder + 1;
             newGroup.save();
 
             //adds group to tx and saves
