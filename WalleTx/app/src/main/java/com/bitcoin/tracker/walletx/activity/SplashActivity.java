@@ -5,7 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.api.BlockchainInfo;
+import com.bitcoin.tracker.walletx.api.SyncDatabase;
+import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
+import com.bitcoin.tracker.walletx.model.WalletType;
+import com.bitcoin.tracker.walletx.model.Walletx;
+import com.google.bitcoin.core.BlockChain;
+
+import org.json.JSONException;
 
 import java.util.List;
 import java.util.Timer;
@@ -29,8 +37,18 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         WalletGroup.initDefaultGroup(this);
 
-        // TODO - Fetch new tx and price data?
+        /*
+         * TODO @md Initiate a data sync
+         *
+         */
 
+
+        //Walletx wtx = new Walletx("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", WalletType.SINGLE_ADDRESS_WALLET, WalletGroup.getBy("My Wallets"));
+        //SingleAddressWallet saw = new SingleAddressWallet(wtx, "1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy");
+        //new BlockchainInfo("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", wtx).execute();
+        //wtx.save();
+        //saw.save();
+        new SyncDatabase();
         applySplashScreenTimeOut();
     } // onCreate
 

@@ -10,9 +10,9 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editTextWalletGroupName"
+        android:id="@+id/editTextWalletxName"
         android:layout_gravity="center_horizontal|top"
-        android:hint="@string/wallet_group_create_hint_name"
+        android:hint="@string/walletx_update_hint_name"
         android:paddingTop="@dimen/form_spacer_small"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -23,28 +23,28 @@
         android:singleLine="true"
         android:inputType="textCapWords" />
 
-    <CheckBox
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/wallet_group_create_checkbox_set_as_default"
-        android:id="@+id/checkBoxSetAsDefault"
-        android:layout_below="@+id/editTextWalletGroupName"
+        android:text="@string/wallet_group_update_button_update"
+        android:id="@+id/buttonUpdateWalletx"
+        android:layout_below="@+id/editTextWalletxName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/editTextWalletGroupName"
-        android:layout_alignEnd="@+id/editTextWalletGroupName"
-        android:checked="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginBottom="@dimen/form_spacer_small" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/wallet_group_create_button_add"
-        android:id="@+id/buttonAddWalletGroup"
-        android:layout_below="@+id/checkBoxSetAsDefault"
+        android:text="@string/wallet_group_update_button_delete"
+        android:id="@+id/buttonDeleteWalletx"
+        android:layout_below="@+id/buttonUpdateWalletx"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/checkBoxSetAsDefault"
-        android:layout_alignEnd="@+id/checkBoxSetAsDefault"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginBottom="@dimen/form_spacer_small" />
+
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.bitcoin.tracker.walletx.activity.walletx.create;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -110,6 +111,9 @@ public class WalletxCreateActivity extends ActionBarActivity implements
      * Closes the activity in response an onSubmit event in a wallet type fragment.
      */
     public void onFragmentInteraction() {
+        Intent intent = new Intent();
+        intent.putExtra("new_wallet_added","true");
+        setResult(RESULT_OK, intent);
         finish();
     }
 

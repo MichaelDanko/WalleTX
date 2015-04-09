@@ -1,5 +1,6 @@
-package com.bitcoin.tracker.walletx.activity.walletGroup;
+package com.bitcoin.tracker.walletx.activity.walletGroup.create;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
@@ -7,12 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.model.QueryModelTest;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
-
-import java.util.List;
 
 /**
  * Displays and handles the form associated with adding
@@ -55,62 +54,18 @@ public class WalletGroupCreateActivity extends ActionBarActivity {
     private void addSubmitButtonClickListener() {
         mSubmit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (validateGroupName()) {
-                    addGroupToDatabase();
+                String nameEntered = mGroupName.getText().toString().toLowerCase();
+                boolean dataIsValid = WalletGroup.validate(getBaseContext(), nameEntered);
+                if (dataIsValid) {
+                    String name = mGroupName.getText().toString();
+                    WalletGroup.createWalletGroup(name, mSetAsDefault.isChecked());
+
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }
         });
-    }
-
-    /**
-     * Validates that the wallet group name entered does not already exist
-     * and is not an empty string.
-     */
-    private boolean validateGroupName() {
-        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
-        String nameEntered = mGroupName.getText().toString().toLowerCase();
-
-        // Cannot be empty string.
-        if (nameEntered.isEmpty()) {
-            String error = getString(R.string.wallet_group_create_toast_name_empty);
-            Toast.makeText(this, error, Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        // Cannot already exist in the database.
-        for (WalletGroup group : groups) {
-            if (group.name.toLowerCase().equals(nameEntered)) {
-                String error = getString(R.string.wallet_group_create_toast_name_exists);
-                Toast.makeText(this, error, Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void addGroupToDatabase() {
-        WalletGroup newGroup = new WalletGroup();
-        newGroup.name = mGroupName.getText().toString();
-
-        // Set group as default.
-        if (mSetAsDefault.isChecked()) {
-            List<WalletGroup> existingGroups = WalletGroup.getAllSortedByDisplayOrder();
-            for (WalletGroup group : existingGroups) {
-                if (group.getDefaultGroup() == 1) {
-                    group.setAsDefault(0);
-                    group.save();
-                }
-            }
-            newGroup.setAsDefault(1);
-        } else {
-            newGroup.setAsDefault(0);
-        }
-
-        // Set group display order and save.
-        WalletGroup last = WalletGroup.getLast();
-        newGroup.displayOrder = last.displayOrder + 1;
-        newGroup.save();
     }
 
     //endregion

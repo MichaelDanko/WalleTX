@@ -1,14 +1,12 @@
-package com.bitcoin.tracker.walletx.activity.walletGroup;
+package com.bitcoin.tracker.walletx.activity.walletGroup.read;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
@@ -25,7 +23,7 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
     //region FIELDS
 
     private final Activity activity;
-    private final ArrayList<WalletGroupListItem> itemsArrayList;
+    private ArrayList<WalletGroupListItem> mItemsArrayList;
 
     private View mRowView;
     private LayoutInflater inflater;
@@ -41,7 +39,12 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
     public WalletGroupAdapter(Activity activity, ArrayList<WalletGroupListItem> itemsArrayList) {
         super(activity, R.layout.fragment_walletgroup_list_item, itemsArrayList);
         this.activity = activity;
-        this.itemsArrayList = itemsArrayList;
+        this.mItemsArrayList = itemsArrayList;
+    }
+
+    public void updateData(ArrayList<WalletGroupListItem> itemsArrayList) {
+        this.mItemsArrayList = itemsArrayList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -80,7 +83,7 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
         }
 
         // Disable move up button for last list item
-        int last = WalletGroup.getLast().displayOrder;
+        int last = WalletGroup.getLast().getDisplayOrder();
         if (position + 1 == last) {
             mMoveDown.setEnabled(false);
             mMoveDown.setVisibility(View.INVISIBLE);
@@ -89,7 +92,7 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
     }
 
     private void setupTextLabels(int position) {
-        mGroupName.setText(itemsArrayList.get(position).getName());
+        mGroupName.setText(mItemsArrayList.get(position).getName());
 
         // Hide default label for non-default groups
         WalletGroup current = WalletGroup.getByDisplayOrder(position + 1);
@@ -114,10 +117,7 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
                 int displayOrder = position + 1;
                 WalletGroup clicked = WalletGroup.getByDisplayOrder(displayOrder);
                 WalletGroup swap = WalletGroup.getByDisplayOrder(displayOrder + 1);
-                swap.displayOrder = displayOrder;
-                clicked.displayOrder = displayOrder + 1;
-                swap.save();
-                clicked.save();
+                WalletGroup.swap(clicked, swap);
                 refreshListView(parent, clicked);
             }
 
@@ -129,10 +129,7 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
                 int displayOrder = position + 1;
                 WalletGroup clicked = WalletGroup.getByDisplayOrder(displayOrder);
                 WalletGroup swap = WalletGroup.getByDisplayOrder(displayOrder - 1);
-                swap.displayOrder = displayOrder;
-                clicked.displayOrder = displayOrder - 1;
-                swap.save();
-                clicked.save();
+                WalletGroup.swap(clicked, swap);
                 refreshListView(parent, clicked);
             }
         });
@@ -152,22 +149,21 @@ public class WalletGroupAdapter extends ArrayAdapter<WalletGroupListItem> {
         int lastVisible = parentListView.getLastVisiblePosition();
 
         // Populate list view
-        ListAdapter adapter;
-        ArrayList<WalletGroupListItem> items = new ArrayList<>();
+
+        mItemsArrayList.clear();
         List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
         for (WalletGroup group : groups) {
             WalletGroupListItem item;
             item = new WalletGroupListItem(group.name);
-            items.add(item);
+            mItemsArrayList.add(item);
         }
-        adapter = new WalletGroupAdapter(activity, items);
-        ((AdapterView<ListAdapter>) parent).setAdapter(adapter);
+        notifyDataSetChanged();
 
         // Handle case where item is at visible top and moved up.
-        if (firstVisible >= updatedGroup.displayOrder) {
-            parentListView.setSelection(updatedGroup.displayOrder - 1);
+        if (firstVisible >= updatedGroup.getDisplayOrder()) {
+            parentListView.setSelection(updatedGroup.getDisplayOrder() - 1);
         // Handle case where item is at visible bottom and moved down.
-        } else if (lastVisible < updatedGroup.displayOrder) {
+        } else if (lastVisible < updatedGroup.getDisplayOrder()) {
             parentListView.setSelection(firstVisible + 1);
         // Handle move cases in the middle of viewable listview.
         } else {

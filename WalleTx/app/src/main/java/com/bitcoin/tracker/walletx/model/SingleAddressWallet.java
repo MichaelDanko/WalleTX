@@ -16,6 +16,9 @@ import java.util.List;
  *
  * TODO Add indexes & constraints to columns (if any)
  *
+ * TODO technically the public key is not the public address, the public address is a hash of the
+ * TODO public key, we should clean up the terminology if time permits.
+ *
  */
 @Table(name = "SingleAddressWallet")
 public class SingleAddressWallet extends Model implements WalletxBlockchainInterface {
