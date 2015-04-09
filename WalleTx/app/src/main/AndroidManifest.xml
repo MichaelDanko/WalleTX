@@ -41,12 +41,32 @@
             android:label="@string/walletx_update_title_activity" >
         </activity>
         <activity
+            android:name=".activity.walletxSummary.WalletxSummaryAllActivity"
+            android:label="@string/walletx_summary_all_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.walletxSummary.WalletxSummaryGroupActivity"
+            android:label="@string/walletx_summary_group_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.walletxSummary.WalletxSummarySingleActivity"
+            android:label="@string/walletx_summary_single_title_activity" >
+        </activity>
+        <activity
             android:name=".activity.walletGroup.create.WalletGroupCreateActivity"
             android:label="@string/wallet_group_create_title_activity" >
         </activity>
         <activity
             android:name=".activity.walletGroup.updateDelete.WalletGroupUpdateActivity"
             android:label="@string/wallet_group_update_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.walletxTxs.TxsActivity"
+            android:label="@string/title_activity_walletx_txs_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.txDetail.TxDetailActivity"
+            android:label="@string/title_activity_tx_detail" >
         </activity>
     </application>
   <uses-permission android:name="android.permission.INTERNET" />

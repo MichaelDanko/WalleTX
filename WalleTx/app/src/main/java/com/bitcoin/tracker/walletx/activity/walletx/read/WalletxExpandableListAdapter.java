@@ -150,7 +150,6 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.fragment_walletx_list_item_group, null);
         }
         getViewsInGroupHeader(convertView);
-        styleViewsInGroupHeader();
         prepareGroupHeaderData(groupPosition, parent);
 
         // Prevent group collapsing
@@ -165,17 +164,9 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         mName = (TextView) convertView.findViewById(R.id.groupName);
         mBtcBalance = (TextView) convertView.findViewById(R.id.btcBalance);
         mBtcBalanceLabel = (TextView) convertView.findViewById(R.id.btcCurrencyLabel);
-        mLocalCurrencyBalance = (TextView) convertView.findViewById(R.id.lcLabel);
-        mLocalCurrencyBalanceLabel = (TextView) convertView.findViewById(R.id.lcLabel);
+        mLocalCurrencyBalance = (TextView) convertView.findViewById(R.id.lcBalance);
+        mLocalCurrencyBalanceLabel = (TextView) convertView.findViewById(R.id.lcBalance);
     }
-
-    private void styleViewsInGroupHeader() {
-        mBtcBalanceLabel.setTypeface(null, Typeface.ITALIC);
-        mBtcBalance.setTypeface(null, Typeface.BOLD_ITALIC);
-        mLocalCurrencyBalance.setTypeface(null, Typeface.BOLD_ITALIC);
-        mLocalCurrencyBalanceLabel.setTypeface(null, Typeface.ITALIC);
-    }
-
     private void prepareGroupHeaderData(int groupPosition, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
         WalletGroup group = WalletGroup.getBy(headerTitle);

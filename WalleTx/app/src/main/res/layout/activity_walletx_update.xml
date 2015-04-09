@@ -23,12 +23,47 @@
         android:singleLine="true"
         android:inputType="textCapWords" />
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/groupContainer"
+        android:layout_below="@+id/editTextWalletxName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="@dimen/form_spacer_large"
+        android:layout_marginTop="@dimen/form_spacer_small">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/walletx_update_label_group_spinner"
+            android:id="@+id/groupLabel"
+            android:layout_alignTop="@+id/groupSpinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/submitButton"
+            android:gravity="center_vertical"
+            android:layout_marginRight="@dimen/form_spacer_small"
+            android:layout_marginLeft="5dp" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/groupSpinner"
+            android:layout_below="@+id/editTextSaWalletName"
+            android:layout_toRightOf="@+id/groupLabel"
+            android:layout_toEndOf="@+id/groupLabel"
+            android:layout_weight="1" />
+    </LinearLayout>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/wallet_group_update_button_update"
         android:id="@+id/buttonUpdateWalletx"
-        android:layout_below="@+id/editTextWalletxName"
+        android:layout_below="@+id/groupContainer"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
