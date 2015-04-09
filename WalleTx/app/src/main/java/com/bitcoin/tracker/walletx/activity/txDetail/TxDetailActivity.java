@@ -4,18 +4,29 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
+import android.widget.AutoCompleteTextView;
 
 import com.bitcoin.tracker.walletx.R;
 
 public class TxDetailActivity extends ActionBarActivity {
+
+    AutoCompleteTextView mTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tx_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        mTag = (AutoCompleteTextView) findViewById(R.id.tag);
+
+
+
+
+    }
 
     //region OPTIONS MENU
 

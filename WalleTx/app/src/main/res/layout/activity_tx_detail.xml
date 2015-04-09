@@ -78,12 +78,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/gen_spacer_medium"
         android:paddingBottom="@dimen/gen_spacer_medium"
         android:background="@color/wtx_light_gray"
-        android:id="@+id/relativeLayout">
+        android:id="@+id/editable_container">
 
         <AutoCompleteTextView
             android:layout_width="wrap_content"
@@ -91,21 +93,22 @@
             android:id="@+id/tag"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
             android:hint="@string/tx_detail_auto_complete_tag_hint"
-            android:layout_marginBottom="@dimen/gen_spacer_small" />
+            android:focusable="true"
+            android:singleLine="true"
+            android:inputType="text|textCapSentences"
+            android:layout_toLeftOf="@+id/imageView"
+            android:layout_toStartOf="@+id/imageView" />
 
-        <EditText
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
-            android:id="@+id/note"
-            android:layout_below="@+id/tag"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:id="@+id/imageView"
+            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:hint="@string/tx_detail_auto_complete_note_hint" />
+            android:src="@mipmap/ic_tag"
+            android:layout_alignBottom="@+id/tag" />
 
     </RelativeLayout>
 
@@ -114,7 +117,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/relativeLayout"
+        android:layout_below="@+id/editable_container"
         android:background="@color/white"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
