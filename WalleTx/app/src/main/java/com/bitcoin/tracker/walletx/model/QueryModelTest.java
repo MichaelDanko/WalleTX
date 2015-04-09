@@ -12,7 +12,7 @@ import java.util.List;
  * Created by DanielCarroll on 3/22/2015.
  */
 public class QueryModelTest {
-
+/*
 
     /////////////////////////////////////////////////////////////////////////////////
     //builds fake db for groups
@@ -141,5 +141,5 @@ public class QueryModelTest {
 
 
 
-
+*/
 }
