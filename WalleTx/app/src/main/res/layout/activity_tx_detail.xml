@@ -1,0 +1,120 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bitcoin.tracker.walletx.activity.txDetail.TxDetailActivity">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/wtx_gray"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/gen_spacer_large"
+        android:paddingBottom="@dimen/gen_spacer_large"
+        android:id="@+id/linearLayout">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="2">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/tx_detail_spend_or_received_placeholder"
+                android:id="@+id/spent_or_received_label"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/tx_detail_amount_placeholder"
+                android:id="@+id/spent_or_received_amount"
+                android:textColor="@color/white"
+                android:paddingLeft="@dimen/gen_spacer_small"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/spent_or_received_label"
+                android:layout_toEndOf="@+id/spent_or_received_label" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/app_btc_currency_label"
+                android:id="@+id/spent_or_received_btc"
+                android:textColor="@color/white"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/spent_or_received_amount"
+                android:layout_toEndOf="@+id/spent_or_received_amount"
+                android:paddingLeft="@dimen/gen_spacer_small"
+                android:textStyle="italic" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/tx_detail_date_placeholder"
+                android:id="@+id/tx_date"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/wtx_light_gray"
+                android:paddingLeft="@dimen/gen_spacer_small" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/gen_spacer_medium"
+        android:paddingBottom="@dimen/gen_spacer_medium"
+        android:background="@color/wtx_light_gray"
+        android:id="@+id/relativeLayout">
+
+        <AutoCompleteTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tag"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:hint="@string/tx_detail_auto_complete_tag_hint"
+            android:layout_marginBottom="@dimen/gen_spacer_small" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/note"
+            android:layout_below="@+id/tag"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:hint="@string/tx_detail_auto_complete_note_hint" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/relativeLayout"
+        android:background="@color/white"></RelativeLayout>
+
+</RelativeLayout>

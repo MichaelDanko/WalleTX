@@ -4,6 +4,7 @@
     <!-- TEMP -->
     <string name="hello_world">Hello world!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_settings">Settings</string>
 
     <!-- APP -->
     <string name="app_name">WalleTx</string>
@@ -55,9 +56,41 @@
     <!-- Update existing walletx activity -->
     <string name="walletx_update_title_activity">Update wallet</string>
     <string name="walletx_update_hint_name">Name of your wallet</string>
+    <string name="walletx_update_label_group_spinner">In group: </string>
     <string name="walletx_update_alert_message_delete">All data associated with this wallet will be removed from device. This action cannot be undone.</string>
     <string name="walletx_update_toast_name_empty">Oops! Wallet name cannot be empty string</string>
     <string name="walletx_update_toast_name_exists">Oops! Wallet name already exists</string>
+
+    <!-- WALLETX SUMMARIES -->
+    <string name="walletx_summary_all_title_activity">All Wallets Summary</string>
+    <string name="walletx_summary_all_title_activity_shortened">All Wallets</string>
+    <string name="walletx_summary_group_title_activity">Wallet Group Summary</string>
+    <string name="walletx_summary_single_title_activity">Single Walletx Summary</string>
+    <!-- Summary modules -->
+    <string name="walletx_summary_module_txs_title">Transactions</string>
+    <string name="walletx_summary_module_txs_pie_chart_center">Total</string>
+    <string name="walletx_summary_module_txs_received">Received</string>
+    <string name="walletx_summary_module_txs_sent">Sent</string>
+
+    <!-- WALLETX TXS -->
+    <string name="title_activity_walletx_txs_title_activity">Transactions</string>
+    <string name="txs_list_header_group_name_placeholder">WalleTx Group Name</string>
+    <string name="txs_list_header_txs_placeholder">0</string>
+    <string name="txs_list_header_txs_label">Txs</string>
+    <string name="txs_list_item_date">Date of tx</string>
+    <string name="txs_list_item_category">Uncategorized</string>
+    <string name="txs_list_item_amount">0</string>
+    <string name="txs_list_item_amount_label">BTC</string>
+    <string name="txs_list_item_confirmations">0</string>
+    <string name="txs_list_item_confirmations_label">Confirmations</string>
+
+    <!-- TX DETAIL -->
+    <string name="title_activity_tx_detail">Transaction Details</string>
+    <string name="tx_detail_spend_or_received_placeholder">Spent/Received</string>
+    <string name="tx_detail_amount_placeholder">0</string>
+    <string name="tx_detail_date_placeholder">1 Jan 15</string>
+    <string name="tx_detail_auto_complete_tag_hint">Add a tag</string>
+    <string name="tx_detail_auto_complete_note_hint">Add a note</string>
 
     <!-- WALLET GROUPS -->
     <!-- Read list view -->

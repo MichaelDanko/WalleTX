@@ -34,7 +34,8 @@
             android:id="@+id/walletDescription"
             android:layout_below="@+id/walletName"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:singleLine="true" />
 
     </RelativeLayout>
 
@@ -89,8 +90,8 @@
                 android:text="@string/walletx_main_label_empty_lc_balance"
                 android:id="@+id/lcBalance"
                 android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/lcLabel"
-                android:layout_toStartOf="@+id/lcLabel"
+                android:layout_toLeftOf="@+id/lcBalance"
+                android:layout_toStartOf="@+id/lcBalance"
                 android:layout_marginRight="@dimen/gen_spacer_small" />
 
             <TextView

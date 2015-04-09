@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.model.QueryModelTest;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 
 /**

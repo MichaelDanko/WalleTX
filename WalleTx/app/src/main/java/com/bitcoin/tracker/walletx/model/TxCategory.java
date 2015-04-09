@@ -3,6 +3,7 @@ package com.bitcoin.tracker.walletx.model;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 import java.util.List;
 
@@ -38,6 +39,23 @@ public class TxCategory extends Model {
     /*----------------------*
      *  TxCategory Queries  *
      *----------------------*/
+
+
+    public static List<TxCategory> getAllCatagories(){
+        return new Select()
+                .from(TxCategory.class)
+                .orderBy("Name ASC")
+                .execute();
+    }
+
+
+    public static TxCategory getCatagoryName(String _name){
+        return new Select()
+                .from(TxCategory.class)
+                .where("Name = ?", _name)
+                .executeSingle();
+    }
+
 
 
 
