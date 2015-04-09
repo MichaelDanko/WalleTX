@@ -91,6 +91,13 @@
     <string name="tx_detail_date_placeholder">1 Jan 15</string>
     <string name="tx_detail_auto_complete_tag_hint">Add a tag</string>
     <string name="tx_detail_auto_complete_note_hint">Add a note</string>
+    <string name="tx_detail_time_label">Time</string>
+    <string name="tx_detail_time_placeholder">00:00 EST</string>
+    <string name="tx_detail_conf_label">Confirmations</string>
+    <string name="tx_detail_conf_placeholder">0</string>
+    <string name="tx_detail_hash_label">Tx ID</string>
+    <string name="tx_detail_hash_placeholder">-</string>
+    <string name="tx_detail_button_text">View transaction at Blockchain.info</string>
 
     <!-- WALLET GROUPS -->
     <!-- Read list view -->
