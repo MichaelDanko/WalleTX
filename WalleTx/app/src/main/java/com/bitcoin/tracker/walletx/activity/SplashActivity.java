@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.api.BlockchainInfo;
+import com.bitcoin.tracker.walletx.api.SyncDatabase;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.WalletType;
@@ -39,12 +40,12 @@ public class SplashActivity extends Activity {
         // TODO - Fetch new tx and price data?
 
 
-        Walletx wtx = new Walletx("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", WalletType.SINGLE_ADDRESS_WALLET, WalletGroup.getBy("My Wallets"));
-        SingleAddressWallet saw = new SingleAddressWallet(wtx, "1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy");
-        new BlockchainInfo("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", wtx).execute();
-        wtx.save();
-        saw.save();
-
+        //Walletx wtx = new Walletx("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", WalletType.SINGLE_ADDRESS_WALLET, WalletGroup.getBy("My Wallets"));
+        //SingleAddressWallet saw = new SingleAddressWallet(wtx, "1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy");
+        //new BlockchainInfo("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", wtx).execute();
+        //wtx.save();
+        //saw.save();
+        new SyncDatabase();
         applySplashScreenTimeOut();
     } // onCreate
 
@@ -59,6 +60,4 @@ public class SplashActivity extends Activity {
         }, SPLASH_TIME_OUT );
     }
 
-=======
->>>>>>> models
 } // SplashActivity

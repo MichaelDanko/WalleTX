@@ -13,6 +13,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 // Data Model Functionality
+import com.bitcoin.tracker.walletx.model.Tx;
+import com.bitcoin.tracker.walletx.model.TxCategory;
+import com.bitcoin.tracker.walletx.model.TxNote;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 // Gson library convert JSON to an object class
@@ -29,13 +32,15 @@ import java.io.IOException;
 // Java Lists
 
 // Used to determine when an asynchrnous call has been completed
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 /*
  * Fetches Blockchain and wallet data from Blockchain.info usin*g the Blockchain.info API.
  */
 
-  public class BlockchainInfo extends AsyncTask<String, String, BlockchainInfo> {
+  public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
 
     // The public address of the wallet to pull from blockchain.info
     private final String publicAddress;
@@ -44,7 +49,7 @@ import java.util.concurrent.CountDownLatch;
     private Walletx wtx = null;
 
     // Data will be pushed into an object that models the JSON received
-    public static btcTransaction transaction = null;
+    public static btcTransaction transaction = new btcTransaction();
 
     // Logging
     private static final String logInfo = "Blockchain API";
@@ -58,6 +63,7 @@ import java.util.concurrent.CountDownLatch;
         super();
         this.publicAddress = new String(publicAddress);
         this.wtx = wtx;
+        Log.v(logInfo + "Cons", this.publicAddress );
     }
 
     // Three parameter constructor, address, wallet, and object to dump data into.
@@ -70,20 +76,23 @@ import java.util.concurrent.CountDownLatch;
 
       // Asynchronous call to complete web api pull in background.
       @Override
-      protected BlockchainInfo doInBackground(String... strings) {
+      protected Boolean doInBackground(Void...nothing) {
 
           String json = null;
+
+          Log.v(logInfo, this.publicAddress);
 
           // -- Debugging
           //WalletGroup.dump();
           //Walletx.dump();
           //SingleAddressWallet.dump();
+
           try {
               json = readUrl("https://blockchain.info/address/" + publicAddress + "?format=json");
               Gson gson = new Gson();
               btcTransaction newTransaction = gson.fromJson(json, btcTransaction.class);
 
-              // Copy downloaded values to original object
+              // Copy downloaded values to original object (for testing, don't ask)
               transaction.hash160 = newTransaction.hash160;
               transaction.n_tx = newTransaction.n_tx;
               transaction.total_received = newTransaction.total_received;
@@ -92,37 +101,84 @@ import java.util.concurrent.CountDownLatch;
               transaction.final_balance = newTransaction.final_balance;
               transaction.txs = newTransaction.txs;
 
+              Tx newTx = null;
+              Tx insertTx = null;
+//              Tx checkTx = Tx.getTxWalleTx(transaction.hash);
+//              if (checkTx == null) {
+
+              // Loop through array of transaction data provided from JSON -> GSON conversion
+              // Loop thorugh inputs first, if the public wallet address is found in the inputs
+              // of a transaction that is considered bitcoin moving out of the wallet, if the public
+              // wallet is found in the outputs (out) then bitcoin is moving into the wallet.
+              for(int i=0; i < transaction.txs.size();i++){
+                  for (int j=0; j < transaction.txs.get(i).inputs.size(); j++) {
+                      if ((transaction.txs.get(i).inputs.get(j).prev_out.addr.equals(publicAddress))
+                         && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
+                          insertTx = new Tx(new Date(transaction.txs.get(i).time * 1000L), wtx, "block", transaction.txs.get(i).tx_index, new TxCategory("Default"), new TxNote(newTx, "Default Note"), 0 - transaction.txs.get(i).inputs.get(j).prev_out.value, 100);
+                          insertTx.save();
+                      }
+                  }
+                  for (int j=0; j < transaction.txs.get(i).out.size(); j++){
+                    if (transaction.txs.get(i).out.get(j).addr.equals(publicAddress)
+                         && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
+                      insertTx = new Tx (new Date(transaction.txs.get(i).time * 1000L), wtx, "block", transaction.txs.get(i).tx_index, new TxCategory("Default"), new TxNote(newTx, "Default Note"), transaction.txs.get(i).out.get(j).value, 100);
+                      insertTx.save();
+                    }
+                  }
+              }
+             Tx.dump();
+
+
               // TODO: Does wallet exist? check for updates
-              // try {
-              //   Walletx.getBy(transaction.address);
-              // } catch (Exception e) {
+              //Walletx testThisWallet = null;
+              //testThisWallet.getBy(transaction.address);
+              //if (testThisWallet != null) {
+              //  Log.v(logInfo, "Address Found, Updating Records");
+              //}
+              //else{
               //    Log.v(logInfo, "could not find address");
               // }
 
               // -- Debugging
-              //Log.v("hash160", transaction.hash160);
-              //Log.v("address", transaction.address);
-              //Log.v("n_tx", transaction.n_tx);
-              //Log.v("total received", transaction.total_received);
-              //Log.v("total send", transaction.total_sent);
-              //Log.v("final balance", transaction.final_balance);
-              //for (int i=0; i < transaction.txs.size(); i++) {
-              //    Log.v("txs " + i, "" + transaction.txs.get(i).ver);
-              //    for (int j=0; j < transaction.txs.get(i).inputs.size(); j++) {
-              //        Log.v("sequence:" + j + ":", "" + transaction.txs.get(i).inputs.get(j).sequence);
-              //    }
-              //}
-              // Log.v(logInfo, transaction.wtx);
-              // Log.v(logInfo, transaction.address);
-              // Tx tx = new Tx(transaction.timestamp, transaction.wtx, transaction.block,
-              //               transaction.hash, transaction.category, transaction.note,
-              //             transaction.amountBTC, transaction.amountLC, transaction.final_balance );
-
+              Log.v("btc_api: ---Debugging--", " --");
+              Log.v("btc_api: hash160", transaction.hash160);
+              Log.v("btc_api: address", transaction.address);
+              Log.v("btc_api: n_tx", transaction.n_tx);
+              Log.v("btc_api: total received", transaction.total_received);
+              Log.v("btc_api: total send", transaction.total_sent);
+              String finalBalance = Long.toString(transaction.final_balance);
+              Log.v("btc_api: final balance", finalBalance);
+              for (int i=0; i < transaction.txs.size(); i++) {
+                  Log.v("btc_api:", "txs(" + i + ") -------------------" );
+                  Log.v("btc_api:", "txs(" + i + ")" + " ver " + transaction.txs.get(i).ver);
+                  for (int j=0; j < transaction.txs.get(i).inputs.size(); j++) {
+                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "sequence:" + transaction.txs.get(i).inputs.get(j).sequence);
+                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "spent:" + transaction.txs.get(i).inputs.get(j).prev_out.spent);
+                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "tx_index:" + transaction.txs.get(i).inputs.get(j).prev_out.tx_index);
+                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "addr:" + transaction.txs.get(i).inputs.get(j).prev_out.addr);
+                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "value:" + transaction.txs.get(i).inputs.get(j).prev_out.value);
+                      Log.v("btc_api:" , "-----------------------------");
+                  }
+                  for (int j=0; j < transaction.txs.get(i).out.size(); j++) {
+                      Log.v("btc_api:" , "txs(" + i + ")" + "out(" + j + ")" + "spent:" + transaction.txs.get(i).out.get(j).spent);
+                      Log.v("btc_api:" , "txs(" + i + ")" + "out(" + j + ")" + "tx_index:" + transaction.txs.get(i).out.get(j).tx_index);
+                      Log.v("btc_api:" , "txs(" + i + ")" + "out(" + j + ")" + "addr:" + transaction.txs.get(i).out.get(j).addr);
+                      Log.v("btc_api:" , "txs(" + i + ")" + "out(" + j + ")" + "value:" + transaction.txs.get(i).out.get(j).value);
+                      Log.v("btc_api:" , "-----------------------------");
+                  }
+              }
+//               Log.v(logInfo, transaction.wtx);
+//               Log.v(logInfo, transaction.address);
+               //Tx tx = new Tx(transaction.timestamp, transaction.wtx, transaction.block,
+                //             transaction.hash, transaction.category, transaction.note,
+                //           transaction.amountBTC, transaction.amountLC, transaction.final_balance );
+             return true;
           } catch (Exception e) {
-              Log.v(logInfo, "ERROR:" + e);
+              Log.e(e.getClass().getName(), "ERROR:" + e.getMessage(), e);
+            return false;
           }
 
-         return this;
+
       }
 
       private static String readUrl (String urlString) throws Exception {
@@ -158,13 +214,12 @@ import java.util.concurrent.CountDownLatch;
       }
 
     @Override
-    protected void onProgressUpdate(String... values) {
+    protected void onProgressUpdate(Void...argument) {
     }
 
     @Override
-    protected void onPostExecute(BlockchainInfo result) {
-       super.onPostExecute(result);
-       signal.countDown();
+    protected void onPostExecute(Boolean result) {
+       //super.onPostExecute(result);
     }
 
     @Override

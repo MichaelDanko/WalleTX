@@ -20,17 +20,33 @@ import java.util.List;
 
 public class btcTransaction {
 
+    static public class jsonPrev_out {
+        public boolean spent;
+        public int tx_index;
+        public String addr;
+        public int value;
+    }
+
     static public class jsonInputs {
-        public String sequence;
+        public long sequence;
+        public jsonPrev_out prev_out;
     }
 
     static class jsonOutputs {
+        public boolean spent;
+        public int tx_index;
+        public String addr;
+        public int value;
 
     }
 
     static public class jsonTxs {
         public int ver;
         public List<jsonInputs> inputs;
+        public List<jsonOutputs> out;
+        public long time;
+        public long tx_index;
+
     }
 
     public btcTransaction()
@@ -48,12 +64,11 @@ public class btcTransaction {
     @SerializedName("address")
     public String address = "";
     @SerializedName("final_balance")
-    public String final_balance = "";
+    public long final_balance = 0;
     //@SerializedName("txs")
     public List<jsonTxs> txs;
 
     // Additional Fields
-    String time;
     String amountBTC;
     String amountLC;
     String block;
