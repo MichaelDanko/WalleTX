@@ -89,7 +89,8 @@
     <string name="tx_detail_spend_or_received_placeholder">Spent/Received</string>
     <string name="tx_detail_amount_placeholder">0</string>
     <string name="tx_detail_date_placeholder">1 Jan 15</string>
-    <string name="tx_detail_auto_complete_tag_hint"></string>
+    <string name="tx_detail_auto_complete_tag_hint">Add a tag</string>
+    <string name="tx_detail_auto_complete_note_hint">Add a note</string>
 
     <!-- WALLET GROUPS -->
     <!-- Read list view -->

@@ -93,8 +93,20 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:hint="@string/tx_detail_auto_complete_tag_hint" />
+            android:hint="@string/tx_detail_auto_complete_tag_hint"
+            android:layout_marginBottom="@dimen/gen_spacer_small" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/note"
+            android:layout_below="@+id/tag"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:hint="@string/tx_detail_auto_complete_note_hint" />
+
     </RelativeLayout>
 
     <RelativeLayout
