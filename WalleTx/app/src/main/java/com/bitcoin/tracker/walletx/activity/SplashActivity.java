@@ -37,7 +37,10 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         WalletGroup.initDefaultGroup(this);
 
-        // TODO - Fetch new tx and price data?
+        /*
+         * TODO @md Initiate a data sync
+         *
+         */
 
 
         //Walletx wtx = new Walletx("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", WalletType.SINGLE_ADDRESS_WALLET, WalletGroup.getBy("My Wallets"));
