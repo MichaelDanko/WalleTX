@@ -64,6 +64,10 @@
             android:name=".activity.walletxTxs.TxsActivity"
             android:label="@string/title_activity_walletx_txs_title_activity" >
         </activity>
+        <activity
+            android:name=".activity.txDetail.TxDetailActivity"
+            android:label="@string/title_activity_tx_detail" >
+        </activity>
     </application>
 
 </manifest>

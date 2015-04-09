@@ -1,5 +1,6 @@
 package com.bitcoin.tracker.walletx.activity.walletxTxs;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.txDetail.TxDetailActivity;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
@@ -29,7 +31,7 @@ public class TxsActivity extends ActionBarActivity {
     private ListView mListView;
     private TxsAdapter mAdapter;
     private ArrayList<Walletx> wtxs;
-    private List<Tx> txs;
+    private List<Tx> mTxs;
     private ArrayList<TxsListItem> mItems = new ArrayList<>();
 
     @Override
@@ -67,7 +69,14 @@ public class TxsActivity extends ActionBarActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), "Open Tx detail activity for this tx", Toast.LENGTH_SHORT).show();
+                // Again... We should pass the Tx object but it is not parcelable
+                // So an interim fix is to pass something to id the Tx and then
+                // re-query it in the next activity
+                Intent intent = new Intent( getBaseContext(), TxDetailActivity.class );
+                // TODO Uncomment and test once data is present
+                //Tx tx = mTxs.get(position);
+                //intent.putExtra( "hash", tx.hash );
+                startActivity(intent);
             }
         });
     }
@@ -80,10 +89,10 @@ public class TxsActivity extends ActionBarActivity {
         //for ( Walletx w : wtxs ) {
         //    List<Tx> txsForThisWtx = w.txs();
         //    for ( Tx tx : txsForThisWtx ) {
-        //        txs.add(tx);
+        //        mTxs.add(tx);
         //    }
         //}
-        //for ( Tx tx : txs ) {
+        //for ( Tx tx : mTxs ) {
         //    TxsListItem item;
         //    String date = tx...... get date as string
         //    String category = tx..... get category as string

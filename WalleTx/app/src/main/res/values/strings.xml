@@ -104,5 +104,6 @@
     <string name="wallet_group_update_alert_message_delete">Wallets within this group will automatically be moved to the default group.</string>
     <string name="wallet_group_update_label_delete_default_group_note">Current default group cannot be deleted. If you wish to remove this group please set another wallet group as the default.</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_tx_detail">TxDetailActivity</string>
 
 </resources>
