@@ -5,13 +5,25 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import com.bitcoin.tracker.walletx.R;
 
+/*
+ * Tx Details Activity
+ *
+ * TODO Save any tag updates before the view is destroyed.
+ * We can vastly improve upon this... Time permitting
+ *
+ */
 public class TxDetailActivity extends ActionBarActivity {
 
     AutoCompleteTextView mTag;
+
+    private static final String[] TAGS = new String[] {
+            "Pizza","Beer","Movies", "Clothes", "Income", "Shoes", "Dog Food"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,12 +31,13 @@ public class TxDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_tx_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // prevent autofocus on tags autocompletetextview
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, TAGS);
         mTag = (AutoCompleteTextView) findViewById(R.id.tag);
-
-
-
+        mTag.setAdapter(adapter);
 
     }
 
