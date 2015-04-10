@@ -11,7 +11,7 @@
     <string name="app_confirm_yes">Yes</string>
     <string name="app_confirm_no">Cancel</string>
     <string name="app_btc_currency_label">BTC</string>
-    <string name="app_lc_currency_label">LC</string>
+    <string name="app_lc_currency_label">USD</string>
 
     <!-- NAV DRAWER -->
     <string name="navigation_drawer_title_activity_main">WalleTx</string>
