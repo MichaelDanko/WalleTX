@@ -4,9 +4,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 
@@ -19,7 +23,8 @@ import com.bitcoin.tracker.walletx.R;
  */
 public class TxDetailActivity extends ActionBarActivity {
 
-    AutoCompleteTextView mTag;
+    AutoCompleteTextView mTagAutoCompleteTextView;
+    ImageView mTagImageView;
 
     private static final String[] TAGS = new String[] {
             "Pizza","Beer","Movies", "Clothes", "Income", "Shoes", "Dog Food"
@@ -34,10 +39,39 @@ public class TxDetailActivity extends ActionBarActivity {
         // prevent autofocus on tags autocompletetextview
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        mTagAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.tagAutoCompleteTextView);
+        mTagImageView = (ImageView) findViewById(R.id.tagImageView);
+
+        mTagImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTagImageView.setImageResource(R.mipmap.ic_tag);
+                mTagAutoCompleteTextView.clearFocus();
+
+                InputMethodManager imm = (InputMethodManager)getSystemService(
+                        getApplicationContext().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mTagAutoCompleteTextView.getWindowToken(), 0);
+
+                /*
+
+                 TODO save the tag update
+                 */
+            }
+        });
+
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, TAGS);
-        mTag = (AutoCompleteTextView) findViewById(R.id.tag);
-        mTag.setAdapter(adapter);
+        mTagAutoCompleteTextView.setAdapter(adapter);
+
+        mTagAutoCompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mTagImageView.setImageResource(R.mipmap.ic_tag_save_update);
+                }
+            }
+        });
 
     }
 

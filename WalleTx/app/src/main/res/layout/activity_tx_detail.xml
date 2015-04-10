@@ -91,25 +91,26 @@
         <AutoCompleteTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tag"
+            android:id="@+id/tagAutoCompleteTextView"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:hint="@string/tx_detail_auto_complete_tag_hint"
             android:focusable="true"
             android:singleLine="true"
             android:inputType="text|textCapSentences"
-            android:layout_toLeftOf="@+id/imageView"
-            android:layout_toStartOf="@+id/imageView" />
+            android:layout_toLeftOf="@+id/tagImageView"
+            android:layout_toStartOf="@+id/tagImageView" />
 
         <ImageView
-            android:layout_width="30dp"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView"
+            android:id="@+id/tagImageView"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:src="@mipmap/ic_tag"
-            android:layout_alignBottom="@+id/tag" />
+            android:layout_alignBottom="@+id/tagAutoCompleteTextView"
+            android:layout_marginLeft="@dimen/gen_spacer_xsmall" />
 
     </RelativeLayout>
 
