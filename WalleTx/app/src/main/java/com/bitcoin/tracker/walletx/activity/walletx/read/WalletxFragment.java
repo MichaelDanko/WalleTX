@@ -1,6 +1,7 @@
 package com.bitcoin.tracker.walletx.activity.walletx.read;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,8 +11,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,12 +27,15 @@ import com.bitcoin.tracker.walletx.activity.walletx.updateDelete.WalletxUpdateAc
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummaryAllActivity;
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummaryGroupActivity;
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummarySingleActivity;
+import com.bitcoin.tracker.walletx.helper.AnimationHelper;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * WalletxFragment acts as the home view for the application.
@@ -41,6 +48,8 @@ public class WalletxFragment extends Fragment {
     private static final int NEW_WALLETX_ADDED = 1;
     private static final int WALLETX_UPDATED = 2;
     private static final int WALLET_GROUP_UPDATED = 3;
+
+    private MenuItem mSync; // actionbar menu sync
 
     // Walletx custom expandable list
     WalletxExpandableListAdapter mListApapter;
@@ -221,6 +230,38 @@ public class WalletxFragment extends Fragment {
                  *
                  */
 
+                AnimationHelper.startRotateSync(mSync, getActivity());
+
+                while (true) {
+                    // When can run the sync database code here to get all txs for the newly added wallet
+                    // when complete
+                    // if successful turn of rotate animation and update listview
+                    // if failure display a toast message to user
+                    break;
+                }
+
+                // THIS IS JUST A TEMP TIME DELAY TO SHOW WHAT THE UX SHOULD BE LIKE.
+                // TODO delete when implemented
+                Toast.makeText(getActivity(), "TODO: Sync all transactions associated with this new wallet and then update the list view.", Toast.LENGTH_SHORT).show();
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {}
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // HERE IS THE METHOD TO TURN OF ROTATE - must be called on ui thread
+                                AnimationHelper.stopRotateSync(mSync, getActivity());
+                            }
+                        });
+                    }
+                };
+                thread.start();
+
+
+
             }
         } else if (requestCode == WALLETX_UPDATED || requestCode == WALLET_GROUP_UPDATED) {
             if (resultCode == getActivity().RESULT_OK) {
@@ -238,6 +279,7 @@ public class WalletxFragment extends Fragment {
         // Add fragment specific action bar items to activity action bar items.
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.main, menu);
+        mSync = menu.getItem(0);
     }
 
     @Override
