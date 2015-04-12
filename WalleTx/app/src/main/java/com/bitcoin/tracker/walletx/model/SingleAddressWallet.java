@@ -1,5 +1,8 @@
 package com.bitcoin.tracker.walletx.model;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -7,6 +10,7 @@ import com.activeandroid.query.Select;
 import com.google.bitcoin.core.Address;
 import com.google.bitcoin.core.AddressFormatException;
 
+import java.lang.ref.SoftReference;
 import java.util.List;
 
 /**
@@ -79,6 +83,13 @@ public class SingleAddressWallet extends Model implements WalletxBlockchainInter
                 .executeSingle();
     }
 
+    public static SingleAddressWallet getPublicKey(String pKey){
+        return new Select()
+                .from(SingleAddressWallet.class)
+                .where("publicKey = ?", pKey)
+                .executeSingle();
+    }
+
     /**
      * Validates if a string is a valid public key.
      */
@@ -90,5 +101,28 @@ public class SingleAddressWallet extends Model implements WalletxBlockchainInter
             return false;
         }
     }
+
+
+    /* ---------------
+    Validation
+    --------------- */
+
+    /**
+     * Checkst to see if Public Key is stored in Database
+     * if stored it presents toast message
+     * @param context
+     * @param pkey publicKey to check
+     * @return boolean true or false
+     */
+
+    public static boolean validateKeyisNew(Context context,String pkey){
+      if  (SingleAddressWallet.getPublicKey(pkey).publicKey == pkey){
+          String error = "That public key already saved!";
+          Toast.makeText(context, error, Toast.LENGTH_LONG).show();
+          return false;
+      }
+        return true;
+    }
+
 
 } // SingleAddressWallet
