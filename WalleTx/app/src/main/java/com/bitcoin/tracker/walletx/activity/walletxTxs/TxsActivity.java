@@ -72,11 +72,13 @@ public class TxsActivity extends ActionBarActivity {
                 // Again... We should pass the Tx object but it is not parcelable
                 // So an interim fix is to pass something to id the Tx and then
                 // re-query it in the next activity
-                Intent intent = new Intent( getBaseContext(), TxDetailActivity.class );
-                // TODO Uncomment and test once data is present
-                //Tx tx = mTxs.get(position);
-                //intent.putExtra( "hash", tx.hash );
-                startActivity(intent);
+                if (position != 0) {
+                    Intent intent = new Intent( getBaseContext(), TxDetailActivity.class );
+                    // TODO Uncomment and test once data is present
+                    //Tx tx = mTxs.get(position);
+                    //intent.putExtra( "hash", tx.hash );
+                    startActivity(intent);
+                }
             }
         });
     }
