@@ -1,8 +1,8 @@
 package com.bitcoin.tracker.walletx.activity.walletx.read;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,11 +11,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,15 +25,12 @@ import com.bitcoin.tracker.walletx.activity.walletx.updateDelete.WalletxUpdateAc
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummaryAllActivity;
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummaryGroupActivity;
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummarySingleActivity;
-import com.bitcoin.tracker.walletx.helper.AnimationHelper;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * WalletxFragment acts as the home view for the application.
@@ -49,14 +44,15 @@ public class WalletxFragment extends Fragment {
     private static final int WALLETX_UPDATED = 2;
     private static final int WALLET_GROUP_UPDATED = 3;
 
-    private MenuItem mSync; // actionbar menu sync
-
     // Walletx custom expandable list
     WalletxExpandableListAdapter mListApapter;
     ExpandableListView mExpListView;
     List<String> mGroupHeader;
     HashMap<String, List<String>> mListDataChild;
     View mHeader; // all wallets header for exp. list view
+
+    // displays when sync in progress
+    private ProgressBar mSyncProgressBar;
 
     // The fragment argument representing the section number for this fragment.
     private static final String ARG_SECTION_NUMBER = "section_number";
@@ -96,6 +92,11 @@ public class WalletxFragment extends Fragment {
             mListApapter = new WalletxExpandableListAdapter(getActivity(), mGroupHeader, mListDataChild);
         if (mExpListView != null)
             mExpListView.setAdapter(mListApapter);
+
+        // setup sync progress spinner
+        mSyncProgressBar = (ProgressBar) view.findViewById(R.id.syncProgressBar);
+        mSyncProgressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
+        mSyncProgressBar.setVisibility(View.GONE);
 
         return view;
     }
@@ -230,15 +231,7 @@ public class WalletxFragment extends Fragment {
                  *
                  */
 
-                AnimationHelper.startRotateSync(mSync, getActivity());
-
-                while (true) {
-                    // When can run the sync database code here to get all txs for the newly added wallet
-                    // when complete
-                    // if successful turn of rotate animation and update listview
-                    // if failure display a toast message to user
-                    break;
-                }
+                startSyncProgressBar(getActivity());
 
                 // THIS IS JUST A TEMP TIME DELAY TO SHOW WHAT THE UX SHOULD BE LIKE.
                 // TODO delete when implemented
@@ -247,20 +240,18 @@ public class WalletxFragment extends Fragment {
                     @Override
                     public void run() {
                         try {
-                            Thread.sleep(5000);
+                            Thread.sleep(3000);
                         } catch (InterruptedException e) {}
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 // HERE IS THE METHOD TO TURN OF ROTATE - must be called on ui thread
-                                AnimationHelper.stopRotateSync(mSync, getActivity());
+                                mSyncProgressBar.setVisibility(View.GONE);
                             }
                         });
                     }
                 };
                 thread.start();
-
-
 
             }
         } else if (requestCode == WALLETX_UPDATED || requestCode == WALLET_GROUP_UPDATED) {
@@ -279,13 +270,34 @@ public class WalletxFragment extends Fragment {
         // Add fragment specific action bar items to activity action bar items.
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.main, menu);
-        mSync = menu.getItem(0);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_sync) {
-            Toast.makeText(getActivity(), "TODO: Sync data", Toast.LENGTH_SHORT).show();
+
+            /**
+             * TODO Implement user initiated sync
+             * Check if a sync is already in progress before starting
+             */
+
+            startSyncProgressBar(getActivity());
+
+            // THIS IS JUST A TEMP TIME DELAY TO SHOW WHAT THE UX SHOULD BE LIKE.
+            // TODO delete when implemented
+            Toast.makeText(getActivity(), "TODO: Sync all transactions associated with this new wallet and then update the list view.", Toast.LENGTH_SHORT).show();
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {}
+                    stopSyncProgressBarIn(getActivity());
+
+                }
+            };
+            thread.start();
+
             return true;
         } else if (item.getItemId() == R.id.action_add_wallet) {
             // open new activity
@@ -296,5 +308,27 @@ public class WalletxFragment extends Fragment {
     }
 
     //endregion
+
+    private void startSyncProgressBar(Activity activity) {
+        if ( activity != null ) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mSyncProgressBar.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+    }
+
+    private void stopSyncProgressBarIn(Activity activity) {
+        if ( activity != null ) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mSyncProgressBar.setVisibility(View.GONE);
+                }
+            });
+        }
+    }
 
 } // WalletxFragment
