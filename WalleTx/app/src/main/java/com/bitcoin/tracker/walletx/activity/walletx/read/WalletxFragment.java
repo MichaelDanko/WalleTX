@@ -292,13 +292,7 @@ public class WalletxFragment extends Fragment {
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {}
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // HERE IS THE METHOD TO TURN OF ROTATE - must be called on ui thread
-                                mSyncProgressBar.setVisibility(View.GONE);
-                            }
-                        });
+                        stopSyncProgressBarIn(getActivity());
                     }
                 };
                 thread.start();
@@ -341,7 +335,7 @@ public class WalletxFragment extends Fragment {
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(3000);
                     } catch (InterruptedException e) {}
                     stopSyncProgressBarIn(getActivity());
 
