@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.MainActivity;
 import com.bitcoin.tracker.walletx.activity.walletGroup.updateDelete.WalletGroupUpdateActivity;
@@ -50,6 +51,7 @@ public class WalletxFragment extends Fragment {
     List<String> mGroupHeader;
     HashMap<String, List<String>> mListDataChild;
     View mHeader; // all wallets header for exp. list view
+    View mFooter; // no wallets footer (shown only when no wallets are added)
 
     // displays when sync in progress
     private ProgressBar mSyncProgressBar;
@@ -87,6 +89,13 @@ public class WalletxFragment extends Fragment {
         mHeader = header.findViewById(R.id.allWalletsContainer);
         mHeader.setOnClickListener(allWalletsOnClickListener);
 
+        // Use the footer to display 'Add first wallet view' when no wallets are added
+        View footer = getActivity().getLayoutInflater().inflate(R.layout.fragment_walletx_list_item_no_wallets_footer, null);
+        mExpListView.addFooterView(footer);
+        mFooter = footer.findViewById(R.id.no_wallets_container);
+        mFooter.setOnClickListener(footerOnClickListener);
+
+        // setup exp list view
         prepareData();
         if (mListApapter == null)
             mListApapter = new WalletxExpandableListAdapter(getActivity(), mGroupHeader, mListDataChild);
@@ -128,8 +137,25 @@ public class WalletxFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(
-                getArguments().getInt(ARG_SECTION_NUMBER));
+        ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
+    }
+
+    /**
+     * Determines whether or not the 'Add first wallet footer view"
+     * should be visible
+     */
+    private void setAddFirstWalletFooterVisibility() {
+
+        // TODO @dc I need a count query here. Or isEmpty query. Replace the if statement below...
+        int wtxCount = new Select()
+                .from(Walletx.class)
+                .count();
+
+        if (wtxCount == 0) {
+            mFooter.setVisibility(View.VISIBLE);
+        } else {
+            mFooter.setVisibility(View.GONE);
+        }
     }
 
     //endregion
@@ -140,6 +166,14 @@ public class WalletxFragment extends Fragment {
         public void onClick(View v) {
             Intent intent = new Intent( getActivity(), WalletxSummaryAllActivity.class );
             startActivity(intent);
+        }
+    };
+
+    private View.OnClickListener footerOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent( getActivity(), WalletxCreateActivity.class );
+            startActivityForResult( intent, NEW_WALLETX_ADDED );
         }
     };
 
@@ -170,7 +204,17 @@ public class WalletxFragment extends Fragment {
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             int itemType = ExpandableListView.getPackedPositionType(id);
 
-            if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+            // TODO @dc I need a count query here. Or isEmpty query. Replace the if statement below...
+            int wtxCount = new Select()
+                    .from(Walletx.class)
+                    .count();
+
+            if ( wtxCount == 0 ) {
+
+                // do nothing if there are no wallets added
+                return true;
+
+            } else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
 
                 // open new activity to edit single walletx
                 TextView tv = (TextView) view.findViewById(R.id.walletName);
@@ -191,8 +235,10 @@ public class WalletxFragment extends Fragment {
                 return true;
 
             } else {
+
                 // Should Never Happen. TODO Throw error / write to log
                 return false;
+
             }
         }
     };
@@ -209,6 +255,7 @@ public class WalletxFragment extends Fragment {
             if (resultCode == getActivity().RESULT_OK) {
                 // Refresh the expListView to display the newly added wallet
                 prepareData();
+                setAddFirstWalletFooterVisibility();
                 mListApapter.updateData(mGroupHeader, mListDataChild);
 
                 /*
@@ -257,6 +304,7 @@ public class WalletxFragment extends Fragment {
         } else if (requestCode == WALLETX_UPDATED || requestCode == WALLET_GROUP_UPDATED) {
             if (resultCode == getActivity().RESULT_OK) {
                 prepareData();
+                setAddFirstWalletFooterVisibility();
                 mListApapter.updateData(mGroupHeader, mListDataChild);
             }
         }
@@ -308,6 +356,7 @@ public class WalletxFragment extends Fragment {
     }
 
     //endregion
+    //region PROGRESS BAR
 
     private void startSyncProgressBar(Activity activity) {
         if ( activity != null ) {
@@ -330,5 +379,7 @@ public class WalletxFragment extends Fragment {
             });
         }
     }
+
+    //endregion
 
 } // WalletxFragment

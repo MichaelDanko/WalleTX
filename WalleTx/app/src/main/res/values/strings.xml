@@ -60,6 +60,9 @@
     <string name="walletx_update_alert_message_delete">All data associated with this wallet will be removed from device. This action cannot be undone.</string>
     <string name="walletx_update_toast_name_empty">Oops! Wallet name cannot be empty string</string>
     <string name="walletx_update_toast_name_exists">Oops! Wallet name already exists</string>
+    <!-- No wallets footer -->
+    <string name="walletx_add_first_wallet_l1">You have not added any wallets.</string>
+    <string name="walletx_add_first_wallet_l2">Add your first wallet now.</string>
 
     <!-- WALLETX SUMMARIES -->
     <string name="walletx_summary_all_title_activity">All Wallets Summary</string>
