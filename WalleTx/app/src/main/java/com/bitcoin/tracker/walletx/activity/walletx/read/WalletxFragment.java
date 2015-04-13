@@ -94,6 +94,7 @@ public class WalletxFragment extends Fragment {
         mExpListView.addFooterView(footer);
         mFooter = footer.findViewById(R.id.no_wallets_container);
         mFooter.setOnClickListener(footerOnClickListener);
+        setHeaderFooterVisibility();
 
         // setup exp list view
         prepareData();
@@ -141,10 +142,9 @@ public class WalletxFragment extends Fragment {
     }
 
     /**
-     * Determines whether or not the 'Add first wallet footer view"
-     * should be visible
+     * Determines visibility of the list view header/footer
      */
-    private void setAddFirstWalletFooterVisibility() {
+    private void setHeaderFooterVisibility() {
 
         // TODO @dc I need a count query here. Or isEmpty query. Replace the if statement below...
         int wtxCount = new Select()
@@ -153,7 +153,9 @@ public class WalletxFragment extends Fragment {
 
         if (wtxCount == 0) {
             mFooter.setVisibility(View.VISIBLE);
+            mHeader.setVisibility(View.GONE);
         } else {
+            mHeader.setVisibility(View.VISIBLE);
             mFooter.setVisibility(View.GONE);
         }
     }
@@ -191,6 +193,7 @@ public class WalletxFragment extends Fragment {
     private ExpandableListView.OnChildClickListener childWalletClickListener = new ExpandableListView.OnChildClickListener() {
         @Override
         public boolean onChildClick (ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+            System.out.println("AM I CALLED");
             TextView tv = (TextView) v.findViewById(R.id.walletName);
             Intent intent = new Intent( getActivity(), WalletxSummarySingleActivity.class );
             intent.putExtra("walletx_name", tv.getText().toString());
@@ -255,7 +258,7 @@ public class WalletxFragment extends Fragment {
             if (resultCode == getActivity().RESULT_OK) {
                 // Refresh the expListView to display the newly added wallet
                 prepareData();
-                setAddFirstWalletFooterVisibility();
+                setHeaderFooterVisibility();
                 mListApapter.updateData(mGroupHeader, mListDataChild);
 
                 /*
@@ -304,7 +307,7 @@ public class WalletxFragment extends Fragment {
         } else if (requestCode == WALLETX_UPDATED || requestCode == WALLET_GROUP_UPDATED) {
             if (resultCode == getActivity().RESULT_OK) {
                 prepareData();
-                setAddFirstWalletFooterVisibility();
+                setHeaderFooterVisibility();
                 mListApapter.updateData(mGroupHeader, mListDataChild);
             }
         }
