@@ -11,7 +11,7 @@
     <string name="app_confirm_yes">Yes</string>
     <string name="app_confirm_no">Cancel</string>
     <string name="app_btc_currency_label">BTC</string>
-    <string name="app_lc_currency_label">LC</string>
+    <string name="app_lc_currency_label">USD</string>
 
     <!-- NAV DRAWER -->
     <string name="navigation_drawer_title_activity_main">WalleTx</string>
@@ -60,6 +60,9 @@
     <string name="walletx_update_alert_message_delete">All data associated with this wallet will be removed from device. This action cannot be undone.</string>
     <string name="walletx_update_toast_name_empty">Oops! Wallet name cannot be empty string</string>
     <string name="walletx_update_toast_name_exists">Oops! Wallet name already exists</string>
+    <!-- No wallets footer -->
+    <string name="walletx_add_first_wallet_l1">You have not added any wallets.</string>
+    <string name="walletx_add_first_wallet_l2">Add your first wallet now.</string>
 
     <!-- WALLETX SUMMARIES -->
     <string name="walletx_summary_all_title_activity">All Wallets Summary</string>
@@ -91,6 +94,13 @@
     <string name="tx_detail_date_placeholder">1 Jan 15</string>
     <string name="tx_detail_auto_complete_tag_hint">Add a tag</string>
     <string name="tx_detail_auto_complete_note_hint">Add a note</string>
+    <string name="tx_detail_time_label">Time</string>
+    <string name="tx_detail_time_placeholder">00:00 EST</string>
+    <string name="tx_detail_conf_label">Confirmations</string>
+    <string name="tx_detail_conf_placeholder">0</string>
+    <string name="tx_detail_hash_label">Tx ID</string>
+    <string name="tx_detail_hash_placeholder">-</string>
+    <string name="tx_detail_button_text">View transaction at Blockchain.info</string>
 
     <!-- WALLET GROUPS -->
     <!-- Read list view -->
@@ -112,5 +122,13 @@
     <string name="wallet_group_update_button_delete">Delete</string>
     <string name="wallet_group_update_alert_message_delete">Wallets within this group will automatically be moved to the default group.</string>
     <string name="wallet_group_update_label_delete_default_group_note">Current default group cannot be deleted. If you wish to remove this group please set another wallet group as the default.</string>
+
+    <!-- TX CATEGORIES -->
+    <string name="title_activity_create_tx_category">Add New Tx Category</string>
+    <string name="tx_categories_create_edittext_hint">Category tag name</string>
+    <string name="tx_categories_create_button_text">Create tx category</string>
+    <string name="title_activity_tx_category_update">Update Tx Category</string>
+    <string name="tx_categories_update_button_text">Update Tx Category</string>
+    <string name="tx_categories_delete_button_text">Delete Tx Category</string>
 
 </resources>

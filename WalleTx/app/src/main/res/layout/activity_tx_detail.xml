@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bitcoin.tracker.walletx.activity.txDetail.TxDetailActivity">
+    tools:context="com.bitcoin.tracker.walletx.activity.txDetail.TxDetailActivity"
+    android:id="@+id/main_layout">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -78,43 +79,167 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/gen_spacer_medium"
         android:paddingBottom="@dimen/gen_spacer_medium"
         android:background="@color/wtx_light_gray"
-        android:id="@+id/relativeLayout">
+        android:id="@+id/editable_container">
 
         <AutoCompleteTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tag"
+            android:id="@+id/tagAutoCompleteTextView"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
             android:hint="@string/tx_detail_auto_complete_tag_hint"
-            android:layout_marginBottom="@dimen/gen_spacer_small" />
+            android:focusable="true"
+            android:singleLine="true"
+            android:inputType="text|textCapSentences"
+            android:layout_toLeftOf="@+id/tagImageView"
+            android:layout_toStartOf="@+id/tagImageView" />
 
-        <EditText
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:id="@+id/note"
-            android:layout_below="@+id/tag"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:id="@+id/tagImageView"
+            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:hint="@string/tx_detail_auto_complete_note_hint" />
+            android:src="@mipmap/ic_tag"
+            android:layout_alignBottom="@+id/tagAutoCompleteTextView"
+            android:layout_marginLeft="@dimen/gen_spacer_xsmall" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/relativeLayout"
-        android:background="@color/white"></RelativeLayout>
+        android:layout_below="@+id/editable_container"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/gen_spacer_medium"
+        android:paddingBottom="@dimen/gen_spacer_medium"
+        android:id="@+id/time_container">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/tx_detail_time_label"
+            android:id="@+id/time_label"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/tx_detail_time_placeholder"
+            android:id="@+id/time"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/gen_spacer_medium"
+        android:paddingBottom="@dimen/gen_spacer_medium"
+        android:id="@+id/confirmations_container"
+        android:layout_below="@+id/time_container"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/tx_detail_conf_label"
+            android:id="@+id/confs_label"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/tx_detail_conf_placeholder"
+            android:id="@+id/textView8"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/gen_spacer_medium"
+        android:paddingBottom="@dimen/gen_spacer_medium"
+        android:id="@+id/txid_container"
+        android:layout_below="@+id/confirmations_container"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/tx_detail_hash_label"
+            android:id="@+id/hash_label"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/tx_detail_hash_placeholder"
+            android:id="@+id/textView10"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/gen_spacer_medium"
+        android:paddingBottom="@dimen/gen_spacer_medium"
+        android:id="@+id/button_container"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/txid_container">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tx_detail_button_text"
+            android:id="@+id/blockchain_button"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
 
 </RelativeLayout>
