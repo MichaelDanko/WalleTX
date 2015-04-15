@@ -108,21 +108,15 @@ public class SingleAddressWallet extends Model implements WalletxBlockchainInter
     --------------- */
 
     /**
-     * Checkst to see if Public Key is stored in Database
-     * if stored it presents toast message
-     * @param context
-     * @param pkey publicKey to check
-     * @return boolean true or false
+     * Count for pkey value
+     * @param pkey public to be checked
+     * @return int or the count of the columns if >0 than in table already 
      */
 
-    public static boolean validateKeyisNew(Context context,String pkey){
-      if  (SingleAddressWallet.getPublicKey(pkey).publicKey == pkey){
-          String error = "That public key already saved!";
-          Toast.makeText(context, error, Toast.LENGTH_LONG).show();
-          return false;
-      }
-        return true;
+    public static int isAPkey(String pkey){
+        return new Select().from(SingleAddressWallet.class).where("publicKey = ?", pkey).count();
     }
+
 
 
 } // SingleAddressWallet
