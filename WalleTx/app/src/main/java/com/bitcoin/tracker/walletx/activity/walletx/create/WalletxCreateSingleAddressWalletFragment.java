@@ -200,7 +200,7 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
                     saWallet.wtx = wtx;
                     saWallet.save();
 
-                    new BlockchainInfo(saWallet.publicKey, wtx).execute();
+                    new BlockchainInfo(saWallet. publicKey, wtx).execute();
 
                     break;
                 default:

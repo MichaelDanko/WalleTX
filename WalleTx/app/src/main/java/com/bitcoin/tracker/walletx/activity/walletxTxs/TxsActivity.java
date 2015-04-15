@@ -16,6 +16,8 @@ import com.bitcoin.tracker.walletx.activity.txDetail.TxDetailActivity;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,29 +88,35 @@ public class TxsActivity extends ActionBarActivity {
     private void prepareData() {
         mItems.clear();
 
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
         // TODO Get txs and add to mItems (Code below written quickly, untested)
         // Get list of transactions associated with our wtxs
-        //for ( Walletx w : wtxs ) {
-        //    List<Tx> txsForThisWtx = w.txs();
-        //    for ( Tx tx : txsForThisWtx ) {
-        //        mTxs.add(tx);
-        //    }
-        //}
-        //for ( Tx tx : mTxs ) {
-        //    TxsListItem item;
-        //    String date = tx...... get date as string
-        //    String category = tx..... get category as string
-        //    String amount = tx...... get amount as string
-        //    String confs = tx..... get confirmation count as string
-        //    item = new TxsListItem(date, category, amount, confs);
-        //    mItems.add(item);
-        //}
+        for (Walletx w : wtxs) {
+            System.out.println(wtxs.get(0).name + "Testings!!!!!!!!!!!!!!!!!!!1");
 
-        // Throwing some garbage data in list view TODO replace this code
-        for (int i = 0; i < 5; i++) {
-            TxsListItem item;
-            item = new TxsListItem("28 Mar 2015", "Uncategorized", "5", "7");
-            mItems.add(item);
+            List<Tx> txsForThisWtx = w.txs();
+            System.out.println(txsForThisWtx.get(0).timestamp);
+            for (int i =0 ; i <  txsForThisWtx.size() ; i++) {
+//               mTxs.add(Tx.getTxIndex((long) i));
+            }
+
+            for (int i = 0; i < txsForThisWtx.size(); i++) {
+                TxsListItem item;
+                String date = df.format(txsForThisWtx.get(i).timestamp);
+//                String category = txsForThisWtx.get(i).category.name;
+                String amount = Long.toString(txsForThisWtx.get(i).amountBTC);
+//                String confs = tx..... get confirmation count as string
+                item = new TxsListItem(date, "category", amount, "Confirmations");
+                mItems.add(item);
+            }
+
+            // Throwing some garbage data in list view TODO replace this code
+//            for (int i = 0; i < 5; i++) {
+ //               TxsListItem item;
+  //              item = new TxsListItem("28 Mar 2015", "Uncategorized", "5", "7");
+   //             mItems.add(item);
+    //        }
         }
     }
 

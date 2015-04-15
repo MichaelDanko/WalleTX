@@ -25,7 +25,7 @@ import java.util.TimeZone;
 public class Tx extends Model {
 
     @Column(name = "timestamp", index = true)
-    private Date timestamp;
+    public Date timestamp;
 
     // TODO can we get the time zone from the system and append it to our date?
 //    public void setDateFromString(Date date) {
@@ -41,7 +41,7 @@ public class Tx extends Model {
 //    }
 
     @Column(name = "amountBTC")
-    private long amountBTC;
+    public long amountBTC;
 
     @Column(name = "amountLC")
     private long amountLC;
