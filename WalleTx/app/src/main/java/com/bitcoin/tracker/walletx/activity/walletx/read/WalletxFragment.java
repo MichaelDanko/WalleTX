@@ -26,6 +26,8 @@ import com.bitcoin.tracker.walletx.activity.walletx.updateDelete.WalletxUpdateAc
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummaryAllActivity;
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummaryGroupActivity;
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummarySingleActivity;
+import com.bitcoin.tracker.walletx.api.BlockchainInfo;
+import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
@@ -53,6 +55,9 @@ public class WalletxFragment extends Fragment {
     View mHeader; // all wallets header for exp. list view
     View mFooter; // no wallets footer (shown only when no wallets are added)
 
+    // Reference to activity
+    static Activity mActivity;
+
     // displays when sync in progress
     private ProgressBar mSyncProgressBar;
 
@@ -76,6 +81,8 @@ public class WalletxFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+
+        mActivity = getActivity();
 
         View view = inflater.inflate(R.layout.fragment_walletx, container, false);
         mExpListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
@@ -280,21 +287,10 @@ public class WalletxFragment extends Fragment {
                  *
                  */
 
-                startSyncProgressBar(getActivity());
+                Walletx wtx = Walletx.getBy(data.getStringExtra("name_of_wtx_added"));
+                SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
+                new BlockchainInfo(this, saw.publicKey, wtx).execute();
 
-                // THIS IS JUST A TEMP TIME DELAY TO SHOW WHAT THE UX SHOULD BE LIKE.
-                // TODO delete when implemented
-                Toast.makeText(getActivity(), "TODO: Sync all transactions associated with this new wallet and then update the list view.", Toast.LENGTH_SHORT).show();
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {}
-                        stopSyncProgressBarIn(getActivity());
-                    }
-                };
-                thread.start();
 
             }
         } else if (requestCode == WALLETX_UPDATED || requestCode == WALLET_GROUP_UPDATED) {
@@ -324,23 +320,7 @@ public class WalletxFragment extends Fragment {
              * TODO Implement user initiated sync
              * Check if a sync is already in progress before starting
              */
-
-            startSyncProgressBar(getActivity());
-
-            // THIS IS JUST A TEMP TIME DELAY TO SHOW WHAT THE UX SHOULD BE LIKE.
-            // TODO delete when implemented
             Toast.makeText(getActivity(), "TODO: Sync all transactions associated with this new wallet and then update the list view.", Toast.LENGTH_SHORT).show();
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {}
-                    stopSyncProgressBarIn(getActivity());
-
-                }
-            };
-            thread.start();
 
             return true;
         } else if (item.getItemId() == R.id.action_add_wallet) {
@@ -352,28 +332,36 @@ public class WalletxFragment extends Fragment {
     }
 
     //endregion
-    //region PROGRESS BAR
+    //region SYNC
 
-    private void startSyncProgressBar(Activity activity) {
-        if ( activity != null ) {
-            activity.runOnUiThread(new Runnable() {
+    public void startSync() {
+        // Rotate progress bar
+        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
+        if ( mActivity != null && pb != null ) {
+            mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mSyncProgressBar.setVisibility(View.VISIBLE);
+                    pb.setVisibility(View.VISIBLE);
                 }
             });
         }
     }
 
-    private void stopSyncProgressBarIn(Activity activity) {
-        if ( activity != null ) {
-            activity.runOnUiThread(new Runnable() {
+    public void stopSync() {
+        // stop progress bar
+        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
+        if ( mActivity != null && pb != null ) {
+            mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mSyncProgressBar.setVisibility(View.GONE);
+                    pb.setVisibility(View.GONE);
                 }
             });
         }
+        // update list view
+        prepareData();
+        mListApapter.updateData(mGroupHeader, mListDataChild);
+        Toast.makeText(getActivity(), "TODO: Verify sync success and delete this toast message.", Toast.LENGTH_SHORT).show();
     }
 
     //endregion

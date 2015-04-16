@@ -200,16 +200,14 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
                     saWallet.wtx = wtx;
                     saWallet.save();
 
-                    new BlockchainInfo(saWallet. publicKey, wtx).execute();
+                    // Notify parent activity
+                    if (mListener != null) {
+                        mListener.onFragmentInteraction(wtx.name);
+                    }
 
                     break;
                 default:
                     throw new IllegalArgumentException();
-            }
-
-            // Notify parent activity
-            if (mListener != null) {
-                mListener.onFragmentInteraction();
             }
 
         } else if (!addressIsValid) {
@@ -235,7 +233,7 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
      * activity.
      */
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction();
+        public void onFragmentInteraction(String name_of_wtx_added);
     }
 
     //endregion

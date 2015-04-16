@@ -111,6 +111,7 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         // TODO @dc @as Update the BTC current balance, update the LC current balance & LC label
         //              for this walletx
         //----------------------------------------------------------------------------------------
+
     }
 
     @Override
