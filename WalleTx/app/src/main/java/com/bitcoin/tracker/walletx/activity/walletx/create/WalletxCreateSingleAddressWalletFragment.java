@@ -1,6 +1,7 @@
 package com.bitcoin.tracker.walletx.activity.walletx.create;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -195,8 +196,16 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
                     wtx.group = group;
                     wtx.save();
 
+
+
                     SingleAddressWallet saWallet = new SingleAddressWallet();
                     saWallet.publicKey = mPublicKey.getText().toString();
+
+                    //checks if key exists in database, throws toast
+                    if (SingleAddressWallet.isAPkey(saWallet.publicKey) > 0){
+                        Toast.makeText(getActivity(), "That public key already exsists!", Toast.LENGTH_LONG).show();
+                    }
+
                     saWallet.wtx = wtx;
                     saWallet.save();
 

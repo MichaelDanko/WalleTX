@@ -1,6 +1,8 @@
 package com.bitcoin.tracker.walletx.model;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
@@ -40,20 +42,19 @@ public class Tx extends Model {
 //        }
 //    }
 
-    @Column(name = "confirmations")
-    public long confirmations;
+
 
     @Column(name = "amountBTC")
     public long amountBTC;
 
     @Column(name = "amountLC")
-    private long amountLC;
+    public long amountLC;
 
     @Column(name = "block")
-    private long block;
+    public String block;
 
     @Column(name = "tx_index")
-    private long tx_index;
+    public long tx_index;
 
     @Column(name = "hash")
     public String hash;
@@ -179,4 +180,31 @@ public class Tx extends Model {
                     tx.confirmations);
         }
     }
+
+
+    /*----------------
+    * TX Validation *
+     --------------*/
+
+    /**
+     * Validates if new tx is table.  Checks a timestamp to make sure it's unique
+     * @param context application context
+     * @param time timestamp of tx
+     * @return boolean true or false
+     */
+    public static boolean validateTimeStampIsUnique(Context context, Date time){
+        List<Tx> txs = Tx.getAllTxTest();
+
+        for (Tx tx : txs){
+            if (tx.timestamp.equals(time)){
+                String error = "A transaction already exsists with that timestamp";
+                Toast.makeText(context, error, Toast.LENGTH_LONG).show();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
 } // Tx

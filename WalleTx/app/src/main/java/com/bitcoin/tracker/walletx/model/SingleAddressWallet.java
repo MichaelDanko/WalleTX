@@ -1,5 +1,8 @@
 package com.bitcoin.tracker.walletx.model;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -7,6 +10,7 @@ import com.activeandroid.query.Select;
 import com.google.bitcoin.core.Address;
 import com.google.bitcoin.core.AddressFormatException;
 
+import java.lang.ref.SoftReference;
 import java.util.List;
 
 /**
@@ -79,6 +83,13 @@ public class SingleAddressWallet extends Model implements WalletxBlockchainInter
                 .executeSingle();
     }
 
+    public static SingleAddressWallet getPublicKey(String pKey){
+        return new Select()
+                .from(SingleAddressWallet.class)
+                .where("publicKey = ?", pKey)
+                .executeSingle();
+    }
+
     /**
      * Validates if a string is a valid public key.
      */
@@ -90,5 +101,22 @@ public class SingleAddressWallet extends Model implements WalletxBlockchainInter
             return false;
         }
     }
+
+
+    /* ---------------
+    Validation
+    --------------- */
+
+    /**
+     * Count for pkey value
+     * @param pkey public to be checked
+     * @return int or the count of the columns if >0 than in table already 
+     */
+
+    public static int isAPkey(String pkey){
+        return new Select().from(SingleAddressWallet.class).where("publicKey = ?", pkey).count();
+    }
+
+
 
 } // SingleAddressWallet
