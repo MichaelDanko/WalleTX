@@ -88,6 +88,7 @@ import java.util.concurrent.CountDownLatch;
           //SingleAddressWallet.dump();
 
           try {
+              long currentBlockHeight = getBlockHeight();
               json = readUrl("https://blockchain.info/address/" + publicAddress + "?format=json");
               Gson gson = new Gson();
               btcTransaction newTransaction = gson.fromJson(json, btcTransaction.class);
@@ -114,14 +115,34 @@ import java.util.concurrent.CountDownLatch;
                   for (int j=0; j < transaction.txs.get(i).inputs.size(); j++) {
                       if ((transaction.txs.get(i).inputs.get(j).prev_out.addr.equals(publicAddress))
                          && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
-                          insertTx = new Tx(new Date(transaction.txs.get(i).time * 1000L), wtx, "block", transaction.txs.get(i).tx_index, new TxCategory("Default"), new TxNote(newTx, "Default Note"), 0 - transaction.txs.get(i).inputs.get(j).prev_out.value, 100);
+                          insertTx = new Tx(new Date(transaction.txs.get(i).time * 1000L),
+                                            wtx,
+                                            transaction.txs.get(i).block_height,
+                                            currentBlockHeight - transaction.txs.get(i).block_height,
+                                            transaction.txs.get(i).tx_index,
+                                            new TxCategory("Uncategorized"),
+                                            new TxNote(newTx, "Note"),
+                                            0 - transaction.txs.get(i).inputs.get(j).prev_out.value,
+                                            100,
+                                            transaction.txs.get(i).hash);
+                                        System.out.println(Long.toString(currentBlockHeight));
+                                        System.out.println(Long.toString(currentBlockHeight - transaction.txs.get(i).block_height));
                           insertTx.save();
                       }
                   }
                   for (int j=0; j < transaction.txs.get(i).out.size(); j++){
                     if (transaction.txs.get(i).out.get(j).addr.equals(publicAddress)
                          && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
-                      insertTx = new Tx (new Date(transaction.txs.get(i).time * 1000L), wtx, "block", transaction.txs.get(i).tx_index, new TxCategory("Default"), new TxNote(newTx, "Default Note"), transaction.txs.get(i).out.get(j).value, 100);
+                      insertTx = new Tx (new Date(transaction.txs.get(i).time * 1000L),
+                                         wtx,
+                                         transaction.txs.get(i).block_height,
+                                         currentBlockHeight - transaction.txs.get(i).block_height,
+                                         transaction.txs.get(i).tx_index,
+                                         new TxCategory("Uncategorized"),
+                                         new TxNote(newTx, "Default Note"),
+                                         transaction.txs.get(i).out.get(j).value,
+                                         100,
+                                         transaction.txs.get(i).hash);
                       insertTx.save();
                     }
                   }
@@ -211,6 +232,36 @@ import java.util.concurrent.CountDownLatch;
               e.printStackTrace();
             }
         }
+      }
+
+      private static Long getBlockHeight() throws Exception {
+          BufferedReader reader = null;
+          try {
+              URL url = new URL("https://blockchain.info/q/getblockcount");
+              try {
+                  reader = new BufferedReader(new InputStreamReader(url.openStream()));
+              } catch (IOException e) {
+                  e.printStackTrace();
+              }
+              StringBuffer buffer = new StringBuffer();
+              int read;
+              char[] chars = new char[1024];
+              try {
+                  while ((read = reader.read(chars)) != -1)
+                      buffer.append(chars, 0, read);
+              } catch (IOException e) {
+                  e.printStackTrace();
+              }
+
+              return Long.parseLong(buffer.toString());
+          } finally {
+              if (reader != null)
+                  try {
+                      reader.close();
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                  }
+          }
       }
 
     @Override

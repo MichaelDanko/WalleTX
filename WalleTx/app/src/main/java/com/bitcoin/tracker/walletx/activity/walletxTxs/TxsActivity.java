@@ -77,8 +77,8 @@ public class TxsActivity extends ActionBarActivity {
                 if (position != 0) {
                     Intent intent = new Intent( getBaseContext(), TxDetailActivity.class );
                     // TODO Uncomment and test once data is present
-                    //Tx tx = mTxs.get(position);
-                    //intent.putExtra( "hash", tx.hash );
+                    Tx tx = mTxs.get(position - 1);
+                    intent.putExtra( "hash", tx.hash );
                     startActivity(intent);
                 }
             }
@@ -90,33 +90,22 @@ public class TxsActivity extends ActionBarActivity {
 
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
-        // TODO Get txs and add to mItems (Code below written quickly, untested)
         // Get list of transactions associated with our wtxs
         for (Walletx w : wtxs) {
-            System.out.println(wtxs.get(0).name + "Testings!!!!!!!!!!!!!!!!!!!1");
 
             List<Tx> txsForThisWtx = w.txs();
-            System.out.println(txsForThisWtx.get(0).timestamp);
-            for (int i =0 ; i <  txsForThisWtx.size() ; i++) {
-//               mTxs.add(Tx.getTxIndex((long) i));
-            }
+            mTxs = txsForThisWtx;
 
             for (int i = 0; i < txsForThisWtx.size(); i++) {
                 TxsListItem item;
                 String date = df.format(txsForThisWtx.get(i).timestamp);
-//                String category = txsForThisWtx.get(i).category.name;
+ //               String category = txsForThisWtx.get(i).category.name;
                 String amount = Long.toString(txsForThisWtx.get(i).amountBTC);
-//                String confs = tx..... get confirmation count as string
-                item = new TxsListItem(date, "category", amount, "Confirmations");
+                String confirmations = Long.toString(txsForThisWtx.get(i).confirmations);
+                String hash = txsForThisWtx.get(i).hash;
+                item = new TxsListItem(date, "category", amount, confirmations, hash);
                 mItems.add(item);
             }
-
-            // Throwing some garbage data in list view TODO replace this code
-//            for (int i = 0; i < 5; i++) {
- //               TxsListItem item;
-  //              item = new TxsListItem("28 Mar 2015", "Uncategorized", "5", "7");
-   //             mItems.add(item);
-    //        }
         }
     }
 

@@ -44,8 +44,10 @@ public class btcTransaction {
         public int ver;
         public List<jsonInputs> inputs;
         public List<jsonOutputs> out;
+        public long block_height;
         public long time;
         public long tx_index;
+        public String hash;
 
     }
 
@@ -71,8 +73,6 @@ public class btcTransaction {
     // Additional Fields
     String amountBTC;
     String amountLC;
-    String block;
-    String hash;
     String wtx;
     String category;
     String note;

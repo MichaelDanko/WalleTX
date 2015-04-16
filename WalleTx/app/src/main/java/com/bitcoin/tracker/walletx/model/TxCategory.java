@@ -20,7 +20,7 @@ import java.util.List;
 public class TxCategory extends Model {
 
     @Column(name = "Name")
-    public String name;
+    public String name = "Uncategorized";
 
     // Has many Tx's
     public List<Tx> txs() {
@@ -33,7 +33,7 @@ public class TxCategory extends Model {
 
     public TxCategory(String name) {
         super();
-        this.name = name;
+        this.name = new String(name);
     }
 
     /*----------------------*

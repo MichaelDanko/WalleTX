@@ -40,6 +40,9 @@ public class Tx extends Model {
 //        }
 //    }
 
+    @Column(name = "confirmations")
+    public long confirmations;
+
     @Column(name = "amountBTC")
     public long amountBTC;
 
@@ -47,10 +50,13 @@ public class Tx extends Model {
     private long amountLC;
 
     @Column(name = "block")
-    private String block;
+    private long block;
 
     @Column(name = "tx_index")
     private long tx_index;
+
+    @Column(name = "hash")
+    public String hash;
 
     // Belongs to one Walletx (mandatory)
     @Column(name = "Walletx")
@@ -68,15 +74,17 @@ public class Tx extends Model {
         super();
     }
 
-    public Tx(Date date, Walletx wtx, String block, long tx_index, TxCategory category,
-              TxNote note, long amountBTC, long amountLC) {
+    public Tx(Date date, Walletx wtx, long block, long confirmations, long tx_index, TxCategory category,
+              TxNote note, long amountBTC, long amountLC, String hash) {
         super();
         //this.setDateFromString(date);
         this.timestamp = date;
         this.amountBTC = amountBTC;
         this.amountLC = amountLC;
         this.block = block;
+        this.confirmations = confirmations;
         this.tx_index = tx_index;
+        this.hash = hash;
         this.wtx = wtx;
         this.category = category;
         this.note = note;
@@ -94,6 +102,18 @@ public class Tx extends Model {
         return new Select()
                 .from(Tx.class)
                 .where("tx_index = ?", _tx_index)
+                .orderBy("timestamp DESC")
+                .executeSingle();
+    }
+
+    /**
+     * @return a specific row with query of WalleTx
+     */
+
+    public static Tx getTxByHash(String _hash){
+        return new Select()
+                .from(Tx.class)
+                .where("hash = ?", _hash)
                 .orderBy("timestamp DESC")
                 .executeSingle();
     }
@@ -152,10 +172,11 @@ public class Tx extends Model {
         List<Tx> txs = Tx.getAllTxTest();
         for (Tx tx : txs) {
             System.out.printf(
-                    "%-20s %-29s %-16s\n",
+                    "%-20s %-29s %-16s %-15s\n",
                     tx.amountBTC,
                     tx.timestamp,
-                    tx.tx_index);
+                    tx.tx_index,
+                    tx.confirmations);
         }
     }
 } // Tx

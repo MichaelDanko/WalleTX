@@ -11,9 +11,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.model.Tx;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /*
  * Tx Details Activity
@@ -46,6 +51,18 @@ public class TxDetailActivity extends ActionBarActivity {
         // TODO Prepare tag data for the AutoComplete ArrayAdapter and remove dummy array
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, TAGS);
         mTagAutoCompleteTextView.setAdapter(adapter);
+
+
+        // Retrieve Extras
+        String extras = getIntent().getExtras().getString("hash");
+        Tx txDetail = Tx.getTxByHash(extras);
+        final TextView timeTextField = (TextView) findViewById(R.id.time);
+        final TextView dateTextField = (TextView) findViewById(R.id.tx_date);
+        DateFormat time = new SimpleDateFormat("HH:mm:ss");
+        DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
+        timeTextField.setText(time.format(txDetail.timestamp));
+        dateTextField.setText(date.format(txDetail.timestamp));
+
     }
 
     private void getUIViews() {
