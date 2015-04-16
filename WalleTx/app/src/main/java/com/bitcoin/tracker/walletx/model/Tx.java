@@ -51,10 +51,13 @@ public class Tx extends Model {
     public long amountLC;
 
     @Column(name = "block")
-    public String block;
+    public long block;
 
     @Column(name = "tx_index")
     public long tx_index;
+
+    @Column(name = "confirmation")
+    public long confirmations;
 
     @Column(name = "hash")
     public String hash;
