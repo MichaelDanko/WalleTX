@@ -193,7 +193,6 @@ public class WalletxFragment extends Fragment {
     private ExpandableListView.OnChildClickListener childWalletClickListener = new ExpandableListView.OnChildClickListener() {
         @Override
         public boolean onChildClick (ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-            System.out.println("AM I CALLED");
             TextView tv = (TextView) v.findViewById(R.id.walletName);
             Intent intent = new Intent( getActivity(), WalletxSummarySingleActivity.class );
             intent.putExtra("walletx_name", tv.getText().toString());
