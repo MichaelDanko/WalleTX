@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.Tx;
 
+import org.w3c.dom.Text;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -58,11 +60,22 @@ public class TxDetailActivity extends ActionBarActivity {
         Tx txDetail = Tx.getTxByHash(extras);
         final TextView timeTextField = (TextView) findViewById(R.id.time);
         final TextView dateTextField = (TextView) findViewById(R.id.tx_date);
+        final TextView confirmTextField = (TextView) findViewById(R.id.textView8);
+        final TextView txIDField = (TextView) findViewById(R.id.textView10);
+        final TextView spendReceiveLabel = (TextView) findViewById(R.id.spent_or_received_label);
+        final TextView spendReceiveAmount = (TextView) findViewById(R.id.spent_or_received_amount);
+        if (txDetail.amountBTC < 0) {
+            spendReceiveLabel.setText("Spent");
+        } else {
+            spendReceiveLabel.setText("Received");
+        }
+        spendReceiveAmount.setText(Long.toString(txDetail.amountBTC));
         DateFormat time = new SimpleDateFormat("HH:mm:ss");
         DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
         timeTextField.setText(time.format(txDetail.timestamp));
         dateTextField.setText(date.format(txDetail.timestamp));
-
+        confirmTextField.setText(Long.toString(txDetail.confirmations));
+        txIDField.setText(txDetail.hash);
     }
 
     private void getUIViews() {
