@@ -79,8 +79,13 @@ public class WalletxSummaryModuleTxs extends Fragment {
         // get the list of walletxs being summarized from parent activity
         List<Walletx> wtxs = ((WalletxSummaryAbstractActivity)this.getActivity()).getWtxs();
 
-        mReceivedCount = 11; // TODO @dc add query to return the number of txs received (replace # with query)
-        mSentCount = 7; // TODO @dc add query to return the number of txs sent (replace # with query)
+        Walletx.dump();
+        for (Walletx wtx: wtxs) {
+            mReceivedCount += wtx.totalReceive;
+            System.out.println("Dump" + Long.toString(wtx.totalReceive));
+            mSentCount += wtx.totalSpend;
+                        System.out.println("Dump" + Long.toString(wtx.totalSpend));
+        }
 
         List<SliceValue> values = new ArrayList<>();
         values.add(new SliceValue((float) mReceivedCount, ChartUtils.COLOR_GREEN));

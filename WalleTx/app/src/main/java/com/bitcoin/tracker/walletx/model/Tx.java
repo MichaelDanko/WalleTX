@@ -42,7 +42,8 @@ public class Tx extends Model {
 //        }
 //    }
 
-
+    @Column(name = "addres")
+    public String address;
 
     @Column(name = "amountBTC")
     public long amountBTC;
@@ -78,10 +79,11 @@ public class Tx extends Model {
         super();
     }
 
-    public Tx(Date date, Walletx wtx, long block, long confirmations, long tx_index, TxCategory category,
+    public Tx(String address, Date date, Walletx wtx, long block, long confirmations, long tx_index, TxCategory category,
               TxNote note, long amountBTC, long amountLC, String hash) {
         super();
         //this.setDateFromString(date);
+        this.address = new String(address);
         this.timestamp = date;
         this.amountBTC = amountBTC;
         this.amountLC = amountLC;

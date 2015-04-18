@@ -31,6 +31,18 @@ public class Walletx extends Model {
     @Column(name = "WalletGroup")
     public WalletGroup group;
 
+    // Sum of Spending Records
+    @Column(name = "TotalSpend")
+    public long totalSpend = 0;
+
+    // Sum of Receive Records
+    @Column(name = "TotalReceive")
+    public long totalReceive = 0;
+
+    // Final Balance of the Wallet
+    @Column(name = "FinalBalance")
+    public long finalBalance = 0;
+
     // Has many Txs
     public List<Tx> txs() {
         return getMany(Tx.class, "Walletx");

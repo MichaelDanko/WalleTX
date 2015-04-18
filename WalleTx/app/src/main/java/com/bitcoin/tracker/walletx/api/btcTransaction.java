@@ -24,7 +24,7 @@ public class btcTransaction {
         public boolean spent;
         public int tx_index;
         public String addr;
-        public int value;
+        public long value;
     }
 
     static public class jsonInputs {
@@ -36,7 +36,7 @@ public class btcTransaction {
         public boolean spent;
         public int tx_index;
         public String addr;
-        public int value;
+        public long value;
 
     }
 

@@ -62,6 +62,12 @@ public class TxsAdapter extends ArrayAdapter<TxsListItem> {
     private void setupTextLabels(int position) {
         mDate.setText(mItemsArrayList.get(position).getmDate());
         mCategory.setText(mItemsArrayList.get(position).getmCategory());
+        if (Long.parseLong(mItemsArrayList.get(position).getmAmount()) > 0) {
+            mAmount.setTextColor(0xFF228B22);
+        }
+        else {
+            mAmount.setTextColor(0xFFFF0000);
+        }
         mAmount.setText(mItemsArrayList.get(position).getmAmount());
         mConfirmations.setText(mItemsArrayList.get(position).getmConfirmations());
     }

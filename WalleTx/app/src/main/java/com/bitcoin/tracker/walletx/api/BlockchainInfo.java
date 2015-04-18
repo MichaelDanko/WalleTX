@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 // Data Model Functionality
+import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.TxCategory;
 import com.bitcoin.tracker.walletx.model.TxNote;
@@ -88,7 +89,14 @@ import java.util.concurrent.CountDownLatch;
           //SingleAddressWallet.dump();
 
           try {
+              // Sync Current Block Height
               long currentBlockHeight = getBlockHeight();
+
+              // Sync Exchange Rates
+              ExchangeRate exchangeRate = new ExchangeRate(new Date(System.currentTimeMillis() / 1000L), getUSDExchangeRate(), 0, 0);
+              exchangeRate.save();
+
+              // Sync Wallet Data
               json = readUrl("https://blockchain.info/address/" + publicAddress + "?format=json");
               Gson gson = new Gson();
               btcTransaction newTransaction = gson.fromJson(json, btcTransaction.class);
@@ -117,7 +125,8 @@ import java.util.concurrent.CountDownLatch;
                          && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
                           TxCategory insertCategory = new TxCategory("Uncategorized");
                           insertCategory.save();
-                          insertTx = new Tx(new Date(transaction.txs.get(i).time * 1000L),
+                          insertTx = new Tx(transaction.address,
+                                            new Date(transaction.txs.get(i).time * 1000L),
                                             wtx,
                                             transaction.txs.get(i).block_height,
                                             currentBlockHeight - transaction.txs.get(i).block_height,
@@ -129,15 +138,22 @@ import java.util.concurrent.CountDownLatch;
                                             transaction.txs.get(i).hash);
                                         System.out.println(Long.toString(currentBlockHeight));
                                         System.out.println(Long.toString(currentBlockHeight - transaction.txs.get(i).block_height));
+
+
+                          insertTx.wtx.totalReceive++;
+                          insertTx.wtx.save();
+
                           insertTx.save();
                       }
                   }
+
                   for (int j=0; j < transaction.txs.get(i).out.size(); j++){
                     if (transaction.txs.get(i).out.get(j).addr.equals(publicAddress)
                          && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
                       TxCategory insertCategory = new TxCategory("Uncategorized");
                       insertCategory.save();
-                      insertTx = new Tx (new Date(transaction.txs.get(i).time * 1000L),
+                      insertTx = new Tx (transaction.address,
+                                         new Date(transaction.txs.get(i).time * 1000L),
                                          wtx,
                                          transaction.txs.get(i).block_height,
                                          currentBlockHeight - transaction.txs.get(i).block_height,
@@ -147,10 +163,14 @@ import java.util.concurrent.CountDownLatch;
                                          transaction.txs.get(i).out.get(j).value,
                                          100,
                                          transaction.txs.get(i).hash);
+                      insertTx.wtx.totalSpend++;
+                      insertTx.wtx.save();
                       insertTx.save();
                     }
                   }
               }
+              insertTx.wtx.finalBalance = transaction.final_balance;
+              insertTx.wtx.save();
              Tx.dump();
 
 
@@ -258,6 +278,36 @@ import java.util.concurrent.CountDownLatch;
               }
 
               return Long.parseLong(buffer.toString());
+          } finally {
+              if (reader != null)
+                  try {
+                      reader.close();
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                  }
+          }
+      }
+
+      private static Float getUSDExchangeRate() throws Exception {
+          BufferedReader reader = null;
+          try {
+              URL url = new URL("https://blockchain.info/q/24hrprice");
+              try {
+                  reader = new BufferedReader(new InputStreamReader(url.openStream()));
+              } catch (IOException e) {
+                  e.printStackTrace();
+              }
+              StringBuffer buffer = new StringBuffer();
+              int read;
+              char[] chars = new char[1024];
+              try {
+                  while ((read = reader.read(chars)) != -1)
+                      buffer.append(chars, 0, read);
+              } catch (IOException e) {
+                  e.printStackTrace();
+              }
+
+              return Float.parseFloat(buffer.toString());
           } finally {
               if (reader != null)
                   try {
