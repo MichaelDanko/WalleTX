@@ -22,6 +22,9 @@ public class WalletxSummaryGroupActivity extends WalletxSummaryAbstractActivity 
         mGroupName = intent.getStringExtra("group_name");
         setActivityTitle();
         populateWalletxList();
+
+        // Refresh the pie chart to display data for this group
+        mTxSummaryModule.refreshPieChart();
     }
 
     protected void populateWalletxList() {

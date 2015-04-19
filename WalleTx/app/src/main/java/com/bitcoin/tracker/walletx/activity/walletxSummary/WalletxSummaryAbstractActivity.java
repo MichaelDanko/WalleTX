@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import com.bitcoin.tracker.walletx.model.SupportedSummaryType;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -33,7 +35,7 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
      * The list of walletx's that we are going to summarize.
      * Set by child class.
      */
-    protected List<Walletx> wtxs = Walletx.getAll();
+    protected List<Walletx> wtxs = new LinkedList<>();
 
     public List<Walletx> getWtxs() {
         return wtxs;
@@ -44,6 +46,8 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
 
     // displays when sync in progress
     private ProgressBar mSyncProgressBar;
+
+    protected WalletxSummaryModuleTxs mTxSummaryModule;
 
     // Required implementation by child classes
     protected abstract void populateWalletxList();
@@ -58,6 +62,8 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mActivity = this;
+
+        mTxSummaryModule = (WalletxSummaryModuleTxs) getFragmentManager().findFragmentById(R.id.moduleTxs);
 
         // setup sync progress spinner
         mSyncProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);

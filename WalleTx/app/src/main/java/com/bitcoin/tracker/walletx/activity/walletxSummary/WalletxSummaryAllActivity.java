@@ -17,6 +17,9 @@ public class WalletxSummaryAllActivity extends WalletxSummaryAbstractActivity {
         super.onCreate(savedInstanceState);
         setActivityTitle();
         populateWalletxList();
+
+        // Refresh the pie chart to display data for this group
+        mTxSummaryModule.refreshPieChart();
     }
 
     protected void populateWalletxList() {

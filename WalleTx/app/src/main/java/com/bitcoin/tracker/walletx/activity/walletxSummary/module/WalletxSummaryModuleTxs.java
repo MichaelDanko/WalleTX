@@ -106,6 +106,12 @@ public class WalletxSummaryModuleTxs extends Fragment {
         mChart.setPieChartData(mData);
     }
 
+    public void refreshPieChart() {
+        setPieChartData();
+        mChart.setPieChartData(null);
+        createPieChart();
+    }
+
     /**
      * Binds listener to the module container element
      */
