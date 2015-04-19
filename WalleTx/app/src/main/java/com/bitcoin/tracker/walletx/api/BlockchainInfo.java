@@ -13,7 +13,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 // Data Model Functionality
-import com.bitcoin.tracker.walletx.activity.walletx.read.WalletxFragment;
+import com.bitcoin.tracker.walletx.activity.SyncableInterface;
 import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.TxCategory;
@@ -44,7 +44,7 @@ import java.util.concurrent.CountDownLatch;
   public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
 
     // Reference to calling fragment
-    WalletxFragment wtxFrag;
+    SyncableInterface caller;
 
     // The public address of the wallet to pull from blockchain.info
     private final String publicAddress;
@@ -70,10 +70,10 @@ import java.util.concurrent.CountDownLatch;
         Log.v(logInfo + "Cons", this.publicAddress );
     }
 
-    // Two parameter constructor, address and wallet
-    public BlockchainInfo(WalletxFragment wtxFrag, String publicAddress, Walletx wtx) {
+    // Two parameter constructor, calling fragment, address and wallet
+    public BlockchainInfo(SyncableInterface caller, String publicAddress, Walletx wtx) {
         super();
-        this.wtxFrag = wtxFrag;
+        this.caller = caller;
         this.publicAddress = new String(publicAddress);
         this.wtx = wtx;
         Log.v(logInfo + "Cons", this.publicAddress );
@@ -336,13 +336,16 @@ import java.util.concurrent.CountDownLatch;
 
     @Override
     protected void onPostExecute(Boolean result) {
-       //super.onPostExecute(result);
-        wtxFrag.stopSync();
+        if (caller != null) {
+            caller.stopSyncRelatedUI();
+        }
     }
 
     @Override
     protected void onPreExecute() {
-        wtxFrag.startSync();
+        if (caller != null) {
+            caller.startSyncRelatedUI();
+        }
     }
 
   } // BlockchainInfo
