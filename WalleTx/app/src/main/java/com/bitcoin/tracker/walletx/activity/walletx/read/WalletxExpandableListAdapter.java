@@ -1,5 +1,6 @@
 package com.bitcoin.tracker.walletx.activity.walletx.read;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,10 +14,13 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.api.BlockchainInfo;
+import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.WalletType;
 import com.bitcoin.tracker.walletx.model.Walletx;
+import com.google.bitcoin.core.Block;
 
 /**
  * Sets up the expandable list view on the main WalleTx fragment.
@@ -98,6 +102,7 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
 
     private void prepareChildData(int groupPosition, int childPosition) {
         final String walletName = (String) getChild(groupPosition, childPosition);
+        float usdExchangeRate = 0;
         Walletx wtx = Walletx.getBy(walletName); // get walletx by mName
         mName.setText(wtx.name);
         if (wtx.type.equals(WalletType.SINGLE_ADDRESS_WALLET)) {
@@ -107,6 +112,18 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
                 mDescription.setText(saw.publicKey);
         }
 
+        ExchangeRate.dump();
+
+        try {
+            mBtcBalance.setText(Long.toString(wtx.finalBalance));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            mLocalCurrencyBalance.setText(Float.toString(wtx.finalBalance * ExchangeRate.getUSD()));
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
         //----------------------------------------------------------------------------------------
         // TODO @dc @as Update the BTC current balance, update the LC current balance & LC label
         //              for this walletx

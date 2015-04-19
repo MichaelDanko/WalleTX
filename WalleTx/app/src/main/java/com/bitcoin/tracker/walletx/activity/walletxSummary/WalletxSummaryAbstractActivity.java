@@ -26,7 +26,7 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
      * The list of walletx's that we are going to summarize.
      * Set by child class.
      */
-    protected List<Walletx> wtxs;
+    protected List<Walletx> wtxs = Walletx.getAll();
 
     public List<Walletx> getWtxs() {
         return wtxs;

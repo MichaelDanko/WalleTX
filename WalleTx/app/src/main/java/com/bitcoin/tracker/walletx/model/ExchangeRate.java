@@ -20,7 +20,7 @@ import java.util.List;
  * TODO Investigate coindesk API to see how far back data goes. Will impact charts.
  *
  */
-@Table(name = "ExhangeRate")
+@Table(name = "ExchangeRate")
 public class ExchangeRate extends Model {
 
     @Column(name = "timestamp")
@@ -52,9 +52,10 @@ public class ExchangeRate extends Model {
         super();
     }
 
-    public ExchangeRate(String date, float usd, float eur, float gbp) {
+    public ExchangeRate(Date timestamp, float usd, float eur, float gbp) {
         super();
-        this.setDateFromString(date);
+        //this.setDateFromString(date);
+        this.timestamp = timestamp;
         this.usd = usd;
         this.eur = eur;
         this.gbp = gbp;
@@ -105,11 +106,12 @@ public class ExchangeRate extends Model {
      * @return  most recent USD by timestamp
      */
 
-    public static ExchangeRate getUSD(){
+    public static Float getUSD(){
         //raw query to get one item from column
         List<ExchangeRate> USDrates = SQLiteUtils.rawQuery(ExchangeRate.class, "Select USD from ExchangeRate Order by timestamp DESC Limit 1", new String[]{"null"} );
         //returns pull list item
-        return USDrates.get(0);
+        System.out.println("USD:"+USDrates.get(0).usd);
+        return USDrates.get(0).usd;
     }
 
 
@@ -117,11 +119,11 @@ public class ExchangeRate extends Model {
      * @return returns most recent EUR by timestamp
      */
 
-    public static ExchangeRate getEUR(){
+    public static Float getEUR(){
         //raw query to get one item from column
         List<ExchangeRate> EURrates = SQLiteUtils.rawQuery(ExchangeRate.class, "Select EUR from ExchangeRate Order by timestamp DESC Limit 1", new String[]{"null"} );
         //returns pull list item
-        return EURrates.get(0);
+        return EURrates.get(0).eur;
     }
 
 
@@ -129,11 +131,11 @@ public class ExchangeRate extends Model {
      * @return returns most recent GBR by timestamp
      */
 
-    public static ExchangeRate getGBR(){
+    public static Float getGBR(){
         //raw query to get one item from column
         List<ExchangeRate> GBRrates = SQLiteUtils.rawQuery(ExchangeRate.class, "Select GBR from ExchangeRate Order by timestamp DESC Limit 1", new String[]{"null"} );
         //returns pull list item
-        return GBRrates.get(0);
+        return GBRrates.get(0).gbp;
     }
 
     /**
@@ -143,7 +145,7 @@ public class ExchangeRate extends Model {
     public static List<ExchangeRate> getAllSortedTime(){
         return new Select()
                 .from(ExchangeRate.class)
-                .orderBy("Timestamp DSC")
+                .orderBy("Timestamp DESC")
                 .execute();
     }
 

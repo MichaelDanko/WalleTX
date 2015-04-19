@@ -88,7 +88,11 @@ public class TxsActivity extends ActionBarActivity {
     private void prepareData() {
         mItems.clear();
 
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        DateFormat df = new SimpleDateFormat("MM-dd-yyyy h:mm:ss a");
+
+        TextView txsHeaderCount = (TextView) findViewById(R.id.txs_header_tx_count);
+
+        long tempTxsCount = 0;
 
         // Get list of transactions associated with our wtxs
         for (Walletx w : wtxs) {
@@ -96,17 +100,23 @@ public class TxsActivity extends ActionBarActivity {
             List<Tx> txsForThisWtx = w.txs();
             mTxs = txsForThisWtx;
 
+            tempTxsCount = w.totalReceive + w.totalSpend;
+
             for (int i = 0; i < txsForThisWtx.size(); i++) {
                 TxsListItem item;
                 String date = df.format(txsForThisWtx.get(i).timestamp);
- //               String category = txsForThisWtx.get(i).category.name;
+                // This cause a null pointer expection, unsure if the TxCategory is being created
+                // correctly in BlockChainInfo.java or if there is some other error.
+                String category = txsForThisWtx.get(i).category.name;
                 String amount = Long.toString(txsForThisWtx.get(i).amountBTC);
                 String confirmations = Long.toString(txsForThisWtx.get(i).confirmations);
                 String hash = txsForThisWtx.get(i).hash;
-                item = new TxsListItem(date, "category", amount, confirmations, hash);
+                item = new TxsListItem(date, category, amount, confirmations, hash);
                 mItems.add(item);
             }
         }
+
+        txsHeaderCount.setText(Long.toString(tempTxsCount));
     }
 
     //region OPTIONS MENU

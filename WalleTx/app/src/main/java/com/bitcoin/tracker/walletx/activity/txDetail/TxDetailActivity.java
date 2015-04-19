@@ -1,5 +1,8 @@
 package com.bitcoin.tracker.walletx.activity.txDetail;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -34,7 +37,7 @@ public class TxDetailActivity extends ActionBarActivity {
     AutoCompleteTextView mTagAutoCompleteTextView;
     ImageView mTagImageView;
     Button mMoreInfoButton;
-
+    Tx txDetail =  null;
     // TODO Remove once real data is functional
     private static final String[] TAGS = new String[] {
             "Pizza","Beer","Movies", "Clothes", "Income", "Shoes", "Dog Food"
@@ -57,18 +60,20 @@ public class TxDetailActivity extends ActionBarActivity {
 
         // Retrieve Extras
         String extras = getIntent().getExtras().getString("hash");
-        Tx txDetail = Tx.getTxByHash(extras);
+        txDetail = new Tx().getTxByHash(extras);
         final TextView timeTextField = (TextView) findViewById(R.id.time);
         final TextView dateTextField = (TextView) findViewById(R.id.tx_date);
         final TextView confirmTextField = (TextView) findViewById(R.id.textView8);
         final TextView spendReceiveLabel = (TextView) findViewById(R.id.spent_or_received_label);
         final TextView spendReceiveAmount = (TextView) findViewById(R.id.spent_or_received_amount);
         if (txDetail.amountBTC < 0) {
+            spendReceiveLabel.setTextColor(0xFFFF0000);
             spendReceiveLabel.setText("Spent");
         } else {
+            spendReceiveLabel.setTextColor(0xFF00FF00);
             spendReceiveLabel.setText("Received");
         }
-        spendReceiveAmount.setText(Long.toString(txDetail.amountBTC));
+        spendReceiveAmount.setText(Long.toString(Math.abs(txDetail.amountBTC)));
         DateFormat time = new SimpleDateFormat("HH:mm:ss");
         DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
         timeTextField.setText(time.format(txDetail.timestamp));
@@ -120,8 +125,10 @@ public class TxDetailActivity extends ActionBarActivity {
         mMoreInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Implement
-                Toast.makeText(getApplicationContext(), "TODO: In browser, open Blockchain.info displaying this tx.", Toast.LENGTH_SHORT).show();
+                Intent blockchaininfoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.blockchain.info/address/" + txDetail.address));
+                blockchaininfoIntent.setComponent(new ComponentName("com.android.browser","com.android.browser.BrowserActivity"));
+                blockchaininfoIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(blockchaininfoIntent);
             }
         });
 
