@@ -112,7 +112,7 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
                 mDescription.setText(saw.publicKey);
         }
 
-        ExchangeRate.dump();
+        //ExchangeRate.dump();
 
         try {
             mBtcBalance.setText(Long.toString(wtx.finalBalance));
