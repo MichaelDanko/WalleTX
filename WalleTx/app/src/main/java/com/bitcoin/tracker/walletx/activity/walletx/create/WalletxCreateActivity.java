@@ -122,15 +122,6 @@ public class WalletxCreateActivity extends ActionBarActivity implements
     //region OPTIONS MENU
 
     /**
-     * Display the global options menu.
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.global, menu);
-        return true;
-    }
-
-    /**
      * Home button closes the activity.
      */
     @Override
