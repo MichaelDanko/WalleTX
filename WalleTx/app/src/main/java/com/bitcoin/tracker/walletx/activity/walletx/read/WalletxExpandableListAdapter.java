@@ -119,11 +119,11 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-            mLocalCurrencyBalance.setText(Float.toString(wtx.finalBalance * ExchangeRate.getUSD()));
-        } catch (Exception e) {
-           e.printStackTrace();
-        }
+       // try {
+       //    mLocalCurrencyBalance.setText(Float.toString(wtx.finalBalance * ExchangeRate.getUSD()));
+       // } catch (Exception e) {
+       //    e.printStackTrace();
+       // }
         //----------------------------------------------------------------------------------------
         // TODO @dc @as Update the BTC current balance, update the LC current balance & LC label
         //              for this walletx

@@ -26,7 +26,7 @@ import java.util.List;
 public class Balance extends Model {
 
     @Column(name = "timestamp")
-    private Date timestamp;
+    public Date timestamp;
 
     public void setDateFromString(String date) {
         SimpleDateFormat sf = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
@@ -37,6 +37,9 @@ public class Balance extends Model {
             e.printStackTrace();
         }
     }
+
+    @Column(name = "Balance_Index")
+    public Long index;
 
     @Column(name = "Balance")
     public float balance;
@@ -49,11 +52,13 @@ public class Balance extends Model {
         super();
     }
 
-    public Balance(String date, float balance, Walletx wtx) {
+    public Balance(Walletx wtx, Long index, Date timestamp, float balance) {
         super();
-        this.setDateFromString(date);
-        this.balance = balance;
         this.wtx = wtx;
+        this.index = index;
+        this.timestamp = timestamp;
+        //this.setDateFromString(date);
+        this.balance = balance;
     }
 
     /*-------------------*
@@ -68,6 +73,17 @@ public class Balance extends Model {
         .from(Balance.class)
         .where("Walletx = ?", wtx)
         .executeSingle();
+    }
+
+    /** @return previous balance
+     *
+     */
+    public static Balance getPreviousBalance(Walletx wtx, Long index) {
+        return new Select()
+                .from(Balance.class)
+                .where("Walletx = ?", wtx)
+                //.where("Index = ?", index - 1)
+                .executeSingle();
     }
 
     /**
@@ -97,10 +113,11 @@ public class Balance extends Model {
         List<Balance> balances = Balance.getAllBalances();
         for (Balance balance1 : balances) {
             System.out.printf(
-                    "%-20s %-15s %-16s\n",
+                    "%-10s %-15s %-16s %-10s\n",
                     balance1.balance,
                     balance1.timestamp,
-                    balance1.wtx);
+                    balance1.wtx,
+                    balance1.index);
         }
     }
 

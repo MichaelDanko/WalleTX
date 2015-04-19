@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 // Data Model Functionality
+import com.bitcoin.tracker.walletx.model.Balance;
 import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.TxCategory;
@@ -136,13 +137,8 @@ import java.util.concurrent.CountDownLatch;
                                             0 - transaction.txs.get(i).inputs.get(j).prev_out.value,
                                             100,
                                             transaction.txs.get(i).hash);
-                                        System.out.println(Long.toString(currentBlockHeight));
-                                        System.out.println(Long.toString(currentBlockHeight - transaction.txs.get(i).block_height));
-
-
                           insertTx.wtx.totalReceive++;
                           insertTx.wtx.save();
-
                           insertTx.save();
                       }
                   }
@@ -168,9 +164,17 @@ import java.util.concurrent.CountDownLatch;
                       insertTx.save();
                     }
                   }
+
               }
               insertTx.wtx.finalBalance = transaction.final_balance;
               insertTx.wtx.save();
+              Balance insertBalance1 = new Balance(wtx, 1L, new Date(System.currentTimeMillis()), 100);
+                  Balance insertBalance2 = new Balance(wtx, 2L, new Date(System.currentTimeMillis() / 1000L), 200);
+                  insertBalance1.save();
+                  insertBalance2.save();
+                  //Balance testPrevious = Balance.getPreviousBalance(wtx, 2L);
+                  //System.out.println(testPrevious.wtx.name + " "  + testPrevious.index + " " + testPrevious.timestamp + " " + testPrevious.balance);
+                  Balance.dump();
              Tx.dump();
 
 
