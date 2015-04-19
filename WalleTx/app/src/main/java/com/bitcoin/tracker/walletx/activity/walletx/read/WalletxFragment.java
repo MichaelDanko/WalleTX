@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.activeandroid.query.Select;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.MainActivity;
+import com.bitcoin.tracker.walletx.activity.SyncableInterface;
 import com.bitcoin.tracker.walletx.activity.walletGroup.updateDelete.WalletGroupUpdateActivity;
 import com.bitcoin.tracker.walletx.activity.walletx.create.WalletxCreateActivity;
 import com.bitcoin.tracker.walletx.activity.walletx.updateDelete.WalletxUpdateActivity;
@@ -27,6 +28,7 @@ import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummaryAllActi
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummaryGroupActivity;
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummarySingleActivity;
 import com.bitcoin.tracker.walletx.api.BlockchainInfo;
+import com.bitcoin.tracker.walletx.api.SyncDatabase;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.Walletx;
@@ -39,7 +41,7 @@ import java.util.List;
  * WalletxFragment acts as the home view for the application.
  * Displays aggregations of wallets.
  */
-public class WalletxFragment extends Fragment {
+public class WalletxFragment extends Fragment implements SyncableInterface {
 
     //region FIELDS
 
@@ -315,13 +317,7 @@ public class WalletxFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_sync) {
-
-            /**
-             * TODO Implement user initiated sync
-             * Check if a sync is already in progress before starting
-             */
-            Toast.makeText(getActivity(), "TODO: Sync all transactions associated with this new wallet and then update the list view.", Toast.LENGTH_SHORT).show();
-
+            new SyncDatabase(this);
             return true;
         } else if (item.getItemId() == R.id.action_add_wallet) {
             // open new activity
@@ -334,7 +330,7 @@ public class WalletxFragment extends Fragment {
     //endregion
     //region SYNC
 
-    public void startSync() {
+    public void startSyncRelatedUI() {
         // Rotate progress bar
         final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
         if ( mActivity != null && pb != null ) {
@@ -347,7 +343,7 @@ public class WalletxFragment extends Fragment {
         }
     }
 
-    public void stopSync() {
+    public void stopSyncRelatedUI() {
         // stop progress bar
         final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
         if ( mActivity != null && pb != null ) {
@@ -361,7 +357,6 @@ public class WalletxFragment extends Fragment {
         // update list view
         prepareData();
         mListApapter.updateData(mGroupHeader, mListDataChild);
-        Toast.makeText(getActivity(), "TODO: Verify sync success and delete this toast message.", Toast.LENGTH_SHORT).show();
     }
 
     //endregion

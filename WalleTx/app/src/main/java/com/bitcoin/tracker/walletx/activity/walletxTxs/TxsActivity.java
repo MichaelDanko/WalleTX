@@ -1,6 +1,8 @@
 package com.bitcoin.tracker.walletx.activity.walletxTxs;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,11 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.SyncableInterface;
 import com.bitcoin.tracker.walletx.activity.txDetail.TxDetailActivity;
+import com.bitcoin.tracker.walletx.api.SyncDatabase;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
@@ -28,7 +33,7 @@ import java.util.List;
  * TODO Finish OnItemClick event
  * TODO Color Amount/Amount label based on sent or received
  */
-public class TxsActivity extends ActionBarActivity {
+public class TxsActivity extends ActionBarActivity implements SyncableInterface {
 
     private ListView mListView;
     private TxsAdapter mAdapter;
@@ -36,11 +41,19 @@ public class TxsActivity extends ActionBarActivity {
     private List<Tx> mTxs;
     private ArrayList<TxsListItem> mItems = new ArrayList<>();
 
+    // Reference to activity
+    static Activity mActivity;
+
+    // displays when sync in progress
+    private ProgressBar mSyncProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walletx_txs);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mActivity = this;
 
         // Build wtx list passed from summary activity by walletx name.
         // TODO Remove this code if Walletx implements parcelable like it should
@@ -83,6 +96,11 @@ public class TxsActivity extends ActionBarActivity {
                 }
             }
         });
+
+        // setup sync progress spinner
+        mSyncProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);
+        mSyncProgressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
+        mSyncProgressBar.setVisibility(View.GONE);
     }
 
     private void prepareData() {
@@ -136,9 +154,44 @@ public class TxsActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home)
+        if (item.getItemId() == R.id.action_sync) {
+            new SyncDatabase(this);
+            return true;
+        } else if (id == android.R.id.home)
             finish();
         return super.onOptionsItemSelected(item);
+    }
+
+    //endregion
+    //region SYNC
+
+    public void startSyncRelatedUI() {
+        // Rotate progress bar
+        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
+        if ( mActivity != null && pb != null ) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pb.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+    }
+
+    public void stopSyncRelatedUI() {
+        // stop progress bar
+        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
+        if ( mActivity != null && pb != null ) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pb.setVisibility(View.GONE);
+                }
+            });
+        }
+        // update list view
+        prepareData();
+        mAdapter.updateData(mItems);
     }
 
     //endregion

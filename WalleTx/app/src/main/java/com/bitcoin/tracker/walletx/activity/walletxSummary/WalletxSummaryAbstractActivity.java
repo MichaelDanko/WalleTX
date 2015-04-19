@@ -1,15 +1,21 @@
 package com.bitcoin.tracker.walletx.activity.walletxSummary;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.bitcoin.tracker.walletx.R;
 
+import com.bitcoin.tracker.walletx.activity.SyncableInterface;
 import com.bitcoin.tracker.walletx.activity.walletxSummary.module.WalletxSummaryModuleTxs;
 import com.bitcoin.tracker.walletx.activity.walletxTxs.TxsActivity;
+import com.bitcoin.tracker.walletx.api.SyncDatabase;
 import com.bitcoin.tracker.walletx.model.SupportedSummaryType;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
@@ -20,7 +26,8 @@ import java.util.List;
  * Walletx summary abstract super class.
  */
 public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
-        implements WalletxSummaryModuleTxs.OnFragmentInteractionListener {
+        implements WalletxSummaryModuleTxs.OnFragmentInteractionListener,
+        SyncableInterface {
 
     /**
      * The list of walletx's that we are going to summarize.
@@ -31,6 +38,12 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
     public List<Walletx> getWtxs() {
         return wtxs;
     }
+
+    // Reference to activity
+    static Activity mActivity;
+
+    // displays when sync in progress
+    private ProgressBar mSyncProgressBar;
 
     // Required implementation by child classes
     protected abstract void populateWalletxList();
@@ -43,6 +56,13 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walletx_summary);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mActivity = this;
+
+        // setup sync progress spinner
+        mSyncProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);
+        mSyncProgressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
+        mSyncProgressBar.setVisibility(View.GONE);
     }
 
     //endregion
@@ -63,8 +83,12 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home)
+        if (item.getItemId() == R.id.action_sync) {
+            new SyncDatabase(this);
+            return true;
+        } else if (id == android.R.id.home) {
             finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -91,4 +115,38 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
                 startActivity(intent);
         }
     }
+
+    //region SYNC
+
+    public void startSyncRelatedUI() {
+        // Rotate progress bar
+        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
+        if ( mActivity != null && pb != null ) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pb.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+    }
+
+    public void stopSyncRelatedUI() {
+        // stop progress bar
+        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
+        if ( mActivity != null && pb != null ) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pb.setVisibility(View.GONE);
+                }
+            });
+        }
+
+        // TODO Update each summary module. To do this each model will require a refresh method.
+        // So we should create an interface they inherit. In the activity we'll also need to be
+        // able to access each Fragment (set in onCreate) so that we can call this refresh method.
+    }
+
+    //endregion
 }

@@ -2,6 +2,7 @@ package com.bitcoin.tracker.walletx.activity.walletGroup.read;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,11 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.MainActivity;
+import com.bitcoin.tracker.walletx.activity.SyncableInterface;
 import com.bitcoin.tracker.walletx.activity.walletGroup.create.WalletGroupCreateActivity;
 import com.bitcoin.tracker.walletx.activity.walletGroup.updateDelete.WalletGroupUpdateActivity;
+import com.bitcoin.tracker.walletx.api.SyncDatabase;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 
 import java.util.ArrayList;
@@ -28,7 +32,9 @@ import java.util.List;
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
  */
-public class WalletGroupFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class WalletGroupFragment extends Fragment implements
+        AbsListView.OnItemClickListener,
+        SyncableInterface {
 
     //region FIELDS
 
@@ -38,6 +44,12 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     // The fragment argument representing the section number for this fragment.
     // Used to communicate to the MainActivity that WalletGroupFragment is currently active.
     private static final String ARG_SECTION_NUMBER = "section_number";
+
+    // Reference to activity
+    static Activity mActivity;
+
+    // displays when sync in progress
+    private ProgressBar mSyncProgressBar;
 
     private OnFragmentInteractionListener mListener;
     private AbsListView mListView;
@@ -67,6 +79,9 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mActivity = getActivity();
+
         if (mAdapter == null) {
             prepareData();
             mAdapter = new WalletGroupAdapter(getActivity(), mItems);
@@ -87,6 +102,11 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+
+        // setup sync progress spinner
+        mSyncProgressBar = (ProgressBar) view.findViewById(R.id.syncProgressBar);
+        mSyncProgressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
+        mSyncProgressBar.setVisibility(View.GONE);
 
         return view;
     }
@@ -199,11 +219,43 @@ public class WalletGroupFragment extends Fragment implements AbsListView.OnItemC
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_add_group) {
+        if (item.getItemId() == R.id.action_sync) {
+            new SyncDatabase(this);
+            return true;
+        } else if (item.getItemId() == R.id.action_add_group) {
             Intent intent = new Intent( getActivity(), WalletGroupCreateActivity.class );
             startActivityForResult( intent, NEW_GROUP_ADDED );
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //endregion
+    //region SYNC
+
+    public void startSyncRelatedUI() {
+        // Rotate progress bar
+        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
+        if ( mActivity != null && pb != null ) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pb.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+    }
+
+    public void stopSyncRelatedUI() {
+        // stop progress bar
+        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
+        if ( mActivity != null && pb != null ) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pb.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     //endregion

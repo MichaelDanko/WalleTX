@@ -1,7 +1,9 @@
 package com.bitcoin.tracker.walletx.activity.txDetail;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,10 +16,13 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.SyncableInterface;
+import com.bitcoin.tracker.walletx.api.SyncDatabase;
 import com.bitcoin.tracker.walletx.model.Tx;
 
 import org.w3c.dom.Text;
@@ -32,12 +37,20 @@ import java.text.SimpleDateFormat;
  * TODO Don't forget to change Spent/Received label to either Spent of Received
  *
  */
-public class TxDetailActivity extends ActionBarActivity {
+public class TxDetailActivity extends ActionBarActivity implements SyncableInterface {
 
     AutoCompleteTextView mTagAutoCompleteTextView;
     ImageView mTagImageView;
     Button mMoreInfoButton;
+    TextView confirmTextField;
     Tx txDetail =  null;
+
+    // Reference to activity
+    static Activity mActivity;
+
+    // displays when sync in progress
+    private ProgressBar mSyncProgressBar;
+
     // TODO Remove once real data is functional
     private static final String[] TAGS = new String[] {
             "Pizza","Beer","Movies", "Clothes", "Income", "Shoes", "Dog Food"
@@ -48,29 +61,30 @@ public class TxDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tx_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mActivity = this;
+
         // prevent autofocus on tags autocompletetextview
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         getUIViews();
         bindEvents();
+
         // Setup AutoCompleteTextView
         // TODO Prepare tag data for the AutoComplete ArrayAdapter and remove dummy array
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, TAGS);
         mTagAutoCompleteTextView.setAdapter(adapter);
-
 
         // Retrieve Extras
         String extras = getIntent().getExtras().getString("hash");
         txDetail = new Tx().getTxByHash(extras);
         final TextView timeTextField = (TextView) findViewById(R.id.time);
         final TextView dateTextField = (TextView) findViewById(R.id.tx_date);
-        final TextView confirmTextField = (TextView) findViewById(R.id.textView8);
+        confirmTextField = (TextView) findViewById(R.id.textView8);
         final TextView spendReceiveLabel = (TextView) findViewById(R.id.spent_or_received_label);
         final TextView spendReceiveAmount = (TextView) findViewById(R.id.spent_or_received_amount);
         if (txDetail.amountBTC < 0) {
-            spendReceiveLabel.setTextColor(0xFFFF0000);
             spendReceiveLabel.setText("Spent");
         } else {
-            spendReceiveLabel.setTextColor(0xFF00FF00);
             spendReceiveLabel.setText("Received");
         }
         spendReceiveAmount.setText(Long.toString(Math.abs(txDetail.amountBTC)));
@@ -79,6 +93,11 @@ public class TxDetailActivity extends ActionBarActivity {
         timeTextField.setText(time.format(txDetail.timestamp));
         dateTextField.setText(date.format(txDetail.timestamp));
         confirmTextField.setText(Long.toString(txDetail.confirmations));
+
+        // setup sync progress spinner
+        mSyncProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);
+        mSyncProgressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
+        mSyncProgressBar.setVisibility(View.GONE);
     }
 
     private void getUIViews() {
@@ -164,9 +183,43 @@ public class TxDetailActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home)
+        if (item.getItemId() == R.id.action_sync) {
+            new SyncDatabase(this);
+            return true;
+        } else if (id == android.R.id.home)
             finish();
         return super.onOptionsItemSelected(item);
+    }
+
+    //endregion
+    //region SYNC
+
+    public void startSyncRelatedUI() {
+        // Rotate progress bar
+        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
+        if ( mActivity != null && pb != null ) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pb.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+    }
+
+    public void stopSyncRelatedUI() {
+        // stop progress bar
+        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
+        if ( mActivity != null && pb != null ) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pb.setVisibility(View.GONE);
+                }
+            });
+        }
+        // Update the number of confirmations
+        confirmTextField.setText(Long.toString(txDetail.confirmations));
     }
 
     //endregion
