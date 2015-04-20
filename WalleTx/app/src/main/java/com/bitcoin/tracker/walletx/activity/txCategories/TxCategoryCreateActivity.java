@@ -3,11 +3,9 @@ package com.bitcoin.tracker.walletx.activity.txCategories;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,7 +20,7 @@ public class TxCategoryCreateActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_tx_category);
+        setContentView(R.layout.activity_tx_category_create);
         setupActionBar();
         getViewsById();
         addSubmitButtonClickListener();
@@ -43,7 +41,7 @@ public class TxCategoryCreateActivity extends ActionBarActivity {
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nameEntered = mCatName.getText().toString().toLowerCase();
+                String nameEntered = mCatName.getText().toString();
                 if (categoryIsEmpty(nameEntered)) {
                     Toast.makeText(getApplicationContext(), "Oops! Category cannot be an empty string", Toast.LENGTH_SHORT).show();
                 } else if (categoryAlreadyExists(nameEntered)) {

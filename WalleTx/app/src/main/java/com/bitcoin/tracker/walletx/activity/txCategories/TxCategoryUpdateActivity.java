@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.Tx;
@@ -59,18 +60,25 @@ public class TxCategoryUpdateActivity extends ActionBarActivity {
             @Override
             public void onClick(View v){
                 TxCategory catBeingUpdated = TxCategory.getBy(mCurrentName);
-                String nameInEditText = mCatName.getText().toString().toLowerCase();
-                String nameOfCatBeingUpdated = mCurrentName.toLowerCase();
-                boolean nameNotChanged = nameInEditText.equals(nameOfCatBeingUpdated);
+                String nameInEditText = mCatName.getText().toString();
+                boolean nameNotChanged = nameInEditText.equals(mCurrentName);
 
                 if(nameNotChanged){
                     finish();
                 } else {
-                    TxCategory update = TxCategory.getBy(mCurrentName);
-                    update.update(mCatName.getText().toString(), true);
+                    // TODO Model stuff in activity. Refactor.
+                    if (categoryIsEmpty(nameInEditText)) {
+                        Toast.makeText(getApplicationContext(), "Oops! Category cannot be an empty string", Toast.LENGTH_SHORT).show();
+                    } else if (categoryAlreadyExists(nameInEditText)) {
+                        Toast.makeText(getApplicationContext(), "Oops! Category already exists", Toast.LENGTH_SHORT).show();
+                    } else {
+                        catBeingUpdated.name = nameInEditText;
+                        catBeingUpdated.save();
+                        Intent intent = new Intent();
+                        setResult(RESULT_OK, intent);
+                        finishWithResultOk();
+                    }
                 }
-
-                finishWithResultOk();
             }
         });
 
@@ -79,7 +87,7 @@ public class TxCategoryUpdateActivity extends ActionBarActivity {
             @Override
             public void onClick(View v){
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage("Are you sure you wish to delete this category? This action cannot be undone.");
+                builder.setMessage("Are you sure you wish to delete this Tx tag category? This action cannot be undone.");
                 builder.setTitle("Delete category '" + mCurrentName + "'?");
                 builder.setPositiveButton(R.string.app_confirm_yes, new DialogInterface.OnClickListener(){
                     @Override
@@ -110,6 +118,20 @@ public class TxCategoryUpdateActivity extends ActionBarActivity {
         });
 
     }//end bindClickEvents
+
+    // TODO Move validation to the model
+    private boolean categoryIsEmpty(String validate) {
+        if (validate.equals(""))
+            return true;
+        return false;
+    }
+
+    private boolean categoryAlreadyExists(String validate) {
+        TxCategory existenceCheck = TxCategory.getBy(validate);
+        if (existenceCheck != null)
+            return true;
+        return false;
+    }
 
     private void finishWithResultOk(){
         Intent intent = new Intent();
