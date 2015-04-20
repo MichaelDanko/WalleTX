@@ -25,7 +25,6 @@ public class TxCategoryUpdateActivity extends ActionBarActivity {
     private String   mCurrentName;
     private Button   mUpdate;
     private Button   mDelete;
-    private TextView mCannotDeleteLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +97,7 @@ public class TxCategoryUpdateActivity extends ActionBarActivity {
                         // TODO Yet another place in activity with code that should be in the models
                         // Remove tag from txs
                         List<Tx> txs = toDelete.txs();
+
                         for (Tx tx : txs) {
                             tx.category = null;
                             tx.save();

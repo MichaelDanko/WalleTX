@@ -35,6 +35,8 @@ import java.util.List;
  */
 public class TxsActivity extends ActionBarActivity implements SyncableInterface {
 
+    private static final int TX_CAT_UPDATED = 1;
+
     private ListView mListView;
     private TxsAdapter mAdapter;
     private ArrayList<Walletx> wtxs;
@@ -92,7 +94,7 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
                     // TODO Uncomment and test once data is present
                     Tx tx = mTxs.get(position - 1);
                     intent.putExtra( "hash", tx.hash );
-                    startActivity(intent);
+                    startActivityForResult( intent, TX_CAT_UPDATED );
                 }
             }
         });
@@ -141,6 +143,16 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
         }
 
         txsHeaderCount.setText(Long.toString(tempTxsCount));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TX_CAT_UPDATED) {
+            int currentPos = mListView.getFirstVisiblePosition();
+            prepareData();
+            mAdapter.updateData(mItems);
+            mListView.setSelection(currentPos);
+        }
     }
 
     //region OPTIONS MENU

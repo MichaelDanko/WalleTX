@@ -30,6 +30,8 @@ import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Tx Details Activity
@@ -49,20 +51,11 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
     // displays when sync in progress
     private ProgressBar mSyncProgressBar;
 
-    /*
+    // Track if changes has been made to the tag
+    private boolean mTagUpdated = false;
 
-
-
-
-    TODO Remove once real data is functional
-
-
-
-
-     */
-    private static final String[] TAGS = new String[] {
-            "Pizza","Beer","Movies", "Clothes", "Income", "Shoes", "Dog Food"
-    };
+    private List<TxCategory> mCategories = TxCategory.getAll();
+    private ArrayList<String> mTags = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +71,13 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
         bindEvents();
 
         // Setup AutoCompleteTextView
-        // TODO Prepare tag data for the AutoComplete ArrayAdapter and remove dummy array
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, TAGS);
-        mTagAutoCompleteTextView.setAdapter(adapter);
+        if ( mCategories != null ) {
+            for (TxCategory cat : mCategories) {
+                mTags.add(cat.name);
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mTags);
+            mTagAutoCompleteTextView.setAdapter(adapter);
+        }
 
         // Retrieve Extras
         String extras = getIntent().getExtras().getString("hash");
@@ -149,12 +146,23 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
                     String toAdd = mTagAutoCompleteTextView.getText().toString();
                     TxCategory existenceCheck = TxCategory.getBy(toAdd);
                     if ( existenceCheck != null ) {
+                        System.out.println("####### 1");
                         txDetail.category = existenceCheck;
+                        txDetail.save();
+                        mTagUpdated = true;
+                    } else if ( toAdd.equals("") ) {
+                        System.out.println("####### 2");
+                        txDetail.category = null;
+                        txDetail.save();
+                        mTagUpdated = true;
                     } else {
+                        System.out.println("####### 3");
                         TxCategory newCat = new TxCategory();
                         newCat.name = toAdd;
                         newCat.save();
                         txDetail.category = newCat;
+                        txDetail.save();
+                        mTagUpdated = true;
                     }
                     mTagImageView.setTag("out_of_focus");
                 }
@@ -171,7 +179,6 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
                 startActivity(blockchaininfoIntent);
             }
         });
-
     }
 
     //region OPTIONS MENU
@@ -194,8 +201,13 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
         if (item.getItemId() == R.id.action_sync) {
             new SyncDatabase(this);
             return true;
-        } else if (id == android.R.id.home)
+        } else if (id == android.R.id.home) {
+            if (mTagUpdated) {
+                Intent intent = this.getIntent();
+                setResult(RESULT_OK, intent);
+            }
             finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 
