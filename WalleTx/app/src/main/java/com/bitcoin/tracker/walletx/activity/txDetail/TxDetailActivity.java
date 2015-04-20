@@ -174,8 +174,6 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
             @Override
             public void onClick(View v) {
                 Intent blockchaininfoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.blockchain.info/address/" + txDetail.address));
-                blockchaininfoIntent.setComponent(new ComponentName("com.android.browser","com.android.browser.BrowserActivity"));
-                blockchaininfoIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(blockchaininfoIntent);
             }
         });
