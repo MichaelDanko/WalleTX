@@ -24,6 +24,7 @@ import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.SyncableInterface;
 import com.bitcoin.tracker.walletx.api.SyncDatabase;
 import com.bitcoin.tracker.walletx.model.Tx;
+import com.bitcoin.tracker.walletx.model.TxCategory;
 
 import org.w3c.dom.Text;
 
@@ -32,9 +33,6 @@ import java.text.SimpleDateFormat;
 
 /*
  * Tx Details Activity
- *
- * TODO Update all views with information from the model
- * TODO Don't forget to change Spent/Received label to either Spent of Received
  *
  */
 public class TxDetailActivity extends ActionBarActivity implements SyncableInterface {
@@ -51,7 +49,17 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
     // displays when sync in progress
     private ProgressBar mSyncProgressBar;
 
-    // TODO Remove once real data is functional
+    /*
+
+
+
+
+    TODO Remove once real data is functional
+
+
+
+
+     */
     private static final String[] TAGS = new String[] {
             "Pizza","Beer","Movies", "Clothes", "Income", "Shoes", "Dog Food"
     };
@@ -94,6 +102,11 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
         dateTextField.setText(date.format(txDetail.timestamp));
         confirmTextField.setText(Long.toString(txDetail.confirmations));
 
+        // populate the autocompletetextview with existing tag for this tx
+        if ( txDetail.category != null ) {
+            mTagAutoCompleteTextView.setText(txDetail.category.name);
+        }
+
         // setup sync progress spinner
         mSyncProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);
         mSyncProgressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
@@ -133,8 +146,16 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
                 imm.hideSoftInputFromWindow(mTagAutoCompleteTextView.getWindowToken(), 0);
                 // commit the tag changes
                 if (mTagImageView.getTag() == "in_focus") {
-                    // TODO Implement
-                    Toast.makeText(getApplicationContext(), "TODO: Save tag updates or set as uncategorized", Toast.LENGTH_SHORT).show();
+                    String toAdd = mTagAutoCompleteTextView.getText().toString();
+                    TxCategory existenceCheck = TxCategory.getBy(toAdd);
+                    if ( existenceCheck != null ) {
+                        txDetail.category = existenceCheck;
+                    } else {
+                        TxCategory newCat = new TxCategory();
+                        newCat.name = toAdd;
+                        newCat.save();
+                        txDetail.category = newCat;
+                    }
                     mTagImageView.setTag("out_of_focus");
                 }
             }
@@ -151,19 +172,6 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
             }
         });
 
-    }
-
-    /**
-     * Commits tag updates to the database if the user didn't manually.
-     */
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // commit the tag changes
-        if (mTagImageView.getTag() == "in_focus") {
-            // TODO Implement
-            Toast.makeText(getApplicationContext(), "TODO: On destroy, save tag updates or set as uncategorized", Toast.LENGTH_SHORT).show();
-        }
     }
 
     //region OPTIONS MENU
