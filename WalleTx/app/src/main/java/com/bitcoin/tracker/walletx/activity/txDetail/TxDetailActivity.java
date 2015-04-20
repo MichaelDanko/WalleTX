@@ -92,7 +92,7 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
         } else {
             spendReceiveLabel.setText("Received");
         }
-        spendReceiveAmount.setText(Long.toString(Math.abs(txDetail.amountBTC)));
+        spendReceiveAmount.setText(Long.toString(Math.abs(txDetail.amountBTC) / 100000000));
         DateFormat time = new SimpleDateFormat("HH:mm:ss");
         DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
         timeTextField.setText(time.format(txDetail.timestamp));
