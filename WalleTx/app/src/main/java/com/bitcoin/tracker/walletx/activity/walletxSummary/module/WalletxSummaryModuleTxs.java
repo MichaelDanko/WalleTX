@@ -78,8 +78,9 @@ public class WalletxSummaryModuleTxs extends Fragment {
     private void setPieChartData() {
         // get the list of walletxs being summarized from parent activity
         List<Walletx> wtxs = ((WalletxSummaryAbstractActivity)this.getActivity()).getWtxs();
+        mSentCount = 0;
+        mReceivedCount = 0;
 
-        Walletx.dump();
         for (Walletx wtx: wtxs) {
             mReceivedCount += wtx.totalReceive;
             System.out.println("Dump" + Long.toString(wtx.totalReceive));
