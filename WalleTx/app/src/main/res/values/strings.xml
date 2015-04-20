@@ -130,5 +130,8 @@
     <string name="title_activity_tx_category_update">Update Tx Category</string>
     <string name="tx_categories_update_button_text">Update Tx Category</string>
     <string name="tx_categories_delete_button_text">Delete Tx Category</string>
+    <!-- No tags footer -->
+    <string name="tx_categories_add_first_l1">You have not added any Tx tag categories.</string>
+    <string name="tx_categories_add_first_l2">Add your first tag category now.</string>
 
 </resources>

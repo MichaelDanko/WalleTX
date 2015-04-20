@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,8 +52,11 @@ public class TxCategoriesFragment extends Fragment implements
     // displays when sync in progress
     private ProgressBar mSyncProgressBar;
 
+    // displays when no tags present
+    private View mFooter;
+
     private OnFragmentInteractionListener mListener;
-    private AbsListView mListView;
+    private ListView mListView;
     private ArrayAdapter<String> mAdapter;
     private ArrayList<String> mItems = new ArrayList<>();
 
@@ -87,7 +91,15 @@ public class TxCategoriesFragment extends Fragment implements
         View view = inflater.inflate(R.layout.fragment_txcategory, container, false);
         mActivity = getActivity();
 
-        mListView = (AbsListView) view.findViewById(R.id.listView);
+        mListView = (ListView) view.findViewById(R.id.listView);
+
+
+        View footer = getActivity().getLayoutInflater().inflate(R.layout.fragment_txcategory_no_tags_footer, null);
+        mListView.addFooterView(footer);
+        mFooter = footer.findViewById(R.id.no_wallets_container);
+        mFooter.setOnClickListener(footerOnClickListener);
+        setFooterVisibility();
+
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
 
@@ -106,6 +118,23 @@ public class TxCategoriesFragment extends Fragment implements
             mItems.add(category.name);
         }
     }
+
+    private void setFooterVisibility() {
+        List<TxCategory> cats = TxCategory.getAll();
+        if (cats.size() == 0) {
+            mFooter.setVisibility(View.VISIBLE);
+        } else {
+            mFooter.setVisibility(View.GONE);
+        }
+    }
+
+    private View.OnClickListener footerOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent( getActivity(), TxCategoryCreateActivity.class );
+            startActivityForResult( intent, NEW_TAG_ADDED );
+        }
+    };
 
     @Override
     public void onAttach(Activity activity) {
@@ -151,12 +180,14 @@ public class TxCategoriesFragment extends Fragment implements
         if (requestCode == NEW_TAG_ADDED){
             if(resultCode == getActivity().RESULT_OK){
                 prepareData();
+                setFooterVisibility();
                 mAdapter.notifyDataSetChanged();
                 mListView.setSelection(mListView.getCount());
             }
         } else if (requestCode == TX_CAT_UPDATED){
             if(resultCode == getActivity().RESULT_OK){
                 prepareData();
+                setFooterVisibility();
                 mAdapter.notifyDataSetChanged();
                 if(mRestorePosition != 0){
                     mListView.setSelection(mRestorePosition);
