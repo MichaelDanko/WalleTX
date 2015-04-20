@@ -93,7 +93,6 @@ public class TxCategoriesFragment extends Fragment implements
 
         mListView = (ListView) view.findViewById(R.id.listView);
 
-
         View footer = getActivity().getLayoutInflater().inflate(R.layout.fragment_txcategory_no_tags_footer, null);
         mListView.addFooterView(footer);
         mFooter = footer.findViewById(R.id.no_wallets_container);
