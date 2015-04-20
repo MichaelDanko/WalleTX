@@ -16,7 +16,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/gen_spacer_small"
-        android:hint="@string/tx_categories_create_edittext_hint" />
+        android:hint="@string/tx_categories_create_edittext_hint"
+        android:singleLine="true"
+        android:inputType="textCapWords" />
 
     <Button
         android:layout_width="wrap_content"
