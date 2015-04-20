@@ -23,8 +23,9 @@ public class WalletxSummaryGroupActivity extends WalletxSummaryAbstractActivity 
         setActivityTitle();
         populateWalletxList();
 
-        // Refresh the pie chart to display data for this group
+        // Refresh the modules now that the wtx list is populated
         mTxSummaryModule.refreshPieChart();
+        mSpendingSummaryModule.refreshModule();
     }
 
     protected void populateWalletxList() {

@@ -79,6 +79,10 @@
             android:name=".activity.txCategories.TxCategoryUpdateActivity"
             android:label="@string/title_activity_tx_category_update" >
         </activity>
+        <activity
+            android:name=".activity.graphs.GraphSpendingByCategoryActivity"
+            android:label="@string/title_activity_graph_spending_by_category" >
+        </activity>
     </application>
 
 </manifest>

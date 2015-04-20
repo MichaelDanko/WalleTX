@@ -23,7 +23,14 @@ tools:context="com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:name="com.bitcoin.tracker.walletx.activity.walletxSummary.module.WalletxSummaryModuleTxs"
-            android:id="@+id/moduleTxs" />
+            android:id="@+id/moduleTxs"
+            android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.bitcoin.tracker.walletx.activity.walletxSummary.module.WalletxSummaryModuleSpendingBreakdownByCategory"
+            android:id="@+id/moduleSpendingBreakdown" />
 
         <RelativeLayout
             android:layout_width="fill_parent"

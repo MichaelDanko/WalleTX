@@ -133,5 +133,7 @@
     <!-- No tags footer -->
     <string name="tx_categories_add_first_l1">You have not added any Tx tag categories.</string>
     <string name="tx_categories_add_first_l2">Add your first tag category now.</string>
+    <string name="title_activity_graph_spending_by_category">GraphSpendingByCategoryActivity
+    </string>
 
 </resources>

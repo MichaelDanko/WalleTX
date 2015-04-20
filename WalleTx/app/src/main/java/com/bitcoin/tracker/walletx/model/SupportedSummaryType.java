@@ -11,12 +11,12 @@ package com.bitcoin.tracker.walletx.model;
  */
 public enum SupportedSummaryType {
 
-    TRANSACTION_SUMMARY;
-    // SPENDING_BREAKDOWN - time permitting
+    TRANSACTION_SUMMARY, SPENDING_BY_CATEGORY;
 
     public String toString() {
         switch(this) {
             case TRANSACTION_SUMMARY: return "Transaction summary";
+            case SPENDING_BY_CATEGORY: return "Spending by category";
             default: throw new IllegalArgumentException();
         }
     }
