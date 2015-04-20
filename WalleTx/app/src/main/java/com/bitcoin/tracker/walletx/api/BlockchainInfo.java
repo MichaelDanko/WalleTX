@@ -135,15 +135,15 @@ import java.util.concurrent.CountDownLatch;
                   for (int j=0; j < transaction.txs.get(i).inputs.size(); j++) {
                       if ((transaction.txs.get(i).inputs.get(j).prev_out.addr.equals(publicAddress))
                          && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
-                          TxCategory insertCategory = new TxCategory("Uncategorized");
-                          insertCategory.save();
+                          //TxCategory insertCategory = new TxCategory("Uncategorized");
+                          //insertCategory.save();
                           insertTx = new Tx(transaction.address,
                                             new Date(transaction.txs.get(i).time * 1000L),
                                             wtx,
                                             transaction.txs.get(i).block_height,
                                             currentBlockHeight - transaction.txs.get(i).block_height,
                                             transaction.txs.get(i).tx_index,
-                                            insertCategory,
+                                            null,
                                             new TxNote(newTx, "Note"),
                                             0 - transaction.txs.get(i).inputs.get(j).prev_out.value,
                                             100,
@@ -162,15 +162,15 @@ import java.util.concurrent.CountDownLatch;
                   for (int j=0; j < transaction.txs.get(i).out.size(); j++){
                     if (transaction.txs.get(i).out.get(j).addr.equals(publicAddress)
                          && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
-                      TxCategory insertCategory = new TxCategory("Uncategorized");
-                      insertCategory.save();
+                      //TxCategory insertCategory = new TxCategory("Uncategorized");
+                      //insertCategory.save();
                       insertTx = new Tx (transaction.address,
                                          new Date(transaction.txs.get(i).time * 1000L),
                                          wtx,
                                          transaction.txs.get(i).block_height,
                                          currentBlockHeight - transaction.txs.get(i).block_height,
                                          transaction.txs.get(i).tx_index,
-                                         insertCategory,
+                                         null,
                                          new TxNote(newTx, "Default Note"),
                                          transaction.txs.get(i).out.get(j).value,
                                          100,
