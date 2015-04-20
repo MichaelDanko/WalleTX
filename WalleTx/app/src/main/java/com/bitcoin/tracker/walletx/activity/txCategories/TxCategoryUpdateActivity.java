@@ -99,7 +99,7 @@ public class TxCategoryUpdateActivity extends ActionBarActivity {
                         // Remove tag from txs
                         List<Tx> txs = toDelete.txs();
                         for (Tx tx : txs) {
-                            tx.wtx = null;
+                            tx.category = null;
                             tx.save();
                         }
 
