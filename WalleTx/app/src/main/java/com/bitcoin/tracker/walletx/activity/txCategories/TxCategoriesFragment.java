@@ -15,6 +15,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
@@ -109,6 +110,12 @@ public class TxCategoriesFragment extends Fragment implements
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
         ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
     }
 
@@ -126,17 +133,13 @@ public class TxCategoriesFragment extends Fragment implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-        Toast.makeText(getActivity(), "CLICK", Toast.LENGTH_SHORT).show();
-        /*
         if(null != mListener){
-            String name = TxCategory.getAllSortedByName().get(position).toString();
-            mListener.onFragmentInteraction(name);
-
+            String catName =(String)parent.getItemAtPosition(position);
+            mListener.onFragmentInteraction(catName);
             Intent intent = new Intent(getActivity(), TxCategoryUpdateActivity.class);
-            intent.putExtra("txcategory_category_name", name);
+            intent.putExtra("txcategory_category_name", catName);
             startActivityForResult(intent, TX_CAT_UPDATED);
         }
-        */
     }
 
     public interface OnFragmentInteractionListener{

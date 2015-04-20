@@ -21,7 +21,8 @@ import com.bitcoin.tracker.walletx.activity.walletGroup.read.WalletGroupFragment
  */
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
-        WalletGroupFragment.OnFragmentInteractionListener {
+        WalletGroupFragment.OnFragmentInteractionListener,
+        TxCategoriesFragment.OnFragmentInteractionListener {
 
     // Fragment managing the behaviors, interactions and presentation of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
