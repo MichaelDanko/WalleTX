@@ -9,17 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.TxCategory;
 
-/*
-
-  TODO Validate input (no empty tags)
-  TODO Add the tag
-
-
- */
 public class TxCategoryCreateActivity extends ActionBarActivity {
 
     private EditText mCatName;
@@ -50,15 +44,35 @@ public class TxCategoryCreateActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 String nameEntered = mCatName.getText().toString().toLowerCase();
-                String name = mCatName.getText().toString();
-                TxCategory.createTxCategory(name, false);
-
-                Intent intent = new Intent();
-                setResult(RESULT_OK, intent);
-                finish();
+                if (categoryIsEmpty(nameEntered)) {
+                    Toast.makeText(getApplicationContext(), "Oops! Category cannot be an empty string", Toast.LENGTH_SHORT).show();
+                } else if (categoryAlreadyExists(nameEntered)) {
+                    Toast.makeText(getApplicationContext(), "Oops! Category already exists", Toast.LENGTH_SHORT).show();
+                } else {
+                    String name = mCatName.getText().toString();
+                    TxCategory.createTxCategory(name, false);
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
     }
+
+    // TODO Move validation to the model
+    private boolean categoryIsEmpty(String validate) {
+        if (validate.equals(""))
+            return true;
+        return false;
+    }
+
+    private boolean categoryAlreadyExists(String validate) {
+        TxCategory existenceCheck = TxCategory.getBy(validate);
+        if (existenceCheck != null)
+            return true;
+        return false;
+    }
+
     /**
      * Closes activity when the home button is selected.
      */
