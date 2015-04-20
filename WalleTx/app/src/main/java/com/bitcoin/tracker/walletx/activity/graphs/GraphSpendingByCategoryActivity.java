@@ -74,7 +74,6 @@ public class GraphSpendingByCategoryActivity extends ActionBarActivity {
         }
 
         // Build category count hash table
-        mCats.put("Uncategorized", Long.valueOf(0));
         for ( Tx tx : mTxs ) {
             // only include spends
             if ( tx.amountBTC > 0 ) {
@@ -89,7 +88,11 @@ public class GraphSpendingByCategoryActivity extends ActionBarActivity {
                     mCats.put(catName, tx.amountBTC);
                 }
             } else {
-                mCats.put("Uncategorized", mCats.get("Uncategorized") + tx.amountBTC);
+                if (mCats.get("Uncategorized") != null) {
+                    mCats.put("Uncategorized", mCats.get("Uncategorized") + tx.amountBTC);
+                } else {
+                    mCats.put("Uncategorized", tx.amountBTC);
+                }
             }
         }
     }
@@ -120,6 +123,7 @@ public class GraphSpendingByCategoryActivity extends ActionBarActivity {
 
             }
         });
+        mChart.setZoomEnabled(true);
         mChart.setPieChartData(mData);
     }
 
