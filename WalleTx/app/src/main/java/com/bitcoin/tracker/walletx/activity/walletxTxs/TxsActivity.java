@@ -125,7 +125,13 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
                 String date = df.format(txsForThisWtx.get(i).timestamp);
                 // This cause a null pointer expection, unsure if the TxCategory is being created
                 // correctly in BlockChainInfo.java or if there is some other error.
-                String category = txsForThisWtx.get(i).category.name;
+                String category;
+                //txsForThisWtx.get(i).category.name;
+                if (txsForThisWtx.get(i).category != null) {
+                    category = txsForThisWtx.get(i).category.name;
+                } else {
+                    category = "Uncategorized";
+                }
                 String amount = Long.toString(txsForThisWtx.get(i).amountBTC);
                 String confirmations = Long.toString(txsForThisWtx.get(i).confirmations);
                 String hash = txsForThisWtx.get(i).hash;
