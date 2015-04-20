@@ -40,22 +40,22 @@ public class WalletxSummaryModuleSpendingBreakdownByCategory  extends Fragment {
     private PieChartData mData;
 
     private List<Tx> mTxs = new LinkedList<>();
-    private HashMap<String, Integer> mCats;
+    private HashMap<String, Long> mCatSpending;
 
     private TextView mLegendText1;
     private RelativeLayout mLegendBox1;
     private String mLegendCatName1 = null;
-    private int mLegendCatCount1 = 0;
+    private long mLegendCatSpending1 = 0;
 
     private TextView mLegendText2;
     private RelativeLayout mLegendBox2;
     private String mLegendCatName2 = null;
-    private int mLegendCatCount2 = 0;
+    private long mLegendCatSpending2 = 0;
 
     private TextView mLegendText3;
     private RelativeLayout mLegendBox3;
     private String mLegendCatName3 = null;
-    private int mLegendCatCount3 = 0;
+    private long mLegendCatSpending3 = 0;
 
     // Required empty public constructor
     public WalletxSummaryModuleSpendingBreakdownByCategory() {}
@@ -90,7 +90,7 @@ public class WalletxSummaryModuleSpendingBreakdownByCategory  extends Fragment {
     }
 
     private void buildCategoryHashMap() {
-        mCats = new HashMap<>();
+        mCatSpending = new HashMap<>();
 
         // Get list of wallets to summarize from parent
         List<Walletx> wtxs = ((WalletxSummaryAbstractActivity)this.getActivity()).getWtxs();
@@ -104,7 +104,7 @@ public class WalletxSummaryModuleSpendingBreakdownByCategory  extends Fragment {
         }
 
         // Build category count hash table
-        mCats.put("Uncategorized", 0);
+        mCatSpending.put("Uncategorized", Long.valueOf(0));
         for ( Tx tx : mTxs ) {
 
             if ( tx.amountBTC > 0 ) {
@@ -117,13 +117,13 @@ public class WalletxSummaryModuleSpendingBreakdownByCategory  extends Fragment {
             TxCategory cat = tx.category;
             if ( cat != null ) {
                 String catName = cat.name;
-                if ( mCats.containsKey(catName) ) {
-                    mCats.put(catName, mCats.get(catName) + 1);
+                if ( mCatSpending.containsKey(catName) ) {
+                    mCatSpending.put(catName, mCatSpending.get(catName) + tx.amountBTC);
                 } else {
-                    mCats.put(catName, 1);
+                    mCatSpending.put(catName, tx.amountBTC);
                 }
             } else {
-                mCats.put("Uncategorized", mCats.get("Uncategorized") + 1);
+                mCatSpending.put("Uncategorized", mCatSpending.get("Uncategorized") + tx.amountBTC);
             }
 
         }
@@ -131,50 +131,50 @@ public class WalletxSummaryModuleSpendingBreakdownByCategory  extends Fragment {
 
     private void calculateTopThreeCategories() {
         // Determine top 3 categories to summarize
-        Map.Entry<String, Integer> first = null;
-        Map.Entry<String, Integer> second = null;
-        Map.Entry<String, Integer> third = null;
+        Map.Entry<String, Long> first = null;
+        Map.Entry<String, Long> second = null;
+        Map.Entry<String, Long> third = null;
 
         // Determine #1
-        for (HashMap.Entry<String, Integer> entry : mCats.entrySet())
+        for (HashMap.Entry<String, Long> entry : mCatSpending.entrySet())
         {
-            if (first == null || entry.getValue().compareTo(first.getValue()) > 0)
+            if (first == null || entry.getValue().compareTo(first.getValue()) < 0)
                 first = entry;
         }
 
         // Determine #2
-        if ( mCats.size() > 1 ) {
-            for (HashMap.Entry<String, Integer> entry : mCats.entrySet())
+        if ( mCatSpending.size() > 1 ) {
+            for (HashMap.Entry<String, Long> entry : mCatSpending.entrySet())
             {
                 if (entry.equals(first))
                     continue;
-                if (second == null || entry.getValue().compareTo(second.getValue()) > 0)
+                if (second == null || entry.getValue().compareTo(second.getValue()) < 0)
                     second = entry;
             }
         }
 
         // Determine #3
-        if ( mCats.size() > 2 ) {
-            for (HashMap.Entry<String, Integer> entry : mCats.entrySet())
+        if ( mCatSpending.size() > 2 ) {
+            for (HashMap.Entry<String, Long> entry : mCatSpending.entrySet())
             {
                 if (entry.equals(first) || entry.equals(second))
                     continue;
-                if (third == null || entry.getValue().compareTo(third.getValue()) > 0)
+                if (third == null || entry.getValue().compareTo(third.getValue()) < 0)
                     third = entry;
             }
         }
 
         // Save the top 3 so we can update UI
         mLegendCatName1 = first.getKey();
-        mLegendCatCount1 = first.getValue();
+        mLegendCatSpending1 = first.getValue();
 
         if (second != null) {
             mLegendCatName2 = second.getKey();
-            mLegendCatCount2 = second.getValue();
+            mLegendCatSpending2 = second.getValue();
         }
         if (third != null) {
             mLegendCatName3 = third.getKey();
-            mLegendCatCount3 = third.getValue();
+            mLegendCatSpending3 = third.getValue();
         }
     }
 
@@ -191,13 +191,13 @@ public class WalletxSummaryModuleSpendingBreakdownByCategory  extends Fragment {
         // Set the text views for the top 3 and
         // Hide legend elements if there are less than 3 in total.
         mLegendText1.setText(mLegendCatName1);
-        if ( mLegendCatCount2 == 0 ) {
+        if ( mLegendCatSpending2 == 0 ) {
             mLegendText2.setVisibility(View.GONE);
             mLegendBox2.setVisibility(View.GONE);
         } else {
             mLegendText2.setText(mLegendCatName2);
         }
-        if ( mLegendCatCount3 == 0 ) {
+        if ( mLegendCatSpending3 == 0 ) {
             mLegendText3.setVisibility(View.GONE);
             mLegendBox3.setVisibility(View.GONE);
         } else {
@@ -207,11 +207,11 @@ public class WalletxSummaryModuleSpendingBreakdownByCategory  extends Fragment {
 
     private void setPieChartData() {
         List<SliceValue> values = new ArrayList<>();
-        values.add(new SliceValue((float) mLegendCatCount1, ChartUtils.COLOR_BLUE));
-        if (mLegendCatCount2 != 0)
-            values.add(new SliceValue((float) mLegendCatCount2, ChartUtils.COLOR_ORANGE));
-        if (mLegendCatCount3 != 0)
-            values.add(new SliceValue((float) mLegendCatCount3, ChartUtils.COLOR_VIOLET));
+        values.add(new SliceValue((float) mLegendCatSpending1, ChartUtils.COLOR_BLUE));
+        if (mLegendCatSpending2 != 0)
+            values.add(new SliceValue((float) mLegendCatSpending2, ChartUtils.COLOR_ORANGE));
+        if (mLegendCatSpending3 != 0)
+            values.add(new SliceValue((float) mLegendCatSpending3, ChartUtils.COLOR_VIOLET));
         mData = new PieChartData(values);
     }
 
@@ -227,10 +227,6 @@ public class WalletxSummaryModuleSpendingBreakdownByCategory  extends Fragment {
         setPieChartData();
         mChart.setPieChartData(null);
         createPieChart();
-
-        System.out.format("CATCOUNT1: %s\n", mLegendCatCount1);
-        System.out.format("CATCOUNT2: %s\n", mLegendCatCount2);
-        System.out.format("CATCOUNT3: %s\n", mLegendCatCount3);
     }
 
     /**

@@ -125,12 +125,11 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity i
         ArrayList<String> wtxNames = new ArrayList<>(wtxs.size());
         for ( Walletx w : wtxs )
             wtxNames.add(w.name);
-        
+
         switch (type) {
             case TRANSACTION_SUMMARY:
                 intent = new Intent( this, TxsActivity.class );
                 intent.putExtra("group_name", getSupportActionBar().getTitle().toString());
-
                 intent.putStringArrayListExtra("wtx_names", wtxNames);
                 startActivity( intent );
                 break;
