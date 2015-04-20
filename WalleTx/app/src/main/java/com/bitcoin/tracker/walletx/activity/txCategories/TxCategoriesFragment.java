@@ -137,7 +137,7 @@ public class TxCategoriesFragment extends Fragment implements
             String catName =(String)parent.getItemAtPosition(position);
             mListener.onFragmentInteraction(catName);
             Intent intent = new Intent(getActivity(), TxCategoryUpdateActivity.class);
-            intent.putExtra("txcategory_category_name", catName);
+            intent.putExtra("txcategory_name", catName);
             startActivityForResult(intent, TX_CAT_UPDATED);
         }
     }

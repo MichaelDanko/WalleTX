@@ -13,17 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.TxCategory;
+import com.bitcoin.tracker.walletx.model.Walletx;
 
-/*
+import java.util.List;
 
-  TODO Populate edit text with existing tag name
-  TODO Validate
-  TODO Update
-  TODO Add confirmation dialog to delete
-  TODO if deleted remove from txs
-
- */
 public class TxCategoryUpdateActivity extends ActionBarActivity {
     private EditText mCatName;
     private String   mCurrentName;
@@ -37,20 +32,25 @@ public class TxCategoryUpdateActivity extends ActionBarActivity {
         setContentView(R.layout.activity_tx_category_update);
         setupActionBar();
         getViewsById();
-        bindClickEvents();
         addCurrentCategoryNameToEditText();
-        //disableElementsForDefaultCat();
+        bindClickEvents();
     }
 
     private void setupActionBar(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Category_Update_Activity");
+        getSupportActionBar().setTitle("Edit Tx Category");
     }
 
     private void getViewsById(){
         mCatName = (EditText) findViewById(R.id.category_update_edit_text);
         mUpdate = (Button) findViewById(R.id.category_update_button);
         mDelete = (Button) findViewById(R.id.category_delete_button);
+    }
+
+    private void addCurrentCategoryNameToEditText(){
+        Intent intent = getIntent();
+        mCurrentName = intent.getStringExtra("txcategory_name");
+        mCatName.setText(mCurrentName);
     }
 
     private void bindClickEvents(){
@@ -65,7 +65,7 @@ public class TxCategoryUpdateActivity extends ActionBarActivity {
 
                 if(nameNotChanged){
                     finish();
-                }else{
+                } else {
                     TxCategory update = TxCategory.getBy(mCurrentName);
                     update.update(mCatName.getText().toString(), true);
                 }
@@ -79,14 +79,23 @@ public class TxCategoryUpdateActivity extends ActionBarActivity {
             @Override
             public void onClick(View v){
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage("Update alert message Delete");
-                builder.setTitle("Delete category'" + mCurrentName + "'?");
+                builder.setMessage("Are you sure you wish to delete this category? This action cannot be undone.");
+                builder.setTitle("Delete category '" + mCurrentName + "'?");
                 builder.setPositiveButton(R.string.app_confirm_yes, new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int id){
                         dialog.dismiss();
                         TxCategory toDelete = TxCategory.getBy(mCurrentName);
-                        TxCategory.deleteCategory(toDelete);
+
+                        // TODO Yet another place in activity with code that should be in the models
+                        // Remove tag from txs
+                        List<Tx> txs = toDelete.txs();
+                        for (Tx tx : txs) {
+                            tx.wtx = null;
+                            tx.save();
+                        }
+
+                        toDelete.delete();
                         finishWithResultOk();
                     }
                 });
@@ -99,13 +108,8 @@ public class TxCategoryUpdateActivity extends ActionBarActivity {
                 dialog.show();
             }
         });
-    }//end bindClickEvents
 
-    private void addCurrentCategoryNameToEditText(){
-        Intent intent = getIntent();
-        mCurrentName = intent.getStringExtra("wallet_category_name");
-        mCatName.setText(mCurrentName);
-    }
+    }//end bindClickEvents
 
     private void finishWithResultOk(){
         Intent intent = new Intent();
