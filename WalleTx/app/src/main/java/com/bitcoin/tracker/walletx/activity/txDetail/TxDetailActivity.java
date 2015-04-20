@@ -146,17 +146,14 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
                     String toAdd = mTagAutoCompleteTextView.getText().toString();
                     TxCategory existenceCheck = TxCategory.getBy(toAdd);
                     if ( existenceCheck != null ) {
-                        System.out.println("####### 1");
                         txDetail.category = existenceCheck;
                         txDetail.save();
                         mTagUpdated = true;
                     } else if ( toAdd.equals("") ) {
-                        System.out.println("####### 2");
                         txDetail.category = null;
                         txDetail.save();
                         mTagUpdated = true;
                     } else {
-                        System.out.println("####### 3");
                         TxCategory newCat = new TxCategory();
                         newCat.name = toAdd;
                         newCat.save();
