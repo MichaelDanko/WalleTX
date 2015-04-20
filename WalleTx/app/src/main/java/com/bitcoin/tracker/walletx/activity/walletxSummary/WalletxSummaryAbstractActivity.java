@@ -149,9 +149,7 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
             });
         }
 
-        // TODO Update each summary module. To do this each model will require a refresh method.
-        // So we should create an interface they inherit. In the activity we'll also need to be
-        // able to access each Fragment (set in onCreate) so that we can call this refresh method.
+        mTxSummaryModule.refreshPieChart();
     }
 
     //endregion
