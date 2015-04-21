@@ -114,12 +114,13 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
         // The tx amount can be determined by looking at the tx.result of the next tx
         Tx prevTx = new Tx();
         Tx newTx = new Tx();
-        long finalTxAmount = 0;
+        BlockchainInfoWalletData.BlockchainInfoTxData lastTx = null;
+
+        SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
 
         // Loop through each transaction associated with this wallet
         for (BlockchainInfoWalletData.BlockchainInfoTxData tx : blockchainInfoWalletData.txs) {
 
-            // Check if the Tx already exists in the Tx table
             Tx existingTx = Tx.getTxByHash(tx.hash);
             if (existingTx != null) {
                 // the tx exists and we need to update it
@@ -154,17 +155,28 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
                 // Save on next iteration
                 prevTx = newTx;
 
-                // @MD I have no idea how to calc the amount of the first Tx.
-                // Using this as an WRONG approximation and hoping you do.
-                // Everything else appears okay, and syncs do not compromise the model at all
-                finalTxAmount = tx.result;
+                // Use for reference in calculating the amount of last tx
+                // using michael's logic
+                lastTx = tx;
             }
         }
 
-        // Save the last iteration
-        prevTx.amountBTC = finalTxAmount;
-        prevTx.save();
+        // Although it is faster, we can't calculate the tx amount using the above method.
+        // Utilizing M.Danko's logic to calculate the amount of the final tx before saving
+        if (lastTx != null) {
+            for (BlockchainInfoWalletData.jsonInputs input : lastTx.inputs) {
+                if ( input.prev_out.addr.equals(saw.publicKey) && (Tx.getTxIndex(lastTx.tx_index) == null) ) {
+                    prevTx.amountBTC = 0 - input.prev_out.value;
+                }
+            }
+            for (BlockchainInfoWalletData.jsonOutputs out : lastTx.out) {
+                if (out.addr.equals(saw.publicKey) && (Tx.getTxIndex(lastTx.tx_index) == null)) {
+                    newTx.amountBTC = out.value;
+                }
 
+            }
+            newTx.save();
+        }
     }
 
     private static String readUrl (String urlString) throws Exception {

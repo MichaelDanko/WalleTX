@@ -41,6 +41,9 @@ public class Tx extends Model {
     @Column(name = "block")
     public long block;
 
+    @Column(name = "tx_index")
+    public long tx_index;
+
     @Column(name = "confirmation")
     public long confirmations;
 

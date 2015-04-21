@@ -31,7 +31,9 @@ public class BlockchainInfoWalletData {
         public long block_height;  // used to calculate confimations
         public long time;  // tx time
         public long result;
+        public long tx_index;
         public List<jsonInputs> inputs;
+        public List<jsonOutputs> out;
         public BlockchainInfoTxData() {}
     }
 
@@ -39,7 +41,13 @@ public class BlockchainInfoWalletData {
         public jsonPrevOut prev_out;
     }
 
+    static public class jsonOutputs {
+        public String addr;
+        public long value;
+    }
+
     static public class jsonPrevOut {
+        public String addr;
         public long value;
     }
 }
