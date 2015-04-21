@@ -140,7 +140,7 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
                 } else {
                     category = "Uncategorized";
                 }
-                String amount = Long.toString(txsForThisWtx.get(i).amountBTC);
+                String amount = new Tx().formattedBTCValue(txsForThisWtx.get(i).amountBTC);
                 String confirmations = Long.toString(txsForThisWtx.get(i).confirmations);
                 String hash = txsForThisWtx.get(i).hash;
                 item = new TxsListItem(date, category, amount, confirmations, hash);

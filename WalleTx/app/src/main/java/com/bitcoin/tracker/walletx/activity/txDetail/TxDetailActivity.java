@@ -87,13 +87,12 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
         final TextView spendReceiveLabel = (TextView) findViewById(R.id.spent_or_received_label);
         final TextView spendReceiveAmount = (TextView) findViewById(R.id.spent_or_received_amount);
 
-        Long testThis = txDetail.amountBTC;
-
         if (txDetail.amountBTC < 0) {
             spendReceiveLabel.setText("Spent");
         } else {
             spendReceiveLabel.setText("Received");
         }
+        spendReceiveAmount.setText(new Tx().formattedBTCValue(extras));
         DateFormat time = new SimpleDateFormat("HH:mm:ss");
         DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
         timeTextField.setText(time.format(txDetail.timestamp));

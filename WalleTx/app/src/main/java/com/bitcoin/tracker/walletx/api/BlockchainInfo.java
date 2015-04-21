@@ -14,6 +14,7 @@ import android.util.Log;
 
 // Data Model Functionality
 import com.bitcoin.tracker.walletx.activity.SyncableInterface;
+import com.bitcoin.tracker.walletx.model.Balance;
 import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.TxCategory;
