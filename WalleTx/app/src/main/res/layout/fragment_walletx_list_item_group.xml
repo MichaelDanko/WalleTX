@@ -15,7 +15,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/walletx_main_label_group_placeholder"
         android:id="@+id/groupName"
-        android:layout_weight="2" />
+        android:layout_weight="1" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -42,7 +42,8 @@
                 android:layout_toLeftOf="@+id/btcCurrencyLabel"
                 android:layout_toStartOf="@+id/btcCurrencyLabel"
                 android:layout_marginRight="@dimen/gen_spacer_small"
-                android:layout_marginEnd="@dimen/gen_spacer_small"/>
+                android:layout_marginEnd="@dimen/gen_spacer_small"
+                android:singleLine="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -73,7 +74,8 @@
                 android:layout_toLeftOf="@+id/lcLabel"
                 android:layout_toStartOf="@+id/lcLabel"
                 android:layout_marginRight="@dimen/gen_spacer_small"
-                android:layout_marginEnd="@dimen/gen_spacer_small" />
+                android:layout_marginEnd="@dimen/gen_spacer_small"
+                android:singleLine="true" />
 
             <TextView
                 android:layout_width="wrap_content"

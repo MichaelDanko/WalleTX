@@ -22,6 +22,7 @@ public class BlockchainInfoWalletData {
 
     public String address;                 // wallet's public address
     public List<BlockchainInfoTxData> txs; // txs associated with this wallet
+    public long final_balance = 0;
     public BlockchainInfoWalletData() {}
 
     static public class BlockchainInfoTxData {

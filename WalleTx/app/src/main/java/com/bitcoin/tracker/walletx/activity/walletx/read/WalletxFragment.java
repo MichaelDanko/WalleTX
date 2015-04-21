@@ -29,10 +29,13 @@ import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummaryGroupAc
 import com.bitcoin.tracker.walletx.activity.walletxSummary.WalletxSummarySingleActivity;
 import com.bitcoin.tracker.walletx.api.BlockchainInfo;
 import com.bitcoin.tracker.walletx.api.SyncDatabase;
+import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
+import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +59,8 @@ public class WalletxFragment extends Fragment implements SyncableInterface {
     HashMap<String, List<String>> mListDataChild;
     View mHeader; // all wallets header for exp. list view
     View mFooter; // no wallets footer (shown only when no wallets are added)
+
+    Long mExchangeRate;
 
     // Reference to activity
     static Activity mActivity;
@@ -126,6 +131,20 @@ public class WalletxFragment extends Fragment implements SyncableInterface {
     private void prepareData() {
         mGroupHeader = new ArrayList<>();
         mListDataChild = new HashMap<String, List<String>>();
+
+        // Update all wallets views
+        TextView allWalletxBtcBalance = (TextView) mHeader.findViewById(R.id.textView3);
+        List<Walletx> all = Walletx.getAll();
+        long allWalletsBalance = 0;
+        for (Walletx wtx : all) {
+            allWalletsBalance = allWalletsBalance + wtx.finalBalance;
+        }
+        allWalletxBtcBalance.setText(Tx.formattedBTCValue(allWalletsBalance));
+        TextView allWalletsUSD = (TextView) mHeader.findViewById(R.id.textView4);
+        String inUSD = NumberFormat.getIntegerInstance().format(ExchangeRate.EXCHANGE_RATE_IN_USD * allWalletsBalance / 100000000);
+        allWalletsUSD.setText(inUSD);
+
+        System.out.println("@@@@@@" + ExchangeRate.EXCHANGE_RATE_IN_USD);
 
         // For each wallet group
         List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();

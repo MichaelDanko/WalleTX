@@ -1,6 +1,7 @@
 package com.bitcoin.tracker.walletx.activity.walletx.read;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -103,7 +104,6 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
 
     private void prepareChildData(int groupPosition, int childPosition) {
         final String walletName = (String) getChild(groupPosition, childPosition);
-        float usdExchangeRate = 0;
         Walletx wtx = Walletx.getBy(walletName); // get walletx by mName
         mName.setText(wtx.name);
         if (wtx.type.equals(WalletType.SINGLE_ADDRESS_WALLET)) {
@@ -113,22 +113,13 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
                 mDescription.setText(saw.publicKey);
         }
 
-        //ExchangeRate.dump();
-
         try {
             mBtcBalance.setText(new Tx().formattedBTCValue(wtx.finalBalance));
         } catch (Exception e) {
             e.printStackTrace();
         }
-       // try {
-       //    mLocalCurrencyBalance.setText(Float.toString(wtx.finalBalance * ExchangeRate.getUSD()));
-       // } catch (Exception e) {
-       //    e.printStackTrace();
-       // }
-        //----------------------------------------------------------------------------------------
-        // TODO @dc @as Update the BTC current balance, update the LC current balance & LC label
-        //              for this walletx
-        //----------------------------------------------------------------------------------------
+        String inUSD = NumberFormat.getIntegerInstance().format(ExchangeRate.EXCHANGE_RATE_IN_USD * wtx.finalBalance / 100000000);
+        mLocalCurrencyBalance.setText(inUSD);
 
     }
 
@@ -186,15 +177,23 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         mLocalCurrencyBalance = (TextView) convertView.findViewById(R.id.lcBalance);
         mLocalCurrencyBalanceLabel = (TextView) convertView.findViewById(R.id.lcBalance);
     }
+
     private void prepareGroupHeaderData(int groupPosition, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
         WalletGroup group = WalletGroup.getBy(headerTitle);
         mName.setText(group.name);
 
-        //----------------------------------------------------------------------------------------
-        // TODO @dc @as Update the BTC current balance, update the LC current balance & LC label
-        //              for this wallet group
-        //----------------------------------------------------------------------------------------
+        // Update btc balance
+        List<Walletx> all = Walletx.getAll();
+        long groupBalance = 0;
+        for (Walletx wtx : all) {
+            if (wtx.group.name.equals(group.name)) {
+                groupBalance = groupBalance + wtx.finalBalance;
+            }
+        }
+        mBtcBalance.setText(Tx.formattedBTCValue(groupBalance));
+        String inUSD = NumberFormat.getIntegerInstance().format(ExchangeRate.EXCHANGE_RATE_IN_USD * groupBalance / 100000000);
+        mLocalCurrencyBalance.setText(inUSD);
     }
 
     @Override

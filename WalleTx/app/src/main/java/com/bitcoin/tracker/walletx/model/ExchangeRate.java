@@ -23,6 +23,8 @@ import java.util.List;
 @Table(name = "ExchangeRate")
 public class ExchangeRate extends Model {
 
+    public static float EXCHANGE_RATE_IN_USD = 0;
+
     @Column(name = "timestamp")
     public Date timestamp;
 

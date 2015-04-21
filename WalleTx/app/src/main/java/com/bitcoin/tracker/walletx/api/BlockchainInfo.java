@@ -15,6 +15,7 @@ import android.util.Log;
 // Data Model Functionality
 import com.bitcoin.tracker.walletx.activity.SyncableInterface;
 import com.bitcoin.tracker.walletx.model.Balance;
+import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.TxNote;
@@ -35,6 +36,7 @@ import java.io.IOException;
 
 // Used to determine when an asynchrnous call has been completed
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 /*
@@ -55,6 +57,7 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
     public static BlockchainInfoWalletData blockchainInfoWalletData = new BlockchainInfoWalletData();
 
     public LatestBlockInfo latestBlockInfo = new LatestBlockInfo();
+    public TickerData tickerData = new TickerData();
 
     // CountDownLatch is used to determine when an asynchronous call is complete, otherwise
     // tests may fail if the data asynchronous call is slow.
@@ -79,10 +82,16 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void...nothing) {
 
+        String jsonTicker;
         String jsonLatestBlock;
         String json;
 
         try {
+
+            jsonTicker = readUrl("https://blockchain.info/ticker?format=json");
+            Gson gsonTickerData = new Gson();
+            tickerData = gsonTickerData.fromJson(jsonTicker, TickerData.class);
+            ExchangeRate.EXCHANGE_RATE_IN_USD = tickerData.USD.sell;
 
             jsonLatestBlock = readUrl("https://blockchain.info/latestblock?format=json");
             Gson gsonLatestBlockInfo = new Gson();
@@ -91,7 +100,7 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
             json = readUrl("https://blockchain.info/address/" + saw.publicKey + "?format=json");
             Gson gson = new Gson();
             blockchainInfoWalletData = gson.fromJson(json, BlockchainInfoWalletData.class);
-            importBlockChainInfoData(wtx, blockchainInfoWalletData, saw.publicKey);
+            importBlockChainInfoData(wtx);
 
             return true;
         } catch (Exception e) {
@@ -100,9 +109,7 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
         }
     }
 
-    private void importBlockChainInfoData (Walletx wtx, BlockchainInfoWalletData transaction, String publicAddress) {
-
-        long currentBlockHeight = 0;
+    private void importBlockChainInfoData (Walletx wtx) {
 
         // Loop through each transaction associated with this wallet
         for (BlockchainInfoWalletData.BlockchainInfoTxData tx : blockchainInfoWalletData.txs) {
@@ -130,6 +137,7 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
                         wtx.totalReceive++;
                     else
                         wtx.totalSpend++;
+                    wtx.finalBalance = blockchainInfoWalletData.final_balance;
                     wtx.save();
                     insertTx.save();
 
@@ -203,6 +211,16 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
     public class LatestBlockInfo {
         public long height;
         public LatestBlockInfo() {}
+    }
+
+    public class TickerData {
+        public ExchangeRatesInUSD USD;
+        public TickerData() {}
+
+        public class ExchangeRatesInUSD {
+            public float sell;
+            public ExchangeRatesInUSD() {}
+        }
     }
 
 } // BlockchainInfo
