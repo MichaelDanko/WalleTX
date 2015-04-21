@@ -14,7 +14,7 @@ import java.util.List;
  * Balance model.
  *
  * A Balance is a snapshot of a Walletx balance at a given point in time.
- * Each time there is a new transaction associated with a Walletx, a new balance should be added.
+ * Each time there is a new blockchainInfoWalletData associated with a Walletx, a new balance should be added.
  * Balance detail should not go into detail finer than a daily balance.
  * If 2 balances occur on the same day the newest balance should overwrite the older balance.
  * All Balances are in BTC.
@@ -65,13 +65,14 @@ public class Balance extends Model {
      *  Balance Queries  *
      *-------------------*/
     /**
-    * @return Balance selected by wtx
+    * @return Latest balance selected by wtx
     *
     */
     public static Balance getBalance(Walletx wtx){
     return new Select()
         .from(Balance.class)
         .where("Walletx = ?", wtx)
+        .orderBy("timestamp DESC")
         .executeSingle();
     }
 

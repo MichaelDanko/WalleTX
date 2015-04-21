@@ -29,20 +29,7 @@ public class Tx extends Model {
     @Column(name = "timestamp", index = true)
     public Date timestamp;
 
-    // TODO can we get the time zone from the system and append it to our date?
-//    public void setDateFromString(Date date) {
-//        SimpleDateFormat sf = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-//        // TODO does this set the time zone appropriately?
-//        sf.setTimeZone(TimeZone.getDefault());
-//        sf.setLenient(true);
-//        try {
-//            this.timestamp = sf.format(date);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    @Column(name = "addres")
+    @Column(name = "address")
     public String address;
 
     @Column(name = "amountBTC")
@@ -53,9 +40,6 @@ public class Tx extends Model {
 
     @Column(name = "block")
     public long block;
-
-    @Column(name = "tx_index")
-    public long tx_index;
 
     @Column(name = "confirmation")
     public long confirmations;
@@ -79,17 +63,15 @@ public class Tx extends Model {
         super();
     }
 
-    public Tx(String address, Date date, Walletx wtx, long block, long confirmations, long tx_index, TxCategory category,
+    public Tx(String address, Date date, Walletx wtx, long block, long confirmations, TxCategory category,
               TxNote note, long amountBTC, long amountLC, String hash) {
         super();
-        //this.setDateFromString(date);
         this.address = new String(address);
         this.timestamp = date;
         this.amountBTC = amountBTC;
         this.amountLC = amountLC;
         this.block = block;
         this.confirmations = confirmations;
-        this.tx_index = tx_index;
         this.hash = hash;
         this.wtx = wtx;
         this.category = category;
@@ -239,7 +221,6 @@ public class Tx extends Model {
                     "%-20s %-29s %-16s %-15s\n",
                     tx.amountBTC,
                     tx.timestamp,
-                    tx.tx_index,
                     tx.confirmations);
         }
     }

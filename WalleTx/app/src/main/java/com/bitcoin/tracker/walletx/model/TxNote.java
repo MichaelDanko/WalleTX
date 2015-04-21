@@ -53,7 +53,7 @@ public class TxNote extends Model {
     /**
      *
      * @param tx
-     * @return note related to transaction
+     * @return note related to blockchainInfoWalletData
      */
 
     public static TxNote getBy(Tx tx){

@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.model.Balance;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
@@ -178,9 +179,16 @@ public class WalletxUpdateActivity extends ActionBarActivity {
                          */
                         Walletx wtx = Walletx.getBy(mCurrentName);
 
+                        // Delete tx's associated with this wtx
                         List<Tx> txs = wtx.txs();
                         for ( Tx tx : txs ) {
                             tx.delete();
+                        }
+
+                        // Delete balances's associated with this wtx
+                        List<Balance> balances = wtx.balances();
+                        for ( Balance balance : balances ) {
+                            balance.delete();
                         }
 
                         if (wtx.type == WalletType.SINGLE_ADDRESS_WALLET) {

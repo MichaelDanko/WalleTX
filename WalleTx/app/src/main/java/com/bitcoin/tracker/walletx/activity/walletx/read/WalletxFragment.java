@@ -292,8 +292,7 @@ public class WalletxFragment extends Fragment implements SyncableInterface {
                  */
 
                 Walletx wtx = Walletx.getBy(data.getStringExtra("name_of_wtx_added"));
-                SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
-                new BlockchainInfo(this, saw.publicKey, wtx).execute();
+                new BlockchainInfo(this, wtx).execute();
 
 
             }
