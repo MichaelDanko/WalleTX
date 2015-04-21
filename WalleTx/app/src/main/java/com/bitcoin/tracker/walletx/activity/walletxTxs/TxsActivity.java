@@ -115,11 +115,6 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
 
         long tempTxsCount = 0;
 
-        Intent thisIntent = getIntent();
-
-        if (thisIntent.getStringExtra("type") == "group") {
-            wtxs = WalletGroup.getBy(thisIntent.getStringExtra("group_name")).walletxs();
-        }
         // Get list of transactions associated with our wtxs
         for (Walletx w : wtxs) {
 

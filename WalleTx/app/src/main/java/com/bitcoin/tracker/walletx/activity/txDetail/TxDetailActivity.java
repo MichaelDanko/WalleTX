@@ -42,7 +42,7 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
     ImageView mTagImageView;
     Button mMoreInfoButton;
     TextView confirmTextField;
-    Tx txDetail =  null;
+    Tx txDetail = null;
 
     // Reference to activity
     static Activity mActivity;
@@ -80,7 +80,7 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
 
         // Retrieve Extras
         String extras = getIntent().getExtras().getString("hash");
-        txDetail = new Tx().getTxByHash(extras);
+        txDetail = Tx.getTxByHash(extras);
         final TextView timeTextField = (TextView) findViewById(R.id.time);
         final TextView dateTextField = (TextView) findViewById(R.id.tx_date);
         confirmTextField = (TextView) findViewById(R.id.textView8);
