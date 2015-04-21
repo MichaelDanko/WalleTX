@@ -166,6 +166,64 @@ public class Tx extends Model {
     }
 
     /**
+     *
+     * @return formatted string of BTC value
+      */
+    public static String formattedBTCValue(String _hash) {
+        Tx tx = new Select()
+                .from(Tx.class)
+                .where("hash = ?", _hash)
+                .orderBy("timestamp DESC")
+                .executeSingle();
+
+        return actualStringFormatter(Long.toString(tx.amountBTC));
+    }
+
+    public static String formattedBTCValue(Long formatThisLong) {
+       return actualStringFormatter(Long.toString(formatThisLong));
+    }
+
+    private static String actualStringFormatter (String editString) {
+        String formattedString = null;
+        StringBuilder buffer = new StringBuilder(20);
+        int j = editString.length();
+
+        int k = j-1;
+        boolean isNeg = false;
+        for (int i=16; i > 0 ; i--) {
+
+            if ((16 - i) <= k) {
+               if (editString.charAt(j-1) == '-') {
+                   isNeg = true;
+                   buffer.insert(0, '0');
+               }
+               else {
+                   buffer.insert(0, (editString.charAt(j - 1)));
+               }
+               j--;
+            }
+            else
+                buffer.insert(0, '0');
+        }
+        buffer.insert(8, '.');
+
+        while ((buffer.charAt(0) == '0') && (buffer.length() > 10)) {
+           buffer.delete(0,1);
+        }
+
+        while ((buffer.charAt(buffer.length() - 1) == '0') && (buffer.charAt(buffer.length() - 2)) != '.') {
+           buffer.delete(buffer.length() - 1,buffer.length());
+        }
+
+        if (isNeg) {
+            buffer.insert(0, '-');
+        }
+
+        formattedString = new String(buffer);
+        return formattedString;
+    }
+
+    /**
      * dump method for testing
      */
 

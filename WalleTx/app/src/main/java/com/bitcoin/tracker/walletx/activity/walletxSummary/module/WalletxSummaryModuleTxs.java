@@ -82,9 +82,7 @@ public class WalletxSummaryModuleTxs extends Fragment {
         Walletx.dump();
         for (Walletx wtx: wtxs) {
             mReceivedCount += wtx.totalReceive;
-            System.out.println("Dump" + Long.toString(wtx.totalReceive));
             mSentCount += wtx.totalSpend;
-                        System.out.println("Dump" + Long.toString(wtx.totalSpend));
         }
 
         List<SliceValue> values = new ArrayList<>();

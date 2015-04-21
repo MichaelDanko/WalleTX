@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.txDetail.TxDetailActivity;
 import com.bitcoin.tracker.walletx.model.Tx;
+import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.text.DateFormat;
@@ -32,7 +33,7 @@ public class TxsActivity extends ActionBarActivity {
 
     private ListView mListView;
     private TxsAdapter mAdapter;
-    private ArrayList<Walletx> wtxs;
+    private List<Walletx> wtxs;
     private List<Tx> mTxs;
     private ArrayList<TxsListItem> mItems = new ArrayList<>();
 
@@ -94,13 +95,18 @@ public class TxsActivity extends ActionBarActivity {
 
         long tempTxsCount = 0;
 
+        Intent thisIntent = getIntent();
+
+        if (thisIntent.getStringExtra("type") == "group") {
+            wtxs = WalletGroup.getBy(thisIntent.getStringExtra("group_name")).walletxs();
+        }
         // Get list of transactions associated with our wtxs
         for (Walletx w : wtxs) {
 
             List<Tx> txsForThisWtx = w.txs();
             mTxs = txsForThisWtx;
 
-            tempTxsCount = w.totalReceive + w.totalSpend;
+            tempTxsCount += w.totalReceive + w.totalSpend;
 
             for (int i = 0; i < txsForThisWtx.size(); i++) {
                 TxsListItem item;
@@ -108,7 +114,7 @@ public class TxsActivity extends ActionBarActivity {
                 // This cause a null pointer expection, unsure if the TxCategory is being created
                 // correctly in BlockChainInfo.java or if there is some other error.
                 String category = txsForThisWtx.get(i).category.name;
-                String amount = Long.toString(txsForThisWtx.get(i).amountBTC);
+                String amount = new Tx().formattedBTCValue(txsForThisWtx.get(i).hash);
                 String confirmations = Long.toString(txsForThisWtx.get(i).confirmations);
                 String hash = txsForThisWtx.get(i).hash;
                 item = new TxsListItem(date, category, amount, confirmations, hash);

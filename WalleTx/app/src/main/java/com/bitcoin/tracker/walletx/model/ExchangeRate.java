@@ -110,7 +110,6 @@ public class ExchangeRate extends Model {
         //raw query to get one item from column
         List<ExchangeRate> USDrates = SQLiteUtils.rawQuery(ExchangeRate.class, "Select USD from ExchangeRate Order by timestamp DESC Limit 1", new String[]{"null"} );
         //returns pull list item
-        System.out.println("USD:"+USDrates.get(0).usd);
         return USDrates.get(0).usd;
     }
 

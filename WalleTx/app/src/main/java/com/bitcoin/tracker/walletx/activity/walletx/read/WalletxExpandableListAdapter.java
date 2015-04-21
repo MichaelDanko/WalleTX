@@ -17,6 +17,7 @@ import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.api.BlockchainInfo;
 import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
+import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.WalletType;
 import com.bitcoin.tracker.walletx.model.Walletx;
@@ -115,7 +116,7 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         ExchangeRate.dump();
 
         try {
-            mBtcBalance.setText(Long.toString(wtx.finalBalance));
+            mBtcBalance.setText(new Tx().formattedBTCValue(wtx.finalBalance));
         } catch (Exception e) {
             e.printStackTrace();
         }

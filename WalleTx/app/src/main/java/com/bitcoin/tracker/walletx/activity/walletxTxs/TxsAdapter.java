@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 /**
@@ -62,7 +63,7 @@ public class TxsAdapter extends ArrayAdapter<TxsListItem> {
     private void setupTextLabels(int position) {
         mDate.setText(mItemsArrayList.get(position).getmDate());
         mCategory.setText(mItemsArrayList.get(position).getmCategory());
-        if (Long.parseLong(mItemsArrayList.get(position).getmAmount()) > 0) {
+        if (Float.parseFloat(mItemsArrayList.get(position).getmAmount()) > 0) {
             mAmount.setTextColor(0xFF228B22);
         }
         else {

@@ -90,13 +90,6 @@ import java.util.concurrent.CountDownLatch;
           //SingleAddressWallet.dump();
 
           try {
-              // Sync Current Block Height
-              long currentBlockHeight = getBlockHeight();
-
-              // Sync Exchange Rates
-              ExchangeRate exchangeRate = new ExchangeRate(new Date(System.currentTimeMillis() / 1000L), getUSDExchangeRate(), 0, 0);
-              exchangeRate.save();
-
               // Sync Wallet Data
               json = readUrl("https://blockchain.info/address/" + publicAddress + "?format=json");
               Gson gson = new Gson();
@@ -111,63 +104,21 @@ import java.util.concurrent.CountDownLatch;
               transaction.final_balance = newTransaction.final_balance;
               transaction.txs = newTransaction.txs;
 
-              Tx newTx = null;
-              Tx insertTx = null;
-//              Tx checkTx = Tx.getTxWalleTx(transaction.hash);
-//              if (checkTx == null) {
-
-              // Loop through array of transaction data provided from JSON -> GSON conversion
-              // Loop thorugh inputs first, if the public wallet address is found in the inputs
-              // of a transaction that is considered bitcoin moving out of the wallet, if the public
-              // wallet is found in the outputs (out) then bitcoin is moving into the wallet.
-              for(int i=0; i < transaction.txs.size();i++){
-                  for (int j=0; j < transaction.txs.get(i).inputs.size(); j++) {
-                      if ((transaction.txs.get(i).inputs.get(j).prev_out.addr.equals(publicAddress))
-                         && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
-                          TxCategory insertCategory = new TxCategory("Uncategorized");
-                          insertCategory.save();
-                          insertTx = new Tx(transaction.address,
-                                            new Date(transaction.txs.get(i).time * 1000L),
-                                            wtx,
-                                            transaction.txs.get(i).block_height,
-                                            currentBlockHeight - transaction.txs.get(i).block_height,
-                                            transaction.txs.get(i).tx_index,
-                                            insertCategory,
-                                            new TxNote(newTx, "Note"),
-                                            0 - transaction.txs.get(i).inputs.get(j).prev_out.value,
-                                            100,
-                                            transaction.txs.get(i).hash);
-                          insertTx.wtx.totalReceive++;
-                          insertTx.wtx.save();
-                          insertTx.save();
-                      }
+              if (Integer.parseInt(transaction.n_tx) > 50) {
+                 for (int i=0; i < (int)(Math.ceil(Float.parseFloat(transaction.n_tx) / 50.0)); i++)
+                  {
+                    json = readUrl("https://blockchain.info/address/" +publicAddress + "?format=json&offset=" + (i * 50) + "&filter=0");
+                    gson = new Gson();
+                    transaction = gson.fromJson(json, btcTransaction.class);
+                    importBlockChainInfoData(wtx, transaction, publicAddress);
                   }
-
-                  for (int j=0; j < transaction.txs.get(i).out.size(); j++){
-                    if (transaction.txs.get(i).out.get(j).addr.equals(publicAddress)
-                         && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
-                      TxCategory insertCategory = new TxCategory("Uncategorized");
-                      insertCategory.save();
-                      insertTx = new Tx (transaction.address,
-                                         new Date(transaction.txs.get(i).time * 1000L),
-                                         wtx,
-                                         transaction.txs.get(i).block_height,
-                                         currentBlockHeight - transaction.txs.get(i).block_height,
-                                         transaction.txs.get(i).tx_index,
-                                         insertCategory,
-                                         new TxNote(newTx, "Default Note"),
-                                         transaction.txs.get(i).out.get(j).value,
-                                         100,
-                                         transaction.txs.get(i).hash);
-                      insertTx.wtx.totalSpend++;
-                      insertTx.wtx.save();
-                      insertTx.save();
-                    }
-                  }
-
+              } else {
+                     importBlockChainInfoData(wtx, transaction, publicAddress);
               }
-              insertTx.wtx.finalBalance = transaction.final_balance;
-              insertTx.wtx.save();
+
+
+//              insertTx.wtx.finalBalance = transaction.final_balance;
+//              insertTx.wtx.save();
               Balance insertBalance1 = new Balance(wtx, 1L, new Date(System.currentTimeMillis()), 100);
                   Balance insertBalance2 = new Balance(wtx, 2L, new Date(System.currentTimeMillis() / 1000L), 200);
                   insertBalance1.save();
@@ -189,33 +140,33 @@ import java.util.concurrent.CountDownLatch;
               // }
 
               // -- Debugging
-              Log.v("btc_api: ---Debugging--", " --");
-              Log.v("btc_api: hash160", transaction.hash160);
-              Log.v("btc_api: address", transaction.address);
-              Log.v("btc_api: n_tx", transaction.n_tx);
-              Log.v("btc_api: total received", transaction.total_received);
-              Log.v("btc_api: total send", transaction.total_sent);
-              String finalBalance = Long.toString(transaction.final_balance);
-              Log.v("btc_api: final balance", finalBalance);
-              for (int i=0; i < transaction.txs.size(); i++) {
-                  Log.v("btc_api:", "txs(" + i + ") -------------------" );
-                  Log.v("btc_api:", "txs(" + i + ")" + " ver " + transaction.txs.get(i).ver);
-                  for (int j=0; j < transaction.txs.get(i).inputs.size(); j++) {
-                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "sequence:" + transaction.txs.get(i).inputs.get(j).sequence);
-                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "spent:" + transaction.txs.get(i).inputs.get(j).prev_out.spent);
-                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "tx_index:" + transaction.txs.get(i).inputs.get(j).prev_out.tx_index);
-                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "addr:" + transaction.txs.get(i).inputs.get(j).prev_out.addr);
-                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "value:" + transaction.txs.get(i).inputs.get(j).prev_out.value);
-                      Log.v("btc_api:" , "-----------------------------");
-                  }
-                  for (int j=0; j < transaction.txs.get(i).out.size(); j++) {
-                      Log.v("btc_api:" , "txs(" + i + ")" + "out(" + j + ")" + "spent:" + transaction.txs.get(i).out.get(j).spent);
-                      Log.v("btc_api:" , "txs(" + i + ")" + "out(" + j + ")" + "tx_index:" + transaction.txs.get(i).out.get(j).tx_index);
-                      Log.v("btc_api:" , "txs(" + i + ")" + "out(" + j + ")" + "addr:" + transaction.txs.get(i).out.get(j).addr);
-                      Log.v("btc_api:" , "txs(" + i + ")" + "out(" + j + ")" + "value:" + transaction.txs.get(i).out.get(j).value);
-                      Log.v("btc_api:" , "-----------------------------");
-                  }
-              }
+//              Log.v("btc_api: ---Debugging--", " --");
+//              Log.v("btc_api: hash160", transaction.hash160);
+//              Log.v("btc_api: address", transaction.address);
+//              Log.v("btc_api: n_tx", transaction.n_tx);
+//              Log.v("btc_api: total received", transaction.total_received);
+//              Log.v("btc_api: total send", transaction.total_sent);
+//              String finalBalance = Long.toString(transaction.final_balance);
+//              Log.v("btc_api: final balance", finalBalance);
+//              for (int i=0; i < transaction.txs.size(); i++) {
+//                  Log.v("btc_api:", "txs(" + i + ") -------------------" );
+//                  Log.v("btc_api:", "txs(" + i + ")" + " ver " + transaction.txs.get(i).ver);
+//                  for (int j=0; j < transaction.txs.get(i).inputs.size(); j++) {
+//                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "sequence:" + transaction.txs.get(i).inputs.get(j).sequence);
+//                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "spent:" + transaction.txs.get(i).inputs.get(j).prev_out.spent);
+//                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "tx_index:" + transaction.txs.get(i).inputs.get(j).prev_out.tx_index);
+//                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "addr:" + transaction.txs.get(i).inputs.get(j).prev_out.addr);
+//                      Log.v("btc_api:" , "txs(" + i + ")" + "inputs(" + j + ")" + "value:" + transaction.txs.get(i).inputs.get(j).prev_out.value);
+//                      Log.v("btc_api:" , "-----------------------------");
+//                  }
+//                  for (int j=0; j < transaction.txs.get(i).out.size(); j++) {
+//                      Log.v("btc_api:" , "txs(" + i + ")" + "out(" + j + ")" + "spent:" + transaction.txs.get(i).out.get(j).spent);
+//                      Log.v("btc_api:" , "txs(" + i + ")" + "out(" + j + ")" + "tx_index:" + transaction.txs.get(i).out.get(j).tx_index);
+//                      Log.v("btc_api:" , "txs(" + i + ")" + "out(" + j + ")" + "addr:" + transaction.txs.get(i).out.get(j).addr);
+//                      Log.v("btc_api:" , "txs(" + i + ")" + "out(" + j + ")" + "value:" + transaction.txs.get(i).out.get(j).value);
+//                      Log.v("btc_api:" , "-----------------------------");
+//                  }
+//              }
 //               Log.v(logInfo, transaction.wtx);
 //               Log.v(logInfo, transaction.address);
                //Tx tx = new Tx(transaction.timestamp, transaction.wtx, transaction.block,
@@ -230,10 +181,92 @@ import java.util.concurrent.CountDownLatch;
 
       }
 
+      private static void importBlockChainInfoData (Walletx wtx, btcTransaction transaction, String publicAddress) {
+              long currentBlockHeight = 0;
+              // Sync Exchange Rates
+              try {
+                  ExchangeRate exchangeRate = new ExchangeRate(new Date(System.currentTimeMillis() / 1000L), getUSDExchangeRate(), 0, 0);
+                  exchangeRate.save();
+              } catch (Exception e) {
+                e.printStackTrace();
+              }
+
+              // Sync Current Block Height
+              try {
+                  currentBlockHeight = getBlockHeight();
+              } catch (Exception e) {
+                  e.printStackTrace();
+              }
+              Tx newTx = null;
+              Tx insertTx = null;
+//              Tx checkTx = Tx.getTxWalleTx(transaction.hash);
+//              if (checkTx == null) {
+
+              // Loop through array of transaction data provided from JSON -> GSON conversion
+              // Loop through inputs first, if the public wallet address is found in the inputs
+              // of a transaction that is considered bitcoin moving out of the wallet, if the public
+              // wallet is found in the outputs (out) then bitcoin is moving into the wallet.
+              for(int i=0; i < transaction.txs.size();i++){
+                  for (int j=0; j < transaction.txs.get(i).inputs.size(); j++) {
+                      if ((transaction.txs.get(i).inputs.get(j).prev_out.addr.equals(publicAddress))
+                         && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
+                          TxCategory insertCategory = new TxCategory("Uncategorized");
+                          insertCategory.save();
+                          insertTx = new Tx(transaction.address,
+                                            new Date(transaction.txs.get(i).time * 1000L),
+                                            wtx,
+                                            transaction.txs.get(i).block_height,
+                                            currentBlockHeight - transaction.txs.get(i).block_height,
+                                            transaction.txs.get(i).tx_index,
+                                            insertCategory,
+                                            new TxNote(newTx, "Note"),
+                                            0 - transaction.txs.get(i).inputs.get(j).prev_out.value,
+                                            100,
+                                            transaction.txs.get(i).hash);
+                          insertTx.wtx.totalSpend++;
+                          insertTx.wtx.save();
+                          insertTx.save();
+                      } else if (Tx.getTxByHash(transaction.txs.get(i).hash) != null) {
+                          insertTx = Tx.getTxByHash(transaction.txs.get(i).hash);
+                          insertTx.confirmations = currentBlockHeight - insertTx.block;
+                          insertTx.wtx.finalBalance = transaction.final_balance;
+                          insertTx.save();
+                      }
+                  }
+
+                  for (int j=0; j < transaction.txs.get(i).out.size(); j++){
+                    if (transaction.txs.get(i).out.get(j).addr.equals(publicAddress)
+                         && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
+                      TxCategory insertCategory = new TxCategory("Uncategorized");
+                      insertCategory.save();
+                      insertTx = new Tx (transaction.address,
+                                         new Date(transaction.txs.get(i).time * 1000L),
+                                         wtx,
+                                         transaction.txs.get(i).block_height,
+                                         currentBlockHeight - transaction.txs.get(i).block_height,
+                                         transaction.txs.get(i).tx_index,
+                                         insertCategory,
+                                         new TxNote(newTx, "Default Note"),
+                                         transaction.txs.get(i).out.get(j).value,
+                                         100,
+                                         transaction.txs.get(i).hash);
+                      insertTx.wtx.totalReceive++;
+                      insertTx.wtx.save();
+                      insertTx.save();
+                    } else if (Tx.getTxByHash(transaction.txs.get(i).hash) != null) {
+                        insertTx = Tx.getTxByHash(transaction.txs.get(i).hash);
+                        insertTx.confirmations = currentBlockHeight - insertTx.block;
+                        insertTx.wtx.finalBalance = transaction.final_balance;
+                        insertTx.save();
+                    }
+                  }
+              }
+      }
+
       private static String readUrl (String urlString) throws Exception {
         BufferedReader reader = null;
         try {
-          Log.v("Blockchain API", urlString);
+//           Log.v("Blockchain API", urlString);
           URL url = new URL(urlString);
           try {
             reader = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -250,7 +283,7 @@ import java.util.concurrent.CountDownLatch;
             e.printStackTrace();
           }
 
-          System.out.println(buffer.toString());
+//          System.out.println(buffer.toString());
           return buffer.toString();
         } finally {
           if (reader != null)

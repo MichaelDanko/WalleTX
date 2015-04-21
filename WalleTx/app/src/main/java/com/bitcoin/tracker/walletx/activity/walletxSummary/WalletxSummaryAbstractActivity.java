@@ -75,7 +75,9 @@ public abstract class WalletxSummaryAbstractActivity extends ActionBarActivity
         switch (type) {
             case TRANSACTION_SUMMARY:
                 Intent intent = new Intent( this, TxsActivity.class );
+                Intent thisIntent = getIntent();
                 intent.putExtra("group_name", getSupportActionBar().getTitle().toString());
+                intent.putExtra("type", thisIntent.getStringExtra("type"));
                 // The proper was to do this would be to make Walletx model parcelable so
                 // we can pass the wtxs list to the new intent, but we're short on time
                 // and the use of Active Android complicates things a little. For purposes of
