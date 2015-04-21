@@ -144,8 +144,6 @@ public class WalletxFragment extends Fragment implements SyncableInterface {
         String inUSD = NumberFormat.getIntegerInstance().format(ExchangeRate.EXCHANGE_RATE_IN_USD * allWalletsBalance / 100000000);
         allWalletsUSD.setText(inUSD);
 
-        System.out.println("@@@@@@" + ExchangeRate.EXCHANGE_RATE_IN_USD);
-
         // For each wallet group
         List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
         for (WalletGroup group : groups) {
