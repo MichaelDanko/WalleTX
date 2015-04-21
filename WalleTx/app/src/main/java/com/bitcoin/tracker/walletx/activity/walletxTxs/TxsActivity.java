@@ -67,6 +67,14 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
             wtxs.add(w);
         }
 
+        mTxs = new ArrayList<>();
+        for (Walletx wtx : wtxs) {
+            List<Tx> txs = wtx.txs();
+            for (Tx tx : txs) {
+                mTxs.add(tx);
+            }
+        }
+
         // Setup list view header
         mListView = (ListView) findViewById(R.id.txs_list);
         View header = getLayoutInflater().inflate(R.layout.fragment_walletx_txs_list_header, null);
@@ -116,31 +124,24 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
         long tempTxsCount = 0;
 
         // Get list of transactions associated with our wtxs
-        for (Walletx w : wtxs) {
-
-            List<Tx> txsForThisWtx = w.txs();
-            mTxs = txsForThisWtx;
-
-            tempTxsCount += w.totalReceive + w.totalSpend;
-
-            for (int i = 0; i < txsForThisWtx.size(); i++) {
-                TxsListItem item;
-                String date = df.format(txsForThisWtx.get(i).timestamp);
-                // This cause a null pointer expection, unsure if the TxCategory is being created
-                // correctly in BlockChainInfo.java or if there is some other error.
-                String category;
-                //txsForThisWtx.get(i).category.name;
-                if (txsForThisWtx.get(i).category != null) {
-                    category = txsForThisWtx.get(i).category.name;
-                } else {
-                    category = "Uncategorized";
-                }
-                String amount = new Tx().formattedBTCValue(txsForThisWtx.get(i).amountBTC);
-                String confirmations = Long.toString(txsForThisWtx.get(i).confirmations);
-                String hash = txsForThisWtx.get(i).hash;
-                item = new TxsListItem(date, category, amount, confirmations, hash);
-                mItems.add(item);
+        for (Tx tx : mTxs) {
+            TxsListItem item;
+            String date = df.format(tx.timestamp);
+            // This cause a null pointer expection, unsure if the TxCategory is being created
+            // correctly in BlockChainInfo.java or if there is some other error.
+            String category;
+            //txsForThisWtx.get(i).category.name;
+            if (tx.category != null) {
+                category = tx.category.name;
+            } else {
+                category = "Uncategorized";
             }
+            String amount = new Tx().formattedBTCValue(tx.amountBTC);
+            String confirmations = Long.toString(tx.confirmations);
+            String hash = tx.hash;
+            item = new TxsListItem(date, category, amount, confirmations, hash);
+            mItems.add(item);
+            tempTxsCount++;
         }
 
         txsHeaderCount.setText(Long.toString(tempTxsCount));

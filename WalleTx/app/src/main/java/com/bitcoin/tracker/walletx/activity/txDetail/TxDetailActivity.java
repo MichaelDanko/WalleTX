@@ -170,7 +170,7 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
         mMoreInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent blockchaininfoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.blockchain.info/address/" + txDetail.address));
+                Intent blockchaininfoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://blockchain.info/tx/" + txDetail.hash));
                 startActivity(blockchaininfoIntent);
             }
         });
