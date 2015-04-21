@@ -12,6 +12,7 @@ package com.bitcoin.tracker.walletx.api;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +31,15 @@ public class BlockchainInfoWalletData {
         public long block_height;  // used to calculate confimations
         public long time;  // tx time
         public long result;
+        public List<jsonInputs> inputs;
         public BlockchainInfoTxData() {}
+    }
+
+    static public class jsonInputs {
+        public jsonPrevOut prev_out;
+    }
+
+    static public class jsonPrevOut {
+        public long value;
     }
 }

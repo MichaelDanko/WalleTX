@@ -111,6 +111,11 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
 
     private void importBlockChainInfoData (Walletx wtx) {
 
+        // The tx amount can be determined by looking at the tx.result of the next tx
+        Tx prevTx = new Tx();
+        Tx newTx = new Tx();
+        long finalTxAmount = 0;
+
         // Loop through each transaction associated with this wallet
         for (BlockchainInfoWalletData.BlockchainInfoTxData tx : blockchainInfoWalletData.txs) {
 
@@ -121,45 +126,45 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
                 existingTx.confirmations = latestBlockInfo.height - tx.block_height;
                 existingTx.save();
             } else {
-                // the tx is new and we need to insert
-                if (tx.result != 0) {
-                    Tx insertTx = new Tx(saw.publicKey,
-                            new Date(tx.time * 1000L),
-                            wtx,
-                            tx.block_height,
-                            latestBlockInfo.height - tx.block_height,
-                            null,
-                            null,
-                            tx.result,
-                            0,
-                            tx.hash);
-                    if (tx.result >= 0)
-                        wtx.totalReceive++;
-                    else
-                        wtx.totalSpend++;
-                    wtx.finalBalance = blockchainInfoWalletData.final_balance;
-                    wtx.save();
-                    insertTx.save();
 
-                    // Add a new balance to the balances table for this tx
-                    addNewBalance(wtx, insertTx);
-
+                // Set the amount for the previous tx and save
+                if (prevTx.hash != null) {
+                    prevTx.amountBTC = tx.result;
+                    prevTx.save();
                 }
+
+                // the tx is new and we need to setup
+                newTx = new Tx(saw.publicKey,
+                        new Date(tx.time * 1000L),
+                        wtx,
+                        tx.block_height,
+                        latestBlockInfo.height - tx.block_height,
+                        null,
+                        null,
+                        tx.result,
+                        0,
+                        tx.hash);
+                if (tx.result >= 0)
+                    wtx.totalReceive++;
+                else
+                    wtx.totalSpend++;
+                wtx.finalBalance = blockchainInfoWalletData.final_balance;
+                wtx.save();
+
+                // Save on next iteration
+                prevTx = newTx;
+
+                // @MD I have no idea how to calc the amount of the first Tx.
+                // Using this as an WRONG approximation and hoping you do.
+                // Everything else appears okay, and syncs do not compromise the model at all
+                finalTxAmount = tx.result;
             }
         }
-    }
 
-    private void addNewBalance(Walletx wtx, Tx tx) {
-        Balance newBalance = new Balance();
-        newBalance.timestamp = tx.timestamp;
-        newBalance.wtx = wtx;
-        Balance currentBalance = Balance.getBalance(wtx);
-        if (currentBalance == null) {
-            newBalance.balance = tx.amountBTC;
-        } else {
-            newBalance.balance = currentBalance.balance + tx.amountBTC;
-        }
-        newBalance.save();
+        // Save the last iteration
+        prevTx.amountBTC = finalTxAmount;
+        prevTx.save();
+
     }
 
     private static String readUrl (String urlString) throws Exception {
