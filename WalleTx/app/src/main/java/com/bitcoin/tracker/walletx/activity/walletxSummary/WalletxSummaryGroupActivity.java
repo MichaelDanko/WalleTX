@@ -22,6 +22,10 @@ public class WalletxSummaryGroupActivity extends WalletxSummaryAbstractActivity 
         mGroupName = intent.getStringExtra("group_name");
         setActivityTitle();
         populateWalletxList();
+
+        // Refresh the modules now that the wtx list is populated
+        mTxSummaryModule.refreshPieChart();
+        mSpendingSummaryModule.refreshModule();
     }
 
     protected void populateWalletxList() {

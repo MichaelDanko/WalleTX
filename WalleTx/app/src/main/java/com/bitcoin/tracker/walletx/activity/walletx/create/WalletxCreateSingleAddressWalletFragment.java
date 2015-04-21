@@ -187,38 +187,37 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
                 case "single address wallet":
 
                     // TODO Validate that public key doesn't already exist before adding.
+                    Walletx checkUniqueName = Walletx.getBy(mWalletName.getText().toString());
 
-                    Walletx wtx = new Walletx();
-                    wtx.name = mWalletName.getText().toString();
-                    wtx.type = WalletType.SINGLE_ADDRESS_WALLET;
-                    String groupName = mGroupNameSpinner.getSelectedItem().toString();
-                    WalletGroup group = WalletGroup.getBy(groupName);
-                    wtx.group = group;
-                    wtx.save();
+                    if (checkUniqueName != null) {
+                        Toast.makeText(getActivity(), "Oops! Please provide a unique wallet name", Toast.LENGTH_SHORT).show();
+                    } else if (SingleAddressWallet.isAPkey(mPublicKey.getText().toString()) > 0) {
+                        Toast.makeText(getActivity(), "Ooops! That public key already exists!", Toast.LENGTH_LONG).show();
+                    } else {
+                        // add the new walletx
+                        Walletx wtx = new Walletx();
+                        wtx.name = mWalletName.getText().toString();
+                        wtx.type = WalletType.SINGLE_ADDRESS_WALLET;
+                        String groupName = mGroupNameSpinner.getSelectedItem().toString();
+                        WalletGroup group = WalletGroup.getBy(groupName);
+                        wtx.group = group;
+                        wtx.save();
 
+                        SingleAddressWallet saWallet = new SingleAddressWallet();
+                        saWallet.publicKey = mPublicKey.getText().toString();
 
+                        saWallet.wtx = wtx;
+                        saWallet.save();
 
-                    SingleAddressWallet saWallet = new SingleAddressWallet();
-                    saWallet.publicKey = mPublicKey.getText().toString();
-
-                    //checks if key exists in database, throws toast
-                    if (SingleAddressWallet.isAPkey(saWallet.publicKey) > 0){
-                        Toast.makeText(getActivity(), "That public key already exsists!", Toast.LENGTH_LONG).show();
+                        // Notify parent activity
+                        if (mListener != null) {
+                            mListener.onFragmentInteraction(wtx.name);
+                        }
                     }
-
-                    saWallet.wtx = wtx;
-                    saWallet.save();
-
-                    new BlockchainInfo(saWallet. publicKey, wtx).execute();
 
                     break;
                 default:
                     throw new IllegalArgumentException();
-            }
-
-            // Notify parent activity
-            if (mListener != null) {
-                mListener.onFragmentInteraction();
             }
 
         } else if (!addressIsValid) {
@@ -244,7 +243,7 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
      * activity.
      */
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction();
+        public void onFragmentInteraction(String name_of_wtx_added);
     }
 
     //endregion

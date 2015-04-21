@@ -13,7 +13,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 // Data Model Functionality
-import com.bitcoin.tracker.walletx.model.Balance;
+import com.bitcoin.tracker.walletx.activity.SyncableInterface;
 import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.TxCategory;
@@ -35,7 +35,6 @@ import java.io.IOException;
 
 // Used to determine when an asynchrnous call has been completed
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 /*
@@ -43,6 +42,9 @@ import java.util.concurrent.CountDownLatch;
  */
 
   public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
+
+    // Reference to calling fragment
+    SyncableInterface caller;
 
     // The public address of the wallet to pull from blockchain.info
     private final String publicAddress;
@@ -63,6 +65,15 @@ import java.util.concurrent.CountDownLatch;
     // Two parameter constructor, address and wallet
     public BlockchainInfo(String publicAddress, Walletx wtx) {
         super();
+        this.publicAddress = new String(publicAddress);
+        this.wtx = wtx;
+        Log.v(logInfo + "Cons", this.publicAddress );
+    }
+
+    // Two parameter constructor, calling fragment, address and wallet
+    public BlockchainInfo(SyncableInterface caller, String publicAddress, Walletx wtx) {
+        super();
+        this.caller = caller;
         this.publicAddress = new String(publicAddress);
         this.wtx = wtx;
         Log.v(logInfo + "Cons", this.publicAddress );
@@ -210,15 +221,15 @@ import java.util.concurrent.CountDownLatch;
                   for (int j=0; j < transaction.txs.get(i).inputs.size(); j++) {
                       if ((transaction.txs.get(i).inputs.get(j).prev_out.addr.equals(publicAddress))
                          && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
-                          TxCategory insertCategory = new TxCategory("Uncategorized");
-                          insertCategory.save();
+                          //TxCategory insertCategory = new TxCategory("Uncategorized");
+                          //insertCategory.save();
                           insertTx = new Tx(transaction.address,
                                             new Date(transaction.txs.get(i).time * 1000L),
                                             wtx,
                                             transaction.txs.get(i).block_height,
                                             currentBlockHeight - transaction.txs.get(i).block_height,
                                             transaction.txs.get(i).tx_index,
-                                            insertCategory,
+                                            null,
                                             new TxNote(newTx, "Note"),
                                             0 - transaction.txs.get(i).inputs.get(j).prev_out.value,
                                             100,
@@ -237,15 +248,15 @@ import java.util.concurrent.CountDownLatch;
                   for (int j=0; j < transaction.txs.get(i).out.size(); j++){
                     if (transaction.txs.get(i).out.get(j).addr.equals(publicAddress)
                          && (Tx.getTxIndex(transaction.txs.get(i).tx_index) == null)) {
-                      TxCategory insertCategory = new TxCategory("Uncategorized");
-                      insertCategory.save();
+                      //TxCategory insertCategory = new TxCategory("Uncategorized");
+                      //insertCategory.save();
                       insertTx = new Tx (transaction.address,
                                          new Date(transaction.txs.get(i).time * 1000L),
                                          wtx,
                                          transaction.txs.get(i).block_height,
                                          currentBlockHeight - transaction.txs.get(i).block_height,
                                          transaction.txs.get(i).tx_index,
-                                         insertCategory,
+                                         null,
                                          new TxNote(newTx, "Default Note"),
                                          transaction.txs.get(i).out.get(j).value,
                                          100,
@@ -361,11 +372,16 @@ import java.util.concurrent.CountDownLatch;
 
     @Override
     protected void onPostExecute(Boolean result) {
-       //super.onPostExecute(result);
+        if (caller != null) {
+            caller.stopSyncRelatedUI();
+        }
     }
 
     @Override
     protected void onPreExecute() {
+        if (caller != null) {
+            caller.startSyncRelatedUI();
+        }
     }
 
   } // BlockchainInfo

@@ -3,6 +3,7 @@ package com.bitcoin.tracker.walletx.activity.walletxSummary;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.bitcoin.tracker.walletx.activity.walletxSummary.module.WalletxSummaryModuleTxs;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.LinkedList;
@@ -24,10 +25,14 @@ public class WalletxSummarySingleActivity extends WalletxSummaryAbstractActivity
         mWalletxName = intent.getStringExtra("walletx_name");
         setActivityTitle();
         populateWalletxList();
+
+        // Refresh the modules now that the wtx list is populated
+        mTxSummaryModule.refreshPieChart();
+        mSpendingSummaryModule.refreshModule();
     }
 
     protected void populateWalletxList() {
-        wtxs = new LinkedList<Walletx>();
+        wtxs = new LinkedList<>();
         wtxs.add(Walletx.getBy(mWalletxName));
     }
 

@@ -110,24 +110,16 @@ public class WalletxCreateActivity extends ActionBarActivity implements
     /**
      * Closes the activity in response an onSubmit event in a wallet type fragment.
      */
-    public void onFragmentInteraction() {
+    public void onFragmentInteraction(String name_of_wtx_added) {
         Intent intent = new Intent();
         intent.putExtra("new_wallet_added","true");
+        intent.putExtra("name_of_wtx_added", name_of_wtx_added);
         setResult(RESULT_OK, intent);
         finish();
     }
 
     //endregion
     //region OPTIONS MENU
-
-    /**
-     * Display the global options menu.
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.global, menu);
-        return true;
-    }
 
     /**
      * Home button closes the activity.

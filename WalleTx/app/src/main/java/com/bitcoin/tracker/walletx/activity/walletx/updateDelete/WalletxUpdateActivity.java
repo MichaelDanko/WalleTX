@@ -11,9 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
+import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.WalletType;
 import com.bitcoin.tracker.walletx.model.Walletx;
@@ -129,21 +131,22 @@ public class WalletxUpdateActivity extends ActionBarActivity {
                  *              Note: I've already added to strings to the string.xml file
                  *              for being displayed in toast messages
                  */
-                } else if (true) {
-                    // name was changed and it is valid. update name and group.
+                } else if ( nameInEditText.equals("") ) {
+                    Toast.makeText(getApplicationContext(), "Oops! Name cannot be an empty string.", Toast.LENGTH_SHORT).show();
+                } else {
 
-                    /*
-                     * TODO @ dc @as Refactor this code into a Walletx update method
-                     *               Walletx should handle the name, group update and save.
-                     *
-                     */
-                    walletBeingUpdated.name = mWalletxName.getText().toString();
-                    WalletGroup group = WalletGroup.getBy(groupSelected);
-                    walletBeingUpdated.group = group;
-                    walletBeingUpdated.save();
-
-
-                    finishWithResultOk();
+                    // name was changed. do existence check then update name and group.
+                    Walletx existenceCheck = Walletx.getBy(mWalletxName.getText().toString());
+                    if (existenceCheck != null) {
+                        Toast.makeText(getApplicationContext(), "Oops! That wallet name already exists.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Do that update !!!
+                        walletBeingUpdated.name = mWalletxName.getText().toString();
+                        WalletGroup group = WalletGroup.getBy(groupSelected);
+                        walletBeingUpdated.group = group;
+                        walletBeingUpdated.save();
+                        finishWithResultOk();
+                    }
                 }
 
             }
@@ -174,10 +177,17 @@ public class WalletxUpdateActivity extends ActionBarActivity {
                          *
                          */
                         Walletx wtx = Walletx.getBy(mCurrentName);
+
+                        List<Tx> txs = wtx.txs();
+                        for ( Tx tx : txs ) {
+                            tx.delete();
+                        }
+
                         if (wtx.type == WalletType.SINGLE_ADDRESS_WALLET) {
                             SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
                             saw.delete();
                         }
+
                         wtx.delete();
 
                         // Return to parent activity

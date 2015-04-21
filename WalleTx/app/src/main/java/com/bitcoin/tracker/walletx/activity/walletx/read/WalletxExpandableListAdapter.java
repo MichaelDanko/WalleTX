@@ -113,7 +113,7 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
                 mDescription.setText(saw.publicKey);
         }
 
-        ExchangeRate.dump();
+        //ExchangeRate.dump();
 
         try {
             mBtcBalance.setText(new Tx().formattedBTCValue(wtx.finalBalance));
@@ -129,6 +129,7 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
         // TODO @dc @as Update the BTC current balance, update the LC current balance & LC label
         //              for this walletx
         //----------------------------------------------------------------------------------------
+
     }
 
     @Override

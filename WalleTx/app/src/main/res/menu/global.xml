@@ -5,6 +5,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- there are no global items -->
+    <!-- sync -->
+    <item
+        android:id="@+id/action_sync"
+        android:title="@string/menu_action_sync"
+        android:icon="@drawable/ic_action_reload"
+        app:showAsAction="always" />
 
 </menu>

@@ -24,7 +24,7 @@ import java.util.List;
 public class ExchangeRate extends Model {
 
     @Column(name = "timestamp")
-    private Date timestamp;
+    public Date timestamp;
 
     public void setDateFromString(String date) {
         SimpleDateFormat sf = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");

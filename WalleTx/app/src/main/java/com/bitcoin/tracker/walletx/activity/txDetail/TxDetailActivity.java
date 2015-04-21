@@ -1,7 +1,9 @@
 package com.bitcoin.tracker.walletx.activity.txDetail;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,56 +16,74 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.SyncableInterface;
+import com.bitcoin.tracker.walletx.api.SyncDatabase;
 import com.bitcoin.tracker.walletx.model.Tx;
+import com.bitcoin.tracker.walletx.model.TxCategory;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Tx Details Activity
  *
- * TODO Update all views with information from the model
- * TODO Don't forget to change Spent/Received label to either Spent of Received
- *
  */
-public class TxDetailActivity extends ActionBarActivity {
+public class TxDetailActivity extends ActionBarActivity implements SyncableInterface {
 
     AutoCompleteTextView mTagAutoCompleteTextView;
     ImageView mTagImageView;
     Button mMoreInfoButton;
+    TextView confirmTextField;
     Tx txDetail =  null;
-    // TODO Remove once real data is functional
-    private static final String[] TAGS = new String[] {
-            "Pizza","Beer","Movies", "Clothes", "Income", "Shoes", "Dog Food"
-    };
+
+    // Reference to activity
+    static Activity mActivity;
+
+    // displays when sync in progress
+    private ProgressBar mSyncProgressBar;
+
+    // Track if changes has been made to the tag
+    private boolean mTagUpdated = false;
+
+    private List<TxCategory> mCategories = TxCategory.getAll();
+    private ArrayList<String> mTags = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tx_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mActivity = this;
+
         // prevent autofocus on tags autocompletetextview
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         getUIViews();
         bindEvents();
-        // Setup AutoCompleteTextView
-        // TODO Prepare tag data for the AutoComplete ArrayAdapter and remove dummy array
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, TAGS);
-        mTagAutoCompleteTextView.setAdapter(adapter);
 
+        // Setup AutoCompleteTextView
+        if ( mCategories != null ) {
+            for (TxCategory cat : mCategories) {
+                mTags.add(cat.name);
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mTags);
+            mTagAutoCompleteTextView.setAdapter(adapter);
+        }
 
         // Retrieve Extras
         String extras = getIntent().getExtras().getString("hash");
         txDetail = new Tx().getTxByHash(extras);
         final TextView timeTextField = (TextView) findViewById(R.id.time);
         final TextView dateTextField = (TextView) findViewById(R.id.tx_date);
-        final TextView confirmTextField = (TextView) findViewById(R.id.textView8);
-        final TextView txIDField = (TextView) findViewById(R.id.textView10);
+        confirmTextField = (TextView) findViewById(R.id.textView8);
         final TextView spendReceiveLabel = (TextView) findViewById(R.id.spent_or_received_label);
         final TextView spendReceiveAmount = (TextView) findViewById(R.id.spent_or_received_amount);
 
@@ -74,13 +94,21 @@ public class TxDetailActivity extends ActionBarActivity {
         } else {
             spendReceiveLabel.setText("Received");
         }
-        spendReceiveAmount.setText(new Tx().formattedBTCValue(extras));
         DateFormat time = new SimpleDateFormat("HH:mm:ss");
         DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
         timeTextField.setText(time.format(txDetail.timestamp));
         dateTextField.setText(date.format(txDetail.timestamp));
         confirmTextField.setText(Long.toString(txDetail.confirmations));
-        txIDField.setText(txDetail.hash);
+
+        // populate the autocompletetextview with existing tag for this tx
+        if ( txDetail.category != null ) {
+            mTagAutoCompleteTextView.setText(txDetail.category.name);
+        }
+
+        // setup sync progress spinner
+        mSyncProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);
+        mSyncProgressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
+        mSyncProgressBar.setVisibility(View.GONE);
     }
 
     private void getUIViews() {
@@ -116,8 +144,24 @@ public class TxDetailActivity extends ActionBarActivity {
                 imm.hideSoftInputFromWindow(mTagAutoCompleteTextView.getWindowToken(), 0);
                 // commit the tag changes
                 if (mTagImageView.getTag() == "in_focus") {
-                    // TODO Implement
-                    Toast.makeText(getApplicationContext(), "TODO: Save tag updates or set as uncategorized", Toast.LENGTH_SHORT).show();
+                    String toAdd = mTagAutoCompleteTextView.getText().toString();
+                    TxCategory existenceCheck = TxCategory.getBy(toAdd);
+                    if ( existenceCheck != null ) {
+                        txDetail.category = existenceCheck;
+                        txDetail.save();
+                        mTagUpdated = true;
+                    } else if ( toAdd.equals("") ) {
+                        txDetail.category = null;
+                        txDetail.save();
+                        mTagUpdated = true;
+                    } else {
+                        TxCategory newCat = new TxCategory();
+                        newCat.name = toAdd;
+                        newCat.save();
+                        txDetail.category = newCat;
+                        txDetail.save();
+                        mTagUpdated = true;
+                    }
                     mTagImageView.setTag("out_of_focus");
                 }
             }
@@ -128,25 +172,9 @@ public class TxDetailActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent blockchaininfoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.blockchain.info/address/" + txDetail.address));
-                blockchaininfoIntent.setComponent(new ComponentName("com.android.browser","com.android.browser.BrowserActivity"));
-                blockchaininfoIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(blockchaininfoIntent);
             }
         });
-
-    }
-
-    /**
-     * Commits tag updates to the database if the user didn't manually.
-     */
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // commit the tag changes
-        if (mTagImageView.getTag() == "in_focus") {
-            // TODO Implement
-            Toast.makeText(getApplicationContext(), "TODO: On destroy, save tag updates or set as uncategorized", Toast.LENGTH_SHORT).show();
-        }
     }
 
     //region OPTIONS MENU
@@ -166,9 +194,48 @@ public class TxDetailActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home)
+        if (item.getItemId() == R.id.action_sync) {
+            new SyncDatabase(this);
+            return true;
+        } else if (id == android.R.id.home) {
+            if (mTagUpdated) {
+                Intent intent = this.getIntent();
+                setResult(RESULT_OK, intent);
+            }
             finish();
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    //endregion
+    //region SYNC
+
+    public void startSyncRelatedUI() {
+        // Rotate progress bar
+        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
+        if ( mActivity != null && pb != null ) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pb.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+    }
+
+    public void stopSyncRelatedUI() {
+        // stop progress bar
+        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
+        if ( mActivity != null && pb != null ) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pb.setVisibility(View.GONE);
+                }
+            });
+        }
+        // Update the number of confirmations
+        confirmTextField.setText(Long.toString(txDetail.confirmations));
     }
 
     //endregion

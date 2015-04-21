@@ -24,7 +24,7 @@ import java.util.TimerTask;
  * Starts a background service to fetch new transactions & price data
  * before redirecting to the MainActivity.
  */
-public class SplashActivity extends Activity {
+public class SplashActivity extends Activity implements SyncableInterface {
 
     /**
      * Time duration for displaying the splash activity.
@@ -48,7 +48,7 @@ public class SplashActivity extends Activity {
         //new BlockchainInfo("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", wtx).execute();
         //wtx.save();
         //saw.save();
-        new SyncDatabase();
+        new SyncDatabase(this);
         applySplashScreenTimeOut();
     } // onCreate
 
@@ -61,6 +61,14 @@ public class SplashActivity extends Activity {
                 finish();
             }
         }, SPLASH_TIME_OUT );
+    }
+
+    public void stopSyncRelatedUI() {
+        // no ui work to be done
+    }
+
+    public void startSyncRelatedUI() {
+        // no ui work to be done
     }
 
 } // SplashActivity
