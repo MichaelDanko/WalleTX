@@ -121,10 +121,14 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
         // Loop through each transaction associated with this wallet
         for (BlockchainInfoWalletData.BlockchainInfoTxData tx : blockchainInfoWalletData.txs) {
 
+            long blockHeight = Long.valueOf(0);
+            if (tx.block_height != 0) {
+                blockHeight = latestBlockInfo.height - tx.block_height + 1;
+            }
+
             Tx existingTx = Tx.getTxByHash(tx.hash);
             if (existingTx != null) {
-                // the tx exists and we need to update it
-                existingTx.confirmations = latestBlockInfo.height - tx.block_height;
+                existingTx.confirmations = blockHeight;
                 existingTx.save();
             } else {
 
@@ -134,12 +138,11 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
                     prevTx.save();
                 }
 
-                // the tx is new and we need to setup
                 newTx = new Tx(saw.publicKey,
                         new Date(tx.time * 1000L),
                         wtx,
                         tx.block_height,
-                        latestBlockInfo.height - tx.block_height,
+                        blockHeight,
                         null,
                         null,
                         tx.result,

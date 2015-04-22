@@ -25,6 +25,9 @@ import com.bitcoin.tracker.walletx.model.Walletx;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -41,7 +44,7 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
     private ListView mListView;
     private TxsAdapter mAdapter;
     private List<Walletx> wtxs;
-    private List<Tx> mTxs;
+    private List<Tx> mTxs = new ArrayList<>();
     private ArrayList<TxsListItem> mItems = new ArrayList<>();
 
     // Reference to activity
@@ -65,14 +68,6 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
         for ( String name : wtxNames ) {
             Walletx w = Walletx.getBy(name);
             wtxs.add(w);
-        }
-
-        mTxs = new ArrayList<>();
-        for (Walletx wtx : wtxs) {
-            List<Tx> txs = wtx.txs();
-            for (Tx tx : txs) {
-                mTxs.add(tx);
-            }
         }
 
         // Setup list view header
@@ -116,6 +111,24 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
 
     private void prepareData() {
         mItems.clear();
+        mTxs.clear();
+
+        // Build and sort the tx list
+        for (Walletx wtx : wtxs) {
+            List<Tx> txs = wtx.txs();
+            for (Tx tx : txs) {
+                mTxs.add(tx);
+            }
+        }
+
+        Collections.sort(mTxs, new Comparator<Tx>() {
+            @Override
+            public int compare(Tx lhs, Tx rhs) {
+                if (lhs.timestamp.after(rhs.timestamp))
+                    return 0;
+                return 1;
+            }
+        });
 
         DateFormat df = new SimpleDateFormat("MM-dd-yyyy h:mm:ss a");
 
