@@ -123,10 +123,8 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
 
         Collections.sort(mTxs, new Comparator<Tx>() {
             @Override
-            public int compare(Tx lhs, Tx rhs) {
-                if (lhs.timestamp.after(rhs.timestamp))
-                    return 0;
-                return 1;
+            public int compare(Tx tx1, Tx tx2) {
+                return tx2.timestamp.compareTo(tx1.timestamp);
             }
         });
 
