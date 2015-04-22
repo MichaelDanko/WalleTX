@@ -1,6 +1,7 @@
 package com.bitcoin.tracker.walletx.activity.walletx.create;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -16,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.api.BlockchainInfo;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
 import com.bitcoin.tracker.walletx.model.WalletType;
@@ -162,6 +164,17 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
      */
     public void onSubmit() {
 
+        //----------------------------------------------------------------------------------------
+        // TODO @dc @as Refactor this method so that all Walletx CRUD and validation functionality
+        //              is in the Walletx model.
+        // TODO @dc @as Add validation (in Walletx model) that the public key entered does not
+        //              already exist. If it does display a toast message notifying the user of
+        //              the error.
+        // TODO @dc @as Add validation that the Walletx name is unique. This will allow us to
+        //              query Walletx's by name. Can anyone think of a better way to access
+        //              wtxs from list view.
+        //----------------------------------------------------------------------------------------
+
         boolean addressIsValid = SingleAddressWallet.isValidAddress(mPublicKey.getText().toString());
         boolean nameIsEmptyString = mWalletName.getText().toString().equals("");
 
@@ -174,28 +187,37 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
                 case "single address wallet":
 
                     // TODO Validate that public key doesn't already exist before adding.
+                    Walletx checkUniqueName = Walletx.getBy(mWalletName.getText().toString());
 
-                    Walletx wtx = new Walletx();
-                    wtx.name = mWalletName.getText().toString();
-                    wtx.type = WalletType.SINGLE_ADDRESS_WALLET;
-                    String groupName = mGroupNameSpinner.getSelectedItem().toString();
-                    WalletGroup group = WalletGroup.getBy(groupName);
-                    wtx.group = group;
-                    wtx.save();
+                    if (checkUniqueName != null) {
+                        Toast.makeText(getActivity(), "Oops! Please provide a unique wallet name", Toast.LENGTH_SHORT).show();
+                    } else if (SingleAddressWallet.isAPkey(mPublicKey.getText().toString()) > 0) {
+                        Toast.makeText(getActivity(), "Ooops! That public key already exists!", Toast.LENGTH_LONG).show();
+                    } else {
+                        // add the new walletx
+                        Walletx wtx = new Walletx();
+                        wtx.name = mWalletName.getText().toString();
+                        wtx.type = WalletType.SINGLE_ADDRESS_WALLET;
+                        String groupName = mGroupNameSpinner.getSelectedItem().toString();
+                        WalletGroup group = WalletGroup.getBy(groupName);
+                        wtx.group = group;
+                        wtx.save();
 
-                    SingleAddressWallet saWallet = new SingleAddressWallet();
-                    saWallet.publicKey = mPublicKey.getText().toString();
-                    saWallet.wtx = wtx;
-                    saWallet.save();
+                        SingleAddressWallet saWallet = new SingleAddressWallet();
+                        saWallet.publicKey = mPublicKey.getText().toString();
+
+                        saWallet.wtx = wtx;
+                        saWallet.save();
+
+                        // Notify parent activity
+                        if (mListener != null) {
+                            mListener.onFragmentInteraction(wtx.name);
+                        }
+                    }
 
                     break;
                 default:
                     throw new IllegalArgumentException();
-            }
-
-            // Notify parent activity
-            if (mListener != null) {
-                mListener.onFragmentInteraction();
             }
 
         } else if (!addressIsValid) {
@@ -221,7 +243,7 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment implement
      * activity.
      */
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction();
+        public void onFragmentInteraction(String name_of_wtx_added);
     }
 
     //endregion

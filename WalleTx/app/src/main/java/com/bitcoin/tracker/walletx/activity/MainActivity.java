@@ -11,9 +11,8 @@ import android.view.MenuItem;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.txCategories.TxCategoriesFragment;
-import com.bitcoin.tracker.walletx.activity.walletx.main.WalletxFragment;
-import com.bitcoin.tracker.walletx.activity.settings.SettingsFragment;
-import com.bitcoin.tracker.walletx.activity.walletGroup.WalletGroupFragment;
+import com.bitcoin.tracker.walletx.activity.walletx.read.WalletxFragment;
+import com.bitcoin.tracker.walletx.activity.walletGroup.read.WalletGroupFragment;
 
 /**
  * Handles the display of and interactions with the fragments
@@ -21,7 +20,8 @@ import com.bitcoin.tracker.walletx.activity.walletGroup.WalletGroupFragment;
  */
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
-        WalletGroupFragment.OnFragmentInteractionListener {
+        WalletGroupFragment.OnFragmentInteractionListener,
+        TxCategoriesFragment.OnFragmentInteractionListener {
 
     // Fragment managing the behaviors, interactions and presentation of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
@@ -60,9 +60,6 @@ public class MainActivity extends ActionBarActivity implements
                 break;
             case 2:
                 fragment = TxCategoriesFragment.newInstance(position + 1);
-                break;
-            case 3:
-                fragment = SettingsFragment.newInstance(position + 1);
                 break;
             default:
                 fragment = WalletxFragment.newInstance(position + 1);

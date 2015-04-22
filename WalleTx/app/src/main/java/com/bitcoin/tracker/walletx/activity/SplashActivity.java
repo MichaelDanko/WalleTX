@@ -5,7 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.api.BlockchainInfo;
+import com.bitcoin.tracker.walletx.api.SyncDatabase;
+import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.WalletGroup;
+import com.bitcoin.tracker.walletx.model.WalletType;
+import com.bitcoin.tracker.walletx.model.Walletx;
+import com.google.bitcoin.core.BlockChain;
+
+import org.json.JSONException;
 
 import java.util.List;
 import java.util.Timer;
@@ -16,7 +24,7 @@ import java.util.TimerTask;
  * Starts a background service to fetch new transactions & price data
  * before redirecting to the MainActivity.
  */
-public class SplashActivity extends Activity {
+public class SplashActivity extends Activity implements SyncableInterface {
 
     /**
      * Time duration for displaying the splash activity.
@@ -27,10 +35,20 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        setupDefaultWalletGroup();
+        WalletGroup.initDefaultGroup(this);
 
-        // TODO - Fetch new tx and price data?
+        /*
+         * TODO @md Initiate a data sync
+         *
+         */
 
+
+        //Walletx wtx = new Walletx("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", WalletType.SINGLE_ADDRESS_WALLET, WalletGroup.getBy("My Wallets"));
+        //SingleAddressWallet saw = new SingleAddressWallet(wtx, "1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy");
+        //new BlockchainInfo("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", wtx).execute();
+        //wtx.save();
+        //saw.save();
+        new SyncDatabase(this);
         applySplashScreenTimeOut();
     } // onCreate
 
@@ -45,17 +63,12 @@ public class SplashActivity extends Activity {
         }, SPLASH_TIME_OUT );
     }
 
-    // Adds 'My Wallets' group to the WalletGroups table on first run
-    // and sets it as the default group.
-    private void setupDefaultWalletGroup() {
-        List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
-        if ( groups.size() < 1 ) {
-            WalletGroup defaultGroup = new WalletGroup();
-            defaultGroup.name = getString(R.string.wallet_group_wtx_default_group);
-            defaultGroup.setAsDefault(1);
-            defaultGroup.displayOrder = 1;
-            defaultGroup.save();
-        }
+    public void stopSyncRelatedUI() {
+        // no ui work to be done
+    }
+
+    public void startSyncRelatedUI() {
+        // no ui work to be done
     }
 
 } // SplashActivity

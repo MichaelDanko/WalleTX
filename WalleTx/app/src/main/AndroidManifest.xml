@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bitcoin.tracker.walletx" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name="com.activeandroid.app.Application"
         android:allowBackup="true"
@@ -37,12 +40,48 @@
             android:label="@string/walletx_create_title_activity" >
         </activity>
         <activity
-            android:name=".activity.walletGroup.WalletGroupCreateActivity"
+            android:name=".activity.walletx.updateDelete.WalletxUpdateActivity"
+            android:label="@string/walletx_update_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.walletxSummary.WalletxSummaryAllActivity"
+            android:label="@string/walletx_summary_all_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.walletxSummary.WalletxSummaryGroupActivity"
+            android:label="@string/walletx_summary_group_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.walletxSummary.WalletxSummarySingleActivity"
+            android:label="@string/walletx_summary_single_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.walletGroup.create.WalletGroupCreateActivity"
             android:label="@string/wallet_group_create_title_activity" >
         </activity>
         <activity
-            android:name=".activity.walletGroup.WalletGroupUpdateActivity"
+            android:name=".activity.walletGroup.updateDelete.WalletGroupUpdateActivity"
             android:label="@string/wallet_group_update_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.walletxTxs.TxsActivity"
+            android:label="@string/title_activity_walletx_txs_title_activity" >
+        </activity>
+        <activity
+            android:name=".activity.txDetail.TxDetailActivity"
+            android:label="@string/title_activity_tx_detail" >
+        </activity>
+        <activity
+            android:name=".activity.txCategories.TxCategoryCreateActivity"
+            android:label="@string/title_activity_create_tx_category" >
+        </activity>
+        <activity
+            android:name=".activity.txCategories.TxCategoryUpdateActivity"
+            android:label="@string/title_activity_tx_category_update" >
+        </activity>
+        <activity
+            android:name=".activity.graphs.GraphSpendingByCategoryActivity"
+            android:label="@string/title_activity_graph_spending_by_category" >
         </activity>
     </application>
 

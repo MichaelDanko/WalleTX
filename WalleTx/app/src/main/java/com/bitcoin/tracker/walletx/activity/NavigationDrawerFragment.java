@@ -98,7 +98,6 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.navigation_drawer_title_my_wallets),
                         getString(R.string.navigation_drawer_title_wallet_groups),
                         getString(R.string.navigation_drawer_title_tx_catgeories),
-                        getString(R.string.navigation_drawer_title_settings),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;

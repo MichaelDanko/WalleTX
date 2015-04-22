@@ -8,11 +8,6 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/action_sync"
-        android:title="@string/menu_action_sync"
-        android:icon="@drawable/ic_action_reload"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/action_add_wallet"
         android:title="@string/menu_action_add_wallet"
         android:orderInCategory="100"
