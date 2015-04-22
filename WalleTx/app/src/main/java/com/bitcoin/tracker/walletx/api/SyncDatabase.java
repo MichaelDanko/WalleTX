@@ -14,13 +14,11 @@ import java.util.List;
 public class SyncDatabase {
 
     public SyncDatabase(SyncableInterface caller) {
-    List<Walletx> wtxs = Walletx.getAll();
-    for (Walletx wtx : wtxs) {
-            if (caller != null) {
-                new BlockchainInfo(caller, wtx).execute();
-            } else {
-                new BlockchainInfo(wtx).execute();
-            }
+        if (caller != null) {
+            System.out.println("SYNC CALLED");
+            new BlockchainInfo(caller).execute();
+        } else {
+            new BlockchainInfo().execute();
         }
     }
 }

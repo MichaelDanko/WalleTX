@@ -309,8 +309,7 @@ public class WalletxFragment extends Fragment implements SyncableInterface {
                  */
 
                 Walletx wtx = Walletx.getBy(data.getStringExtra("name_of_wtx_added"));
-                new BlockchainInfo(this, wtx).execute();
-
+                new BlockchainInfo(this).execute();
 
             }
         } else if (requestCode == WALLETX_UPDATED || requestCode == WALLET_GROUP_UPDATED) {

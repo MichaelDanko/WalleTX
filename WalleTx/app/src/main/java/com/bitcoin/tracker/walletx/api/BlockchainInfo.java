@@ -47,12 +47,6 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
     // Reference to calling fragment
     SyncableInterface caller;
 
-    // The single address wallet to pull from blockchain.info
-    public static SingleAddressWallet saw;
-
-    // User defined wallet (eg. Cash Wallet, Savings Wallet, etc.)
-    private Walletx wtx = null;
-
     // Data will be pushed into an object that models the JSON received
     public static BlockchainInfoWalletData blockchainInfoWalletData = new BlockchainInfoWalletData();
 
@@ -64,49 +58,49 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
     public static final CountDownLatch signal = new CountDownLatch(1);
 
     // Two parameter constructor, address and wallet
-    public BlockchainInfo(Walletx wtx) {
+    public BlockchainInfo() {
         super();
-        this.saw = SingleAddressWallet.getByWalletx(wtx);
-        this.wtx = wtx;
     }
 
     // Two parameter constructor, calling fragment, address and wallet
-    public BlockchainInfo(SyncableInterface caller, Walletx wtx) {
+    public BlockchainInfo(SyncableInterface caller) {
         super();
         this.caller = caller;
-        this.saw = SingleAddressWallet.getByWalletx(wtx);
-        this.wtx = wtx;
     }
 
     // Asynchronous call to complete web api pull in background.
     @Override
     protected Boolean doInBackground(Void...nothing) {
 
-        String jsonTicker;
-        String jsonLatestBlock;
-        String json;
+        List<Walletx> wtxs = Walletx.getAll();
+        for (Walletx wtx : wtxs) {
 
-        try {
+            String jsonTicker;
+            String jsonLatestBlock;
+            String json;
 
-            jsonTicker = readUrl("https://blockchain.info/ticker?format=json");
-            Gson gsonTickerData = new Gson();
-            tickerData = gsonTickerData.fromJson(jsonTicker, TickerData.class);
-            ExchangeRate.EXCHANGE_RATE_IN_USD = tickerData.USD.sell;
+            try {
+                jsonTicker = readUrl("https://blockchain.info/ticker?format=json");
+                Gson gsonTickerData = new Gson();
+                tickerData = gsonTickerData.fromJson(jsonTicker, TickerData.class);
+                ExchangeRate.EXCHANGE_RATE_IN_USD = tickerData.USD.sell;
 
-            jsonLatestBlock = readUrl("https://blockchain.info/latestblock?format=json");
-            Gson gsonLatestBlockInfo = new Gson();
-            latestBlockInfo = gsonLatestBlockInfo.fromJson(jsonLatestBlock, LatestBlockInfo.class);
+                jsonLatestBlock = readUrl("https://blockchain.info/latestblock?format=json");
+                Gson gsonLatestBlockInfo = new Gson();
+                latestBlockInfo = gsonLatestBlockInfo.fromJson(jsonLatestBlock, LatestBlockInfo.class);
 
-            json = readUrl("https://blockchain.info/address/" + saw.publicKey + "?format=json");
-            Gson gson = new Gson();
-            blockchainInfoWalletData = gson.fromJson(json, BlockchainInfoWalletData.class);
-            importBlockChainInfoData(wtx);
+                SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
+                json = readUrl("https://blockchain.info/address/" + saw.publicKey + "?format=json");
+                Gson gson = new Gson();
+                blockchainInfoWalletData = gson.fromJson(json, BlockchainInfoWalletData.class);
+                importBlockChainInfoData(wtx);
 
-            return true;
-        } catch (Exception e) {
-            Log.e(e.getClass().getName(), "ERROR:" + e.getMessage(), e);
-            return false;
+            } catch (Exception e) {
+                Log.e(e.getClass().getName(), "ERROR:" + e.getMessage(), e);
+                return false;
+            }
         }
+        return true;
     }
 
     private void importBlockChainInfoData (Walletx wtx) {
@@ -115,20 +109,20 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
         Tx prevTx = new Tx();
         Tx newTx = new Tx();
         BlockchainInfoWalletData.BlockchainInfoTxData lastTx = null;
-
         SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
 
         // Loop through each transaction associated with this wallet
         for (BlockchainInfoWalletData.BlockchainInfoTxData tx : blockchainInfoWalletData.txs) {
 
-            long blockHeight = Long.valueOf(0);
+            long confirmations = Long.valueOf(0);
             if (tx.block_height != 0) {
-                blockHeight = (latestBlockInfo.height - tx.block_height) + 1;
+                confirmations = (latestBlockInfo.height - tx.block_height) + 1;
+                System.out.println("Confirmations -----------------------------" + confirmations);
             }
 
             Tx existingTx = Tx.getTxByHash(tx.hash);
             if (existingTx != null) {
-                existingTx.confirmations = blockHeight;
+                existingTx.confirmations = confirmations;
                 existingTx.save();
             } else {
 
@@ -142,7 +136,7 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
                         new Date(tx.time * 1000L),
                         wtx,
                         tx.block_height,
-                        blockHeight,
+                        confirmations,
                         null,
                         null,
                         tx.result,
@@ -180,6 +174,10 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
             }
             newTx.save();
         }
+
+        System.out.println("");
+        System.out.println("DONE WITH ONE WALLET");
+        System.out.println("");
     }
 
     private static String readUrl (String urlString) throws Exception {
