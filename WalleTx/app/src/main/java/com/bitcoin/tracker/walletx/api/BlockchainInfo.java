@@ -123,7 +123,7 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
 
             long blockHeight = Long.valueOf(0);
             if (tx.block_height != 0) {
-                blockHeight = latestBlockInfo.height - tx.block_height + 1;
+                blockHeight = (latestBlockInfo.height - tx.block_height) + 1;
             }
 
             Tx existingTx = Tx.getTxByHash(tx.hash);
