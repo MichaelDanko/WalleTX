@@ -121,7 +121,7 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    mTagImageView.setImageResource(R.mipmap.ic_save);
+                    mTagImageView.setImageResource(R.drawable.tx_detail_save);
                     mTagImageView.setTag("in_focus");
                 }
             }
@@ -134,7 +134,7 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
             @Override
             public void onClick(View v) {
                 // restore button image, clear tag focus, and hide keyboard
-                mTagImageView.setImageResource(R.mipmap.ic_tag);
+                mTagImageView.setImageResource(R.drawable.tx_detail_tag);
                 mTagAutoCompleteTextView.clearFocus();
                 InputMethodManager imm = (InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mTagAutoCompleteTextView.getWindowToken(), 0);
