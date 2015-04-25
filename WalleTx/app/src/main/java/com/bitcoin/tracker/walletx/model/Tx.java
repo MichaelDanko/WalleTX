@@ -1,7 +1,6 @@
 package com.bitcoin.tracker.walletx.model;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.activeandroid.Model;
@@ -9,11 +8,8 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * Tx model.
@@ -56,18 +52,18 @@ public class Tx extends Model {
 
     // Belongs to one category (optional)
     @Column(name = "TxCategory")
-    public TxCategory category;
+    public Category category;
 
     // Has one note (optional)
     @Column(name = "TxNote")
-    public TxNote note;
+    public Note note;
 
     public Tx() {
         super();
     }
 
-    public Tx(String address, Date date, Walletx wtx, long block, long confirmations, TxCategory category,
-              TxNote note, long amountBTC, long amountLC, String hash) {
+    public Tx(String address, Date date, Walletx wtx, long block, long confirmations, Category category,
+              Note note, long amountBTC, long amountLC, String hash) {
         super();
         this.address = new String(address);
         this.timestamp = date;
@@ -127,7 +123,7 @@ public class Tx extends Model {
      * @return all transactions with param of catagory
      */
 
-    public static List<Tx> getAllTxCategory(TxCategory _category){
+    public static List<Tx> getAllTxCategory(Category _category){
         return new Select()
                 .from(Tx.class)
                 .where("TxCategory = ?", _category)

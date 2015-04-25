@@ -1,16 +1,13 @@
 package com.bitcoin.tracker.walletx.model;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.bitcoin.tracker.walletx.api.SupportedWalletTypeInterface;
 import com.google.bitcoin.core.Address;
 import com.google.bitcoin.core.AddressFormatException;
 
-import java.lang.ref.SoftReference;
 import java.util.List;
 
 /**
@@ -25,7 +22,7 @@ import java.util.List;
  *
  */
 @Table(name = "SingleAddressWallet")
-public class SingleAddressWallet extends Model implements WalletxBlockchainInterface {
+public class SingleAddressWallet extends Model implements SupportedWalletTypeInterface {
 
     @Column(name = "PublicKey")
     public String publicKey;

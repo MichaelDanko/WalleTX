@@ -5,17 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.api.BlockchainInfo;
+import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
 import com.bitcoin.tracker.walletx.api.SyncDatabase;
-import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
-import com.bitcoin.tracker.walletx.model.WalletGroup;
-import com.bitcoin.tracker.walletx.model.WalletType;
-import com.bitcoin.tracker.walletx.model.Walletx;
-import com.google.bitcoin.core.BlockChain;
+import com.bitcoin.tracker.walletx.api.SyncableInterface;
+import com.bitcoin.tracker.walletx.model.Group;
 
-import org.json.JSONException;
-
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,8 +28,8 @@ public class SplashActivity extends Activity implements SyncableInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-        WalletGroup.initDefaultGroup(this);
+        setContentView(R.layout.splash_activity);
+        Group.initDefaultGroup(this);
 
         /*
          * TODO @md Initiate a data sync

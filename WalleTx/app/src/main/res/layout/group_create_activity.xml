@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.bitcoin.tracker.walletx.activity.group.GroupCreateActivity"
+    android:id="@+id/container">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextWalletGroupName"
+        android:layout_gravity="center_horizontal|top"
+        android:hint="@string/wallet_group_create_hint_name"
+        android:paddingTop="@dimen/form_spacer_small"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="@dimen/form_spacer_small"
+        android:singleLine="true"
+        android:inputType="textCapWords" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wallet_group_create_checkbox_set_as_default"
+        android:id="@+id/checkBoxSetAsDefault"
+        android:layout_below="@+id/editTextWalletGroupName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/editTextWalletGroupName"
+        android:layout_alignEnd="@+id/editTextWalletGroupName"
+        android:checked="false"
+        android:layout_marginBottom="@dimen/form_spacer_small" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wallet_group_create_button_add"
+        android:id="@+id/buttonAddWalletGroup"
+        android:layout_below="@+id/checkBoxSetAsDefault"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/checkBoxSetAsDefault"
+        android:layout_alignEnd="@+id/checkBoxSetAsDefault"
+        android:layout_marginBottom="@dimen/form_spacer_small" />
+</RelativeLayout>

@@ -13,12 +13,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 // Data Model Functionality
-import com.bitcoin.tracker.walletx.activity.SyncableInterface;
-import com.bitcoin.tracker.walletx.model.Balance;
 import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.Tx;
-import com.bitcoin.tracker.walletx.model.TxNote;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 // Gson library convert JSON to an object class
@@ -48,7 +45,7 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
     SyncableInterface caller;
 
     // Data will be pushed into an object that models the JSON received
-    public static BlockchainInfoWalletData blockchainInfoWalletData = new BlockchainInfoWalletData();
+    public static BlockchainInfoGson blockchainInfoWalletData = new BlockchainInfoGson();
 
     public LatestBlockInfo latestBlockInfo = new LatestBlockInfo();
     public TickerData tickerData = new TickerData();
@@ -92,7 +89,7 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
                 SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
                 json = readUrl("https://blockchain.info/address/" + saw.publicKey + "?format=json");
                 Gson gson = new Gson();
-                blockchainInfoWalletData = gson.fromJson(json, BlockchainInfoWalletData.class);
+                blockchainInfoWalletData = gson.fromJson(json, BlockchainInfoGson.class);
                 importBlockChainInfoData(wtx);
 
             } catch (Exception e) {
@@ -108,11 +105,11 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
         // The tx amount can be determined by looking at the tx.result of the next tx
         Tx prevTx = new Tx();
         Tx newTx = new Tx();
-        BlockchainInfoWalletData.BlockchainInfoTxData lastTx = null;
+        BlockchainInfoGson.txGson lastTx = null;
         SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
 
         // Loop through each transaction associated with this wallet
-        for (BlockchainInfoWalletData.BlockchainInfoTxData tx : blockchainInfoWalletData.txs) {
+        for (BlockchainInfoGson.txGson tx : blockchainInfoWalletData.txs) {
 
             long confirmations = Long.valueOf(0);
             if (tx.block_height != 0) {
@@ -161,12 +158,12 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
         // Although it is faster, we can't calculate the tx amount using the above method.
         // Utilizing M.Danko's logic to calculate the amount of the final tx before saving
         if (lastTx != null) {
-            for (BlockchainInfoWalletData.jsonInputs input : lastTx.inputs) {
+            for (BlockchainInfoGson.inputsGson input : lastTx.inputs) {
                 if ( input.prev_out.addr.equals(saw.publicKey) && (Tx.getTxIndex(lastTx.tx_index) == null) ) {
                     prevTx.amountBTC = 0 - input.prev_out.value;
                 }
             }
-            for (BlockchainInfoWalletData.jsonOutputs out : lastTx.out) {
+            for (BlockchainInfoGson.outputsGson out : lastTx.out) {
                 if (out.addr.equals(saw.publicKey) && (Tx.getTxIndex(lastTx.tx_index) == null)) {
                     newTx.amountBTC = out.value;
                 }

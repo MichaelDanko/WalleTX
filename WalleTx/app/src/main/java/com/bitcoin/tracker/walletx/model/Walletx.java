@@ -25,11 +25,11 @@ public class Walletx extends Model {
     public String name;
 
     @Column(name = "WalletType")
-    public WalletType type;
+    public SupportedWalletType type;
 
     // Belongs to one WalletGroup (mandatory)
     @Column(name = "WalletGroup")
-    public WalletGroup group;
+    public Group group;
 
     // Sum of Spending Records
     @Column(name = "TotalSpend")
@@ -57,7 +57,7 @@ public class Walletx extends Model {
         super();
     }
 
-    public Walletx(String name, WalletType type, WalletGroup group) {
+    public Walletx(String name, SupportedWalletType type, Group group) {
         super();
         this.name = name;
         this.type = type;

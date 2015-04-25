@@ -2,8 +2,8 @@ package com.bitcoin.tracker.walletx;
 
 import android.test.suitebuilder.annotation.SmallTest;
 
+import com.bitcoin.tracker.walletx.model.Group;
 import com.bitcoin.tracker.walletx.model.QueryModelTest;
-import com.bitcoin.tracker.walletx.model.WalletGroup;
 
 import java.text.ParseException;
 
@@ -33,16 +33,16 @@ public class testWalletGroupModel extends ApplicationTest {
 
         newTest.addGroupsTestDB();
 
-        String query1 = WalletGroup.getBy("test3").name;
+        String query1 = Group.getBy("test3").name;
         assertEquals(query1, "test3");
 
-        query1 = WalletGroup.getDefault().name;
+        query1 = Group.getDefault().name;
         assertEquals(query1, "My Wallets");
 
-        query1 = WalletGroup.getLast().name;
+        query1 = Group.getLast().name;
         assertEquals(query1, "test6");
 
-        query1 = WalletGroup.getByDisplayOrder(3).name;
+        query1 = Group.getByDisplayOrder(3).name;
         assertEquals(query1, "test2");
 
     }
