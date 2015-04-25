@@ -431,40 +431,7 @@ No other systems will be dependent on our app. Therefore no functionality is cri
   % Use case 3.4 : Tagging transactions
   %-----------------------------------------------
 
-    \begin{figure}[ht]
-      \centering
-      \includegraphics[width=0.6\textwidth]{../diagrams/use-case-backup.png}
-      \caption{Backup Data}
-    \end{figure}
 
-\begin{table}[H]
-  \tabulinesep=1.2mm
-      \rowcolors{2}{gray!25}{white}
-      \centering
-      \resizebox{0.8\columnwidth}{!}{%
-
-      \begin{tabu}{r | X}
-        \rowfont{\color{black}}
-        \taburulecolor{black}
-        \taburowcolors 1{green .. green}
-
-        \multicolumn{2}{l}{\textbf{\textsf{WalleTx: Backup Data}}}\\
-        \hline
-        \taburowcolors 2{light-gray .. white}
-
-        \textsf{Actors} & User\\
-        Description & A user will be able to backup all wallet information, transaction hashes, and tags associate with those transactions to an XML or JSON file.\\
-        Data & public wallet identification, transaction hashes, tags associate with transactions\\
-        Stimulus & User initiates a data backup\\
-        Response & Dialog box will confirm backup\\
-        Comments & Is there any additional data that needs to be backed up? Where will the database backup be stored?\\
-        \taburowcolors 1{green .. green}
-      \multicolumn{2}{|l|}{\textbf{\textsf{\footnotesize{Figure 7.11}}}}\\
-      \hline
-
-      \end{tabu}%
-    }
-    \end{table}
 
 	
     \begin{figure}[H]
