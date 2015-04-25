@@ -121,7 +121,7 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    mTagImageView.setImageResource(R.mipmap.ic_tag_save_update);
+                    mTagImageView.setImageResource(R.mipmap.ic_save);
                     mTagImageView.setTag("in_focus");
                 }
             }

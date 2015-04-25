@@ -104,7 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/allWalletsBitcoinLogo"
-                android:src="@drawable/bitcoin_logo"
+                android:src="@drawable/walletx_bitcoin_logo"
                 android:layout_weight="0.17"
                 android:adjustViewBounds="false"
                 android:layout_centerVertical="true"
