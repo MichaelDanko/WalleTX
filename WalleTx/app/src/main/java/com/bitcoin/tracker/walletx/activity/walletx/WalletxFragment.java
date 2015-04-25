@@ -20,6 +20,7 @@ import com.activeandroid.query.Select;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.group.GroupUpdateActivity;
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
+import com.bitcoin.tracker.walletx.api.SyncManager;
 import com.bitcoin.tracker.walletx.api.SyncableInterface;
 import com.bitcoin.tracker.walletx.activity.summary.SummaryAllActivity;
 import com.bitcoin.tracker.walletx.activity.summary.SummaryGroupActivity;
@@ -330,7 +331,15 @@ public class WalletxFragment extends Fragment implements SyncableInterface {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_sync) {
-            new SyncDatabase(this);
+
+
+
+            //new SyncDatabase(this);
+
+
+
+
+
             return true;
         } else if (item.getItemId() == R.id.action_add_wallet) {
             // open new activity

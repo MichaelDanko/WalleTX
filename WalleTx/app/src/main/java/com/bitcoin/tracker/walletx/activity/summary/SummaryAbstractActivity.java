@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 
 import com.bitcoin.tracker.walletx.R;
 
+import com.bitcoin.tracker.walletx.activity.SyncableActivity;
 import com.bitcoin.tracker.walletx.api.SyncableInterface;
 import com.bitcoin.tracker.walletx.activity.chart.ChartSpendingByCategoryActivity;
 import com.bitcoin.tracker.walletx.activity.tx.TxsActivity;
@@ -26,10 +27,9 @@ import java.util.List;
 /**
  * Walletx summary abstract super class.
  */
-public abstract class SummaryAbstractActivity extends ActionBarActivity implements
+public abstract class SummaryAbstractActivity extends SyncableActivity implements
         ModuleTxs.OnFragmentInteractionListener,
-        ModuleSpending.OnFragmentInteractionListener,
-        SyncableInterface {
+        ModuleSpending.OnFragmentInteractionListener {
 
     /**
      * The list of walletx's that we are going to summarize.
@@ -87,7 +87,7 @@ public abstract class SummaryAbstractActivity extends ActionBarActivity implemen
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.global, menu);
+        super.onCreateOptionsMenu(menu);
         return true;
     }
 
@@ -97,10 +97,10 @@ public abstract class SummaryAbstractActivity extends ActionBarActivity implemen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (item.getItemId() == R.id.action_sync) {
-            new SyncDatabase(this);
-            return true;
-        } else if (id == android.R.id.home) {
+        //if (item.getItemId() == R.id.action_sync) {
+        //    new SyncDatabase(this);
+        //    return true;
+        if (id == android.R.id.home) {
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -145,35 +145,4 @@ public abstract class SummaryAbstractActivity extends ActionBarActivity implemen
         }
     }
 
-    //region SYNC
-
-    public void startSyncRelatedUI() {
-        // Rotate progress bar
-        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
-        if ( mActivity != null && pb != null ) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pb.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-    }
-
-    public void stopSyncRelatedUI() {
-        // stop progress bar
-        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
-        if ( mActivity != null && pb != null ) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pb.setVisibility(View.GONE);
-                }
-            });
-        }
-
-        mTxSummaryModule.refreshPieChart();
-    }
-
-    //endregion
 }

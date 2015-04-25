@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.SyncableActivity;
 import com.bitcoin.tracker.walletx.activity.category.CategoryFragment;
 import com.bitcoin.tracker.walletx.activity.group.GroupFragment;
 import com.bitcoin.tracker.walletx.activity.walletx.WalletxFragment;
@@ -18,7 +19,7 @@ import com.bitcoin.tracker.walletx.activity.walletx.WalletxFragment;
  * Handles the display of and interactions with the fragments
  * accessed from within the navigation.
  */
-public class MainActivity extends ActionBarActivity implements
+public class MainActivity extends SyncableActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         GroupFragment.OnFragmentInteractionListener,
         CategoryFragment.OnFragmentInteractionListener {
@@ -98,12 +99,14 @@ public class MainActivity extends ActionBarActivity implements
     // Applies the global menu to the action bar when navigation drawer is closed.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            getMenuInflater().inflate(R.menu.global, menu);
-            restoreActionBar();
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
+        super.onCreateOptionsMenu(menu);
+        //if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        //    getMenuInflater().inflate(R.menu.global, menu);
+        //    restoreActionBar();
+        //    return true;
+        //}
+        //return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     // Handles action bar item clicks associated with the global menu.

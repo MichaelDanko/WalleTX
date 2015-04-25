@@ -83,6 +83,10 @@
             android:name=".activity.chart.ChartSpendingByCategoryActivity"
             android:label="@string/title_activity_graph_spending_by_category" >
         </activity>
+        <activity
+            android:name=".activity.SyncableActivity"
+            android:label="@string/title_activity_syncable" >
+        </activity>
     </application>
 
 </manifest>
