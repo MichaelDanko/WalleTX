@@ -36,6 +36,187 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+/*
+
+public class BlockchainInfo {
+
+    List<Walletx> mWtxs;
+
+    // Reference to calling fragment
+    SyncableInterface caller;
+
+    // Data will be pushed into an object that models the JSON received
+    public static BlockchainInfoGson blockchainInfoWalletData = new BlockchainInfoGson();
+
+    public LatestBlockInfo latestBlockInfo = new LatestBlockInfo();
+    public TickerData tickerData = new TickerData();
+
+
+    // Two parameter constructor, address and wallet
+    public BlockchainInfo(List<Walletx> wtxs) {
+        super();
+        mWtxs = wtxs;
+    }
+
+    public boolean syncWallets() {
+
+        for (Walletx wtx : mWtxs) {
+
+            String jsonTicker;
+            String jsonLatestBlock;
+            String json;
+
+            try {
+                jsonTicker = readUrl("https://blockchain.info/ticker?format=json");
+                Gson gsonTickerData = new Gson();
+                tickerData = gsonTickerData.fromJson(jsonTicker, TickerData.class);
+                ExchangeRate.EXCHANGE_RATE_IN_USD = tickerData.USD.sell;
+
+                jsonLatestBlock = readUrl("https://blockchain.info/latestblock?format=json");
+                Gson gsonLatestBlockInfo = new Gson();
+                latestBlockInfo = gsonLatestBlockInfo.fromJson(jsonLatestBlock, LatestBlockInfo.class);
+
+                SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
+                json = readUrl("https://blockchain.info/address/" + saw.publicKey + "?format=json");
+                Gson gson = new Gson();
+                blockchainInfoWalletData = gson.fromJson(json, BlockchainInfoGson.class);
+                importBlockChainInfoData(wtx);
+
+            } catch (Exception e) {
+                Log.e(e.getClass().getName(), "ERROR:" + e.getMessage(), e);
+                return false;
+            }
+        }
+        return true;
+
+    }
+
+    private void importBlockChainInfoData (Walletx wtx) {
+
+        // The tx amount can be determined by looking at the tx.result of the next tx
+        Tx prevTx = new Tx();
+        Tx newTx = new Tx();
+        BlockchainInfoGson.txGson lastTx = null;
+        SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
+
+        System.out.println("E4");
+
+        // Loop through each transaction associated with this wallet
+        for (BlockchainInfoGson.txGson tx : blockchainInfoWalletData.txs) {
+
+            long confirmations = Long.valueOf(0);
+            if (tx.block_height != 0) {
+                confirmations = (latestBlockInfo.height - tx.block_height) + 1;
+            }
+
+            Tx existingTx = Tx.getTxByHash(tx.hash);
+            if (existingTx != null) {
+                existingTx.confirmations = confirmations;
+                existingTx.save();
+            } else {
+
+                // Set the amount for the previous tx and save
+                if (prevTx.hash != null) {
+                    prevTx.amountBTC = tx.result;
+                    prevTx.save();
+                }
+
+                newTx = new Tx(saw.publicKey,
+                        new Date(tx.time * 1000L),
+                        wtx,
+                        tx.block_height,
+                        confirmations,
+                        null,
+                        null,
+                        tx.result,
+                        0,
+                        tx.hash);
+                if (tx.result >= 0)
+                    wtx.totalReceive++;
+                else
+                    wtx.totalSpend++;
+                wtx.finalBalance = blockchainInfoWalletData.final_balance;
+                wtx.save();
+
+                // Save on next iteration
+                prevTx = newTx;
+
+                // Use for reference in calculating the amount of last tx
+                // using michael's logic
+                lastTx = tx;
+            }
+
+
+        }
+
+        // Although it is faster, we can't calculate the tx amount using the above method.
+        // Utilizing M.Danko's logic to calculate the amount of the final tx before saving
+        if (lastTx != null) {
+            for (BlockchainInfoGson.inputsGson input : lastTx.inputs) {
+                if ( input.prev_out.addr.equals(saw.publicKey) && (Tx.getTxIndex(lastTx.tx_index) == null) ) {
+                    prevTx.amountBTC = 0 - input.prev_out.value;
+                }
+            }
+            for (BlockchainInfoGson.outputsGson out : lastTx.out) {
+                if (out.addr.equals(saw.publicKey) && (Tx.getTxIndex(lastTx.tx_index) == null)) {
+                    newTx.amountBTC = out.value;
+                }
+
+            }
+            newTx.save();
+        }
+
+        System.out.println("AND DONE");
+    }
+
+    private static String readUrl (String urlString) throws Exception {
+        BufferedReader reader = null;
+        try {
+            URL url = new URL(urlString);
+            try {
+                reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            StringBuffer buffer = new StringBuffer();
+            int read;
+            char[] chars = new char[1024];
+            try {
+                while ((read = reader.read(chars)) != -1)
+                    buffer.append(chars, 0, read);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return buffer.toString();
+        } finally {
+            if (reader != null)
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        }
+    }
+
+
+
+    public class LatestBlockInfo {
+        public long height;
+        public LatestBlockInfo() {}
+    }
+
+    public class TickerData {
+        public ExchangeRatesInUSD USD;
+        public TickerData() {}
+
+        public class ExchangeRatesInUSD {
+            public float sell;
+            public ExchangeRatesInUSD() {}
+        }
+    }
+
+} // BlockchainInfo
+*/
 
 /*
  * Fetches Blockchain and wallet data from Blockchain.info usin*g the Blockchain.info API.
@@ -212,8 +393,7 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean result) {
 
-        SyncManager.resetSyncIsInProgress();
-        System.out.println("BCTASK COMPLETE");
+
 
         if (caller != null) {
             caller.stopSyncRelatedUI();
@@ -243,3 +423,5 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
     }
 
 } // BlockchainInfo
+
+

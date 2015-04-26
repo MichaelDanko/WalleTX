@@ -3,13 +3,10 @@ package com.bitcoin.tracker.walletx.api;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * SyncManager is responsible for managing all interactions with the Blockchain
@@ -20,18 +17,15 @@ import java.util.TimerTask;
  */
 public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
 
-    // Reference to context of caller
-    private Context mContext;
-
-    // Block multiple syncs
-    private static boolean mSyncIsInProgress = false;
+    private Context mContext; // reference to context of caller
+    public static boolean sSyncIsInProgress = false;  // block multiple syncs
 
     /*----------------------------------------/
      *  Static Sync Methods - Use these ...   /
      *---------------------------------------*/
 
     public static void syncExistingWallets(Context context) {
-        if (!mSyncIsInProgress)
+        if (!sSyncIsInProgress)
             new SyncManager(context).execute();
         else
             System.out.println("################ BLOCKED");
@@ -44,26 +38,26 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
-
-        //SyncManager.mSyncIsInProgress = true;
+        sSyncIsInProgress = true;
 
         // get list of all walletxs
         List<Walletx> wtxs = Walletx.getAll();
 
-        //new BlockchainInfo().execute();
+        //BlockchainInfo blockchainInfo = new BlockchainInfo(wtxs);
+        //boolean done = blockchainInfo.syncWallets();
+
+        // Do a Blockchain sync
 
 
-        AsyncTask<Void, Void, Boolean> blockchainTask = new BlockchainInfo(this);
-        blockchainTask.execute();
-
-        while (blockchainTask.getStatus() != Status.FINISHED) {
-           System.out.println("NOT CANC");
+        // Temp code
+        for (int i = 0; i < 20; i++) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            publishProgress();
         }
-
-
-
-
-
 
         return null;
     }
@@ -72,14 +66,8 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
 
 
 
-    public static void resetSyncIsInProgress() {
-        System.out.println("AM I CALLED");
-        //SyncManager.mSyncIsInProgress = false;
-    }
 
-    /**
-     * Notifies the SyncableActivity that this sync is ongoing.
-     */
+    // Notifies the SyncableActivity that this sync is ongoing
     @Override
     protected void onPreExecute() {
         Intent intent = new Intent("com.bitcoin.tracker.walletx.SYNC_STATUS");
@@ -87,6 +75,7 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
         mContext.sendBroadcast(intent);
     }
 
+    // Notifies the SyncableActivity that this sync is ongoing
     @Override
     protected void onProgressUpdate(Integer... progress) {
         super.onProgressUpdate(progress);;
@@ -95,11 +84,10 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
         mContext.sendBroadcast(intent);
     }
 
-    /**
-     * Notifies the SyncableActivity that this sync is complete.
-     */
+    // Notifies the SyncableActivity that this sync is complete
     @Override
     protected void onPostExecute(Boolean result) {
+        sSyncIsInProgress = false;
         Intent intent = new Intent("com.bitcoin.tracker.walletx.SYNC_STATUS");
         intent.putExtra("sync_complete", true);
         mContext.sendBroadcast(intent);
