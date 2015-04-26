@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ProgressBar;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.SyncableActivity;
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
 import com.bitcoin.tracker.walletx.api.SyncableInterface;
 import com.bitcoin.tracker.walletx.api.SyncDatabase;
@@ -146,6 +147,7 @@ public class GroupFragment extends Fragment implements
     public void onPause() {
         super.onResume();
         mRestorePosition = mListView.getFirstVisiblePosition(); // save last visible position
+        ((SyncableActivity) getActivity()).stopSyncIconRotation(); // COMMENT
     }
 
     @Override

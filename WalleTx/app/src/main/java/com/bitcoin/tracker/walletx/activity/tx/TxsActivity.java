@@ -171,7 +171,7 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.global, menu);
+        getMenuInflater().inflate(R.menu.sync, menu);
         return true;
     }
 

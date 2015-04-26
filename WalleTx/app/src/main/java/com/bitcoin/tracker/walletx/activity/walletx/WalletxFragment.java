@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.activeandroid.query.Select;
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.SyncableActivity;
 import com.bitcoin.tracker.walletx.activity.group.GroupUpdateActivity;
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
 import com.bitcoin.tracker.walletx.api.SyncManager;
@@ -121,6 +122,13 @@ public class WalletxFragment extends Fragment implements SyncableInterface {
 
         return view;
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ((SyncableActivity) getActivity()).stopSyncIconRotation(); // COMMENT
+    }
+
 
     /**
      * Prepares wallet group / wallet data for the expandable list view.
@@ -330,18 +338,10 @@ public class WalletxFragment extends Fragment implements SyncableInterface {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_sync) {
 
+        System.out.println("WTF?");
 
-
-            //new SyncDatabase(this);
-
-
-
-
-
-            return true;
-        } else if (item.getItemId() == R.id.action_add_wallet) {
+        if (item.getItemId() == R.id.action_add_wallet) {
             // open new activity
             Intent intent = new Intent( getActivity(), WalletxCreateActivity.class );
             startActivityForResult( intent, NEW_WALLETX_ADDED );

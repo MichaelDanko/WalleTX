@@ -17,8 +17,12 @@ import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.api.SyncManager;
 
 /**
- * SyncableActivity is a super class for any activities from which
- * the user should be able to initiate a sync.
+ * SyncableActivity is a super class for any activities from which the user
+ * should be able to initiate a sync.
+ *
+ * SyncableActivity listens for broadcasts from the SyncManager and manages the animation
+ * of the sync icon in the ActionBar accordingly. This allows the sync icon to remain in
+ * animation across all activities until the sync is complete.
  */
 public class SyncableActivity extends ActionBarActivity {
 
@@ -29,8 +33,9 @@ public class SyncableActivity extends ActionBarActivity {
     // Reference to the sync actionbar menu item
     private MenuItem mSyncMenuItem;
 
-    //
+    // Sync ActionView and rotate animation
     private ImageView mSyncActionView;
+    private Animation mSyncAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,39 +54,52 @@ public class SyncableActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        // stop the sync icon animation so it doesn't appear over any other menus
+        // if syncable, the next activity will re-apply the rotation to its own sync menu item
         stopSyncIconRotation();
         unregisterReceiver(mSyncBroadcastReceiver);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.global, menu);
+        getMenuInflater().inflate(R.menu.sync, menu);
         mSyncMenuItem = menu.findItem(R.id.action_sync);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_sync) {
+        if (item.getItemId() == R.id.action_sync) {
+            // user initiated sync
             SyncManager.syncExistingWallets(this.getApplicationContext());
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void startSyncIconRotation() {
+    /**
+     * Applies rotating ActionView to the sync menu item.
+     */
+    public void startSyncIconRotation() {
         if (mSyncMenuItem != null && mSyncMenuItem.getActionView() == null) {
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mSyncActionView = (ImageView) inflater.inflate(R.layout.action_view_sync, null);
-            Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
-            rotation.setRepeatCount(Animation.INFINITE);
-            mSyncActionView.startAnimation(rotation);
+            if (mSyncActionView == null) {
+                LayoutInflater inflater;
+                inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                mSyncActionView = (ImageView) inflater.inflate(R.layout.action_view_sync, null);
+            }
+            if (mSyncAnimation == null) {
+                mSyncAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+                mSyncAnimation.setRepeatCount(Animation.INFINITE);
+            }
+            mSyncActionView.startAnimation(mSyncAnimation);
             mSyncMenuItem.setActionView(mSyncActionView);
         }
     }
 
-    private void stopSyncIconRotation() {
+    /**
+     * Stops the rotating ActionView.
+     */
+    public void stopSyncIconRotation() {
         if (mSyncMenuItem != null && mSyncMenuItem.getActionView() != null) {
             mSyncMenuItem.getActionView().clearAnimation();
             mSyncMenuItem.setActionView(null);
@@ -95,9 +113,6 @@ public class SyncableActivity extends ActionBarActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            System.out.println("On progress received!!!!!");
-
             boolean syncComplete = intent.getBooleanExtra("sync_complete", true);
             if (!syncComplete) {
                 startSyncIconRotation();

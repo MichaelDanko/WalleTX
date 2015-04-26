@@ -8,6 +8,7 @@
 package com.bitcoin.tracker.walletx.api;
 
 // Android requires Asynchronous Tasks to be completed in the background.
+import android.content.Context;
 import android.os.AsyncTask;
 // Android logging
 import android.util.Log;
@@ -108,13 +109,14 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
         BlockchainInfoGson.txGson lastTx = null;
         SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
 
+        System.out.println("E4");
+
         // Loop through each transaction associated with this wallet
         for (BlockchainInfoGson.txGson tx : blockchainInfoWalletData.txs) {
 
             long confirmations = Long.valueOf(0);
             if (tx.block_height != 0) {
                 confirmations = (latestBlockInfo.height - tx.block_height) + 1;
-                System.out.println("Confirmations -----------------------------" + confirmations);
             }
 
             Tx existingTx = Tx.getTxByHash(tx.hash);
@@ -153,6 +155,8 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
                 // using michael's logic
                 lastTx = tx;
             }
+
+            publishProgress();
         }
 
         // Although it is faster, we can't calculate the tx amount using the above method.
@@ -172,9 +176,7 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
             newTx.save();
         }
 
-        System.out.println("");
-        System.out.println("DONE WITH ONE WALLET");
-        System.out.println("");
+        System.out.println("AND DONE");
     }
 
     private static String readUrl (String urlString) throws Exception {
@@ -206,11 +208,13 @@ public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
         }
     }
 
-    @Override
-    protected void onProgressUpdate(Void...argument) {}
 
     @Override
     protected void onPostExecute(Boolean result) {
+
+        SyncManager.resetSyncIsInProgress();
+        System.out.println("BCTASK COMPLETE");
+
         if (caller != null) {
             caller.stopSyncRelatedUI();
         }

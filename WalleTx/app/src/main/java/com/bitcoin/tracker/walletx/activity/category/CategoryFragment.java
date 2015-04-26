@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.SyncableActivity;
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
 import com.bitcoin.tracker.walletx.api.SyncableInterface;
 import com.bitcoin.tracker.walletx.api.SyncDatabase;
@@ -152,6 +153,7 @@ public class CategoryFragment extends Fragment implements
     public void onPause(){
         super.onResume();
         mRestorePosition = mListView.getFirstVisiblePosition();
+        ((SyncableActivity) getActivity()).stopSyncIconRotation(); // COMMENT
     }
 
     @Override

@@ -96,23 +96,23 @@ public class MainActivity extends SyncableActivity implements
         actionBar.setTitle(mTitle);
     }
 
-    // Applies the global menu to the action bar when navigation drawer is closed.
+    // Applies SyncableActivity's menu to the action bar is closed and
+    // applies the title specific to the active fragment.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        //if (!mNavigationDrawerFragment.isDrawerOpen()) {
-        //    getMenuInflater().inflate(R.menu.global, menu);
-        //    restoreActionBar();
-        //    return true;
-        //}
-        //return super.onCreateOptionsMenu(menu);
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+
+            restoreActionBar();
+            return true;
+        }
         return true;
     }
 
     // Handles action bar item clicks associated with the global menu.
-    @Override
+    //@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // global menu contains no actions
+        //if (item.getItemId() ==)
         return super.onOptionsItemSelected(item);
     }
 

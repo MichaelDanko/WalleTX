@@ -180,7 +180,7 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.global, menu);
+        getMenuInflater().inflate(R.menu.sync, menu);
         return true;
     }
 

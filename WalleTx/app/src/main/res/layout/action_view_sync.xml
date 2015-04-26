@@ -1,4 +1,9 @@
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/ic_action_sync" />
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:src="@drawable/ic_action_sync"
+    android:adjustViewBounds="true"
+    style="?android:attr/actionButtonStyle" />
+
