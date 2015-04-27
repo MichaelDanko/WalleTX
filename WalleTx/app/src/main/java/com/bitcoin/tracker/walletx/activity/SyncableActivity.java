@@ -26,9 +26,6 @@ import com.bitcoin.tracker.walletx.api.SyncManager;
  */
 public class SyncableActivity extends ActionBarActivity {
 
-    //region FIELDS
-    //----------------------------------------------------------------------------------------------
-
     // Receives broadcasts from the SyncManager
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
     private IntentFilter mIntentFilter;
@@ -39,11 +36,6 @@ public class SyncableActivity extends ActionBarActivity {
     // Sync ActionView and rotate animation
     private ImageView mSyncActionView;
     private Animation mSyncAnimation;
-
-    //endregion
-
-    //region ACTIVITY LIFECYCLE
-    //----------------------------------------------------------------------------------------------
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +61,6 @@ public class SyncableActivity extends ActionBarActivity {
         unregisterReceiver(mSyncBroadcastReceiver);
     }
 
-    //endregion
-
-    //region OPTIONS MENU
-    //----------------------------------------------------------------------------------------------
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.sync, menu);
@@ -95,11 +82,6 @@ public class SyncableActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    //endregion
-
-    //region SYNC
-    //----------------------------------------------------------------------------------------------
 
     /**
      * Applies rotating ActionView to the sync menu item.
@@ -159,7 +141,5 @@ public class SyncableActivity extends ActionBarActivity {
         }
 
     } // SyncBroadcastReceiver
-
-    //endregion
 
 } // SyncableActivity
