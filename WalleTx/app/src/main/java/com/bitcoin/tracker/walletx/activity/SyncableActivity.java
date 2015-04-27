@@ -26,6 +26,9 @@ import com.bitcoin.tracker.walletx.api.SyncManager;
  */
 public class SyncableActivity extends ActionBarActivity {
 
+    //region FIELDS
+    //----------------------------------------------------------------------------------------------
+
     // Receives broadcasts from the SyncManager
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
     private IntentFilter mIntentFilter;
@@ -36,6 +39,11 @@ public class SyncableActivity extends ActionBarActivity {
     // Sync ActionView and rotate animation
     private ImageView mSyncActionView;
     private Animation mSyncAnimation;
+
+    //endregion
+
+    //region ACTIVITY LIFECYCLE
+    //----------------------------------------------------------------------------------------------
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,7 @@ public class SyncableActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         registerReceiver(mSyncBroadcastReceiver, mIntentFilter);
+        restartSyncIconRotation(); // if in progress
     }
 
     @Override
@@ -60,6 +69,11 @@ public class SyncableActivity extends ActionBarActivity {
         unregisterReceiver(mSyncBroadcastReceiver);
     }
 
+    //endregion
+
+    //region OPTIONS MENU
+    //----------------------------------------------------------------------------------------------
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.sync, menu);
@@ -68,29 +82,32 @@ public class SyncableActivity extends ActionBarActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        restartSyncIconRotation(); // if in progress
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_sync) {
-            // user initiated sync
             SyncManager.syncExistingWallets(this.getApplicationContext());
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    //endregion
+
+    //region SYNC
+    //----------------------------------------------------------------------------------------------
+
     /**
      * Applies rotating ActionView to the sync menu item.
      */
     public void startSyncIconRotation() {
         if (mSyncMenuItem != null && mSyncMenuItem.getActionView() == null) {
-            if (mSyncActionView == null) {
-                LayoutInflater inflater;
-                inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                mSyncActionView = (ImageView) inflater.inflate(R.layout.action_view_sync, null);
-            }
-            if (mSyncAnimation == null) {
-                mSyncAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
-                mSyncAnimation.setRepeatCount(Animation.INFINITE);
-            }
+            initializeSyncActionView();
+            initializeSyncAnimation();
             mSyncActionView.startAnimation(mSyncAnimation);
             mSyncMenuItem.setActionView(mSyncActionView);
         }
@@ -106,6 +123,27 @@ public class SyncableActivity extends ActionBarActivity {
         }
     }
 
+    // Restarts the rotation if a sync is in progress
+    private void restartSyncIconRotation() {
+        if (SyncManager.syncIsInProgress())
+            startSyncIconRotation();
+    }
+
+    private void initializeSyncActionView() {
+        if (mSyncActionView == null) {
+            LayoutInflater inflater;
+            inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mSyncActionView = (ImageView) inflater.inflate(R.layout.action_view_sync, null);
+        }
+    }
+
+    private void initializeSyncAnimation() {
+        if (mSyncAnimation == null) {
+            mSyncAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+            mSyncAnimation.setRepeatCount(Animation.INFINITE);
+        }
+    }
+
     /**
      * Handles broadcasts sent from the SyncManager
      */
@@ -114,13 +152,14 @@ public class SyncableActivity extends ActionBarActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             boolean syncComplete = intent.getBooleanExtra("sync_complete", true);
-            if (!syncComplete) {
+            if (!syncComplete)
                 startSyncIconRotation();
-            } else {
+            else
                 stopSyncIconRotation();
-            }
         }
 
     } // SyncBroadcastReceiver
+
+    //endregion
 
 } // SyncableActivity
