@@ -42,25 +42,6 @@ public class SingleAddressWallet extends Model implements SupportedWalletTypeInt
     }
 
     /**
-     * Dumps the SingleAddressWallet table to console.
-     * For debugging purposes only.
-     */
-    public static void dump() {
-        String dividerCol1 = "--------------------------------------";
-        String dividerCol2 = "-----------------------";
-        System.out.printf("%-40s %-15s\n", dividerCol1, dividerCol2, dividerCol2);
-        System.out.printf("%-40s %-15s\n", "Public Key", "Walletx Name");
-        System.out.printf("%-40s %-15s\n", dividerCol1, dividerCol2, dividerCol2);
-        List<SingleAddressWallet> saws = SingleAddressWallet.getAll();
-        for (SingleAddressWallet saw : saws) {
-            System.out.printf(
-                    "%-40s %-15s\n",
-                    saw.publicKey,
-                    saw.wtx.name);
-        }
-    }
-
-    /**
      * @return List of all SingleAddressWallets.
      */
     public static List<SingleAddressWallet> getAll() {
@@ -99,6 +80,14 @@ public class SingleAddressWallet extends Model implements SupportedWalletTypeInt
         }
     }
 
+    /**
+     * @return Tx count associated with this SingleAddressWallet
+     */
+    public int getTxCount() {
+        Walletx wtx = Walletx.getBy(this);
+        return wtx.getTxCount();
+    }
+
 
     /* ---------------
     Validation
@@ -114,6 +103,23 @@ public class SingleAddressWallet extends Model implements SupportedWalletTypeInt
         return new Select().from(SingleAddressWallet.class).where("publicKey = ?", pkey).count();
     }
 
-
+    /**
+     * Dumps the SingleAddressWallet table to console.
+     * For debugging purposes only.
+     */
+    public static void dump() {
+        String dividerCol1 = "--------------------------------------";
+        String dividerCol2 = "-----------------------";
+        System.out.printf("%-40s %-15s\n", dividerCol1, dividerCol2, dividerCol2);
+        System.out.printf("%-40s %-15s\n", "Public Key", "Walletx Name");
+        System.out.printf("%-40s %-15s\n", dividerCol1, dividerCol2, dividerCol2);
+        List<SingleAddressWallet> saws = SingleAddressWallet.getAll();
+        for (SingleAddressWallet saw : saws) {
+            System.out.printf(
+                    "%-40s %-15s\n",
+                    saw.publicKey,
+                    saw.wtx.name);
+        }
+    }
 
 } // SingleAddressWallet

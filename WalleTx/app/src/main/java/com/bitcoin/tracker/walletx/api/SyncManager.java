@@ -3,84 +3,99 @@ package com.bitcoin.tracker.walletx.api;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.widget.ProgressBar;
 
+import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
+import com.bitcoin.tracker.walletx.model.SupportedWalletType;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * SyncManager is responsible for managing all interactions with the Blockchain and/or
- * other APIs and reporting progress to the SyncableActivity.
+ * other APIs, writing data to the database, and reporting progress to SyncableActivity.
  *
  * Although it is possible to use this class directly, it has been implemented with
  * several static methods that should be used to initiate a sync.
  */
 public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
 
-    private Context mContext; // reference to context of caller
-    private static boolean sSyncIsInProgress = false;  // blocks multiple syncs
+    // Blocks multiple syncs
+    private static boolean sSyncIsInProgress = false;
 
-    //------------------------------------------------------------------//
-    //  SyncManager API                                                 //
-    //  Use these methods rather than invoking SyncManager directly     //
-    //------------------------------------------------------------------//
+    private Context mContext;    // reference to context of caller
+    private SyncType mSyncType;  // the type of sync to be performed
+    private Walletx mWtx;        // wtx to sync if syncing a single wallet's txs
+
+    //----- SyncManager API -----
 
     /**
      * Syncs all new transactions for all existing wallets.
-     * @param context
+     * @param context of caller
      */
     public static void syncExistingWallets(Context context) {
         if (!sSyncIsInProgress)
-            new SyncManager(context).execute();
+            new SyncManager(context, SyncType.TXS_FOR_EXISTING_WALLETS).execute();
     }
 
     /**
      * Syncs all transactions for a wallet just added.
-     * @param context
-     * @param wtx
+     * @param context of caller
+     * @param wtx wallet to sync
      */
     public static void syncNewWallet(Context context, Walletx wtx) {
-        // TODO Implemente
+        if (!sSyncIsInProgress)
+            new SyncManager(context, SyncType.TXS_FOR_NEW_WALLET, wtx).execute();
     }
 
     /**
-     * @return true if a sync of any type is already in progress
+     * Syncs daily bitcoin price data
+     * @param context of caller
      */
-    public static boolean syncIsInProgress() {
-        if (sSyncIsInProgress)
-            return true;
-        else
-            return false;
+    public static void syncBitcoinPriceData(Context context) {
+        if (!sSyncIsInProgress)
+            new SyncManager(context, SyncType.BTC_PRICE_DATA).execute();
     }
 
-    // end SyncManager API -----
+    /**
+     * Getter for sSyncIsInProgress
+     */
+    public static boolean syncIsInProgress() {
+        return sSyncIsInProgress;
+    }
 
-    public SyncManager(Context context) {
+    //----- end SyncManager API -----
+
+    public SyncManager(Context context, SyncType syncType) {
         super();
         mContext = context;
+        mSyncType = syncType;
+    }
+
+    public SyncManager(Context context, SyncType syncType, Walletx wtx) {
+        super();
+        mContext = context;
+        mSyncType = syncType;
+        mWtx = wtx;
     }
 
     @Override
     protected Boolean doInBackground(Void... params) {
         sSyncIsInProgress = true;
-
-        // get list of all walletxs
-        //List<Walletx> wtxs = Walletx.getAll();
-
-        //BlockchainInfo blockchainInfo = new BlockchainInfo(wtxs);
-        //boolean done = blockchainInfo.syncWallets();
-
-        System.out.println("15 SECONDS TO GO");
-        try {
-            Thread.sleep(15000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        switch (mSyncType) {
+            case TXS_FOR_EXISTING_WALLETS:
+                syncTxsForExistingWallets();
+                break;
+            case TXS_FOR_NEW_WALLET:
+                syncTxsForNewWallet(mWtx);
+                break;
+            case BTC_PRICE_DATA:
+                syncBtcPriceData();
+                break;
+            default:
+                // TODO Throw error. This should never occur.
+                break;
         }
-        System.out.println("AND WE'RE DONE");
-
-        // Do a Blockchain sync
-
         return null;
     }
 
@@ -95,7 +110,6 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
         broadcastSyncIsInProgress();
     }
 
-    // Notifies the SyncableActivity that this sync is complete
     @Override
     protected void onPostExecute(Boolean result) {
         broadcastSyncIsComplete();
@@ -112,6 +126,53 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
         Intent intent = new Intent("com.bitcoin.tracker.walletx.SYNC_STATUS");
         intent.putExtra("sync_complete", true);
         mContext.sendBroadcast(intent);
+    }
+
+    //----- Sync methods -----
+
+    private void syncTxsForExistingWallets() {
+        List<Walletx> wtxs = Walletx.getAll();
+        List<Walletx> saws = new ArrayList<>();
+
+        // Separate wtxs into lists based on type
+        // This should allow us to maximize the efficiency of our API calls
+        for (Walletx wtx : wtxs) {
+            switch (wtx.type) {
+                case SINGLE_ADDRESS_WALLET:
+                    saws.add(wtx);
+                    break;
+                default:
+                    // TODO Throw error. This should never occur.
+                    break;
+            }
+        }
+
+        // Call sync APIs
+        new BlockchainInfo().syncTxsFor(saws);
+    }
+
+    private void syncTxsForNewWallet(Walletx wtx) {
+        switch (wtx.type) {
+            case SINGLE_ADDRESS_WALLET:
+                new BlockchainInfo().syncTxsForNewWallet(wtx);
+                break;
+            default:
+                // TODO Throw error. This should never occur.
+                break;
+        }
+    }
+
+    private void syncBtcPriceData() {
+        // TODO Implement
+    }
+
+    /**
+     * Various types of syncs that the SyncManager can initiate.
+     */
+    private enum SyncType {
+        TXS_FOR_EXISTING_WALLETS,
+        TXS_FOR_NEW_WALLET,
+        BTC_PRICE_DATA
     }
 
 } // SyncManager

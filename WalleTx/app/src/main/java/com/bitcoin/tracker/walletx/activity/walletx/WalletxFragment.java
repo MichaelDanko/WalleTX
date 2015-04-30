@@ -42,7 +42,7 @@ import java.util.List;
  * WalletxFragment acts as the home view for the application.
  * Displays aggregations of wallets.
  */
-public class WalletxFragment extends Fragment implements SyncableInterface {
+public class WalletxFragment extends Fragment {
 
     //region FIELDS
 
@@ -314,7 +314,9 @@ public class WalletxFragment extends Fragment implements SyncableInterface {
                  */
 
                 Walletx wtx = Walletx.getBy(data.getStringExtra("name_of_wtx_added"));
-                new BlockchainInfo(this).execute();
+                SyncManager.syncNewWallet(getActivity().getApplicationContext(), wtx);
+
+                //new BlockchainInfo(this).execute();
 
             }
         } else if (requestCode == WALLETX_UPDATED || requestCode == WALLET_GROUP_UPDATED) {
@@ -347,38 +349,6 @@ public class WalletxFragment extends Fragment implements SyncableInterface {
             startActivityForResult( intent, NEW_WALLETX_ADDED );
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    //endregion
-    //region SYNC
-
-    public void startSyncRelatedUI() {
-        // Rotate progress bar
-        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
-        if ( mActivity != null && pb != null ) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pb.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-    }
-
-    public void stopSyncRelatedUI() {
-        // stop progress bar
-        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
-        if ( mActivity != null && pb != null ) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pb.setVisibility(View.GONE);
-                }
-            });
-        }
-        // update list view
-        prepareData();
-        mListApapter.updateData(mGroupHeader, mListDataChild);
     }
 
     //endregion

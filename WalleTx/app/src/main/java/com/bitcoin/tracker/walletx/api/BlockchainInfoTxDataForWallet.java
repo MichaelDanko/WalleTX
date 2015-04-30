@@ -16,12 +16,13 @@ import java.util.List;
  * Created by michael on 3/25/15.
  */
 
-public class BlockchainInfoGson {
+/*
+public class BlockchainInfoTxDataForWallet {
 
     public String address;                 // wallet's public address
     public List<txGson> txs; // txs associated with this wallet
     public long final_balance = 0;
-    public BlockchainInfoGson() {}
+    public BlockchainInfoTxDataForWallet() {}
 
     static public class txGson {
         public String hash;  // tx hash
@@ -48,3 +49,4 @@ public class BlockchainInfoGson {
         public long value;
     }
 }
+*/

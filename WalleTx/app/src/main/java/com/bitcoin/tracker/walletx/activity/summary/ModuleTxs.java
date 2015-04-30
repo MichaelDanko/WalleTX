@@ -10,7 +10,9 @@ import android.widget.RelativeLayout;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.walletx.WalletxExpandableListAdapter;
 import com.bitcoin.tracker.walletx.model.SupportedSummaryType;
+import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.ArrayList;
@@ -79,6 +81,13 @@ public class ModuleTxs extends Fragment {
         mReceivedCount = 0;
 
         for (Walletx wtx: wtxs) {
+            List<Tx> txs = wtx.txs();
+            for (Tx tx : txs) {
+                if (tx.amountBTC >= 0)
+                    mReceivedCount++;
+                else
+                    mSentCount++;
+            }
             mReceivedCount += wtx.totalReceive;
             mSentCount += wtx.totalSpend;
         }

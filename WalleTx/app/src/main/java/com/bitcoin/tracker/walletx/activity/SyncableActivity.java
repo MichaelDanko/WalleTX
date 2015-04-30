@@ -77,6 +77,7 @@ public class SyncableActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_sync) {
+            // initiate a sync of txs for all existing wallets
             SyncManager.syncExistingWallets(this.getApplicationContext());
             return true;
         }

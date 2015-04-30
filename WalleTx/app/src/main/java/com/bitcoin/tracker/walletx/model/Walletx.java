@@ -5,6 +5,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -64,6 +65,56 @@ public class Walletx extends Model {
         this.group = group;
     }
 
+    //endregion
+
+    //region QUERIES
+    //----------------------------------------------------------------------------------------------
+
+    /**
+     * @return List of all Walletxs.
+     */
+    public static List<Walletx> getAll() {
+        return new Select()
+                .from(Walletx.class)
+                .execute();
+    }
+
+    /**
+     * @param name of the Walletx
+     * @return Walletx selected by name
+     */
+    public static Walletx getBy(String name) {
+        return new Select()
+                .from(Walletx.class)
+                .where("Name = ?", name)
+                .executeSingle();
+    }
+
+    /**
+     * @param saw SingleAddressWallet associated with the Walletx
+     * @return Walletx selected by SingleAddressWallet
+     */
+    public static Walletx getBy(SingleAddressWallet saw) {
+        return saw.wtx;
+    }
+
+    public static Walletx getByPublicKey(String publicKey) {
+        SingleAddressWallet saw = SingleAddressWallet.getPublicKey(publicKey);
+        return saw.wtx;
+    }
+
+    /**
+     * @return Tx count of a wallet
+     */
+    public int getTxCount() {
+        return this.txs().size();
+    }
+
+    //endregion QUERIES
+
+    //region DEBUG
+    //----------------------------------------------------------------------------------------------
+
     /**
      * Dumps the Walletx table to console.
      * For debugging purposes only.
@@ -84,31 +135,6 @@ public class Walletx extends Model {
         }
     }
 
-    //endregion
-    //region WALLETX QUERIES
-
-    /**
-     * @return List of all Walletxs.
-     */
-    public static List<Walletx> getAll() {
-        return new Select()
-                .from(Walletx.class)
-                .execute();
-    }
-
-    /**
-     * @return Walletx selected by name
-     */
-    public static Walletx getBy(String name) {
-        return new Select()
-                .from(Walletx.class)
-                .where("Name = ?", name)
-                .executeSingle();
-    }
-
-
-    //endregion
-
-
+    //endregion DEBUG
 
 } // Walletx

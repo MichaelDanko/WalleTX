@@ -25,9 +25,6 @@ public class Tx extends Model {
     @Column(name = "timestamp", index = true)
     public Date timestamp;
 
-    @Column(name = "address")
-    public String address;
-
     @Column(name = "amountBTC")
     public long amountBTC;
 
@@ -62,10 +59,9 @@ public class Tx extends Model {
         super();
     }
 
-    public Tx(String address, Date date, Walletx wtx, long block, long confirmations, Category category,
+    public Tx(Date date, Walletx wtx, long block, long confirmations, Category category,
               Note note, long amountBTC, long amountLC, String hash) {
         super();
-        this.address = new String(address);
         this.timestamp = date;
         this.amountBTC = amountBTC;
         this.amountLC = amountLC;
@@ -217,7 +213,7 @@ public class Tx extends Model {
         List<Tx> txs = Tx.getAllTxTest();
         for (Tx tx : txs) {
             System.out.printf(
-                    "%-20s %-29s %-16s %-15s\n",
+                    "%-20s %-29s %-16s\n",
                     tx.amountBTC,
                     tx.timestamp,
                     tx.confirmations);

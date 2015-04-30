@@ -17,7 +17,7 @@ import android.test.ActivityUnitTestCase;
 import android.util.Log;
 
 import com.bitcoin.tracker.walletx.activity.SplashActivity;
-import com.bitcoin.tracker.walletx.api.BlockchainInfoGson;
+import com.bitcoin.tracker.walletx.api.BlockchainInfoTxDataForWallet;
 import com.bitcoin.tracker.walletx.api.BlockchainInfo;
 import com.bitcoin.tracker.walletx.model.Group;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
@@ -34,7 +34,7 @@ import java.util.concurrent.CountDownLatch;
 public class BlockchainInfoTestActivity extends ActivityUnitTestCase<SplashActivity> {
     private Intent _startIntent;
     final CountDownLatch signal = BlockchainInfo.signal;
-    final static BlockchainInfoGson blockChainInfoTest = new BlockchainInfoGson();
+    final static BlockchainInfoTxDataForWallet blockChainInfoTest = new BlockchainInfoTxDataForWallet();
 
     // Set activity to test with, avtivity is needed to provide a UI thread to run tests on.
     // If a true async thread is used the tests may fail due to conditions being tested prior

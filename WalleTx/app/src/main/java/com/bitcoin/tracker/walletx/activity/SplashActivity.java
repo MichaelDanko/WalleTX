@@ -6,8 +6,7 @@ import android.os.Bundle;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
-import com.bitcoin.tracker.walletx.api.SyncDatabase;
-import com.bitcoin.tracker.walletx.api.SyncableInterface;
+import com.bitcoin.tracker.walletx.api.SyncManager;
 import com.bitcoin.tracker.walletx.model.Group;
 
 import java.util.Timer;
@@ -15,14 +14,12 @@ import java.util.TimerTask;
 
 /**
  * SplashActivity is the entry portal for Bitcoin WalleTx.
- * Starts a background service to fetch new transactions & price data
- * before redirecting to the MainActivity.
+ * It sets up the default group on first run,
+ * and initiates tx & price data sync before redirecting to the MainActivity.
  */
-public class SplashActivity extends Activity implements SyncableInterface {
+public class SplashActivity extends Activity {
 
-    /**
-     * Time duration for displaying the splash activity.
-     */
+    // Time duration for displaying the splash activity.
     final private long SPLASH_TIME_OUT = 2000;
 
     @Override
@@ -30,21 +27,9 @@ public class SplashActivity extends Activity implements SyncableInterface {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
         Group.initDefaultGroup(this);
-
-        /*
-         * TODO @md Initiate a data sync
-         *
-         */
-
-
-        //Walletx wtx = new Walletx("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", WalletType.SINGLE_ADDRESS_WALLET, WalletGroup.getBy("My Wallets"));
-        //SingleAddressWallet saw = new SingleAddressWallet(wtx, "1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy");
-        //new BlockchainInfo("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", wtx).execute();
-        //wtx.save();
-        //saw.save();
-        new SyncDatabase(this);
+        SyncManager.syncExistingWallets(this.getApplicationContext());
         applySplashScreenTimeOut();
-    } // onCreate
+    }
 
     private void applySplashScreenTimeOut() {
         new Timer().schedule( new TimerTask() {
@@ -55,14 +40,6 @@ public class SplashActivity extends Activity implements SyncableInterface {
                 finish();
             }
         }, SPLASH_TIME_OUT );
-    }
-
-    public void stopSyncRelatedUI() {
-        // no ui work to be done
-    }
-
-    public void startSyncRelatedUI() {
-        // no ui work to be done
     }
 
 } // SplashActivity
