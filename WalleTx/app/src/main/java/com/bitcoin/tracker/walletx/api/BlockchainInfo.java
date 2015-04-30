@@ -23,6 +23,9 @@ import java.util.List;
  * BlockchainInfo handles Blockchain.info API calls
  * and saves results to the database.
  *
+ * TODO Fix time bug. Blockchain.info uses military time, so Txs are displaying improperly
+ *      in the Tx list view.
+ *
  */
 public class BlockchainInfo {
 
@@ -30,6 +33,7 @@ public class BlockchainInfo {
     private final String URL_SINGLEADDR = "https://blockchain.info/address/";
     private final String URL_JSON = "?format=json";
     private final String URL_APPLY_LIMIT = "&limit=";
+    private final String URL_APPLY_OFFSET = "&offset=";
     private final int BLOCKCHAIN_INFO_MAX_TX_LIMIT = 50;
 
     // Latest block number - for calculating confirmations
@@ -73,9 +77,10 @@ public class BlockchainInfo {
         return bciAddress.n_tx - currentTxCount;
     }
 
-    private URL buildSingleAddressApiCallUrlFor(SingleAddressWallet saw, int limit) {
+    private URL buildSingleAddressApiCallUrlFor(SingleAddressWallet saw, int numToSync) {
+        int offset = numToSync - 50;
         String sUrl = URL_SINGLEADDR + saw.publicKey + URL_JSON +
-                URL_APPLY_LIMIT + Integer.toString(limit);
+                URL_APPLY_OFFSET + offset;
         return buildUrlFromString(sUrl);
     }
 
@@ -126,44 +131,41 @@ public class BlockchainInfo {
 
     private void syncTx(SingleAddressWallet saw, BciTx bciTx) {
 
-        // Create the tx to insert
-        Tx tx = new Tx();
-        tx.timestamp = new Date(bciTx.time * 1000L);
-        tx.wtx = Walletx.getBy(saw);
-        tx.block = bciTx.block_height;
-        tx.confirmations = 1; // TODO Delete (I want to calculate confs in real time)
-        tx.category = null;
-        tx.note = null; // TODO Delete (I want to remove this functionality)
-        tx.hash = bciTx.hash;
-        tx.amountLC = 0; // TODO Delete (This should also be calculated real time using balance table / exchange rate table
+        if (Tx.getTxByHash(bciTx.hash) == null) {
 
-        // TODO Determine the tx amount #dankoMagic
-        // TODO This is buggy FIX IT
-        // TODO Simple test with https://blockchain.info/address/1GCq7aca1gn61VPbWAnPmtQafD7mbaSUJ4
-        for (BciTxInputs input : bciTx.inputs) {
-            // this tx is a spend
-            boolean matchesSaw = input.prev_out.addr.equals(saw.publicKey);
-            if (matchesSaw && Tx.getTxIndex(bciTx.tx_index) == null) {
-                tx.amountBTC = input.prev_out.value;
-                if (tx.amountBTC > 0)
-                    tx.amountBTC = tx.amountBTC * -1;
-                tx.tx_index = bciTx.tx_index;
-                break;
-            }
-        }
+            // Create the tx to insert
+            Tx tx = new Tx();
+            tx.timestamp = new Date(bciTx.time * 1000L);
+            tx.wtx = Walletx.getBy(saw);
+            tx.block = bciTx.block_height;
+            tx.confirmations = 1; // TODO Delete (I want to calculate confs in real time)
+            tx.category = null;
+            tx.tx_index = bciTx.tx_index;
+            tx.note = null;
+            tx.hash = bciTx.hash;
+            tx.amountLC = 0; // TODO Delete (This should also be calculated real time using Balance/ExchangeRate
 
-        for (BciTxOutputs output : bciTx.out) {
-            // this tx is a receive
-            boolean matchesSaw = output.addr.equals(saw.publicKey);
-            if (matchesSaw && Tx.getTxIndex(bciTx.tx_index) == null) {
-                tx.amountBTC = output.value;
-                if (tx.amountBTC < 0)
-                    tx.amountBTC = tx.amountBTC * -1;
-                tx.tx_index = bciTx.tx_index;
-                break;
+            // Sum inputs associated with this address
+            long totalInputs = 0;
+            for (BciTxInputs input : bciTx.inputs) {
+                boolean matchesSaw = input.prev_out.addr.equals(saw.publicKey);
+                if (matchesSaw)
+                    totalInputs = totalInputs + input.prev_out.value;
             }
+
+            // Sum outputs assoicated with this address
+            long totalOutputs = 0;
+            for (BciTxOutputs output : bciTx.out) {
+                boolean matchesSaw = output.addr.equals(saw.publicKey);
+                if (matchesSaw)
+                    totalOutputs = totalOutputs + output.value;
+            }
+
+            // Calculate the Tx amount
+            tx.amountBTC = 0 - (totalInputs - totalOutputs);
+
+            tx.save();
         }
-        tx.save();
     }
 
     //--------------------------------------------------//
@@ -200,6 +202,7 @@ public class BlockchainInfo {
     public class BciTxInputPrevOut {
         public String addr;
         public long value;
+        public long tx_index;
     }
 
 } // BlockchainInfo
