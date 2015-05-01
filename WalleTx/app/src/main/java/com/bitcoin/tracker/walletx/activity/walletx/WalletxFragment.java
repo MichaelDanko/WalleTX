@@ -51,7 +51,7 @@ public class WalletxFragment extends Fragment {
 
     // Walletx custom expandable list
     ExpandableListView mExpListView;
-    WalletxExpandableListAdapter mListApapter;
+    WalletxExpListAdapter mListApapter;
     List<String> mGroupHeader;
     HashMap<String, List<String>> mListDataChild;
     View mHeader; // all wallets header for exp. list view
@@ -166,25 +166,21 @@ public class WalletxFragment extends Fragment {
         mListDataChild = new HashMap<>();
         List<Group> groups = Group.getAllSortedByDisplayOrder();
         for (Group group : groups) {
-            List<Walletx> wtxs = group.walletxs(); // get all wtxs in this group
-
+            List<Walletx> wtxs = group.walletxs();
             // Setup only if the wallet group has at least 1 wallet
             if (wtxs.size() > 0) {
                 mGroupHeader.add(group.name);
                 List<String> wtxsInThisGroup = new ArrayList<>(); // names of all wtx in group
-                for (Walletx wtx : wtxs) {
+                for (Walletx wtx : wtxs)
                     wtxsInThisGroup.add(wtx.name);
-                }
                 mListDataChild.put(group.name, wtxsInThisGroup);
             }
         }
     }
 
     private void populateListViewWithPreparedData() {
-        if (mListApapter == null) {
-            mListApapter = new WalletxExpandableListAdapter(getActivity(),
-                    mGroupHeader, mListDataChild);
-        }
+        if (mListApapter == null)
+            mListApapter = new WalletxExpListAdapter(getActivity(), mGroupHeader, mListDataChild);
         if (mExpListView != null)
             mExpListView.setAdapter(mListApapter);
     }
@@ -199,13 +195,7 @@ public class WalletxFragment extends Fragment {
      * Determines visibility of the list view header/footer
      */
     private void setHeaderFooterVisibility() {
-
-        // TODO @dc I need a count query here. Or isEmpty query. Replace the if statement below...
-        int wtxCount = new Select()
-                .from(Walletx.class)
-                .count();
-
-        if (wtxCount == 0) {
+        if (Walletx.isEmpty()) {
             mFooter.setVisibility(View.VISIBLE);
             mHeader.setVisibility(View.GONE);
         } else {
@@ -213,7 +203,6 @@ public class WalletxFragment extends Fragment {
             mFooter.setVisibility(View.GONE);
         }
     }
-
 
     private View.OnClickListener allWalletsOnClickListener = new View.OnClickListener() {
         @Override

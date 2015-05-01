@@ -103,6 +103,12 @@ public class Walletx extends Model {
         return this.txs().size();
     }
 
+
+    public static boolean isEmpty() {
+        int count = new Select().from(Walletx.class).count();
+        return (count <= 0) ? true : false;
+    }
+
     //endregion QUERIES
 
     //region DEBUG

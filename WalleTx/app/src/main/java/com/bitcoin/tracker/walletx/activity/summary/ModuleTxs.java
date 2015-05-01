@@ -10,7 +10,6 @@ import android.widget.RelativeLayout;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.activity.walletx.WalletxExpandableListAdapter;
 import com.bitcoin.tracker.walletx.model.SupportedSummaryType;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.Walletx;

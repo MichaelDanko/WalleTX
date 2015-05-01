@@ -25,7 +25,7 @@ import com.bitcoin.tracker.walletx.model.Walletx;
  * Sets up the expandable list view on the main WalleTx fragment.
  * Reference: http://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
  */
-public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
+public class WalletxExpListAdapter extends BaseExpandableListAdapter {
 
     //region FIELDS
 
@@ -43,9 +43,9 @@ public class WalletxExpandableListAdapter extends BaseExpandableListAdapter {
 
     //endregion
 
-    public WalletxExpandableListAdapter(Context context,
-                                        List<String> groupHeader,
-                                        HashMap<String, List<String>> singleWalletChild) {
+    public WalletxExpListAdapter(Context context,
+                                 List<String> groupHeader,
+                                 HashMap<String, List<String>> singleWalletChild) {
         this.mContext = context;
         this.mGroupHeader = groupHeader;
         this.mSingleWalletChild = singleWalletChild;
