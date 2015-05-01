@@ -12,15 +12,17 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Tx model.
- *
- * Tx table stores all transactions associated with wallets added by the user.
- *
- * TODO Add indexes & constraints to columns (if any)
- *
+ * Tx represents a single transaction.
  */
 @Table(name = "Tx")
 public class Tx extends Model {
+
+    // Tx type constants
+    public static final int SPEND = -1;
+    public static final int RECEIVE = 1;
+
+    //region Table
+    //----------------------------------------------------------------------------------------------
 
     @Column(name = "timestamp", index = true)
     public Date timestamp;
@@ -28,17 +30,13 @@ public class Tx extends Model {
     @Column(name = "amountBTC")
     public long amountBTC;
 
-    @Column(name = "amountLC")
-    public long amountLC;
+    // Tx type - is tx a spend or receive?
+    // -1 = Spend, 1 = Receive
+    @Column(name = "type")
+    public int type;
 
     @Column(name = "block")
     public long block;
-
-    @Column(name = "tx_index")
-    public long tx_index;
-
-    @Column(name = "confirmation")
-    public long confirmations;
 
     @Column(name = "hash")
     public String hash;
@@ -59,52 +57,31 @@ public class Tx extends Model {
         super();
     }
 
-    public Tx(Date date, Walletx wtx, long block, long confirmations, Category category,
-              Note note, long amountBTC, long amountLC, String hash) {
+    public Tx(Date date, Walletx wtx, long block, long amountBTC, String hash) {
         super();
         this.timestamp = date;
         this.amountBTC = amountBTC;
-        this.amountLC = amountLC;
         this.block = block;
-        this.confirmations = confirmations;
         this.hash = hash;
         this.wtx = wtx;
-        this.category = category;
-        this.note = note;
     }
 
-    /*--------------*
-     *  Tx Queries  *
-     *--------------*/
+    //endregion
+    //region Queries -------------------------------------------------------------------------------
 
     /**
-     * @return a specific row with query of WalleTx
+     * @return Single Tx selected by hash value
      */
-
-    public static Tx getTxIndex(Long _tx_index){
+    public static Tx getTxByHash(String hash){
         return new Select()
                 .from(Tx.class)
-                .where("tx_index = ?", _tx_index)
-                .orderBy("timestamp DESC")
+                .where("hash = ?", hash)
                 .executeSingle();
     }
 
     /**
-     * @return a specific row with query of WalleTx
+     * @return All Txs linked to a Walletx
      */
-
-    public static Tx getTxByHash(String _hash){
-        return new Select()
-                .from(Tx.class)
-                .where("hash = ?", _hash)
-                .orderBy("timestamp DESC")
-                .executeSingle();
-    }
-
-    /**
-     * @return all rows with query of WalleTx
-     */
-
     public static List<Tx> getAllTxWalleTx(Walletx _wtx){
         return new Select()
                 .from(Tx.class)
@@ -156,6 +133,36 @@ public class Tx extends Model {
         return actualStringFormatter(Long.toString(tx.amountBTC));
     }
 
+    //endregion
+
+    //region VALIDATION
+    //----------------------------------------------------------------------------------------------
+
+
+
+    //endregion
+
+    //region DEBUG
+    //----------------------------------------------------------------------------------------------
+
+    public static void dump() {
+        String dividerCol1 = "------------------";
+        String dividerCol23 = "-------------";
+        System.out.printf("%-20s %-29s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
+        System.out.printf("%-20s %-29s %-16s\n", "Amount", "timestamp", "tx_index");
+        System.out.printf("%-20s %-29s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
+        List<Tx> txs = Tx.getAllTxTest();
+        for (Tx tx : txs) {
+            System.out.printf(
+                    "%-20s %-29s %-16s\n",
+                    tx.amountBTC,
+                    tx.timestamp);
+        }
+    }
+
+
+    // TODO ???? This doesn't belong here logically ------------------------------------------------
+
     public static String formattedBTCValue(Long formatThisLong) {
        return actualStringFormatter(Long.toString(formatThisLong));
     }
@@ -199,51 +206,5 @@ public class Tx extends Model {
         formattedString = new String(buffer);
         return formattedString;
     }
-
-    /**
-     * dump method for testing
-     */
-
-    public static void dump() {
-        String dividerCol1 = "------------------";
-        String dividerCol23 = "-------------";
-        System.out.printf("%-20s %-29s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
-        System.out.printf("%-20s %-29s %-16s\n", "Amount", "timestamp", "tx_index");
-        System.out.printf("%-20s %-29s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
-        List<Tx> txs = Tx.getAllTxTest();
-        for (Tx tx : txs) {
-            System.out.printf(
-                    "%-20s %-29s %-16s\n",
-                    tx.amountBTC,
-                    tx.timestamp,
-                    tx.confirmations);
-        }
-    }
-
-
-    /*----------------
-    * TX Validation *
-     --------------*/
-
-    /**
-     * Validates if new tx is table.  Checks a timestamp to make sure it's unique
-     * @param context application context
-     * @param time timestamp of tx
-     * @return boolean true or false
-     */
-    public static boolean validateTimeStampIsUnique(Context context, Date time){
-        List<Tx> txs = Tx.getAllTxTest();
-
-        for (Tx tx : txs){
-            if (tx.timestamp.equals(time)){
-                String error = "A transaction already exsists with that timestamp";
-                Toast.makeText(context, error, Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-
-        return true;
-    }
-
 
 } // Tx

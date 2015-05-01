@@ -4,7 +4,6 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
-import com.bitcoin.tracker.walletx.api.SupportedWalletTypeInterface;
 import com.google.bitcoin.core.Address;
 import com.google.bitcoin.core.AddressFormatException;
 
@@ -22,7 +21,7 @@ import java.util.List;
  *
  */
 @Table(name = "SingleAddressWallet")
-public class SingleAddressWallet extends Model implements SupportedWalletTypeInterface {
+public class SingleAddressWallet extends Model {
 
     @Column(name = "PublicKey")
     public String publicKey;

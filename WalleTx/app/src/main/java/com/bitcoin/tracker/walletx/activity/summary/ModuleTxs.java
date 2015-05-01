@@ -88,8 +88,6 @@ public class ModuleTxs extends Fragment {
                 else
                     mSentCount++;
             }
-            mReceivedCount += wtx.totalReceive;
-            mSentCount += wtx.totalSpend;
         }
 
         List<SliceValue> values = new ArrayList<>();

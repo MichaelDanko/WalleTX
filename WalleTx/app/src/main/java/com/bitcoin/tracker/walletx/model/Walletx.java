@@ -32,15 +32,8 @@ public class Walletx extends Model {
     @Column(name = "WalletGroup")
     public Group group;
 
-    // Sum of Spending Records
-    @Column(name = "TotalSpend")
-    public long totalSpend = 0;
-
-    // Sum of Receive Records
-    @Column(name = "TotalReceive")
-    public long totalReceive = 0;
-
     // Final Balance of the Wallet
+    // TODO Delete this column once Balances are implemented
     @Column(name = "FinalBalance")
     public long finalBalance = 0;
 

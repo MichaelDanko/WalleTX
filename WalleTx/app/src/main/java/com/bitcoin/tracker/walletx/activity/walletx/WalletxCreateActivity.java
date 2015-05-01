@@ -13,6 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.Constants;
+import com.bitcoin.tracker.walletx.activity.SharedData;
+import com.bitcoin.tracker.walletx.model.Walletx;
 
 /**
  * Handles the forms for adding new user wallets of various types.
@@ -110,9 +113,9 @@ public class WalletxCreateActivity extends ActionBarActivity implements
      * Closes the activity in response an onSubmit event in a wallet type fragment.
      */
     public void onFragmentInteraction(String name_of_wtx_added) {
+        SharedData.ADDED_WTX = Walletx.getBy(name_of_wtx_added);
         Intent intent = new Intent();
-        intent.putExtra("new_wallet_added","true");
-        intent.putExtra("name_of_wtx_added", name_of_wtx_added);
+        intent.putExtra(Constants.EXTRA_NEW_WTX_ADDED, true);
         setResult(RESULT_OK, intent);
         finish();
     }

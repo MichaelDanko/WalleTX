@@ -13,10 +13,8 @@ import android.widget.ProgressBar;
 import com.bitcoin.tracker.walletx.R;
 
 import com.bitcoin.tracker.walletx.activity.SyncableActivity;
-import com.bitcoin.tracker.walletx.api.SyncableInterface;
 import com.bitcoin.tracker.walletx.activity.chart.ChartSpendingByCategoryActivity;
 import com.bitcoin.tracker.walletx.activity.tx.TxsActivity;
-import com.bitcoin.tracker.walletx.api.SyncDatabase;
 import com.bitcoin.tracker.walletx.model.SupportedSummaryType;
 import com.bitcoin.tracker.walletx.model.Walletx;
 

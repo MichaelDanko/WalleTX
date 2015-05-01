@@ -20,8 +20,6 @@ import android.widget.ProgressBar;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.SyncableActivity;
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
-import com.bitcoin.tracker.walletx.api.SyncableInterface;
-import com.bitcoin.tracker.walletx.api.SyncDatabase;
 import com.bitcoin.tracker.walletx.model.Category;
 
 import java.util.ArrayList;
@@ -32,9 +30,7 @@ import java.util.List;
  * CRUD operations on tx categories.
  *
  */
-public class CategoryFragment extends Fragment implements
-        AbsListView.OnItemClickListener,
-        SyncableInterface {
+public class CategoryFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     private static final int NEW_TAG_ADDED = 1;
     private static final int TX_CAT_UPDATED = 2;
@@ -44,9 +40,6 @@ public class CategoryFragment extends Fragment implements
 
     // Reference to activity
     static Activity mActivity;
-
-    // displays when sync in progress
-    private ProgressBar mSyncProgressBar;
 
     // displays when no tags present
     private View mFooter;
@@ -97,11 +90,6 @@ public class CategoryFragment extends Fragment implements
 
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
-
-        // setup sync progress spinner
-        mSyncProgressBar = (ProgressBar) view.findViewById(R.id.syncProgressBar);
-        mSyncProgressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
-        mSyncProgressBar.setVisibility(View.GONE);
 
         return view;
     }
@@ -205,7 +193,12 @@ public class CategoryFragment extends Fragment implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_sync) {
-            new SyncDatabase(this);
+
+
+            // TODO Let SyncAct handle
+            //new SyncDatabase(this);
+
+
             return true;
         } else if (item.getItemId() == R.id.action_add_tx_category) {
             Intent intent = new Intent( getActivity(), CategoryCreateActivity.class );
@@ -213,35 +206,5 @@ public class CategoryFragment extends Fragment implements
         }
         return super.onOptionsItemSelected(item);
     }
-
-    //region SYNC
-
-    public void startSyncRelatedUI() {
-        // Rotate progress bar
-        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
-        if ( mActivity != null && pb != null ) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pb.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-    }
-
-    public void stopSyncRelatedUI() {
-        // stop progress bar
-        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
-        if ( mActivity != null && pb != null ) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pb.setVisibility(View.GONE);
-                }
-            });
-        }
-    }
-
-    //endregion
 
 } // TxCategoriesFragment

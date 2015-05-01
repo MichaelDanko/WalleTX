@@ -1,5 +1,7 @@
 package com.bitcoin.tracker.walletx.api;
 
+import android.util.Log;
+
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 
 import com.bitcoin.tracker.walletx.model.Tx;
@@ -23,8 +25,7 @@ import java.util.List;
  * BlockchainInfo handles Blockchain.info API calls
  * and saves results to the database.
  *
- * TODO Fix time bug. Blockchain.info uses military time, so Txs are displaying improperly
- *      in the Tx list view.
+ * TODO This class requires thorough testing.
  *
  */
 public class BlockchainInfo {
@@ -38,6 +39,9 @@ public class BlockchainInfo {
 
     // Latest block number - for calculating confirmations
     public static int sLatestBlock;
+
+    // Error logging tag
+    private static final String TAG = "BlockchainInfo";
 
     public BlockchainInfo() {
         super();
@@ -54,14 +58,14 @@ public class BlockchainInfo {
             if (saw == null)
                 break;
             int numTxsToSync = getNumberOfTxsToSyncFor(saw);
-            syncTxsForWallet(saw, numTxsToSync);
+            syncTxsForWallet(saw, numTxsToSync, wtx);
         }
     }
 
     public void syncTxsForNewWallet(Walletx wtx) {
         SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
         int numTxsToSync = getNumberOfTxsToSyncFor(saw);
-        syncTxsForWallet(saw, numTxsToSync);
+        syncTxsForWallet(saw, numTxsToSync, wtx);
     }
 
     /**
@@ -77,6 +81,7 @@ public class BlockchainInfo {
         return bciAddress.n_tx - currentTxCount;
     }
 
+    // Builds URL with offset to pickup last txs from those to sync
     private URL buildSingleAddressApiCallUrlFor(SingleAddressWallet saw, int numToSync) {
         int offset = numToSync - 50;
         String sUrl = URL_SINGLEADDR + saw.publicKey + URL_JSON +
@@ -89,7 +94,7 @@ public class BlockchainInfo {
         try {
             url = new URL(sUrl);
         } catch (MalformedURLException e) {
-            // TODO Handle MalformedURLException
+            Log.e(TAG, e.getLocalizedMessage());
         }
         return url;
     }
@@ -100,9 +105,9 @@ public class BlockchainInfo {
             request = (HttpURLConnection) (url).openConnection();
             request.connect();
         } catch (MalformedURLException e) {
-            // TODO Handle url error
+            Log.e(TAG, e.getLocalizedMessage());
         } catch (IOException e) {
-            // TODO Handle connection error
+            Log.e(TAG, e.getLocalizedMessage());
         }
         JsonParser jp = new JsonParser(); // gson lib
         JsonElement json = null; //convert the input stream to a json element
@@ -110,18 +115,21 @@ public class BlockchainInfo {
             InputStreamReader reader = new InputStreamReader((InputStream) request.getContent());
             json = jp.parse(reader).getAsJsonObject();
         } catch (IOException e) {
-            // TODO Handle getContent
+            Log.e(TAG, e.getLocalizedMessage());
         }
         return json;
     }
 
-    private void syncTxsForWallet(SingleAddressWallet saw, int numTxsToSync) {
+    private void syncTxsForWallet(SingleAddressWallet saw, int numTxsToSync, Walletx wtx) {
         // Blockchain limits the number of txs that can be pulled in a single api call
         // We need to track this to ensure that all new txs have been inserted
         while (numTxsToSync > 0) {
             URL url = buildSingleAddressApiCallUrlFor(saw, numTxsToSync);
             JsonElement json = getJsonElementFromUrl(url);
             BciAddress bciAddress = new Gson().fromJson(json, BciAddress.class);
+            // Save the final balance
+            wtx.finalBalance = bciAddress.final_balance;
+            wtx.save();
             // Loop through each transaction obtained from the api call
             for (BciTx bciTx : bciAddress.txs)
                 syncTx(saw, bciTx);
@@ -138,12 +146,9 @@ public class BlockchainInfo {
             tx.timestamp = new Date(bciTx.time * 1000L);
             tx.wtx = Walletx.getBy(saw);
             tx.block = bciTx.block_height;
-            tx.confirmations = 1; // TODO Delete (I want to calculate confs in real time)
             tx.category = null;
-            tx.tx_index = bciTx.tx_index;
             tx.note = null;
             tx.hash = bciTx.hash;
-            tx.amountLC = 0; // TODO Delete (This should also be calculated real time using Balance/ExchangeRate
 
             // Sum inputs associated with this address
             long totalInputs = 0;
@@ -161,9 +166,12 @@ public class BlockchainInfo {
                     totalOutputs = totalOutputs + output.value;
             }
 
-            // Calculate the Tx amount
+            // Calculate the Tx amount & write to the database
             tx.amountBTC = 0 - (totalInputs - totalOutputs);
-
+            if (tx.amountBTC < 0)
+                tx.type = Tx.SPEND;
+            else
+                tx.type = Tx.RECEIVE;
             tx.save();
         }
     }
@@ -178,13 +186,13 @@ public class BlockchainInfo {
         public String address;
         public int n_tx;
         public List<BciTx> txs;
+        public int final_balance;
     }
 
     public class BciTx {
         public String hash;
         public int block_height;
         public long time;
-        public long tx_index;
         public List<BciTxInputs> inputs;
         public List<BciTxOutputs> out;
 
@@ -202,7 +210,6 @@ public class BlockchainInfo {
     public class BciTxInputPrevOut {
         public String addr;
         public long value;
-        public long tx_index;
     }
 
 } // BlockchainInfo

@@ -19,8 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.api.SyncableInterface;
-import com.bitcoin.tracker.walletx.api.SyncDatabase;
 import com.bitcoin.tracker.walletx.model.Category;
 import com.bitcoin.tracker.walletx.model.Tx;
 
@@ -33,7 +31,7 @@ import java.util.List;
  * Tx Details Activity
  *
  */
-public class TxDetailActivity extends ActionBarActivity implements SyncableInterface {
+public class TxDetailActivity extends ActionBarActivity {
 
     AutoCompleteTextView mTagAutoCompleteTextView;
     ImageView mTagImageView;
@@ -43,9 +41,6 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
 
     // Reference to activity
     static Activity mActivity;
-
-    // displays when sync in progress
-    private ProgressBar mSyncProgressBar;
 
     // Track if changes has been made to the tag
     private boolean mTagUpdated = false;
@@ -94,17 +89,13 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
         DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
         timeTextField.setText(time.format(txDetail.timestamp));
         dateTextField.setText(date.format(txDetail.timestamp));
-        confirmTextField.setText(Long.toString(txDetail.confirmations));
+        // TODO CALC REALTIME
+        //confirmTextField.setText(Long.toString(txDetail.confirmations));
 
         // populate the autocompletetextview with existing tag for this tx
         if ( txDetail.category != null ) {
             mTagAutoCompleteTextView.setText(txDetail.category.name);
         }
-
-        // setup sync progress spinner
-        mSyncProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);
-        mSyncProgressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
-        mSyncProgressBar.setVisibility(View.GONE);
     }
 
     private void getUIViews() {
@@ -191,7 +182,13 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (item.getItemId() == R.id.action_sync) {
-            new SyncDatabase(this);
+
+
+            // TODO LET SYNCACT HANDLE
+            //new SyncDatabase(this);
+
+
+
             return true;
         } else if (id == android.R.id.home) {
             if (mTagUpdated) {
@@ -204,35 +201,5 @@ public class TxDetailActivity extends ActionBarActivity implements SyncableInter
     }
 
     //endregion
-    //region SYNC
 
-    public void startSyncRelatedUI() {
-        // Rotate progress bar
-        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
-        if ( mActivity != null && pb != null ) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pb.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-    }
-
-    public void stopSyncRelatedUI() {
-        // stop progress bar
-        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
-        if ( mActivity != null && pb != null ) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pb.setVisibility(View.GONE);
-                }
-            });
-        }
-        // Update the number of confirmations
-        confirmTextField.setText(Long.toString(txDetail.confirmations));
-    }
-
-    //endregion
 }

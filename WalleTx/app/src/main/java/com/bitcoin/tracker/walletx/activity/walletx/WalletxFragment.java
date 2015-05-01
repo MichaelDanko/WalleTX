@@ -2,7 +2,6 @@ package com.bitcoin.tracker.walletx.activity.walletx;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,21 +12,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.activeandroid.query.Select;
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.Constants;
+import com.bitcoin.tracker.walletx.activity.SharedData;
 import com.bitcoin.tracker.walletx.activity.SyncableActivity;
 import com.bitcoin.tracker.walletx.activity.group.GroupUpdateActivity;
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
 import com.bitcoin.tracker.walletx.api.SyncManager;
-import com.bitcoin.tracker.walletx.api.SyncableInterface;
 import com.bitcoin.tracker.walletx.activity.summary.SummaryAllActivity;
 import com.bitcoin.tracker.walletx.activity.summary.SummaryGroupActivity;
 import com.bitcoin.tracker.walletx.activity.summary.SummarySingleActivity;
-import com.bitcoin.tracker.walletx.api.BlockchainInfo;
-import com.bitcoin.tracker.walletx.api.SyncDatabase;
 import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.Group;
 import com.bitcoin.tracker.walletx.model.Tx;
@@ -44,33 +41,24 @@ import java.util.List;
  */
 public class WalletxFragment extends Fragment {
 
-    //region FIELDS
-
+    // onActivityResult requestCodes
     private static final int NEW_WALLETX_ADDED = 1;
     private static final int WALLETX_UPDATED = 2;
     private static final int WALLET_GROUP_UPDATED = 3;
 
+    // The fragment argument representing the section number for this fragment.
+    private static final String ARG_SECTION_NUMBER = "section_number";
+
     // Walletx custom expandable list
-    WalletxExpandableListAdapter mListApapter;
     ExpandableListView mExpListView;
+    WalletxExpandableListAdapter mListApapter;
     List<String> mGroupHeader;
     HashMap<String, List<String>> mListDataChild;
     View mHeader; // all wallets header for exp. list view
     View mFooter; // no wallets footer (shown only when no wallets are added)
 
-    Long mExchangeRate;
-
     // Reference to activity
-    static Activity mActivity;
-
-    // displays when sync in progress
-    private ProgressBar mSyncProgressBar;
-
-    // The fragment argument representing the section number for this fragment.
-    private static final String ARG_SECTION_NUMBER = "section_number";
-
-    //endregion
-    //region FRAGMENT LIFECYCLE
+    private static Activity mActivity;
 
     // Returns a new instance of this fragment for the given section number.
     public static WalletxFragment newInstance(int sectionNumber) {
@@ -86,70 +74,96 @@ public class WalletxFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-
         mActivity = getActivity();
-
         View view = inflater.inflate(R.layout.walletx_fragment, container, false);
-        mExpListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
-        mExpListView.setOnGroupClickListener(groupClickListener);
-        mExpListView.setOnChildClickListener(childWalletClickListener);
-        mExpListView.setOnItemLongClickListener(childWalletLongClickListener);
-
-        // Add All Wallets header to expandable list view.
-        View header = inflater.inflate(R.layout.walletx_fragment_list_header, null);
-        mExpListView.addHeaderView(header);
-        mHeader = header.findViewById(R.id.allWalletsContainer);
-        mHeader.setOnClickListener(allWalletsOnClickListener);
-
-        // Use the footer to display 'Add first wallet view' when no wallets are added
-        View footer = getActivity().getLayoutInflater().inflate(R.layout.walletx_fragment_list_footer, null);
-        mExpListView.addFooterView(footer);
-        mFooter = footer.findViewById(R.id.no_wallets_container);
-        mFooter.setOnClickListener(footerOnClickListener);
-        setHeaderFooterVisibility();
-
-        // setup exp list view
+        getExpListViewAndBindEvents(view);
+        setupAllWalletsHeader();
+        setupNoWalletsFooter();
         prepareData();
-        if (mListApapter == null)
-            mListApapter = new WalletxExpandableListAdapter(getActivity(), mGroupHeader, mListDataChild);
-        if (mExpListView != null)
-            mExpListView.setAdapter(mListApapter);
-
-        // setup sync progress spinner
-        mSyncProgressBar = (ProgressBar) view.findViewById(R.id.syncProgressBar);
-        mSyncProgressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
-        mSyncProgressBar.setVisibility(View.GONE);
-
+        populateListViewWithPreparedData();
         return view;
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        // stop the sync icon animation so it doesn't appear over any other menus
+        // if syncable, the next fragment will re-apply the rotation to its own sync menu item
         ((SyncableActivity) getActivity()).stopSyncIconRotation(); // COMMENT
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
+    }
 
     /**
-     * Prepares wallet group / wallet data for the expandable list view.
+     * Refreshes the expListView and initiates a data sync when required
      */
-    private void prepareData() {
-        mGroupHeader = new ArrayList<>();
-        mListDataChild = new HashMap<String, List<String>>();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == NEW_WALLETX_ADDED) {
+            if (resultCode == Activity.RESULT_OK) {
+                refreshUi();
+                Walletx wtx = SharedData.ADDED_WTX;
+                SyncManager.syncNewWallet(getActivity().getApplicationContext(), wtx);
+            }
+        } else if (requestCode == WALLETX_UPDATED || requestCode == WALLET_GROUP_UPDATED) {
+            if (resultCode == Activity.RESULT_OK) {
+                refreshUi();
+            }
+        }
+    }
 
-        // Update all wallets views
+    private void getExpListViewAndBindEvents(View view) {
+        mExpListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
+        mExpListView.setOnGroupClickListener(groupClickListener);
+        mExpListView.setOnChildClickListener(childWalletClickListener);
+        mExpListView.setOnItemLongClickListener(childWalletLongClickListener);
+    }
+
+    private void setupAllWalletsHeader() {
+        View header = getActivity().getLayoutInflater()
+                .inflate(R.layout.walletx_fragment_list_header, null);
+        if (mExpListView != null)
+            mExpListView.addHeaderView(header);
+        mHeader = header.findViewById(R.id.allWalletsContainer);
+        mHeader.setOnClickListener(allWalletsOnClickListener);
+    }
+
+    private void setupNoWalletsFooter() {
+        View footer = getActivity().getLayoutInflater()
+                .inflate(R.layout.walletx_fragment_list_footer, null);
+        if (mExpListView != null)
+            mExpListView.addFooterView(footer);
+        mFooter = footer.findViewById(R.id.no_wallets_container);
+        mFooter.setOnClickListener(footerOnClickListener);
+        setHeaderFooterVisibility();
+    }
+
+    // Prepares data for the expandable list view
+    private void prepareData() {
+        prepareAllWalletsHeaderData();
+        prepareGroupAndChildData();
+    }
+
+    private void prepareAllWalletsHeaderData() {
         TextView allWalletxBtcBalance = (TextView) mHeader.findViewById(R.id.textView3);
+        TextView allWalletsUSD = (TextView) mHeader.findViewById(R.id.textView4);
         List<Walletx> all = Walletx.getAll();
         long allWalletsBalance = 0;
-        for (Walletx wtx : all) {
+        for (Walletx wtx : all)
             allWalletsBalance = allWalletsBalance + wtx.finalBalance;
-        }
         allWalletxBtcBalance.setText(Tx.formattedBTCValue(allWalletsBalance));
-        TextView allWalletsUSD = (TextView) mHeader.findViewById(R.id.textView4);
-        String inUSD = NumberFormat.getIntegerInstance().format(ExchangeRate.EXCHANGE_RATE_IN_USD * allWalletsBalance / 100000000);
+        String inUSD = NumberFormat.getIntegerInstance().
+                format(ExchangeRate.EXCHANGE_RATE_IN_USD * allWalletsBalance / Constants.SATOSHIS);
         allWalletsUSD.setText(inUSD);
+    }
 
-        // For each wallet group
+    private void prepareGroupAndChildData() {
+        mGroupHeader = new ArrayList<>();
+        mListDataChild = new HashMap<>();
         List<Group> groups = Group.getAllSortedByDisplayOrder();
         for (Group group : groups) {
             List<Walletx> wtxs = group.walletxs(); // get all wtxs in this group
@@ -166,10 +180,19 @@ public class WalletxFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
+    private void populateListViewWithPreparedData() {
+        if (mListApapter == null) {
+            mListApapter = new WalletxExpandableListAdapter(getActivity(),
+                    mGroupHeader, mListDataChild);
+        }
+        if (mExpListView != null)
+            mExpListView.setAdapter(mListApapter);
+    }
+
+    private void refreshUi() {
+        prepareData();
+        setHeaderFooterVisibility();
+        mListApapter.updateData(mGroupHeader, mListDataChild);
     }
 
     /**
@@ -191,8 +214,6 @@ public class WalletxFragment extends Fragment {
         }
     }
 
-    //endregion
-    //region EVENT HANDLING
 
     private View.OnClickListener allWalletsOnClickListener = new View.OnClickListener() {
         @Override
@@ -277,59 +298,6 @@ public class WalletxFragment extends Fragment {
             }
         }
     };
-
-    /**
-     * Refreshes the expListView and initiates a data sync
-     * when changes have been made (i.e. new Walletx added or deleted)
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        if (requestCode == NEW_WALLETX_ADDED) {
-            // Make sure the request was successful
-            if (resultCode == getActivity().RESULT_OK) {
-                // Refresh the expListView to display the newly added wallet
-                prepareData();
-                setHeaderFooterVisibility();
-                mListApapter.updateData(mGroupHeader, mListDataChild);
-
-                /*
-                 * TODO @md Initiate a sync for the new wallet
-                 *          A new wallet has been added so we'll need to initiate a data sync on
-                 *          a background thread. The sync will pull all transactions and update
-                 *          the Tx and Balance tables. The user should receive feedback that a
-                 *          sync is occurring (I'm thinking the refresh icon in the action bar
-                 *          can rotate, which as UI guy @bh will handle). Upon successfully
-                 *          completion, when data is added to db, the background thread created by
-                 *          the sync helper class should notify this fragment so that the
-                 *          expListView can be updated to show new data.
-                 *
-                 *          A group discussion is probably req'd about the design of the sync
-                 *          helper class.
-                 *
-                 *          Also, for starters we can probably begin with a single method that
-                 *          updates (syncs) all Walletxs and use it here. Time permitting we
-                 *          can tweak things to make it more efficient.
-                 *
-                 */
-
-                Walletx wtx = Walletx.getBy(data.getStringExtra("name_of_wtx_added"));
-                SyncManager.syncNewWallet(getActivity().getApplicationContext(), wtx);
-
-                //new BlockchainInfo(this).execute();
-
-            }
-        } else if (requestCode == WALLETX_UPDATED || requestCode == WALLET_GROUP_UPDATED) {
-            if (resultCode == getActivity().RESULT_OK) {
-                prepareData();
-                setHeaderFooterVisibility();
-                mListApapter.updateData(mGroupHeader, mListDataChild);
-            }
-        }
-    }
-
-    //endregion
-    //region OPTIONS MENU
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

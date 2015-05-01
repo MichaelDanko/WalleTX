@@ -3,9 +3,8 @@ package com.bitcoin.tracker.walletx.api;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
-import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
-import com.bitcoin.tracker.walletx.model.SupportedWalletType;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.ArrayList;
@@ -26,6 +25,9 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
     private Context mContext;    // reference to context of caller
     private SyncType mSyncType;  // the type of sync to be performed
     private Walletx mWtx;        // wtx to sync if syncing a single wallet's txs
+
+    // Error logging tag
+    private static final String TAG = "SyncManager";
 
     //----- SyncManager API -----
 
@@ -93,7 +95,7 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
                 syncBtcPriceData();
                 break;
             default:
-                // TODO Throw error. This should never occur.
+                Log.w(TAG, "Invalid SyncType");
                 break;
         }
         return null;
@@ -106,7 +108,7 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
 
     @Override
     protected void onProgressUpdate(Integer... progress) {
-        super.onProgressUpdate(progress);;
+        super.onProgressUpdate(progress);
         broadcastSyncIsInProgress();
     }
 
@@ -142,7 +144,7 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
                     saws.add(wtx);
                     break;
                 default:
-                    // TODO Throw error. This should never occur.
+                    Log.w(TAG, "Invalid SupportedWalletType");
                     break;
             }
         }
@@ -157,7 +159,7 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
                 new BlockchainInfo().syncTxsForNewWallet(wtx);
                 break;
             default:
-                // TODO Throw error. This should never occur.
+                Log.w(TAG, "Invalid SupportedWalletType");
                 break;
         }
     }

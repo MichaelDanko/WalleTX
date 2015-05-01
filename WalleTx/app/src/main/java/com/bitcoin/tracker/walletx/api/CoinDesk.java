@@ -1,13 +1,12 @@
 package com.bitcoin.tracker.walletx.api;
 
 /**
- * CoinDesk API
+ * CoinDesk handles coindesk.com API calls
+ * and saves results to the database.
  *
- * This class provides methods for fetching information from CoinDesks API
- * for daily price data.
+ * TODO Implement
+ *
  */
 public class CoinDesk {
-
-
 
 } // CoinDesk

@@ -14,8 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.api.SyncableInterface;
-import com.bitcoin.tracker.walletx.api.SyncDatabase;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
@@ -33,7 +31,7 @@ import java.util.List;
  * TODO Finish OnItemClick event
  * TODO Color Amount/Amount label based on sent or received
  */
-public class TxsActivity extends ActionBarActivity implements SyncableInterface {
+public class TxsActivity extends ActionBarActivity {
 
     private static final int TX_CAT_UPDATED = 1;
 
@@ -45,9 +43,6 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
 
     // Reference to activity
     static Activity mActivity;
-
-    // displays when sync in progress
-    private ProgressBar mSyncProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,10 +94,6 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
             }
         });
 
-        // setup sync progress spinner
-        mSyncProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);
-        mSyncProgressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
-        mSyncProgressBar.setVisibility(View.GONE);
     }
 
     private void prepareData() {
@@ -144,7 +135,12 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
                 category = "Uncategorized";
             }
             String amount = new Tx().formattedBTCValue(tx.amountBTC);
-            String confirmations = Long.toString(tx.confirmations);
+
+
+            // TODO CALC REALTIME
+            String confirmations = Long.toString(1);
+
+
             String hash = tx.hash;
             item = new TxsListItem(date, category, amount, confirmations, hash);
             mItems.add(item);
@@ -182,7 +178,12 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (item.getItemId() == R.id.action_sync) {
-            new SyncDatabase(this);
+
+
+            // TODO Let SyncAct Handle
+            //new SyncDatabase(this);
+
+
             return true;
         } else if (id == android.R.id.home)
             finish();
@@ -190,36 +191,5 @@ public class TxsActivity extends ActionBarActivity implements SyncableInterface 
     }
 
     //endregion
-    //region SYNC
 
-    public void startSyncRelatedUI() {
-        // Rotate progress bar
-        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
-        if ( mActivity != null && pb != null ) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pb.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-    }
-
-    public void stopSyncRelatedUI() {
-        // stop progress bar
-        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
-        if ( mActivity != null && pb != null ) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pb.setVisibility(View.GONE);
-                }
-            });
-        }
-        // update list view
-        prepareData();
-        mAdapter.updateData(mItems);
-    }
-
-    //endregion
 }

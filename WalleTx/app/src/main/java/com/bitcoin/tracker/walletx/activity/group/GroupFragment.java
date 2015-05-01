@@ -18,8 +18,7 @@ import android.widget.ProgressBar;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.SyncableActivity;
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
-import com.bitcoin.tracker.walletx.api.SyncableInterface;
-import com.bitcoin.tracker.walletx.api.SyncDatabase;
+
 import com.bitcoin.tracker.walletx.model.Group;
 
 import java.util.ArrayList;
@@ -31,9 +30,7 @@ import java.util.List;
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
  */
-public class GroupFragment extends Fragment implements
-        AbsListView.OnItemClickListener,
-        SyncableInterface {
+public class GroupFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     //region FIELDS
 
@@ -46,9 +43,6 @@ public class GroupFragment extends Fragment implements
 
     // Reference to activity
     static Activity mActivity;
-
-    // displays when sync in progress
-    private ProgressBar mSyncProgressBar;
 
     private OnFragmentInteractionListener mListener;
     private AbsListView mListView;
@@ -101,11 +95,6 @@ public class GroupFragment extends Fragment implements
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
-
-        // setup sync progress spinner
-        mSyncProgressBar = (ProgressBar) view.findViewById(R.id.syncProgressBar);
-        mSyncProgressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
-        mSyncProgressBar.setVisibility(View.GONE);
 
         return view;
     }
@@ -220,42 +209,17 @@ public class GroupFragment extends Fragment implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_sync) {
-            new SyncDatabase(this);
+
+            // TODO LET SYNC ACT HANDLE
+            //new SyncDatabase(this);
+
+
             return true;
         } else if (item.getItemId() == R.id.action_add_group) {
             Intent intent = new Intent( getActivity(), GroupCreateActivity.class );
             startActivityForResult( intent, NEW_GROUP_ADDED );
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    //endregion
-    //region SYNC
-
-    public void startSyncRelatedUI() {
-        // Rotate progress bar
-        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
-        if ( mActivity != null && pb != null ) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pb.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-    }
-
-    public void stopSyncRelatedUI() {
-        // stop progress bar
-        final ProgressBar pb = (ProgressBar) mActivity.findViewById(R.id.syncProgressBar);
-        if ( mActivity != null && pb != null ) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pb.setVisibility(View.GONE);
-                }
-            });
-        }
     }
 
     //endregion
