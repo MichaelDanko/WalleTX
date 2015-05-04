@@ -16,14 +16,14 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/gen_spacer_small"
-        android:hint="@string/tx_categories_create_edittext_hint"
+        android:hint="@string/category_create_activity_hint"
         android:singleLine="true"
         android:inputType="textCapWords" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tx_categories_update_button_text"
+        android:text="@string/category_update_activity_update_button_text"
         android:id="@+id/category_update_button"
         android:layout_below="@+id/category_update_edit_text"
         android:layout_alignParentLeft="true"
@@ -35,7 +35,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tx_categories_delete_button_text"
+        android:text="@string/category_update_activity_delete_button_text"
         android:id="@+id/category_delete_button"
         android:layout_below="@+id/category_update_button"
         android:layout_alignParentLeft="true"

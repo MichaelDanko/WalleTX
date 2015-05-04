@@ -15,7 +15,7 @@
 
             <!-- TODO: Update blank fragment layout -->
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:text="@string/tx_categories_add_first_l1"
+                android:text="@string/category_none_present_footer_line_1"
                 android:gravity="center"
                 android:id="@+id/no_wallets_line1"
                 android:layout_alignParentLeft="true"
@@ -27,7 +27,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/tx_categories_add_first_l2"
+                android:text="@string/category_none_present_footer_line_2"
                 android:gravity="center"
                 android:id="@+id/textView"
                 android:layout_gravity="center_horizontal|top"

@@ -5,41 +5,24 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Balance model.
- *
- * A Balance is a snapshot of a Walletx balance at a given point in time.
- * Each time there is a new blockchainInfoWalletData associated with a Walletx, a new balance should be added.
+ * Balance is a snapshot of a Walletx balance at a given point in time.
+ * Each time there is a new Tx associated with a Walletx, a new balance should be added.
  * Balance detail should not go into detail finer than a daily balance.
  * If 2 balances occur on the same day the newest balance should overwrite the older balance.
  * All Balances are in BTC.
- *
- * TODO Add indexes & constraints to columns (if any)
- *
  */
 @Table(name = "Balance")
 public class Balance extends Model {
 
-    @Column(name = "timestamp")
+    //region Table
+    //----------------------------------------------------------------------------------------------
+
+    @Column(name = "timestamp", index = true)
     public Date timestamp;
-
-    public void setDateFromString(String date) {
-        SimpleDateFormat sf = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-        sf.setLenient(true);
-        try {
-            this.timestamp = sf.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Column(name = "Balance_Index")
-    public Long index;
 
     @Column(name = "Balance")
     public float balance;
@@ -52,22 +35,21 @@ public class Balance extends Model {
         super();
     }
 
-    public Balance(Walletx wtx, Long index, Date timestamp, float balance) {
+    public Balance(Date timestamp, float balance, Walletx wtx) {
         super();
-        this.wtx = wtx;
-        this.index = index;
         this.timestamp = timestamp;
-        //this.setDateFromString(date);
         this.balance = balance;
+        this.wtx = wtx;
     }
 
-    /*-------------------*
-     *  Balance Queries  *
-     *-------------------*/
+    //endregion
+
+    //region QUERIES
+    //----------------------------------------------------------------------------------------------
+
     /**
-    * @return Latest balance selected by wtx
-    *
-    */
+     * @return latest balance selected by wtx
+     */
     public static Balance getBalance(Walletx wtx){
     return new Select()
         .from(Balance.class)
@@ -76,34 +58,28 @@ public class Balance extends Model {
         .executeSingle();
     }
 
-    /** @return previous balance
-     *
-     */
-    public static Balance getPreviousBalance(Walletx wtx, Long index) {
-        return new Select()
-                .from(Balance.class)
-                .where("Walletx = ?", wtx)
-                //.where("Index = ?", index - 1)
-                .executeSingle();
-    }
-
     /**
-     *
-     * @return list of balances (debug)
+     * @return list of all balances
      */
-    public static List<Balance> getAllBalances(){
+    public static List<Balance> getAllBalances() {
         return new Select()
                 .from(Balance.class)
                 .orderBy("timestamp")
                 .execute();
-
     }
 
+    //endregion
 
-    /**
-     * dumps all the balances table to console
-     * debug only
-     */
+    //region VALIDATION
+    //----------------------------------------------------------------------------------------------
+
+
+
+    //endregion
+
+    //region DEBUG
+    //----------------------------------------------------------------------------------------------
+
     public static void dump(){
         String dividerCol1 = "------------------";
         String dividerCol23 = "-------------";
@@ -117,9 +93,10 @@ public class Balance extends Model {
                     "%-10s %-15s %-16s %-10s\n",
                     balance1.balance,
                     balance1.timestamp,
-                    balance1.wtx,
-                    balance1.index);
+                    balance1.wtx);
         }
     }
+
+    //endregion
 
 } // Balance

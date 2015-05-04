@@ -12,9 +12,12 @@ import android.widget.Toast;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.model.Category;
 
+/**
+ * Activity for creating a new Category.
+ */
 public class CategoryCreateActivity extends ActionBarActivity {
 
-    private EditText mCatName;
+    private EditText mCategoryName;
     private Button mSubmit;
 
     @Override
@@ -22,67 +25,52 @@ public class CategoryCreateActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_create_activity);
         setupActionBar();
-        getViewsById();
-        addSubmitButtonClickListener();
+        getViews();
+        bindListeners();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home)
+            finish();
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupActionBar(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Add New Category");
+        getSupportActionBar().setTitle(R.string.category_create_activity_title);
     }
 
-    private void getViewsById(){
-        mCatName = (EditText) findViewById(R.id.category_create_edit_text);
+    private void getViews(){
+        mCategoryName = (EditText) findViewById(R.id.category_create_edit_text);
         mSubmit = (Button) findViewById(R.id.category_create_button);
     }
 
-    //region OPTIONS MENU
-    private void addSubmitButtonClickListener(){
+    private void bindListeners(){
+
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nameEntered = mCatName.getText().toString();
-                if (categoryIsEmpty(nameEntered)) {
-                    Toast.makeText(getApplicationContext(), "Oops! Category cannot be an empty string", Toast.LENGTH_SHORT).show();
-                } else if (categoryAlreadyExists(nameEntered)) {
-                    Toast.makeText(getApplicationContext(), "Oops! Category already exists", Toast.LENGTH_SHORT).show();
+                String name = mCategoryName.getText().toString();
+                if (Category.isEmptyString(name)) {
+                    Toast.makeText(getApplicationContext(),
+                            R.string.category_create_activity_error_empty_string,
+                            Toast.LENGTH_SHORT).show();
+                } else if (Category.matchesExisting(name)) {
+                    Toast.makeText(getApplicationContext(),
+                            R.string.category_create_activity_error_matches_existing,
+                            Toast.LENGTH_SHORT).show();
                 } else {
-                    String name = mCatName.getText().toString();
-                    Category.createTxCategory(name, false);
+                    // valid category name
+                    Category.create(name);
                     Intent intent = new Intent();
                     setResult(RESULT_OK, intent);
                     finish();
                 }
             }
-        });
-    }
+        }); // mSubmit
 
-    // TODO Move validation to the model
-    private boolean categoryIsEmpty(String validate) {
-        if (validate.equals(""))
-            return true;
-        return false;
-    }
+    } // bindListeners
 
-    private boolean categoryAlreadyExists(String validate) {
-        Category existenceCheck = Category.getBy(validate);
-        if (existenceCheck != null)
-            return true;
-        return false;
-    }
-
-    /**
-     * Closes activity when the home button is selected.
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    //endregion
-
-}
+} // CategoryCreateActivity

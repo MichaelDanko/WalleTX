@@ -7,7 +7,7 @@ import com.bitcoin.tracker.walletx.model.Walletx;
  */
 public class SharedData {
 
-    // Most recently added Walletx
+    // Temporarily holds a Walletx that has just been added.
     public static Walletx ADDED_WTX;
 
 }

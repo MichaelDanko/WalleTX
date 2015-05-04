@@ -19,80 +19,44 @@ import java.util.List;
 @Table(name = "TxCategory")
 public class Category extends Model {
 
+    //region TABLE
+    //----------------------------------------------------------------------------------------------
+
     @Column(name = "Name")
     public String name = "Uncategorized";
 
-  /*  @Column(name = "DefaultCategory")
-    private int defaultCategory;
-
-    public int getDefaultCategory(){
-        return defaultCategory;
-    }
-*/
- /*   private void setAsDefault(boolean isDefault){
-        if(isDefault){
-            TxCategory currentDefault = TxCategory.getDefault();
-            if(currentDefault != null){
-                currentDefault.defaultCategory = 0;
-                currentDefault.save();
-            }
-            this.defaultCategory = 1;
-        }else this.defaultCategory = 0;
-    }
-*/
-   // @Column(name = "DisplayOrder")
-    //private int displayOrder;
-
-    //public int getDisplayOrder() {
-      //  return this.displayOrder;
-    //}
-
-    public List<Walletx>walletxs(){
-        return getMany(Walletx.class,"WalletType");
+    // Has many Tx's
+    public List<Tx> txs() {
+        return getMany(Tx.class, "TxCategory");
     }
 
     public Category() {
         super();
     }
 
-    public static void createTxCategory(String name, boolean isDefault) {
-        Category newCat = new Category();
-        newCat.name = name;
-
-       // TxCategory last = TxCategory.getLast();
-        //newCat.displayOrder = last.getDisplayOrder() + 1;
-        // Set group display order and save.
-        //newCat.setAsDefault(isDefault);
-        newCat.save();
-    }
-
-  /*  public static void initDefaultGroup(Context context) {
-        List<TxCategory> groups = TxCategory.getAll();
-        if ( groups.size() < 1 ) {
-            TxCategory defaultCategory = new TxCategory();
-            defaultCategory.name = context.getResources().getString(R.string.wallet_group_wtx_default_group);
-            defaultCategory.displayOrder = 1;
-            defaultCategory.setAsDefault(true);
-            defaultCategory.save();
-        }
-    }
-*/
-    // Has many Tx's
-    public List<Tx> txs() {
-        return getMany(Tx.class, "TxCategory");
-    }
-
-
-
     public Category(String name) {
         super();
         this.name = new String(name);
     }
 
-    /*----------------------*
-     *  TxCategory Queries  *
-     *----------------------*/
+    public String toString(){
+        return name;
+    }
 
+    //endregion
+    //region QUERIES
+    //----------------------------------------------------------------------------------------------
+
+    /**
+     * Inserts a new category
+     * @param name of the new category
+     */
+    public static void create(String name) {
+        if (!isEmptyString(name)) {
+            Category category = new Category(name);
+            category.save();
+        }
+    }
 
     public static Category getBy(String name) {
         return new Select()
@@ -101,19 +65,9 @@ public class Category extends Model {
                 .executeSingle();
     }
 
-
     public static List<Category> getAll() {
-        return new Select()
-                .from(Category.class)
-                .execute();
+        return new Select().from(Category.class).execute();
     }
-
-    /*public static List<TxCategory> getAllSortedByDisplayOrder() {
-        return new Select()
-                .from(TxCategory.class)
-                .orderBy("DisplayOrder ASC")
-                .execute();
-    }*/
 
     public static List<Category> getAllSortedByName() {
         return new Select()
@@ -122,63 +76,67 @@ public class Category extends Model {
                 .execute();
     }
 
-   /* public static List<TxCategory> getAllWithDisplayOrderGreaterThan(int displayOrder) {
-        return new Select()
-                .from(TxCategory.class)
-                .where("DisplayOrder > ?", displayOrder)
-                .orderBy("DisplayOrder ASC")
-                .execute();
-    }*/
-
-  /*  public static TxCategory getDefault() {
-        return new Select()
-                .from(TxCategory.class)
-                .where("DefaultCategory = ?", 1)
-                .executeSingle();
-    }
-*/
-  /*  public boolean isDefault() {
-        return this.defaultCategory == 1;
-    }
-*/
-    /*public static TxCategory getLast() {
-        return new Select()
-                .from(TxCategory.class)
-                .orderBy("DisplayOrder DESC")
-                .executeSingle();
-    }*/
-
-   /* public static TxCategory getByDisplayOrder(int displayOrder) {
-        return new Select()
-                .from(TxCategory.class)
-                .where("DisplayOrder = ?", displayOrder)
-                .executeSingle();
-    }*/
-
-    public void update(String name, boolean isDefault) {
-        this.name = name;
-        //this.setAsDefault(isDefault);
-        this.save();
-    }
-
-    public void updateName(String name) {
+    public void update(String name) {
         this.name = name;
         this.save();
     }
-/*
-    public void updateDefault(boolean isDefault) {
-        this.setAsDefault(isDefault);
-        this.save();
+
+    public static void delete(Category category) {
+        List<Tx> txs = category.txs();
+        for (Tx tx : txs) {
+            tx.category = null;
+            tx.save();
+        }
+        category.delete();
     }
-*/
-public static void deleteCategory(Category delete) {
 
-
-}
-
-    public String toString(){
-        return name;
+    /**
+     * @return true if there are no Categories
+     */
+    public static boolean nonePresent() {
+        int count = new Select().from(Category.class).count();
+        return count <= 0;
     }
+
+    //endregion
+    //region VALIDATION
+    //----------------------------------------------------------------------------------------------
+
+    /**
+     * @param name Category name to validate
+     * @return true if name is empty string
+     */
+    public static boolean isEmptyString(String name) {
+        return name.equals("");
+    }
+
+    /**
+     * @param name Category name to validate
+     * @return true if Category name matches an existing name
+     */
+    public static boolean matchesExisting(String name) {
+        Category existing = Category.getBy(name);
+        return existing != null ? true : false;
+    }
+
+    /**
+     * Validates that a Category name is unique, excluding comparison
+     * to the Category being updated.
+     *
+     * @param name Category name to validate
+     * @param updating Category being updating
+     * @return true if Category name matches an existing name that is not self
+     */
+    public static boolean matchesExisting(String name, Category updating) {
+        Category existing = Category.getBy(name);
+        if (existing != null && existing != updating)
+            return true;
+        return false;
+    }
+
+    //endregion
+    //region DEBUG
+    //----------------------------------------------------------------------------------------------
 
     public static void dump() {
         String dividerCol1 = "------------------";
@@ -194,4 +152,7 @@ public static void deleteCategory(Category delete) {
             );
         }
     }
+
+    //endregion
+
 } // TxCategory

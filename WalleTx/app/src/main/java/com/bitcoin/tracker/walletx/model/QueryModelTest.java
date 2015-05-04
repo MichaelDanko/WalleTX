@@ -94,8 +94,8 @@ public class QueryModelTest {
         Balance newBalance = new Balance();
         for(int j = 0; j < 6; j++) {
 
-            newBalance.balance = balances[j];
-            newBalance.setDateFromString(dt);
+            //newBalance.balance = balances[j];
+            //newBalance.setDateFromString(dt);
 
 
 

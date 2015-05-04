@@ -73,11 +73,11 @@
         </activity>
         <activity
             android:name=".activity.category.CategoryCreateActivity"
-            android:label="@string/title_activity_create_tx_category" >
+            android:label="@string/category_create_activity_title" >
         </activity>
         <activity
             android:name=".activity.category.CategoryUpdateActivity"
-            android:label="@string/title_activity_tx_category_update" >
+            android:label="@string/category_update_activity_title" >
         </activity>
         <activity
             android:name=".activity.chart.ChartSpendingByCategoryActivity"

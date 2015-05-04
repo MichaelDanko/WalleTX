@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- TEMP -->
-    <string name="hello_world">Hello world!</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="action_settings">Settings</string>
-
     <!-- APP -->
     <string name="app_name">WalleTx</string>
     <string name="app_confirm_yes">Yes</string>
@@ -123,16 +118,22 @@
     <string name="wallet_group_update_alert_message_delete">Wallets within this group will automatically be moved to the default group.</string>
     <string name="wallet_group_update_label_delete_default_group_note">Current default group cannot be deleted. If you wish to remove this group please set another wallet group as the default.</string>
 
-    <!-- TX CATEGORIES -->
-    <string name="title_activity_create_tx_category">Add New Tx Category</string>
-    <string name="tx_categories_create_edittext_hint">Category tag name</string>
-    <string name="tx_categories_create_button_text">Create tx category</string>
-    <string name="title_activity_tx_category_update">Update Tx Category</string>
-    <string name="tx_categories_update_button_text">Update Tx Category</string>
-    <string name="tx_categories_delete_button_text">Delete Tx Category</string>
-    <!-- No tags footer -->
-    <string name="tx_categories_add_first_l1">You have not added any Tx tag categories.</string>
-    <string name="tx_categories_add_first_l2">Add your first tag category now.</string>
+    <!-- CATEGORIES -->
+    <string name="category_none_present_footer_line_1">You have not added any Tx tag categories.</string>
+    <string name="category_none_present_footer_line_2">Add your first tag category now.</string>
+
+    <string name="category_create_activity_title">Add New Tx Category</string>
+    <string name="category_create_activity_error_empty_string">Oops! Category cannot be an empty string</string>
+    <string name="category_create_activity_error_matches_existing">Oops! That category already exists</string>
+    <string name="category_create_activity_hint">Category tag name</string>
+    <string name="category_create_activity_submit_button_text">Create tx category</string>
+
+    <string name="category_update_activity_title">Edit Tx Category</string>
+    <string name="category_update_delete_dialog_title_1">Delete category \'</string>
+    <string name="category_update_delete_dialog_title_2">\'?</string>
+    <string name="category_update_delete_dialog_confirmation">Are you sure you wish to delete this Tx tag category? This action cannot be undone.</string>
+    <string name="category_update_activity_update_button_text">Update Tx Category</string>
+    <string name="category_update_activity_delete_button_text">Delete Tx Category</string>
 
     <!-- GRAPHS -->
     <string name="title_activity_graph_spending_by_category">Spending By Category</string>
