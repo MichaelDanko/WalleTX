@@ -58,7 +58,7 @@ public class CategoryFragment extends Fragment implements AbsListView.OnItemClic
             prepareData();
             mAdapter = new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_list_item_1, mItems);
-        } else if(mRestorePosition != 0) {
+        } else if (mRestorePosition != 0) {
             mListView.setSelection(mRestorePosition);
         }
     }
