@@ -105,7 +105,7 @@ public class CategoryFragment extends Fragment implements AbsListView.OnItemClic
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if (requestCode == Constants.RESULT_CATEGORY_CHANGES_MADE) {
-            if(resultCode == getActivity().RESULT_OK) {
+            if(resultCode == Activity.RESULT_OK) {
                 prepareData();
                 setFooterVisibility();
                 mAdapter.notifyDataSetChanged();
