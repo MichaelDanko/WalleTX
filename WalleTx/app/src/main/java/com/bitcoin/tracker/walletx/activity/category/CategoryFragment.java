@@ -96,7 +96,7 @@ public class CategoryFragment extends Fragment implements AbsListView.OnItemClic
     @Override
     public void onPause(){
         super.onResume();
-        mRestorePosition = mListView.getFirstVisiblePosition();
+        mRestorePosition = mListView.getFirstVisiblePosition(); // save last visible position
         // stop the sync icon animation so it doesn't appear over any other menus
         // if syncable, the next fragment will re-apply the rotation to its own sync menu item
         ((SyncableActivity) getActivity()).stopSyncIconRotation();

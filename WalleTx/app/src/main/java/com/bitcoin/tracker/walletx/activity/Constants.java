@@ -17,6 +17,8 @@ public class Constants {
     //----------------------------------------------------------------------------------------------
 
     public static final int RESULT_CATEGORY_CHANGES_MADE = 1;
+    public static final int RESULT_GROUP_ADDED = 1;
+    public static final int RESULT_GROUP_UPDATED = 2;
 
     //endregion
     //region INTENT EXTRAS

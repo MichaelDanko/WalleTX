@@ -18,10 +18,10 @@ import java.util.List;
 /**
  * Custom Group list item
  */
-public class GroupAdapter extends ArrayAdapter<GroupListItem> {
+public class GroupAdapter extends ArrayAdapter<String> {
 
     private final Activity mActivity;
-    private ArrayList<GroupListItem> mItems;
+    private ArrayList<String> mItems;
     private View mRowView;
     private LayoutInflater mInflater;
     private TextView mGroupName;
@@ -29,7 +29,7 @@ public class GroupAdapter extends ArrayAdapter<GroupListItem> {
     private ImageButton mMoveDown;
     private ImageButton mMoveUp;
 
-    public GroupAdapter(Activity activity, ArrayList<GroupListItem> itemsArrayList) {
+    public GroupAdapter(Activity activity, ArrayList<String> itemsArrayList) {
         super(activity, R.layout.group_fragment_list_item, itemsArrayList);
         mActivity = activity;
         mItems = itemsArrayList;
@@ -103,13 +103,13 @@ public class GroupAdapter extends ArrayAdapter<GroupListItem> {
 
     } // bindListeners
 
-    public void updateData(ArrayList<GroupListItem> itemsArrayList) {
+    public void updateData(ArrayList<String> itemsArrayList) {
         this.mItems = itemsArrayList;
         notifyDataSetChanged();
     }
 
     private void setupTextLabels(int position) {
-        mGroupName.setText(mItems.get(position).getName());
+        mGroupName.setText(mItems.get(position));
         // Hide default label for non-default groups
         Group current = Group.getByDisplayOrder(position + 1);
         if (!current.isDefault())
@@ -131,9 +131,7 @@ public class GroupAdapter extends ArrayAdapter<GroupListItem> {
         mItems.clear();
         List<Group> groups = Group.getAllSortedByDisplayOrder();
         for (Group group : groups) {
-            GroupListItem item;
-            item = new GroupListItem(group.name);
-            mItems.add(item);
+            mItems.add(group.name);
         }
         notifyDataSetChanged();
 
