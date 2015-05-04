@@ -24,7 +24,9 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
 
 /*
- * TODO Allow user to control chart based on time period
+ * TODO This activity requires refactoring.
+ *      However, it is my intent to replace HelloCharts since it sucks.
+ *      I'll refactor when I do this. BH
  */
 public class ChartSpendingByCategoryActivity extends ActionBarActivity {
 
