@@ -90,9 +90,9 @@ public class CategoryUpdateActivity extends ActionBarActivity {
             @Override
             public void onClick(View v){
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage(R.string.category_update_delete_dialog_confirmation);
-                String deleteThis = getString(R.string.category_update_delete_dialog_title_1);
-                String questionMark = getString(R.string.category_update_delete_dialog_title_2);
+                builder.setMessage(R.string.category_update__activity_delete_dialog_confirmation);
+                String deleteThis = getString(R.string.category_update_activity_delete_dialog_title_1);
+                String questionMark = getString(R.string.category_update_activity_delete_dialog_title_2);
                 builder.setTitle(deleteThis + mCategoryBeingUpdated.toString() + questionMark);
                 builder.setPositiveButton(R.string.app_confirm_yes, confirmDeleteListener);
                 builder.setNegativeButton(R.string.app_confirm_no, cancelDeleteListener);
