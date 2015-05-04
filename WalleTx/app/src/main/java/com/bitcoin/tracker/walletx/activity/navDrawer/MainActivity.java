@@ -107,8 +107,6 @@ public class MainActivity extends SyncableActivity implements
         return true;
     }
 
-    // Handles action bar item clicks associated with the global menu.
-    //@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
