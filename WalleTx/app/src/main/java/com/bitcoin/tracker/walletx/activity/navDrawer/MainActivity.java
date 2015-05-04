@@ -78,7 +78,7 @@ public class MainActivity extends SyncableActivity implements
                 mTitle = getString(R.string.navigation_drawer_title_my_wallets);
                 break;
             case 2:
-                mTitle = getString(R.string.wallet_group_title_fragment);
+                mTitle = getString(R.string.group_title_fragment);
                 break;
             case 3:
                 mTitle = getString(R.string.navigation_drawer_title_tx_catgeories);

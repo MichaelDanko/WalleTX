@@ -57,11 +57,11 @@
         </activity>
         <activity
             android:name=".activity.group.GroupCreateActivity"
-            android:label="@string/wallet_group_create_title_activity" >
+            android:label="@string/group_create_activity_title_activity" >
         </activity>
         <activity
             android:name=".activity.group.GroupUpdateActivity"
-            android:label="@string/wallet_group_update_title_activity" >
+            android:label="@string/group_update_activity_title_activity" >
         </activity>
         <activity
             android:name=".activity.tx.TxsActivity"

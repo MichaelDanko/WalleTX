@@ -1,7 +1,6 @@
 package com.bitcoin.tracker.walletx.model;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
@@ -18,42 +17,18 @@ import java.util.List;
 @Table(name = "WalletGroup")
 public class Group extends Model {
 
-    //region SCHEMA
-    //
-    //  Define all WalletGroup fields and relationships here.
-    //  Include any getter and setter methods required for private fields.
-    //
+    //region TABLE
+    //----------------------------------------------------------------------------------------------
 
-    /**
-     * The name of the wallet group.
-     */
-    @Column(name = "Name",   // group names are
-            unique = true,   // unique and
-            notNull = true)  // cannot be empty
+    @Column(name = "Name", unique = true, notNull = true)
     public String name;
 
-    /**
-     * An integer used as a boolean to track if the wallet group is the default group.
-     * The default group has a value of 1, all others 0.
-     */
     @Column(name = "DefaultGroup")
     private int defaultGroup;
 
-    /**
-     * Returns 1 if this WalletGroup is the default group, otherwise returns 0.
-     * @return int defaultGroup
-     */
-    public int getDefaultGroup() {
-        return defaultGroup;
-    }
-
-    /**
-     * Sets a WalletGroup's default value and updates the default value of other WalletGroups
-     * @param isDefault boolean value defining if group is the default group
-     */
-    private void setAsDefault(boolean isDefault) {
-        // set this groups default value to 0
-        if (isDefault) {
+    // Using this method without calling save will result in no default group - Use save!
+    private void setAsDefault(boolean yes) {
+        if (yes) {
             // clear current default group and set this group as default
             Group currentDefault = Group.getDefault();
             if (currentDefault != null) {
@@ -61,68 +36,30 @@ public class Group extends Model {
                 currentDefault.save();
             }
             this.defaultGroup = 1;
-        } else this.defaultGroup = 0;
+        } else {
+            this.defaultGroup = 0;
+        }
     }
 
-    /**
-     * Display order tracks the order in which the wallet groups
-     * will be displayed on the main activity.
-     */
     @Column(name = "DisplayOrder")
     private int displayOrder;
 
-    /**
-     * Returns the display order of a WalletGroup.
-     * @return int displayOrder value
-     */
     public int getDisplayOrder() {
         return this.displayOrder;
     }
 
-    /**
-     * WalletGroup has a one-to-many relationship with Walletx
-     * since each WalletGroup can be associated with many Walletxs.
-     */
     //Has many Walletxs
     public List<Walletx> walletxs() {
         return getMany(Walletx.class, "WalletGroup");
     }
 
-    //endregion
-    //region CONSTRUCTORS
-    //
-    //  WalletGroup constructors
-    //
-
-    /**
-     * Default constructor with no parameters.
-     */
     public Group() {
         super();
     }
 
-    //endregion
-    //region CREATE
-    //
-    //  Include methods for creating (or adding) new WalletGroups to the WalletGroup table here
-    //
-
-    /**
-     * Creates a new WalletGroup and inserts it into the WalletGroup table.
-     * @param name of the new WalletGroup
-     * @param isDefault boolean value determining if group should be set as default
-     */
-    public static void createWalletGroup(String name, boolean isDefault) {
-        Group newGroup = new Group();
-        newGroup.name = name;
-
-        // Set group display order and save.
-        Group last = Group.getLast();
-        newGroup.displayOrder = last.getDisplayOrder() + 1;
-
-        // Set group as default.
-        newGroup.setAsDefault(isDefault);
-        newGroup.save();
+    @Override
+    public String toString() {
+        return name;
     }
 
     /**
@@ -135,72 +72,89 @@ public class Group extends Model {
         List<Group> groups = Group.getAll();
         if ( groups.size() < 1 ) {
             Group defaultGroup = new Group();
-            defaultGroup.name = context.getResources().getString(R.string.wallet_group_wtx_default_group);
+            defaultGroup.name = context.getResources().
+                    getString(R.string.group_wtx_default_group);
             defaultGroup.displayOrder = 1;
             defaultGroup.setAsDefault(true);
             defaultGroup.save();
         }
     }
 
+    /**
+     * Swaps the display order of 2 WalletGroups
+     * @param wg1 WalletGroup 1
+     * @param wg2 WalletGroup 2
+     */
+    public static void swap(Group wg1, Group wg2) {
+        int temp = wg1.getDisplayOrder();
+        wg1.displayOrder = wg2.getDisplayOrder();
+        wg2.displayOrder = temp;
+        wg1.save();
+        wg2.save();
+    }
+
     //endregion
-    //region READ
-    //
-    //  Include any methods for reading or accessing data from the WalletGroup table here.
-    //
+    //region QUERIES
+    //----------------------------------------------------------------------------------------------
 
     /**
-     * Returns WalletGroup by name.
+     * Creates a new Group and inserts it into the Group table.
+     * @param name of the new Group
+     * @param isDefault boolean value determining if group should be set as default
+     */
+    public static void create(String name, boolean isDefault) {
+        Group newGroup = new Group();
+        newGroup.name = name;
+        // Set group display order and save.
+        Group last = Group.getLast();
+        newGroup.displayOrder = last.getDisplayOrder() + 1;
+        // Set group as default.
+        newGroup.setAsDefault(isDefault);
+        newGroup.save();
+    }
+
+    /**
+     * Returns Group by name.
      * @param name of the WalletGroup to be read
      * @return WalletGroup with name
      */
     public static Group getBy(String name) {
-        return new Select()
-                .from(Group.class)
-                .where("Name = ?", name)
-                .executeSingle();
+        return new Select().from(Group.class).where("Name = ?", name).executeSingle();
     }
 
     /**
-     * Returns all WalletGroups in no particular order.
+     * Returns all Groups in no particular order.
      * @return List of all WalletGroups unsorted
      */
     public static List<Group> getAll() {
-        return new Select()
-                .from(Group.class)
-                .execute();
+        return new Select().from(Group.class).execute();
     }
 
     /**
-     * Returns all WalletGroups in ascending order by display order.
+     * Returns all Groups in ascending order by display order.
      * @return List of all WalletGroups in order by display order
      */
     public static List<Group> getAllSortedByDisplayOrder() {
-        return new Select()
-                .from(Group.class)
-                .orderBy("DisplayOrder ASC")
-                .execute();
+        return new Select().from(Group.class).orderBy("DisplayOrder ASC").execute();
     }
 
     /**
-     * Returns all WalletGroups in ascending order by name.
+     * Returns all Groups in ascending order by name.
      * @return List of all WalletGroups in order by name
      */
     public static List<Group> getAllSortedByName() {
-        return new Select()
-                .from(Group.class)
-                .orderBy("Name ASC")
-                .execute();
+        return new Select().from(Group.class).orderBy("Name ASC").execute();
     }
 
     /**
-     * Returns all WalletGroups with a display order greater than a specific value.
-     * @param displayOrder select all WalletGroups after
-     * @return List of all WalletGroups with a displayOrder value greater than the displayOrder parameter
+     * Returns all Groups with a display order greater than a specific value.
+     * @param value select all Groups after
+     * @return List of all Groups with a displayOrder value greater than the value parameter
      */
-    public static List<Group> getAllWithDisplayOrderGreaterThan(int displayOrder) {
+    public static List<Group> getAllWithDisplayOrderGreaterThan(int value) {
         return new Select()
                 .from(Group.class)
-                .where("DisplayOrder > ?", displayOrder)
+                .where("DisplayOrder > ?", value)
                 .orderBy("DisplayOrder ASC")
                 .execute();
     }
@@ -210,14 +164,11 @@ public class Group extends Model {
      * @return WalletGroup default group
      */
     public static Group getDefault() {
-        return new Select()
-                .from(Group.class)
-                .where("DefaultGroup = ?", 1)
-                .executeSingle();
+        return new Select().from(Group.class).where("DefaultGroup = ?", 1).executeSingle();
     }
 
     /**
-     * Returns true if WalletGroup is the default group.
+     * Returns true if Group is the default group.
      * @return boolean true if group is the default.
      */
     public boolean isDefault() {
@@ -225,14 +176,11 @@ public class Group extends Model {
     }
 
     /**
-     * Returns the last WalletGroup, or the WalletGroup with the highest display order.
-     * @return WalletGroup last group
+     * Returns the last Group (highest display order).
+     * @return Group last group
      */
     public static Group getLast() {
-        return new Select()
-                .from(Group.class)
-                .orderBy("DisplayOrder DESC")
-                .executeSingle();
+        return new Select().from(Group.class).orderBy("DisplayOrder DESC").executeSingle();
     }
 
     /**
@@ -246,12 +194,6 @@ public class Group extends Model {
                 .where("DisplayOrder = ?", displayOrder)
                 .executeSingle();
     }
-
-    //endregion
-    //region UPDATE
-    //
-    //  Include any methods for updated WalletGroup data here.
-    //
 
     /**
      * Updates a WalletGroups name and default status.
@@ -283,27 +225,11 @@ public class Group extends Model {
     }
 
     /**
-     * Swaps the display order of 2 WalletGroups
-     * @param wg1 WalletGroup 1
-     * @param wg2 WalletGroup 2
-     */
-    public static void swap(Group wg1, Group wg2) {
-        int temp = wg1.getDisplayOrder();
-        wg1.displayOrder = wg2.getDisplayOrder();
-        wg2.displayOrder = temp;
-        wg1.save();
-        wg2.save();
-    }
-
-    //endregion
-    //region DELETE
-
-    /**
      * Deletes a WalletGroup from the WalletGroup table and updates the
      * display order of all other groups.
      * @param delete group to be deleted
      */
-    public static void deleteGroup(Group delete) {
+    public static void delete(Group delete) {
 
         /*
          * ---------------------------------------------------------------------------------------------------------
@@ -331,65 +257,49 @@ public class Group extends Model {
 
     //endregion
     //region VALIDATE
+    //----------------------------------------------------------------------------------------------
 
-    /**
-     * Returns true if the name is not an empty string and is unique
-     * (i.e doesn't exist in the WalletGroup table).
-     * @param context application context
-     * @param name of WalletGroup
-     * @return boolean value of validation results
-     */
-    public static boolean validate(Context context, String name) {
-        return validateNameIsNotEmptyString(context, name) &&
-               validateNameIsUnique(context, name);
+
+    public static boolean validate(Context c, String name) {
+        return false;
     }
 
     /**
-     * Validates that a group name is not an empty string.
-     * @param context application context
-     * @param name name of group
-     * @return boolean name is valid
+     * @param name Group name to validate
+     * @return true if name is empty string
      */
-    public static boolean validateNameIsNotEmptyString(Context context, String name) {
-        if (name.isEmpty()) {
-            String error = context.getString(R.string.wallet_group_create_toast_name_empty);
-            Toast.makeText(context, error, Toast.LENGTH_LONG).show();
-            return false;
-        }
-        return true;
+    public static boolean isEmptyString(String name) {
+        return name.equals("");
     }
 
     /**
-     * Validates that the name of group doesn't already exist in the WalletGroup table.
-     * @param context application context
-     * @param name name of group
-     * @return boolean name is valid
+     * @param name Group name to validate
+     * @return true if Group name matches an existing name
      */
-    public static boolean validateNameIsUnique(Context context, String name) {
-        List<Group> groups = Group.getAll();
-        // Cannot already exist in the database.
-        for (Group group : groups) {
-            if (group.name.toLowerCase().equals(name)) {
-                String error = context.getString(R.string.wallet_group_create_toast_name_exists);
-                Toast.makeText(context, error, Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-        return true;
+    public static boolean matchesExisting(String name) {
+        Group existing = Group.getBy(name);
+        return existing != null ? true : false;
+    }
+
+    /**
+     * Validates that a Group name is unique, excluding comparison
+     * to the Group being updated.
+     *
+     * @param name Group name to validate
+     * @param updating Group being updating
+     * @return true if Category name matches an existing name that is not self
+     */
+    public static boolean matchesExisting(String name, Group updating) {
+        Group existing = Group.getBy(name);
+        if (existing != null && existing != updating)
+            return true;
+        return false;
     }
 
     //endregion
-    //region OTHER
+    //region DEBUG
+    //----------------------------------------------------------------------------------------------
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    /**
-     * Dumps the WalletGroups table to console.
-     * For debugging purposes only.
-     */
     public static void dump() {
         String dividerCol1 = "------------------";
         String dividerCol23 = "-------------";
@@ -405,7 +315,6 @@ public class Group extends Model {
                     group.displayOrder);
         }
     }
-
 
     //endregion
 

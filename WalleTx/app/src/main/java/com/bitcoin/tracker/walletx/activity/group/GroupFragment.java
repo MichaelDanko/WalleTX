@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ProgressBar;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.Constants;
 import com.bitcoin.tracker.walletx.activity.SyncableActivity;
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
 
@@ -31,8 +32,6 @@ import java.util.List;
  * with a GridView.
  */
 public class GroupFragment extends Fragment implements AbsListView.OnItemClickListener {
-
-    //region FIELDS
 
     private static final int NEW_GROUP_ADDED = 1;
     private static final int WALLET_GROUP_UPDATED = 2;
@@ -51,9 +50,6 @@ public class GroupFragment extends Fragment implements AbsListView.OnItemClickLi
 
     // Tracks the position of the listView such that it can be restored.
     private int mRestorePosition;
-
-    //endregion
-    //region FRAGMENT LIFECYCLE
 
     public static GroupFragment newInstance(int sectionNumber) {
         GroupFragment fragment = new GroupFragment();
@@ -150,13 +146,10 @@ public class GroupFragment extends Fragment implements AbsListView.OnItemClickLi
 
             // Open update wallet activity.
             Intent intent = new Intent( getActivity(), GroupUpdateActivity.class );
-            intent.putExtra("wallet_group_name", name);
+            intent.putExtra(Constants.EXTRA_GROUP_SELECTED_TO_EDIT, name);
             startActivityForResult(intent, WALLET_GROUP_UPDATED);
         }
     }
-
-    //endregion
-    //region EVENT HANDLING
 
     /**
      * This interface must be implemented by activities that contain this
@@ -191,9 +184,6 @@ public class GroupFragment extends Fragment implements AbsListView.OnItemClickLi
         }
     }
 
-    //endregion
-    //region OPTIONS MENU
-
     /**
      * Adds fragment specific menu options to action bar menu.
      */
@@ -222,5 +212,4 @@ public class GroupFragment extends Fragment implements AbsListView.OnItemClickLi
         return super.onOptionsItemSelected(item);
     }
 
-    //endregion
-}
+} // GroupFragment

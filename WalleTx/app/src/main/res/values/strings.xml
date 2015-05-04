@@ -97,32 +97,27 @@
     <string name="tx_detail_hash_placeholder">-</string>
     <string name="tx_detail_button_text">View transaction at Blockchain.info</string>
 
-    <!-- WALLET GROUPS -->
+    <!-- GROUP -->
+    <string name="group_title_fragment">Wallet Groups</string>
+    <string name="group_wtx_default_group">My Wallets</string>
+    <string name="group_label_default">(default)</string>
+    <string name="group_content_description_up_arrow">Move group name up</string>
+    <string name="group_content_description_down_arrow">Move group name down</string>
+
+    <string name="group_create_activity_title_activity">Add New Wallet Group</string>
+    <string name="group_create_activity_hint">Wallet group name</string>
+    <string name="group_create_activity_checkbox_set_as_default">Set as default group</string>
+    <string name="group_create_activity_button_add">Add Wallet Group</string>
     <string name="group_create_activity_error_empty_string">Oops! Category cannot be an empty string</string>
     <string name="group_create_activity_error_matches_existing">Oops! That category already exists</string>
 
-    <string name="group_update_delete_dialog_title_1">Delete category \'</string>
-    <string name="group_update_delete_dialog_title_2">\'?</string>
-    <string name="group_update_delete_dialog_confirmation">Are you sure you wish to delete this Tx tag category? This action cannot be undone.</string>
-
-
-    <!-- Read list view -->
-    <string name="wallet_group_title_fragment">Wallet Groups</string>
-    <string name="wallet_group_wtx_default_group">My Wallets</string>
-    <string name="wallet_group_label_default">(default)</string>
-    <string name="wallet_group_content_description_up_arrow">Move group name up</string>
-    <string name="wallet_group_content_description_down_arrow">Move group name down</string>
-    <!-- Create new wallet group activity -->
-    <string name="wallet_group_create_title_activity">Add New Wallet Group</string>
-    <string name="wallet_group_create_hint_name">Wallet group name</string>
-    <string name="wallet_group_create_checkbox_set_as_default">Set as default group</string>
-    <string name="wallet_group_create_button_add">Add Wallet Group</string>
-    <!-- Update existing wallet group -->
-    <string name="wallet_group_update_title_activity">Edit Wallet Group</string>
-    <string name="wallet_group_update_button_update">Update</string>
-    <string name="wallet_group_update_button_delete">Delete</string>
-    <string name="wallet_group_update_alert_message_delete">Wallets within this group will automatically be moved to the default group.</string>
-    <string name="wallet_group_update_label_delete_default_group_note">Current default group cannot be deleted. If you wish to remove this group please set another wallet group as the default.</string>
+    <string name="group_update_activity_title_activity">Edit Wallet Group</string>
+    <string name="group_update_activity_button_update">Update</string>
+    <string name="group_update_activity_button_delete">Delete</string>
+    <string name="group_update_activity_label_delete_default_group_note">Current default group cannot be deleted. If you wish to remove this group please set another wallet group as the default.</string>
+    <string name="group_update_activity_delete_dialog_title_1">Delete group \'</string>
+    <string name="group_update_activity_delete_dialog_title_2">\'?</string>
+    <string name="group_update_activity_delete_dialog_confirmation">Wallets within this group will automatically be moved to the default group.</string>
 
     <!-- CATEGORIES -->
     <string name="category_none_present_footer_line_1">You have not added any Tx tag categories.</string>

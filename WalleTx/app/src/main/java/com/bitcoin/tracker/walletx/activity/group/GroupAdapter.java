@@ -16,49 +16,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Populates custom list items in the WalletGroup list view.
+ * Custom Group list item
  */
 public class GroupAdapter extends ArrayAdapter<GroupListItem> {
 
-    //region FIELDS
-
-    private final Activity activity;
-    private ArrayList<GroupListItem> mItemsArrayList;
-
+    private final Activity mActivity;
+    private ArrayList<GroupListItem> mItems;
     private View mRowView;
-    private LayoutInflater inflater;
-
+    private LayoutInflater mInflater;
     private TextView mGroupName;
     private TextView mDefaultGroup;
     private ImageButton mMoveDown;
     private ImageButton mMoveUp;
 
-    //endregion
-    //region ADAPTER
-
     public GroupAdapter(Activity activity, ArrayList<GroupListItem> itemsArrayList) {
         super(activity, R.layout.group_fragment_list_item, itemsArrayList);
-        this.activity = activity;
-        this.mItemsArrayList = itemsArrayList;
-    }
-
-    public void updateData(ArrayList<GroupListItem> itemsArrayList) {
-        this.mItemsArrayList = itemsArrayList;
-        notifyDataSetChanged();
+        mActivity = activity;
+        mItems = itemsArrayList;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        inflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        getViewsById(parent);
+        mInflater = (LayoutInflater) mActivity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        getViews(parent);
         setupMoveButtons(position);
-        bindClickListeners(parent, position);
+        bindListeners(parent, position);
         setupTextLabels(position);
         return mRowView;
     }
 
-    private void getViewsById(ViewGroup parent) {
-        mRowView = inflater.inflate(R.layout.group_fragment_list_item, parent, false);
+    private void getViews(ViewGroup parent) {
+        mRowView = mInflater.inflate(R.layout.group_fragment_list_item, parent, false);
         mGroupName = (TextView) mRowView.findViewById(R.id.groupNameLabel);
         mDefaultGroup = (TextView) mRowView.findViewById(R.id.defaultGroupLabel);
         mMoveDown = (ImageButton) mRowView.findViewById(R.id.imageButtonMoveDown);
@@ -67,21 +55,19 @@ public class GroupAdapter extends ArrayAdapter<GroupListItem> {
 
     /**
      * Sets up the buttons for changing the display order.
+     * TODO Replace with drag and drop handles
      */
     private void setupMoveButtons(int position) {
         // Stop buttons from preventing list item click event
-        // http://stackoverflow.com/questions/11160639/list-item-with-button-not-clickable-anymore
         mMoveDown.setFocusable(false);
         mMoveDown.setFocusableInTouchMode(false);
         mMoveUp.setFocusable(false);
         mMoveUp.setFocusableInTouchMode(false);
-
         // Disable move down buttons for first list items.
         if (position == 0) {
             mMoveUp.setEnabled(false);
             mMoveUp.setVisibility(View.INVISIBLE);
         }
-
         // Disable move up button for last list item
         int last = Group.getLast().getDisplayOrder();
         if (position + 1 == last) {
@@ -91,25 +77,7 @@ public class GroupAdapter extends ArrayAdapter<GroupListItem> {
         }
     }
 
-    private void setupTextLabels(int position) {
-        mGroupName.setText(mItemsArrayList.get(position).getName());
-
-        // Hide default label for non-default groups
-        Group current = Group.getByDisplayOrder(position + 1);
-        if (!current.isDefault()) {
-            mDefaultGroup.setVisibility(View.GONE);
-        }
-    }
-
-    //endregion
-    //region EVENT HANDLING
-
-    /**
-     * Binds on click listener to the move up and move down display order buttons.
-     * @param parent listview
-     * @param position within list
-     */
-    private void bindClickListeners(final ViewGroup parent, final int position) {
+    private void bindListeners(final ViewGroup parent, final int position) {
 
         mMoveDown.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +88,6 @@ public class GroupAdapter extends ArrayAdapter<GroupListItem> {
                 Group.swap(clicked, swap);
                 refreshListView(parent, clicked);
             }
-
         });
 
         mMoveUp.setOnClickListener(new View.OnClickListener() {
@@ -133,13 +100,25 @@ public class GroupAdapter extends ArrayAdapter<GroupListItem> {
                 refreshListView(parent, clicked);
             }
         });
+
+    } // bindListeners
+
+    public void updateData(ArrayList<GroupListItem> itemsArrayList) {
+        this.mItems = itemsArrayList;
+        notifyDataSetChanged();
+    }
+
+    private void setupTextLabels(int position) {
+        mGroupName.setText(mItems.get(position).getName());
+        // Hide default label for non-default groups
+        Group current = Group.getByDisplayOrder(position + 1);
+        if (!current.isDefault())
+            mDefaultGroup.setVisibility(View.GONE);
     }
 
     /**
      * Refreshes the content of the parent list view
      * while maintaining the current vertical position in the list view.
-     * Reference: http://stackoverflow.com/questions/22474779/listview-resets-after-update
-     * @param parent listview
      */
     private void refreshListView(ViewGroup parent, Group updatedGroup) {
 
@@ -149,13 +128,12 @@ public class GroupAdapter extends ArrayAdapter<GroupListItem> {
         int lastVisible = parentListView.getLastVisiblePosition();
 
         // Populate list view
-
-        mItemsArrayList.clear();
+        mItems.clear();
         List<Group> groups = Group.getAllSortedByDisplayOrder();
         for (Group group : groups) {
             GroupListItem item;
             item = new GroupListItem(group.name);
-            mItemsArrayList.add(item);
+            mItems.add(item);
         }
         notifyDataSetChanged();
 
@@ -171,5 +149,4 @@ public class GroupAdapter extends ArrayAdapter<GroupListItem> {
         }
     }
 
-    //endregion
-}
+} // GroupAdapter

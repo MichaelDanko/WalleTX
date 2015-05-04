@@ -11,47 +11,49 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.Constants;
 import com.bitcoin.tracker.walletx.model.Group;
 
-import static com.bitcoin.tracker.walletx.model.Group.*;
-
 /**
- * Displays and handles the form associated with updating and deleting
- * WalletGroups from the WTX database.
+ * Activity for updating or deleting a Group.
  */
 public class GroupUpdateActivity extends ActionBarActivity {
 
-    //region FIELDS
-
     private EditText mGroupName;
-    private String   mCurrentName;
     private CheckBox mSetAsDefault;
-    private Button   mUpdate;
-    private Button   mDelete;
+    private Button mUpdate;
+    private Button mDelete;
     private TextView mCannotDeleteLabel;
-
-    //endregion
-    //region ACTIVITY LIFECYCLE
+    private Group mGroupBeingUpdated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.group_update_activity);
         setupActionBar();
-        getViewsById();
-        bindClickEvents();
+        getViews();
+        bindListeners();
         addCurrentGroupNameToEditText();
-        disableElementsForDefaultGroup();
+        disableFormElementsForDefaultGroup();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home)
+            finish();
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupActionBar() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.wallet_group_update_title_activity);
+        getSupportActionBar().setTitle(R.string.group_update_activity_title_activity);
     }
 
-    private void getViewsById() {
+    private void getViews() {
         mGroupName = (EditText) findViewById(R.id.editTextWalletGroupName);
         mSetAsDefault = (CheckBox) findViewById((R.id.checkBoxSetAsDefault));
         mUpdate = (Button) findViewById(R.id.buttonUpdateWalletGroup);
@@ -59,112 +61,72 @@ public class GroupUpdateActivity extends ActionBarActivity {
         mCannotDeleteLabel = (TextView) findViewById(R.id.labelDefaultGroupCannotBeDeleted);
     }
 
-    //endregion
-    //region EVENT HANDLING
+    private void bindListeners() {
 
-    private void bindClickEvents() {
-
-        // Update button functionality.
         mUpdate.setOnClickListener(new View.OnClickListener() {
-
-            /**
-             * Updates the group name and default value before finishing this activity.
-             */
             @Override
             public void onClick(View v) {
-
-                Group groupBeingUpdated = Group.getBy(mCurrentName);
-                String nameInEditText = mGroupName.getText().toString().toLowerCase();
-                String nameOfGroupBeingUpdated = mCurrentName.toLowerCase();
-                boolean nameNotChanged = nameInEditText.equals(nameOfGroupBeingUpdated);
-
-                // There are quite a few different scenarios for updating groups
-                // based on user input.
-                // This probably can be cleaned up and be made more concise,
-                // but at the moment it is functional and working correctly.
-                if (groupBeingUpdated.isDefault() && nameNotChanged) {
-
-                    // default group name not changed. do nothing...
-                    finish();
-
-                } else if (groupBeingUpdated.isDefault() && Group.validate(getBaseContext(), nameInEditText)) {
-
-                    // default group name changed. update name only.
-                    Group update = Group.getBy(mCurrentName);
-                    update.updateName(mGroupName.getText().toString());
+                String name = mGroupName.getText().toString();
+                if (Group.isEmptyString(name)) {
+                    Toast.makeText(getApplicationContext(),
+                            R.string.group_create_activity_error_empty_string,
+                            Toast.LENGTH_SHORT).show();
+                } else if (Group.matchesExisting(name, mGroupBeingUpdated)) {
+                    Toast.makeText(getApplicationContext(),
+                            R.string.group_create_activity_error_matches_existing,
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // valid Group name
+                    mGroupBeingUpdated.name = name;
+                    mGroupBeingUpdated.save();
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
                     finishWithResultOk();
-
-                } else if (nameNotChanged && !mSetAsDefault.isChecked() && !groupBeingUpdated.isDefault()) {
-
-                    // not default group and name not changed. do nothing.
-                    finish();
-
-                } else if (nameNotChanged && mSetAsDefault.isChecked()) {
-
-                    // not default group and name not changed. set as default.
-                    Group update = Group.getBy(mCurrentName);
-                    update.updateDefault(true);
-                    finishWithResultOk();
-
-                } else if (Group.validate(getBaseContext(), nameInEditText)) {
-
-                    // not default group and name changed. update name and defaultGroup.
-                    Group update = Group.getBy(mCurrentName);
-                    if (mSetAsDefault.isChecked())
-                        update.update(mGroupName.getText().toString(), true);
-                    else
-                        update.updateName(mGroupName.getText().toString());
-                    finishWithResultOk();
-
                 }
             }
-        });
+        }); // mUpdate
 
-        // Delete button functionality.
         mDelete.setOnClickListener(new View.OnClickListener() {
-
-            /**
-             * Creates and displays an AlertDialog asking user if they wish to delete the group.
-             */
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage(R.string.wallet_group_update_alert_message_delete);
-                builder.setTitle("Delete group '" + mCurrentName + "'?");
-                builder.setPositiveButton(R.string.app_confirm_yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                        Group toDelete = Group.getBy(mCurrentName);
-                        Group.deleteGroup(toDelete);
-                        finishWithResultOk();
-                    }
-                });
-                builder.setNegativeButton(R.string.app_confirm_no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
+                builder.setMessage(R.string.group_update_activity_delete_dialog_confirmation);
+                String deleteThis = getString(R.string.group_update_activity_delete_dialog_title_1);
+                String questionMark = getString(R.string.group_update_activity_delete_dialog_title_2);
+                builder.setTitle(deleteThis + mGroupBeingUpdated + questionMark);
+                builder.setPositiveButton(R.string.app_confirm_yes, confirmDeleteListener);
+                builder.setNegativeButton(R.string.app_confirm_no, cancelDeleteListener);
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
         });
 
-    } // bindClickEvents
+    } // bindListeners
+
+    private DialogInterface.OnClickListener confirmDeleteListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int id){
+            dialog.dismiss();
+            Group.delete(mGroupBeingUpdated);
+            finishWithResultOk();
+        }
+    };
+
+    private DialogInterface.OnClickListener cancelDeleteListener = new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id){
+            dialog.dismiss();
+        }
+    };
 
     private void addCurrentGroupNameToEditText() {
         Intent intent = getIntent();
-        mCurrentName = intent.getStringExtra("wallet_group_name");
-        mGroupName.setText(mCurrentName);
+        String name = intent.getStringExtra(Constants.EXTRA_GROUP_SELECTED_TO_EDIT);
+        mGroupBeingUpdated = Group.getBy(name);
+        mGroupName.setText(mGroupBeingUpdated.toString());
     }
 
-    /**
-     * Modifies form elements that should not be available
-     * for this wallet group.
-     */
-    private void disableElementsForDefaultGroup() {
-        Group group = getBy(mCurrentName);
-        if (group.isDefault()) {
+    private void disableFormElementsForDefaultGroup() {
+        if (mGroupBeingUpdated.isDefault()) {
             mSetAsDefault.setVisibility(View.GONE);
             mDelete.setVisibility(View.GONE);
         } else {
@@ -178,20 +140,4 @@ public class GroupUpdateActivity extends ActionBarActivity {
         finish();
     }
 
-    //endregion
-    //region OPTIONS MENU
-
-    /**
-     * Closes activity when the home button is selected.
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    //endregion
-}
+} // GroupUpdateActivity

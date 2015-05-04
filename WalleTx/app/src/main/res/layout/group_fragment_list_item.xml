@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/wallet_group_label_default"
+            android:text="@string/group_label_default"
             android:id="@+id/defaultGroupLabel"
             android:textStyle="italic"
             android:layout_gravity="center_vertical"
@@ -54,7 +54,7 @@
         android:scaleType="fitCenter"
         android:layout_marginLeft="@dimen/custom_list_view_move_arrow_spacing"
         android:layout_marginStart="@dimen/custom_list_view_move_arrow_spacing"
-        android:contentDescription="@string/wallet_group_content_description_up_arrow" />
+        android:contentDescription="@string/group_content_description_up_arrow" />
 
     <ImageButton
         android:layout_width="wrap_content"

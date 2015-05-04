@@ -23,6 +23,11 @@ public class Constants {
     //----------------------------------------------------------------------------------------------
 
     public static final String EXTRA_CATEGORY_SELECTED_TO_EDIT = "Intent > Extra > Name of Category";
+    public static final String EXTRA_GROUP_SELECTED_TO_EDIT = "Intent > Extra > Name of Group";
+
+
+
+
     public static final String EXTRA_NEW_WTX_ADDED = "Intent: Extra: A new Walletx has been added";
 
     //endregion
