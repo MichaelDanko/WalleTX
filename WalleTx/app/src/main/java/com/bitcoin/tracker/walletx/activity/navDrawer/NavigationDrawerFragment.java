@@ -242,10 +242,8 @@ public class NavigationDrawerFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Per the navigation drawer design guidelines, updates the action bar to show the global app
-     * 'context', rather than just what's in the current screen.
-     */
+    // Per the navigation drawer design guidelines, updates the action bar to show the global app
+    // 'context', rather than just what's in the current screen.
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
@@ -257,14 +255,10 @@ public class NavigationDrawerFragment extends Fragment {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
     }
 
-    /**
-     * Callbacks interface that all activities using this fragment must implement.
-     */
+    // Callbacks interface that all activities using this fragment must implement.
     public static interface NavigationDrawerCallbacks {
 
-        /**
-         * Called when an item in the navigation drawer is selected.
-         */
+        // Called when an item in the navigation drawer is selected.
         void onNavigationDrawerItemSelected(int position);
     }
 
