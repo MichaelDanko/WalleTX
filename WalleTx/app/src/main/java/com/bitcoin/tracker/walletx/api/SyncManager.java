@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.bitcoin.tracker.walletx.activity.Constants;
+import com.bitcoin.tracker.walletx.model.Balance;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.ArrayList;
@@ -118,15 +120,15 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
     }
 
     private void broadcastSyncIsInProgress() {
-        Intent intent = new Intent("com.bitcoin.tracker.walletx.SYNC_STATUS");
-        intent.putExtra("sync_complete", false);
+        Intent intent = new Intent(Constants.SYNC_MANAGER_STATUS);
+        intent.putExtra(Constants.EXTRA_SYNC_MGR_COMPLETE, false);
         mContext.sendBroadcast(intent);
     }
 
     private void broadcastSyncIsComplete() {
         sSyncIsInProgress = false;
-        Intent intent = new Intent("com.bitcoin.tracker.walletx.SYNC_STATUS");
-        intent.putExtra("sync_complete", true);
+        Intent intent = new Intent(Constants.SYNC_MANAGER_STATUS);
+        intent.putExtra(Constants.EXTRA_SYNC_MGR_COMPLETE, true);
         mContext.sendBroadcast(intent);
     }
 

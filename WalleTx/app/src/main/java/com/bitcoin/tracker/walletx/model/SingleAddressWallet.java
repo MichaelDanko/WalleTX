@@ -40,6 +40,13 @@ public class SingleAddressWallet extends Model {
         this.publicKey = publicKey;
     }
 
+    public static void create(String address, Walletx wtx) {
+        SingleAddressWallet saWallet = new SingleAddressWallet();
+        saWallet.publicKey = address;
+        saWallet.wtx = wtx;
+        saWallet.save();
+    }
+
     /**
      * @return List of all SingleAddressWallets.
      */
@@ -100,6 +107,11 @@ public class SingleAddressWallet extends Model {
 
     public static int isAPkey(String pkey){
         return new Select().from(SingleAddressWallet.class).where("publicKey = ?", pkey).count();
+    }
+
+    public static boolean publicKeyExists(String pk) {
+        int count = new Select().from(SingleAddressWallet.class).where("publicKey = ?", pk).count();
+        return count >= 1;
     }
 
     /**

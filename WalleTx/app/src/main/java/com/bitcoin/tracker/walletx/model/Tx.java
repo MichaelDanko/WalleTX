@@ -45,6 +45,9 @@ public class Tx extends Model {
     @Column(name = "Walletx")
     public Walletx wtx;
 
+    @Column(name = "Balance")
+    public Balance balance;
+
     // Belongs to one category (optional)
     @Column(name = "TxCategory")
     public Category category;

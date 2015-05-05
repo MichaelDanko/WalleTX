@@ -37,7 +37,7 @@
         </activity>
         <activity
             android:name=".activity.walletx.WalletxCreateActivity"
-            android:label="@string/walletx_create_title_activity" >
+            android:label="@string/walletx_create_activity_title_activity" >
         </activity>
         <activity
             android:name=".activity.walletx.WalletxUpdateActivity"

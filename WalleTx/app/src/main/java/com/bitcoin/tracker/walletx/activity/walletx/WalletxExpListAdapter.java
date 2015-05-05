@@ -14,6 +14,8 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.Constants;
+import com.bitcoin.tracker.walletx.model.Balance;
 import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.Group;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
@@ -23,11 +25,8 @@ import com.bitcoin.tracker.walletx.model.Walletx;
 
 /**
  * Sets up the expandable list view on the main WalleTx fragment.
- * Reference: http://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
  */
 public class WalletxExpListAdapter extends BaseExpandableListAdapter {
-
-    //region FIELDS
 
     private Context mContext;
     private List<String> mGroupHeader;
@@ -40,8 +39,6 @@ public class WalletxExpListAdapter extends BaseExpandableListAdapter {
     TextView mBtcBalanceLabel;
     TextView mLocalCurrencyBalance;
     TextView mLocalCurrencyBalanceLabel;
-
-    //endregion
 
     public WalletxExpListAdapter(Context context,
                                  List<String> groupHeader,
@@ -58,11 +55,12 @@ public class WalletxExpListAdapter extends BaseExpandableListAdapter {
         notifyDataSetChanged();
     }
 
-    //region CHILD ROWS (Rows pertaining to wallets within groups)
+    //region CHILD ROWS (Rows pertaining to wallets within groups) ---------------------------------
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this.mSingleWalletChild.get(this.mGroupHeader.get(groupPosition)).get(childPosititon);
+        return this.mSingleWalletChild.get(this.mGroupHeader.
+                get(groupPosition)).get(childPosititon);
     }
 
     @Override
@@ -81,7 +79,6 @@ public class WalletxExpListAdapter extends BaseExpandableListAdapter {
         getViewsInChild(convertView);
         styleViewsInChild();
         prepareChildData(groupPosition, childPosition);
-
         return convertView;
     }
 
@@ -103,6 +100,7 @@ public class WalletxExpListAdapter extends BaseExpandableListAdapter {
         final String walletName = (String) getChild(groupPosition, childPosition);
         Walletx wtx = Walletx.getBy(walletName); // get walletx by mName
         mName.setText(wtx.name);
+
         if (wtx.type.equals(SupportedWalletType.SINGLE_ADDRESS_WALLET)) {
             // Get the SAWallet associated with this WTX
             SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
@@ -111,13 +109,17 @@ public class WalletxExpListAdapter extends BaseExpandableListAdapter {
         }
 
         try {
-            mBtcBalance.setText(new Tx().formattedBTCValue(wtx.finalBalance));
+            mBtcBalance.setText(Tx.formattedBTCValue((long) Balance.getBalanceAsFloat(wtx)));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String inUSD = NumberFormat.getIntegerInstance().format(ExchangeRate.EXCHANGE_RATE_IN_USD * wtx.finalBalance / 100000000);
-        mLocalCurrencyBalance.setText(inUSD);
 
+        Balance balance = Balance.getBalance(wtx);
+        if (balance != null) {
+            float convert = Balance.getBalanceAsFloat(wtx);
+            String inUsd = ExchangeRate.getFormattedConversionFor(convert);
+            mLocalCurrencyBalance.setText(inUsd);
+        }
     }
 
     @Override
@@ -131,7 +133,7 @@ public class WalletxExpListAdapter extends BaseExpandableListAdapter {
     }
 
     //endregion
-    //region GROUP (Group header rows)
+    //region GROUP (Group header rows) -------------------------------------------------------------
 
     @Override
     public Object getGroup(int groupPosition) {
@@ -176,20 +178,23 @@ public class WalletxExpListAdapter extends BaseExpandableListAdapter {
     }
 
     private void prepareGroupHeaderData(int groupPosition, ViewGroup parent) {
-        String headerTitle = (String) getGroup(groupPosition);
-        Group group = Group.getBy(headerTitle);
+        String name = (String) getGroup(groupPosition);
+        Group group = Group.getBy(name);
         mName.setText(group.name);
 
-        // Update btc balance
-        List<Walletx> all = Walletx.getAll();
+        List<Walletx> wtxs = group.walletxs();
         long groupBalance = 0;
-        for (Walletx wtx : all) {
-            if (wtx.group.name.equals(group.name)) {
-                groupBalance = groupBalance + wtx.finalBalance;
-            }
+        for (Walletx wtx : wtxs) {
+            Balance balance = Balance.getBalance(wtx);
+            long converted = 0;
+            if (balance != null)
+                converted = (long) balance.balance;
+            groupBalance = groupBalance + converted;
         }
+
         mBtcBalance.setText(Tx.formattedBTCValue(groupBalance));
-        String inUSD = NumberFormat.getIntegerInstance().format(ExchangeRate.EXCHANGE_RATE_IN_USD * groupBalance / 100000000);
+        String inUSD = NumberFormat.getIntegerInstance().
+                format(ExchangeRate.EXCHANGE_RATE_IN_USD * groupBalance / Constants.SATOSHIS);
         mLocalCurrencyBalance.setText(inUSD);
     }
 

@@ -259,11 +259,6 @@ public class Group extends Model {
     //region VALIDATE
     //----------------------------------------------------------------------------------------------
 
-
-    public static boolean validate(Context c, String name) {
-        return false;
-    }
-
     /**
      * @param name Group name to validate
      * @return true if name is empty string

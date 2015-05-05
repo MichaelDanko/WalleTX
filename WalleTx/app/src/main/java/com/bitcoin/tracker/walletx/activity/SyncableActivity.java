@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.api.SyncManager;
+import com.bitcoin.tracker.walletx.model.Balance;
 
 /**
  * SyncableActivity is a super class for any activities from which the user
@@ -42,7 +43,7 @@ public class SyncableActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         // initialize the broadcast receiver
         mSyncBroadcastReceiver = new SyncBroadcastReceiver();
-        mIntentFilter = new IntentFilter("com.bitcoin.tracker.walletx.SYNC_STATUS");
+        mIntentFilter = new IntentFilter(Constants.SYNC_MANAGER_STATUS);
     }
 
     @Override
@@ -77,6 +78,11 @@ public class SyncableActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_sync) {
+
+
+            Balance.dump();
+
+
             // initiate a sync of txs for all existing wallets
             SyncManager.syncExistingWallets(this.getApplicationContext());
             return true;
@@ -134,7 +140,7 @@ public class SyncableActivity extends ActionBarActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean syncComplete = intent.getBooleanExtra("sync_complete", true);
+            boolean syncComplete = intent.getBooleanExtra(Constants.EXTRA_SYNC_MGR_COMPLETE, true);
             if (!syncComplete)
                 startSyncIconRotation();
             else

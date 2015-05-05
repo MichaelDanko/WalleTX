@@ -68,6 +68,6 @@
         android:scaleType="fitCenter"
         android:layout_marginLeft="@dimen/custom_list_view_move_arrow_spacing"
         android:layout_marginStart="@dimen/custom_list_view_move_arrow_spacing"
-        android:contentDescription="@string/walletx_create_content_description_barcode" />
+        android:contentDescription="@string/walletx_create_activity_content_description_barcode" />
 
 </LinearLayout>

@@ -27,23 +27,34 @@ public class WalletxCreateActivity extends ActionBarActivity implements
     // Blocks spinner onItemSelected from firing without user interaction.
     private boolean isUserInteraction = false;
 
-    //region ACTIVITY LIFECYCLE
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.walletx_create_activity);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.walletx_create_title_activity);
+        setupActionBar();
         setupWalletTypeSpinner();
         if (savedInstanceState == null)
-            displayCreateWalletTypeFragment(0);
+            changeWalletTypeFragmentTo(0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home)
+            finish();
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setupActionBar(){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.walletx_create_activity_title_activity);
     }
 
     private void setupWalletTypeSpinner() {
         Spinner walletTypeSpinner = (Spinner) findViewById(R.id.walletTypeSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.walletx_create_spinner_supported_wallet_types, android.R.layout.simple_spinner_item);
+                R.array.walletx_create_activity_spinner_supported_wallet_types,
+                android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         walletTypeSpinner.setAdapter(adapter);
         walletTypeSpinner.setOnItemSelectedListener(this);
@@ -51,14 +62,16 @@ public class WalletxCreateActivity extends ActionBarActivity implements
     }
 
     /**
-     * Changes type wallet type form fragment that is displayed in response to the spinner selection.
+     * Changes wallet type form fragment that is displayed
+     * in response to the spinner selection.
      */
-    private void displayCreateWalletTypeFragment(int walletTypeFragmentLayoutResource) {
+    private void changeWalletTypeFragmentTo(int walletTypeFragmentLayoutResource) {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         switch (walletTypeFragmentLayoutResource) {
             case R.layout.walletx_create_single_address_wallet_fragment:
-                ft.replace(R.id.walletTypeFragmentContainer, WalletxCreateSingleAddressWalletFragment.newInstance());
+                ft.replace(R.id.walletTypeFragmentContainer,
+                        WalletxCreateSingleAddressWalletFragment.newInstance());
                 break;
             // case R.layout.fragment_future_wallet_type:
             //     ft.replace(R.id.walletTypeFragmentContainer, FutureWalletTypeFragment.newInstance());
@@ -70,14 +83,10 @@ public class WalletxCreateActivity extends ActionBarActivity implements
         ft.commit();
     }
 
-    //endregion
-    //region EVENT HANDLING
-
     private View.OnTouchListener spinnerOnTouchListener = new View.OnTouchListener() {
-        public boolean onTouch(    View v,    MotionEvent event){
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        public boolean onTouch(View v, MotionEvent event){
+            if (event.getAction() == MotionEvent.ACTION_DOWN)
                 isUserInteraction = true;
-            }
             return false;
         }
     };
@@ -89,19 +98,19 @@ public class WalletxCreateActivity extends ActionBarActivity implements
      */
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         if (isUserInteraction) {
-            int walletTypeFragmentLayoutResource = 0;
+            int fragment = 0;
             switch (pos) {
                 case 0:
-                    walletTypeFragmentLayoutResource = R.layout.walletx_create_single_address_wallet_fragment;
+                    fragment = R.layout.walletx_create_single_address_wallet_fragment;
                     break;
                 // case 1:
-                //     walletTypeFragmentLayoutResource = R.layout.fragment_walletx_create_future_wallet_type;
+                //     fragment = R.layout.fragment_walletx_create_future_wallet_type;
                 //     break;
                 default:
-                    walletTypeFragmentLayoutResource = R.layout.walletx_create_single_address_wallet_fragment;
+                    fragment = R.layout.walletx_create_single_address_wallet_fragment;
                     break;
             }
-            displayCreateWalletTypeFragment(walletTypeFragmentLayoutResource);
+            changeWalletTypeFragmentTo(fragment);
         }
     }
 
@@ -115,24 +124,9 @@ public class WalletxCreateActivity extends ActionBarActivity implements
     public void onFragmentInteraction(String name_of_wtx_added) {
         SharedData.ADDED_WTX = Walletx.getBy(name_of_wtx_added);
         Intent intent = new Intent();
-        intent.putExtra(Constants.EXTRA_NEW_WTX_ADDED, true);
+        intent.putExtra(Constants.EXTRA_WTX_ADDED, true);
         setResult(RESULT_OK, intent);
         finish();
     }
 
-    //endregion
-    //region OPTIONS MENU
-
-    /**
-     * Home button closes the activity.
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home)
-            finish();
-        return super.onOptionsItemSelected(item);
-    }
-
-    //endregion
-}
+} // WalletxCreateActivity

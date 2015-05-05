@@ -13,6 +13,12 @@ public class Constants {
      */
     public static final int SATOSHIS = 100000000;
 
+    //region INTENT
+    //----------------------------------------------------------------------------------------------
+
+    public static final String SYNC_MANAGER_STATUS= "com.bitcoin.tracker.walletx.SYNC_MGR_STATUS";
+
+    //endregion
     //region REQUEST CODES for onActivityResult
     //----------------------------------------------------------------------------------------------
 
@@ -26,11 +32,8 @@ public class Constants {
 
     public static final String EXTRA_CATEGORY_SELECTED_TO_EDIT = "Intent > Extra > Name of Category";
     public static final String EXTRA_GROUP_SELECTED_TO_EDIT = "Intent > Extra > Name of Group";
-
-
-
-
-    public static final String EXTRA_NEW_WTX_ADDED = "Intent: Extra: A new Walletx has been added";
+    public static final String EXTRA_WTX_ADDED = "Intent > Extra > New Walletx added";
+    public static final String EXTRA_SYNC_MGR_COMPLETE = "Intent > Extra > SyncManager task complete";
 
     //endregion
 

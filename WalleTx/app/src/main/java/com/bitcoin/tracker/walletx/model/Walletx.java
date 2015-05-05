@@ -63,6 +63,19 @@ public class Walletx extends Model {
     //region QUERIES
     //----------------------------------------------------------------------------------------------
 
+    public static void createTypeSingleAddressWallet(String name) {
+
+    }
+
+    public static void createTypeSingleAddressWallet(String name, Group group, String address) {
+        Walletx wtx = new Walletx();
+        wtx.name = name;
+        wtx.type = SupportedWalletType.SINGLE_ADDRESS_WALLET;
+        wtx.group = group;
+        wtx.save();
+        SingleAddressWallet.create(address, wtx);
+    }
+
     /**
      * @return List of all Walletxs.
      */
@@ -91,9 +104,21 @@ public class Walletx extends Model {
         return saw.wtx;
     }
 
+    /**
+     * @param publicKey
+     * @return Walletx associated with public key
+     */
     public static Walletx getByPublicKey(String publicKey) {
         SingleAddressWallet saw = SingleAddressWallet.getPublicKey(publicKey);
         return saw.wtx;
+    }
+
+    /**
+     * @return true if Walletx table is empty
+     */
+    public static boolean isEmpty() {
+        int count = new Select().from(Walletx.class).count();
+        return (count <= 0) ? true : false;
     }
 
     /**
@@ -103,21 +128,31 @@ public class Walletx extends Model {
         return this.txs().size();
     }
 
-
-    public static boolean isEmpty() {
-        int count = new Select().from(Walletx.class).count();
-        return (count <= 0) ? true : false;
-    }
-
-    //endregion QUERIES
-
-    //region DEBUG
+    //endregion
+    //region VALIDATE
     //----------------------------------------------------------------------------------------------
 
     /**
-     * Dumps the Walletx table to console.
-     * For debugging purposes only.
+     * @param name Walletx name to validate
+     * @return true if name is empty string
      */
+    public static boolean isEmptyString(String name) {
+        return name.equals("");
+    }
+
+    /**
+     * @param name Walletx name to validate
+     * @return true if Group name matches an existing name
+     */
+    public static boolean matchesExisting(String name) {
+        Walletx existing = Walletx.getBy(name);
+        return existing != null ? true : false;
+    }
+
+    //endregion
+    //region DEBUG
+    //----------------------------------------------------------------------------------------------
+
     public static void dump() {
         String dividerCol1 = "------------------";
         String dividerCol23 = "---------------------------------";
@@ -134,6 +169,6 @@ public class Walletx extends Model {
         }
     }
 
-    //endregion DEBUG
+    //endregion
 
 } // Walletx

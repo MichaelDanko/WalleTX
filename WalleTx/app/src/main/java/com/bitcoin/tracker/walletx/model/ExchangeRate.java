@@ -6,6 +6,7 @@ import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.activeandroid.util.SQLiteUtils;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -100,6 +101,13 @@ public class ExchangeRate extends Model {
                 .from(ExchangeRate.class)
                 .where("timestamp = ?", date)
                 .executeSingle();
+    }
+
+    public static String getFormattedConversionFor(float btcAmount) {
+        float usdAmount = btcAmount * EXCHANGE_RATE_IN_USD;
+        DecimalFormat twoDecimal = new DecimalFormat("#.##");
+        float formattedUsdAmount = Float.valueOf(twoDecimal.format(usdAmount));
+        return String.valueOf(formattedUsdAmount);
     }
 
 

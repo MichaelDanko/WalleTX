@@ -2,6 +2,7 @@ package com.bitcoin.tracker.walletx.api;
 
 import android.util.Log;
 
+import com.bitcoin.tracker.walletx.model.Balance;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 
 import com.bitcoin.tracker.walletx.model.Tx;
@@ -135,16 +136,18 @@ public class BlockchainInfo {
                 syncTx(saw, bciTx);
             numTxsToSync = numTxsToSync - BLOCKCHAIN_INFO_MAX_TX_LIMIT;
         }
+        Balance.clean(wtx);
     }
 
     private void syncTx(SingleAddressWallet saw, BciTx bciTx) {
 
         if (Tx.getTxByHash(bciTx.hash) == null) {
+            Walletx wtx = Walletx.getBy(saw);
 
             // Create the tx to insert
             Tx tx = new Tx();
             tx.timestamp = new Date(bciTx.time * 1000L);
-            tx.wtx = Walletx.getBy(saw);
+            tx.wtx = wtx;
             tx.block = bciTx.block_height;
             tx.category = null;
             tx.note = null;
@@ -172,9 +175,13 @@ public class BlockchainInfo {
                 tx.type = Tx.SPEND;
             else
                 tx.type = Tx.RECEIVE;
+
+            // Calculate the associated balance and save
+            tx.balance = Balance.createNewAssociatedWith(tx);
             tx.save();
         }
-    }
+
+    } // syncTx
 
     //--------------------------------------------------//
     //  Blockchain.info json requests in object form.   //
