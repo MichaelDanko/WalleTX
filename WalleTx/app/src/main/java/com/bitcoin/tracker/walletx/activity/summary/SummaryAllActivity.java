@@ -10,31 +10,23 @@ import com.bitcoin.tracker.walletx.model.Walletx;
  */
 public class SummaryAllActivity extends SummaryAbstractActivity {
 
-    //region ACTIVITY LIFECYCLE
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActivityTitle();
-        populateWalletxList();
-
+        setActivityTitle(getString(R.string.walletx_summary_all_title_activity_shortened));
         // Refresh the modules now that the wtx list is populated
+        refreshUi();
+    }
+
+    @Override
+    protected void setActivityTitle(String title) {
+        getSupportActionBar().setTitle(title);
+    }
+
+    @Override
+    protected void refreshUi() {
         mTxSummaryModule.refreshPieChart();
         mSpendingSummaryModule.refreshModule();
     }
-
-    protected void populateWalletxList() {
-        wtxs = Walletx.getAll();
-    }
-
-    protected void setActivityTitle() {
-        getSupportActionBar().setTitle(R.string.walletx_summary_all_title_activity_shortened);
-    }
-
-    protected void refreshUi() {
-
-    }
-
-    //endregion
 
 }

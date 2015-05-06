@@ -3,6 +3,7 @@ package com.bitcoin.tracker.walletx.activity.summary;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.bitcoin.tracker.walletx.activity.SharedData;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.LinkedList;
@@ -12,37 +13,24 @@ import java.util.LinkedList;
  */
 public class SummarySingleActivity extends SummaryAbstractActivity {
 
-    // Name of the group we are summarizing
-    private String mWalletxName;
-
-    //region ACTIVITY LIFECYCLE
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
-        mWalletxName = intent.getStringExtra("walletx_name");
-        setActivityTitle();
-        populateWalletxList();
-
+        Walletx wtx = SharedData.WTXS_TO_SUMMARIZE.get(0);
+        setActivityTitle(wtx.name);
         // Refresh the modules now that the wtx list is populated
+        refreshUi();
+    }
+
+    @Override
+    protected void setActivityTitle(String title) {
+        getSupportActionBar().setTitle(title);
+    }
+
+    @Override
+    protected void refreshUi() {
         mTxSummaryModule.refreshPieChart();
         mSpendingSummaryModule.refreshModule();
     }
-
-    protected void populateWalletxList() {
-        wtxs = new LinkedList<>();
-        wtxs.add(Walletx.getBy(mWalletxName));
-    }
-
-    protected void setActivityTitle() {
-        getSupportActionBar().setTitle(mWalletxName);
-    }
-
-    protected void refreshUi() {
-
-    }
-
-    //endregion
 
 }

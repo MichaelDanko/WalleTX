@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.SharedData;
 import com.bitcoin.tracker.walletx.model.Category;
 import com.bitcoin.tracker.walletx.model.SupportedSummaryType;
 import com.bitcoin.tracker.walletx.model.Tx;
@@ -91,11 +92,8 @@ public class ModuleSpending extends Fragment {
     private void buildCategoryHashMap() {
         mCatSpending = new HashMap<>();
 
-        // Get list of wallets to summarize from parent
-        List<Walletx> wtxs = ((SummaryAbstractActivity)this.getActivity()).getWtxs();
-
         // Build list of all associated transactions
-        for ( Walletx wtx : wtxs ) {
+        for ( Walletx wtx : SharedData.WTXS_TO_SUMMARIZE) {
             List<Tx> txsForThisWtx = wtx.txs();
             for ( Tx tx : txsForThisWtx ) {
                 mTxs.add(tx);

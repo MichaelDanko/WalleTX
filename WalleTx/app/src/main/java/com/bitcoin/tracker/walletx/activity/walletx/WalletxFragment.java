@@ -248,7 +248,8 @@ public class WalletxFragment extends Fragment implements SyncableFragmentInterfa
             TextView tv = (TextView) v.findViewById(R.id.walletName);
             Intent intent = new Intent( getActivity(), SummarySingleActivity.class );
             String name = tv.getText().toString();
-            SharedData.WTX_TO_SUMMARIZE = Walletx.getBy(name);
+            SharedData.WTXS_TO_SUMMARIZE = new ArrayList<>();
+            SharedData.WTXS_TO_SUMMARIZE.add(Walletx.getBy(name));
             startActivity(intent);
             return true;
         }

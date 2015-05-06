@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.SharedData;
 import com.bitcoin.tracker.walletx.model.SupportedSummaryType;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.Walletx;
@@ -74,12 +75,11 @@ public class ModuleTxs extends Fragment {
     }
 
     private void setPieChartData() {
-        // get the list of walletxs being summarized from parent activity
-        List<Walletx> wtxs = ((SummaryAbstractActivity)this.getActivity()).getWtxs();
+
         mSentCount = 0;
         mReceivedCount = 0;
 
-        for (Walletx wtx: wtxs) {
+        for (Walletx wtx: SharedData.WTXS_TO_SUMMARIZE) {
             List<Tx> txs = wtx.txs();
             for (Tx tx : txs) {
                 if (tx.amountBTC >= 0)

@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.Constants;
+import com.bitcoin.tracker.walletx.activity.SharedData;
 import com.bitcoin.tracker.walletx.model.Category;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.Walletx;
@@ -33,7 +35,6 @@ public class ChartSpendingByCategoryActivity extends ActionBarActivity {
     private PieChartView mChart;
     private PieChartData mData;
     private String mGroupName;
-    private ArrayList<String> mWtxs;
     private HashMap<String, Long> mCats;
     private List<Tx> mTxs = new LinkedList<>();
 
@@ -44,8 +45,7 @@ public class ChartSpendingByCategoryActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        mGroupName = intent.getStringExtra("group_name");
-        mWtxs = intent.getStringArrayListExtra("wtx_names");
+        mGroupName = intent.getStringExtra(Constants.EXTRA_GROUP_TO_SUMMARIZE);
 
         getSupportActionBar().setTitle(mGroupName);
 
@@ -58,14 +58,8 @@ public class ChartSpendingByCategoryActivity extends ActionBarActivity {
     private void buildCategoryHashMap() {
         mCats = new HashMap<>();
 
-        // Get list of wallets to summarize passed from parent
-        List<Walletx> wtxs = new ArrayList<>();
-        for (String wtxName : mWtxs) {
-            wtxs.add(Walletx.getBy(wtxName));
-        }
-
         // Build list of all associated transactions
-        for ( Walletx wtx : wtxs ) {
+        for ( Walletx wtx : SharedData.WTXS_TO_SUMMARIZE) {
             List<Tx> txsForThisWtx = wtx.txs();
             for ( Tx tx : txsForThisWtx ) {
                 mTxs.add(tx);

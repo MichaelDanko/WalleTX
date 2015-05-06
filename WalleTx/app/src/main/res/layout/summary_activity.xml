@@ -32,20 +32,6 @@ tools:context="com.bitcoin.tracker.walletx.activity.summary.SummaryAbstractActiv
             android:name="com.bitcoin.tracker.walletx.activity.summary.ModuleSpending"
             android:id="@+id/moduleSpendingBreakdown" />
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:gravity="center"
-            android:textAlignment="center">
-
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:progressTint="@color/background_material_dark"
-                android:id="@+id/syncProgressBar" />
-
-        </RelativeLayout>
-
     </LinearLayout>
 
 </ScrollView>

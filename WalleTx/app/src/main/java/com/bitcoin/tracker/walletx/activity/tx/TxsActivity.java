@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.Constants;
+import com.bitcoin.tracker.walletx.activity.SharedData;
 import com.bitcoin.tracker.walletx.helper.Formatter;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.Walletx;
@@ -39,7 +41,6 @@ public class TxsActivity extends ActionBarActivity {
 
     private ListView mListView;
     private TxsAdapter mAdapter;
-    private List<Walletx> wtxs;
     private List<Tx> mTxs = new ArrayList<>();
     private ArrayList<TxsListItem> mItems = new ArrayList<>();
 
@@ -54,15 +55,6 @@ public class TxsActivity extends ActionBarActivity {
 
         mActivity = this;
 
-        // Build wtx list passed from summary activity by walletx name.
-        // TODO Remove this code if Walletx implements parcelable like it should
-        ArrayList<String> wtxNames = getIntent().getStringArrayListExtra("wtx_names");
-        wtxs = new ArrayList<>(wtxNames.size());
-        for ( String name : wtxNames ) {
-            Walletx w = Walletx.getBy(name);
-            wtxs.add(w);
-        }
-
         // Setup list view header
         mListView = (ListView) findViewById(R.id.txs_list);
         View header = getLayoutInflater().inflate(R.layout.txs_activity_list_header, null);
@@ -70,7 +62,10 @@ public class TxsActivity extends ActionBarActivity {
 
         // Display group name associated with the tx's being listed
         TextView groupName = (TextView) header.findViewById(R.id.txs_header_group_name);
-        groupName.setText(getIntent().getStringExtra("group_name"));
+        groupName.setText(getIntent().getStringExtra(Constants.EXTRA_GROUP_TO_SUMMARIZE));
+
+        String title = getIntent().getStringExtra(Constants.EXTRA_GROUP_TO_SUMMARIZE);
+        getSupportActionBar().setTitle(title);
 
         // Setup list view
         prepareData();
@@ -103,7 +98,7 @@ public class TxsActivity extends ActionBarActivity {
         mTxs.clear();
 
         // Build and sort the tx list
-        for (Walletx wtx : wtxs) {
+        for (Walletx wtx : SharedData.WTXS_TO_SUMMARIZE) {
             List<Tx> txs = wtx.txs();
             for (Tx tx : txs) {
                 mTxs.add(tx);
@@ -162,36 +157,18 @@ public class TxsActivity extends ActionBarActivity {
         }
     }
 
-    //region OPTIONS MENU
-
-    /**
-     * Display the global options menu.
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.sync, menu);
         return true;
     }
 
-    /**
-     * Home button closes the activity.
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (item.getItemId() == R.id.action_sync) {
-
-
-            // TODO Let SyncAct Handle
-            //new SyncDatabase(this);
-
-
-            return true;
-        } else if (id == android.R.id.home)
+        if (id == android.R.id.home)
             finish();
         return super.onOptionsItemSelected(item);
     }
-
-    //endregion
 
 }
