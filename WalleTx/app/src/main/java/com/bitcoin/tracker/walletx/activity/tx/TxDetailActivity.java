@@ -27,9 +27,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * Tx Details Activity
- *
+ * TODO Move all of this functionality into the TxsActivity in the form of dialogs
  */
 public class TxDetailActivity extends ActionBarActivity {
 
@@ -127,7 +127,8 @@ public class TxDetailActivity extends ActionBarActivity {
                 // restore button image, clear tag focus, and hide keyboard
                 mTagImageView.setImageResource(R.drawable.tx_detail_tag);
                 mTagAutoCompleteTextView.clearFocus();
-                InputMethodManager imm = (InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager)getSystemService(
+                        getApplicationContext().INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mTagAutoCompleteTextView.getWindowToken(), 0);
                 // commit the tag changes
                 if (mTagImageView.getTag() == "in_focus") {
@@ -158,39 +159,23 @@ public class TxDetailActivity extends ActionBarActivity {
         mMoreInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent blockchaininfoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://blockchain.info/tx/" + txDetail.hash));
+                Intent blockchaininfoIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://blockchain.info/tx/" + txDetail.hash));
                 startActivity(blockchaininfoIntent);
             }
         });
     }
 
-    //region OPTIONS MENU
-
-    /**
-     * Display the global options menu.
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.sync, menu);
         return true;
     }
 
-    /**
-     * Home button closes the activity.
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (item.getItemId() == R.id.action_sync) {
-
-
-            // TODO LET SYNCACT HANDLE
-            //new SyncDatabase(this);
-
-
-
-            return true;
-        } else if (id == android.R.id.home) {
+        if (id == android.R.id.home) {
             if (mTagUpdated) {
                 Intent intent = this.getIntent();
                 setResult(RESULT_OK, intent);
@@ -199,7 +184,5 @@ public class TxDetailActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    //endregion
 
 }

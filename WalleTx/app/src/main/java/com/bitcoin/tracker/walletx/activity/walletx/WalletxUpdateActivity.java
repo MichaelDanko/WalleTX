@@ -27,8 +27,6 @@ import java.util.List;
 
 public class WalletxUpdateActivity extends ActionBarActivity {
 
-    //region FIELDS
-
     private EditText mWalletxName;
     private String mCurrentName;
     private Spinner mGroupNameSpinner;
@@ -36,9 +34,6 @@ public class WalletxUpdateActivity extends ActionBarActivity {
     private Button mUpdate;
     private Button mDelete;
     private Walletx mWalletxBeingUpdated;
-
-    //endregion
-    //region ACTIVITY LIFECYCLE
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

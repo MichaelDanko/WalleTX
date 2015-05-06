@@ -3,7 +3,6 @@ package com.bitcoin.tracker.walletx.activity.summary;
 import android.os.Bundle;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.model.Walletx;
 
 /**
  * Summary of all walletxs
@@ -25,7 +24,7 @@ public class SummaryAllActivity extends SummaryAbstractActivity {
 
     @Override
     protected void refreshUi() {
-        mTxSummaryModule.refreshPieChart();
+        mTxSummaryModule.refreshModule();
         mSpendingSummaryModule.refreshModule();
     }
 

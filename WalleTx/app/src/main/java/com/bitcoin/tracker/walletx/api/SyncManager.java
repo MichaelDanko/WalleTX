@@ -61,13 +61,17 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
      * Syncs daily bitcoin price data
      * @param context of caller
      */
-    public static void syncBtcPriceData(Context context) {
+    public static void btcPriceData(Context context) {
         if (!sSyncIsInProgress)
             new SyncManager(context, SyncType.BTC_PRICE_DATA).execute();
     }
 
     public static void syncExchangeRate(Context context) {
         new SyncManager(context, SyncType.CURRENT_EXCHANGE_RATE).execute();
+    }
+
+    public static void syncLatestBlock(Context context) {
+        new SyncManager(context, SyncType.LATEST_BLOCK).execute();
     }
 
     /**
@@ -101,16 +105,19 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
 
         switch (mSyncType) {
             case TXS_FOR_EXISTING_WALLETS:
-                syncTxsForExistingWallets();
+                txsForExistingWallets();
                 break;
             case TXS_FOR_NEW_WALLET:
-                syncTxsForNewWallet(mWtx);
+                txsForNewWallet(mWtx);
                 break;
             case BTC_PRICE_DATA:
-                syncBtcPriceData();
+                btcPriceData();
                 break;
             case CURRENT_EXCHANGE_RATE:
-                syncCurrentExchangeRate(mContext);
+                currentExchangeRate(mContext);
+                break;
+            case LATEST_BLOCK:
+                latestBlock(mContext);
                 break;
             default:
                 Log.w(TAG, "Invalid SyncType");
@@ -167,7 +174,7 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
 
     //----- Sync methods -----
 
-    private void syncTxsForExistingWallets() {
+    private void txsForExistingWallets() {
         List<Walletx> wtxs = Walletx.getAll();
         List<Walletx> saws = new ArrayList<>();
 
@@ -188,7 +195,7 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
         new BlockchainInfo().syncTxsFor(saws);
     }
 
-    private void syncTxsForNewWallet(Walletx wtx) {
+    private void txsForNewWallet(Walletx wtx) {
         switch (wtx.type) {
             case SINGLE_ADDRESS_WALLET:
                 new BlockchainInfo().syncTxsForNewWallet(wtx);
@@ -199,13 +206,18 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
         }
     }
 
-    private void syncBtcPriceData() {
+    private void btcPriceData() {
         // TODO Implement
     }
 
-    private void syncCurrentExchangeRate(Context context) {
+    private void currentExchangeRate(Context context) {
         System.out.println("Sync Manager called Exchange Rate sync");
         BlockchainInfo.syncExchangeRate(context);
+    }
+
+    private void latestBlock(Context context) {
+        System.out.println("Sync Manager called Latest Block sync");
+        BlockchainInfo.syncLatestBlock(context);
     }
 
     /**
@@ -215,7 +227,8 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
         TXS_FOR_EXISTING_WALLETS,
         TXS_FOR_NEW_WALLET,
         BTC_PRICE_DATA,
-        CURRENT_EXCHANGE_RATE
+        CURRENT_EXCHANGE_RATE,
+        LATEST_BLOCK
     }
 
 } // SyncManager

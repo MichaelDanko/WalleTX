@@ -78,6 +78,7 @@ public class WalletxFragment extends Fragment implements SyncableFragmentInterfa
         // This is the fragment that displays BTC values converted to USD,
         // so it is logical to place an exchange rate sync here.
         SyncManager.syncExchangeRate(getActivity().getApplicationContext());
+        SyncManager.syncLatestBlock(getActivity().getApplicationContext());
     }
 
     @Override

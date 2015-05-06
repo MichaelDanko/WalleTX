@@ -28,9 +28,6 @@ import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
 
-/**
- * Created by brianhowell on 4/20/15.
- */
 public class ModuleSpending extends Fragment {
 
     private OnFragmentInteractionListener mListener;
@@ -73,7 +70,7 @@ public class ModuleSpending extends Fragment {
         getViewsFrom(v);
         setPieChartData();
         createPieChart();
-        bindClickEvents();
+        bindListeners();
         return v;
     }
 
@@ -108,9 +105,6 @@ public class ModuleSpending extends Fragment {
                 // only include spends
                 continue;
             }
-
-            // TODO only add txs within a certain time period
-
             Category cat = tx.category;
             if ( cat != null ) {
                 String catName = cat.name;
@@ -229,7 +223,7 @@ public class ModuleSpending extends Fragment {
     /**
      * Binds listener to the module container element
      */
-    private void bindClickEvents() {
+    private void bindListeners() {
         mModuleContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

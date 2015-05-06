@@ -15,9 +15,6 @@ import java.util.ArrayList;
  * Populates custom list items in the txs_activity list view.
  */
 public class TxsAdapter extends ArrayAdapter<TxsListItem> {
-
-    //region FIELDS
-
     private final Activity activity;
     private ArrayList<TxsListItem> mItemsArrayList;
 
@@ -28,9 +25,6 @@ public class TxsAdapter extends ArrayAdapter<TxsListItem> {
     private TextView mCategory;
     private TextView mAmount;
     private TextView mConfirmations;
-
-    //endregion
-    //region ADAPTER
 
     public TxsAdapter(Activity activity, ArrayList<TxsListItem> itemsArrayList) {
         super(activity, R.layout.txs_activity_list_item, itemsArrayList);
@@ -71,7 +65,5 @@ public class TxsAdapter extends ArrayAdapter<TxsListItem> {
         mAmount.setText(mItemsArrayList.get(position).getmAmount());
         mConfirmations.setText(mItemsArrayList.get(position).getmConfirmations());
     }
-
-    //endregion
 
 }

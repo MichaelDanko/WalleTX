@@ -41,7 +41,7 @@ public abstract class SummaryAbstractActivity extends SyncableActivity implement
     @Override
     protected void onResume() {
         super.onResume();
-        //mTxSummaryModule.refreshModule();
+        mTxSummaryModule.refreshModule();
         mSpendingSummaryModule.refreshModule();
     }
 

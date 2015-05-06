@@ -33,11 +33,13 @@ public class BlockchainInfo {
     private static final String URL_APPLY_LIMIT = "&limit=";
     private static final String URL_APPLY_OFFSET = "&offset=";
     private static final String URL_TICKER = "https://blockchain.info/ticker";
+    private static final String URL_LATEST_BLOCK = "https://blockchain.info/latestblock";
     private static final int BLOCKCHAIN_INFO_MAX_TX_LIMIT = 50;
 
     // Communicates with SyncManager that an error occurred.
     public static boolean sInvalidTxJsonDataReceived = false;
     public static boolean sInvalidTickerJsonReceived = false;
+    public static boolean sInvalidLatestBlockJsonReceived = false;
 
     // Stores the USD exchange rate from last sync
     private static float sExchangeRateInUsd = 0;
@@ -51,19 +53,15 @@ public class BlockchainInfo {
         return sExchangeRateInUsd;
     }
 
-
-
     // Current called whenever syncable activity is created
     public static void syncExchangeRate(Context context) {
-
         URL url = JsonHelper.buildUrlFromString(URL_TICKER + URL_JSON);
         JsonElement json = JsonHelper.getJsonElementFromUrl(url);
-        TickerData tickerData = new Gson().fromJson(json, TickerData.class);
+        BciTickerData tickerData = new Gson().fromJson(json, BciTickerData.class);
         if (tickerData == null) {
             sInvalidTickerJsonReceived = true;
         } else {
             BlockchainInfo.sExchangeRateInUsd = tickerData.USD.sell;
-
             // Save to shared pref in case activity loads before data pulled
             SharedPreferences sp = context.getSharedPreferences(Constants.SHARED_PREFERENCES,
                     Context.MODE_PRIVATE);
@@ -71,6 +69,37 @@ public class BlockchainInfo {
             editor.putFloat(Constants.SP_EXCHANGE_RATE, BlockchainInfo.sExchangeRateInUsd);
             editor.commit();
         }
+    }
+
+
+    // Stores the USD exchange rate from last sync
+    private static long sLatestBlock = 0;
+
+    // Current called whenever syncable activity is created
+    public static void syncLatestBlock(Context context) {
+        URL url = JsonHelper.buildUrlFromString(URL_LATEST_BLOCK + URL_JSON);
+        JsonElement json = JsonHelper.getJsonElementFromUrl(url);
+        BciLatestBlock latestBlock = new Gson().fromJson(json, BciLatestBlock.class);
+        if (latestBlock == null) {
+            sInvalidLatestBlockJsonReceived = true;
+        } else {
+            BlockchainInfo.sLatestBlock = latestBlock.height;
+            // Save to shared pref in case activity loads before data pulled
+            SharedPreferences sp = context.getSharedPreferences(Constants.SHARED_PREFERENCES,
+                    Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putLong(Constants.SP_LATEST_BLOCK, BlockchainInfo.sLatestBlock);
+            editor.commit();
+        }
+    }
+
+    public static long getLatestBlock(Context context) {
+        if (sLatestBlock == 0) {
+            SharedPreferences sp = context.getSharedPreferences(Constants.SHARED_PREFERENCES,
+                    Context.MODE_PRIVATE);
+            return sp.getLong(Constants.SP_LATEST_BLOCK, 0);
+        }
+        return sLatestBlock;
     }
 
 
@@ -228,13 +257,18 @@ public class BlockchainInfo {
     }
 
     // Ticker data
-    public class TickerData {
+    public class BciTickerData {
         public ExchangeRatesInUSD USD;
-        public TickerData() {}
+        public BciTickerData() {}
         public class ExchangeRatesInUSD {
             public float sell;
             public ExchangeRatesInUSD() {}
         }
+    }
+
+    // Latest block
+    public class BciLatestBlock {
+        public int height;
     }
 
 } // BlockchainInfo

@@ -57,7 +57,7 @@ public class ModuleTxs extends Fragment {
         setupChartLegend();
         setPieChartData();
         createPieChart();
-        bindClickEvents();
+        bindListeners();
         return v;
     }
 
@@ -97,7 +97,6 @@ public class ModuleTxs extends Fragment {
     }
 
     private void createPieChart() {
-
         mData.setHasLabels(true);
         mData.setHasLabelsOutside(false);
         mData.setHasCenterCircle(true);
@@ -108,7 +107,7 @@ public class ModuleTxs extends Fragment {
         mChart.setPieChartData(mData);
     }
 
-    public void refreshPieChart() {
+    public void refreshModule() {
         setPieChartData();
         mChart.setPieChartData(null);
         createPieChart();
@@ -117,7 +116,7 @@ public class ModuleTxs extends Fragment {
     /**
      * Binds listener to the module container element
      */
-    private void bindClickEvents() {
+    private void bindListeners() {
         mModuleContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

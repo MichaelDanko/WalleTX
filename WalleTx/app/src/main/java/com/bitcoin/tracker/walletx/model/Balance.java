@@ -100,7 +100,7 @@ public class Balance extends Model {
                 .where("Walletx = ?", wtx.getId())
                 .orderBy("timestamp DESC")
                 .executeSingle();
-        return balance.balance;
+        return balance != null ? balance.balance : 0L;
     }
 
     /**

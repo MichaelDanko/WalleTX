@@ -18,6 +18,7 @@ public class Constants {
 
     public static final String SHARED_PREFERENCES = "com.bitcoin.tracker.walletx";
     public static final String SP_EXCHANGE_RATE = "Shared Preferences > Exchange Rate";
+    public static final String SP_LATEST_BLOCK = "Shared Preferences > Latest Block";
 
 
     //endregion
@@ -38,13 +39,14 @@ public class Constants {
     public static final int RESULT_GROUP_ADDED = 1;
     public static final int RESULT_GROUP_UPDATED = 2;
 
+    public static final int RESULT_TX_UPDATED = 1;
+
     //endregion
     //region INTENT EXTRAS
     //----------------------------------------------------------------------------------------------
 
     public static final String EXTRA_WTX_ADDED = "Intent > Extra > New Walletx added";
     public static final String EXTRA_WTX_SELECTED_TO_EDIT = "Intent > Extra > Name of Walletx";
-    public static final String EXTRA_WTX_TO_SUMMARIZE = "Intent > Extra > Walletx to summarize";
     public static final String EXTRA_GROUP_TO_SUMMARIZE = "Intent > Extra > Group to summarize";
     public static final String EXTRA_CATEGORY_SELECTED_TO_EDIT = "Intent > Extra > Name of Category";
     public static final String EXTRA_GROUP_SELECTED_TO_EDIT = "Intent > Extra > Name of Group";

@@ -25,11 +25,6 @@ import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
 
-/*
- * TODO This activity requires refactoring.
- *      However, it is my intent to replace HelloCharts since it sucks.
- *      I'll refactor when I do this. BH
- */
 public class ChartSpendingByCategoryActivity extends ActionBarActivity {
 
     private PieChartView mChart;
@@ -43,12 +38,9 @@ public class ChartSpendingByCategoryActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chart_spending_by_category_activity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         Intent intent = getIntent();
         mGroupName = intent.getStringExtra(Constants.EXTRA_GROUP_TO_SUMMARIZE);
-
         getSupportActionBar().setTitle(mGroupName);
-
         mChart = (PieChartView) findViewById(R.id.chart);
         buildCategoryHashMap();
         setPieChartData();
@@ -107,7 +99,7 @@ public class ChartSpendingByCategoryActivity extends ActionBarActivity {
         mChart.setOnValueTouchListener(new PieChartOnValueSelectListener() {
             @Override
             public void onValueSelected(int i, SliceValue sliceValue) {
-                Float convertValue = sliceValue.getValue() / 100000000;
+                Float convertValue = sliceValue.getValue() / Constants.SATOSHIS;
                 String label = convertValue +  " BTC";
                 Toast.makeText(getApplicationContext(), label, Toast.LENGTH_SHORT).show();
             }

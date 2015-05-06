@@ -1,12 +1,9 @@
 package com.bitcoin.tracker.walletx.activity.summary;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.bitcoin.tracker.walletx.activity.SharedData;
 import com.bitcoin.tracker.walletx.model.Walletx;
-
-import java.util.LinkedList;
 
 /**
  * Summary for a single walletx
@@ -29,7 +26,7 @@ public class SummarySingleActivity extends SummaryAbstractActivity {
 
     @Override
     protected void refreshUi() {
-        mTxSummaryModule.refreshPieChart();
+        mTxSummaryModule.refreshModule();
         mSpendingSummaryModule.refreshModule();
     }
 
