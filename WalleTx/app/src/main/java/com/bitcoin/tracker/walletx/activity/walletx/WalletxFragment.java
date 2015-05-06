@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
-import com.activeandroid.query.Select;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.Constants;
 import com.bitcoin.tracker.walletx.activity.SharedData;
@@ -76,6 +75,8 @@ public class WalletxFragment extends Fragment implements SyncableFragmentInterfa
     @Override
     public void onResume() {
         super.onResume();
+        // This is the fragment that displays BTC values converted to USD,
+        // so it is logical to place an exchange rate sync here.
         SyncManager.syncExchangeRate(getActivity().getApplicationContext());
     }
 
@@ -101,10 +102,6 @@ public class WalletxFragment extends Fragment implements SyncableFragmentInterfa
                 refreshUi();
                 Walletx wtx = SharedData.ADDED_WTX;
                 SyncManager.syncNewWallet(getActivity().getApplicationContext(), wtx);
-
-                /**
-                 * TODO FIGURE OUT HOW TO REFRESH LIST VIEW AGAIN ONCE SYNC IS COMPLETE
-                 */
             }
         } else if (requestCode == Constants.RESULT_WALLETX_FRAGMENT_UPDATES_MADE) {
             if (resultCode == Activity.RESULT_OK) {
@@ -127,6 +124,13 @@ public class WalletxFragment extends Fragment implements SyncableFragmentInterfa
             startActivityForResult( intent, Constants.RESULT_WALLETX_FRAGMENT_NEW_WTX_ADDED);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void refreshUi() {
+        prepareData();
+        setHeaderFooterVisibility();
+        mListApapter.updateData(mGroupHeader, mListDataChild);
     }
 
     private void setupExpListView(View view) {
@@ -197,15 +201,7 @@ public class WalletxFragment extends Fragment implements SyncableFragmentInterfa
             mExpListView.setAdapter(mListApapter);
     }
 
-    public void refreshUi() {
-        prepareData();
-        setHeaderFooterVisibility();
-        mListApapter.updateData(mGroupHeader, mListDataChild);
-    }
-
-    /**
-     * Determines visibility of the list view header/footer
-     */
+    // Determines visibility of the list view header/footer
     private void setHeaderFooterVisibility() {
         if (Walletx.isEmpty()) {
             mFooter.setVisibility(View.VISIBLE);
@@ -219,6 +215,7 @@ public class WalletxFragment extends Fragment implements SyncableFragmentInterfa
     private View.OnClickListener allWalletsOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            SharedData.WTXS_TO_SUMMARIZE = Walletx.getAll();
             Intent intent = new Intent( getActivity(), SummaryAllActivity.class );
             startActivity(intent);
         }
@@ -232,18 +229,14 @@ public class WalletxFragment extends Fragment implements SyncableFragmentInterfa
         }
     };
 
-
-    /**
-     * TODO I can remove some extras and used SharedData
-     */
-
     private ExpandableListView.OnGroupClickListener groupClickListener = new ExpandableListView.OnGroupClickListener() {
         @Override
         public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
             TextView tv = (TextView) v.findViewById(R.id.groupName);
+            String name = tv.getText().toString();
+            Group group = Group.getBy(name);
+            SharedData.WTXS_TO_SUMMARIZE = group.walletxs();
             Intent intent = new Intent( getActivity(), SummaryGroupActivity.class );
-            intent.putExtra("group_name", tv.getText().toString());
-            intent.putExtra("type", "group");
             startActivity( intent );
             return true;
         }
@@ -254,8 +247,8 @@ public class WalletxFragment extends Fragment implements SyncableFragmentInterfa
         public boolean onChildClick (ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
             TextView tv = (TextView) v.findViewById(R.id.walletName);
             Intent intent = new Intent( getActivity(), SummarySingleActivity.class );
-            intent.putExtra("walletx_name", tv.getText().toString());
-            intent.putExtra("type", "wallet");
+            String name = tv.getText().toString();
+            SharedData.WTX_TO_SUMMARIZE = Walletx.getBy(name);
             startActivity(intent);
             return true;
         }
@@ -266,19 +259,7 @@ public class WalletxFragment extends Fragment implements SyncableFragmentInterfa
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             int itemType = ExpandableListView.getPackedPositionType(id);
 
-
-
-
-
-
-
-
-            // TODO @dc I need a count query here. Or isEmpty query. Replace the if statement below...
-            int wtxCount = new Select()
-                    .from(Walletx.class)
-                    .count();
-
-            if ( wtxCount == 0 ) {
+            if (Walletx.isEmpty()) {
 
                 // do nothing if there are no wallets added
                 return true;
@@ -289,7 +270,7 @@ public class WalletxFragment extends Fragment implements SyncableFragmentInterfa
                 TextView tv = (TextView) view.findViewById(R.id.walletName);
                 String name = tv.getText().toString();
                 Intent intent = new Intent( getActivity(), WalletxUpdateActivity.class );
-                intent.putExtra("walletx_name", name);
+                intent.putExtra(Constants.EXTRA_WTX_SELECTED_TO_EDIT, name);
                 startActivityForResult( intent, Constants.RESULT_WALLETX_FRAGMENT_UPDATES_MADE );
                 return true;
 
@@ -299,15 +280,12 @@ public class WalletxFragment extends Fragment implements SyncableFragmentInterfa
                 TextView group = (TextView) view.findViewById(R.id.groupName);
                 String name = group.getText().toString();
                 Intent intent = new Intent( getActivity(), GroupUpdateActivity.class );
-                intent.putExtra("wallet_group_name", name);
+                intent.putExtra(Constants.EXTRA_GROUP_SELECTED_TO_EDIT, name);
                 startActivityForResult( intent, Constants.RESULT_WALLETX_FRAGMENT_UPDATES_MADE );
                 return true;
 
             } else {
-
-                // Should Never Happen. TODO Throw error / write to log
                 return false;
-
             }
         }
     };

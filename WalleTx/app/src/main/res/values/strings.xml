@@ -87,6 +87,8 @@
     <string name="txs_list_item_amount_label">BTC</string>
     <string name="txs_list_item_confirmations">0</string>
     <string name="txs_list_item_confirmations_label">Confirmations</string>
+    <string name="walletx_update_activity_error_empty_string">Oops! Name cannot be an empty string</string>
+    <string name="walletx_update_activity_error_matches_existing">Oops! That name already exists</string>
 
     <!-- TX DETAIL -->
     <string name="title_activity_tx_detail">Transaction Details</string>
@@ -114,8 +116,8 @@
     <string name="group_create_activity_hint">Wallet group name</string>
     <string name="group_create_activity_checkbox_set_as_default">Set as default group</string>
     <string name="group_create_activity_button_add">Add Wallet Group</string>
-    <string name="group_create_activity_error_empty_string">Oops! Category cannot be an empty string</string>
-    <string name="group_create_activity_error_matches_existing">Oops! That category already exists</string>
+    <string name="group_create_activity_error_empty_string">Oops! Group cannot be an empty string</string>
+    <string name="group_create_activity_error_matches_existing">Oops! That group already exists</string>
 
     <string name="group_update_activity_title_activity">Edit Wallet Group</string>
     <string name="group_update_activity_button_update">Update</string>

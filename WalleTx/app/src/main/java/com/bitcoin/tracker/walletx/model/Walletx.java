@@ -123,6 +123,29 @@ public class Walletx extends Model {
         return this.txs().size();
     }
 
+
+    public static void delete(Walletx wtx) {
+        // Delete tx's associated with this wtx
+        List<Tx> txs = wtx.txs();
+        for ( Tx tx : txs ) {
+            tx.delete();
+        }
+
+        // Delete balances's associated with this wtx
+        List<Balance> balances = wtx.balances();
+        for ( Balance balance : balances ) {
+            balance.delete();
+        }
+
+        // Delete SupportedWalletTypes associated with this wtx
+        if (wtx.type == SupportedWalletType.SINGLE_ADDRESS_WALLET) {
+            SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
+            saw.delete();
+        }
+
+        wtx.delete();
+    }
+
     //endregion
     //region VALIDATE
     //----------------------------------------------------------------------------------------------
@@ -142,6 +165,21 @@ public class Walletx extends Model {
     public static boolean matchesExisting(String name) {
         Walletx existing = Walletx.getBy(name);
         return existing != null ? true : false;
+    }
+
+    /**
+     * Validates that a Walletx name is unique, excluding comparison
+     * to the Walletx being updated.
+     *
+     * @param name Walletx name to validate
+     * @param updating Walletx being updating
+     * @return true if Walletx name matches an existing name that is not self
+     */
+    public static boolean matchesExisting(String name, Walletx updating) {
+        Walletx existing = Walletx.getBy(name);
+        if (existing != null && existing != updating)
+            return true;
+        return false;
     }
 
     //endregion

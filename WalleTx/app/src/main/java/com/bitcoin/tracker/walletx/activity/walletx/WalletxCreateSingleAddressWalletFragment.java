@@ -137,7 +137,8 @@ public class WalletxCreateSingleAddressWalletFragment extends Fragment
      * Retrieves QRCode scan result and adds to public key EditText field.
      */
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        IntentResult scanResult = IntentIntegrator.
+                parseActivityResult(requestCode, resultCode, intent);
         if (scanResult != null)
             mPublicKey.setText(scanResult.getContents());
     }

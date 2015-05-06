@@ -282,7 +282,7 @@ public class Group extends Model {
      *
      * @param name Group name to validate
      * @param updating Group being updating
-     * @return true if Category name matches an existing name that is not self
+     * @return true if Group name matches an existing name that is not self
      */
     public static boolean matchesExisting(String name, Group updating) {
         Group existing = Group.getBy(name);

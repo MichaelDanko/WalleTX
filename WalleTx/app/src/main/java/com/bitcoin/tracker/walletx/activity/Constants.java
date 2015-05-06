@@ -45,6 +45,7 @@ public class Constants {
     public static final String EXTRA_CATEGORY_SELECTED_TO_EDIT = "Intent > Extra > Name of Category";
     public static final String EXTRA_GROUP_SELECTED_TO_EDIT = "Intent > Extra > Name of Group";
     public static final String EXTRA_WTX_ADDED = "Intent > Extra > New Walletx added";
+    public static final String EXTRA_WTX_SELECTED_TO_EDIT = "Intent > Extra > Name of Walletx";
     public static final String EXTRA_SYNC_MGR_COMPLETE = "Intent > Extra > SyncManager task complete";
 
     //endregion
