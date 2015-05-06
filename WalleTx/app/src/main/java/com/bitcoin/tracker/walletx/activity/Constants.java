@@ -13,16 +13,28 @@ public class Constants {
      */
     public static final int SATOSHIS = 100000000;
 
+    //region SHARED PREFERENCES
+    //----------------------------------------------------------------------------------------------
+
+    public static final String SHARED_PREFERENCES = "com.bitcoin.tracker.walletx";
+    public static final String SP_EXCHANGE_RATE = "Shared Preferences > Exchange Rate";
+
+
+    //endregion
     //region INTENT
     //----------------------------------------------------------------------------------------------
 
-    public static final String SYNC_MANAGER_STATUS= "com.bitcoin.tracker.walletx.SYNC_MGR_STATUS";
+    public static final String SYNC_MANAGER_STATUS = "com.bitcoin.tracker.walletx.SYNC_MGR_STATUS";
 
     //endregion
     //region REQUEST CODES for onActivityResult
     //----------------------------------------------------------------------------------------------
 
+    public static final int RESULT_WALLETX_FRAGMENT_NEW_WTX_ADDED = 1;
+    public static final int RESULT_WALLETX_FRAGMENT_UPDATES_MADE = 2;
+
     public static final int RESULT_CATEGORY_CHANGES_MADE = 1;
+
     public static final int RESULT_GROUP_ADDED = 1;
     public static final int RESULT_GROUP_UPDATED = 2;
 

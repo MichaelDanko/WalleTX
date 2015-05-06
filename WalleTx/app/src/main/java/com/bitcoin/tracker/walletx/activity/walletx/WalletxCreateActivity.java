@@ -74,10 +74,12 @@ public class WalletxCreateActivity extends ActionBarActivity implements
                         WalletxCreateSingleAddressWalletFragment.newInstance());
                 break;
             // case R.layout.fragment_future_wallet_type:
-            //     ft.replace(R.id.walletTypeFragmentContainer, FutureWalletTypeFragment.newInstance());
+            //     ft.replace(R.id.walletTypeFragmentContainer,
+            //             FutureWalletTypeFragment.newInstance());
             //     break;
             default:
-                ft.replace(R.id.walletTypeFragmentContainer, WalletxCreateSingleAddressWalletFragment.newInstance());
+                ft.replace(R.id.walletTypeFragmentContainer,
+                        WalletxCreateSingleAddressWalletFragment.newInstance());
                 break;
         }
         ft.commit();

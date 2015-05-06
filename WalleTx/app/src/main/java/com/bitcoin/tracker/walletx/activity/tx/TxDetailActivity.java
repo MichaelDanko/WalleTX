@@ -84,7 +84,7 @@ public class TxDetailActivity extends ActionBarActivity {
         } else {
             spendReceiveLabel.setText("Received");
         }
-        spendReceiveAmount.setText(new Tx().formattedBTCValue(extras));
+        spendReceiveAmount.setText("TODO"); //new Tx().formattedBTCValue(extras));
         DateFormat time = new SimpleDateFormat("HH:mm:ss");
         DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
         timeTextField.setText(time.format(txDetail.timestamp));

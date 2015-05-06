@@ -1,5 +1,6 @@
 package com.bitcoin.tracker.walletx.activity.navDrawer;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.SyncableActivity;
+import com.bitcoin.tracker.walletx.activity.SyncableFragmentInterface;
 import com.bitcoin.tracker.walletx.activity.category.CategoryFragment;
 import com.bitcoin.tracker.walletx.activity.group.GroupFragment;
 import com.bitcoin.tracker.walletx.activity.walletx.WalletxFragment;
@@ -28,6 +30,9 @@ public class MainActivity extends SyncableActivity implements
 
     // Used to store the last screen title. For use in {@link #restoreActionBar()}.
     private CharSequence mTitle;
+
+    // The fragment currently being displayed by this activity.
+    private SyncableFragmentInterface mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,26 +54,44 @@ public class MainActivity extends SyncableActivity implements
     public void onNavigationDrawerItemSelected(int position) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment;
+
 
         switch (position) {
             case 0:
-                fragment = WalletxFragment.newInstance(position + 1);
+                mFragment = WalletxFragment.newInstance(position + 1);
                 break;
             case 1:
-                fragment = GroupFragment.newInstance(position + 1);
+                mFragment = GroupFragment.newInstance(position + 1);
                 break;
             case 2:
-                fragment = CategoryFragment.newInstance(position + 1);
+                mFragment = CategoryFragment.newInstance(position + 1);
                 break;
             default:
-                fragment = WalletxFragment.newInstance(position + 1);
+                mFragment = WalletxFragment.newInstance(position + 1);
                 break;
         }
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .replace(R.id.container, (Fragment) mFragment)
                 .commit();
+    }
+
+    // Applies SyncableActivity's menu to the action bar is closed and
+    // applies the title specific to the active fragment.
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+            restoreActionBar();
+            return true;
+        }
+        return true;
+    }
+
+    @Override
+    protected void refreshUi() {
+        // Refresh the current fragment.
+        mFragment.refreshUi();
     }
 
     // Updates the action bar title depending upon active fragment.
@@ -93,18 +116,6 @@ public class MainActivity extends SyncableActivity implements
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
-    }
-
-    // Applies SyncableActivity's menu to the action bar is closed and
-    // applies the title specific to the active fragment.
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            restoreActionBar();
-            return true;
-        }
-        return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

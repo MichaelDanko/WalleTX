@@ -14,10 +14,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.helper.Formatter;
 import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.text.DateFormat;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -134,7 +136,7 @@ public class TxsActivity extends ActionBarActivity {
             } else {
                 category = "Uncategorized";
             }
-            String amount = new Tx().formattedBTCValue(tx.amountBTC);
+            String amount = Formatter.btcToString(tx.amountBTC);
 
 
             // TODO CALC REALTIME

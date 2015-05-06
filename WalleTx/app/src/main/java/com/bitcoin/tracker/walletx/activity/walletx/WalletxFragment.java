@@ -19,18 +19,19 @@ import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.Constants;
 import com.bitcoin.tracker.walletx.activity.SharedData;
 import com.bitcoin.tracker.walletx.activity.SyncableActivity;
+import com.bitcoin.tracker.walletx.activity.SyncableFragmentInterface;
 import com.bitcoin.tracker.walletx.activity.group.GroupUpdateActivity;
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
 import com.bitcoin.tracker.walletx.api.SyncManager;
 import com.bitcoin.tracker.walletx.activity.summary.SummaryAllActivity;
 import com.bitcoin.tracker.walletx.activity.summary.SummaryGroupActivity;
 import com.bitcoin.tracker.walletx.activity.summary.SummarySingleActivity;
+import com.bitcoin.tracker.walletx.helper.Formatter;
+import com.bitcoin.tracker.walletx.model.Balance;
 import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.Group;
-import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,17 +40,8 @@ import java.util.List;
  * WalletxFragment acts as the home view for the application.
  * Displays aggregations of wallets.
  */
-public class WalletxFragment extends Fragment {
+public class WalletxFragment extends Fragment implements SyncableFragmentInterface {
 
-    // onActivityResult requestCodes
-    private static final int NEW_WALLETX_ADDED = 1;
-    private static final int WALLETX_UPDATED = 2;
-    private static final int WALLET_GROUP_UPDATED = 3;
-
-    // The fragment argument representing the section number for this fragment.
-    private static final String ARG_SECTION_NUMBER = "section_number";
-
-    // Walletx custom expandable list
     ExpandableListView mExpListView;
     WalletxExpListAdapter mListApapter;
     List<String> mGroupHeader;
@@ -57,14 +49,11 @@ public class WalletxFragment extends Fragment {
     View mHeader; // all wallets header for exp. list view
     View mFooter; // no wallets footer (shown only when no wallets are added)
 
-    // Reference to activity
-    private static Activity mActivity;
-
     // Returns a new instance of this fragment for the given section number.
     public static WalletxFragment newInstance(int sectionNumber) {
         WalletxFragment fragment = new WalletxFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putInt(Constants.ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,16 +61,22 @@ public class WalletxFragment extends Fragment {
     public WalletxFragment() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        mActivity = getActivity();
         View view = inflater.inflate(R.layout.walletx_fragment, container, false);
-        getExpListViewAndBindEvents(view);
+        setupExpListView(view);
         setupAllWalletsHeader();
         setupNoWalletsFooter();
         prepareData();
         populateListViewWithPreparedData();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SyncManager.syncExchangeRate(getActivity().getApplicationContext());
     }
 
     @Override
@@ -95,28 +90,46 @@ public class WalletxFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
+        ((MainActivity) activity).onSectionAttached(getArguments().
+                getInt(Constants.ARG_SECTION_NUMBER));
     }
 
-    /**
-     * Refreshes the expListView and initiates a data sync when required
-     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == NEW_WALLETX_ADDED) {
+        if (requestCode == Constants.RESULT_WALLETX_FRAGMENT_NEW_WTX_ADDED) {
             if (resultCode == Activity.RESULT_OK) {
                 refreshUi();
                 Walletx wtx = SharedData.ADDED_WTX;
                 SyncManager.syncNewWallet(getActivity().getApplicationContext(), wtx);
+
+                /**
+                 * TODO FIGURE OUT HOW TO REFRESH LIST VIEW AGAIN ONCE SYNC IS COMPLETE
+                 */
             }
-        } else if (requestCode == WALLETX_UPDATED || requestCode == WALLET_GROUP_UPDATED) {
+        } else if (requestCode == Constants.RESULT_WALLETX_FRAGMENT_UPDATES_MADE) {
             if (resultCode == Activity.RESULT_OK) {
                 refreshUi();
             }
         }
     }
 
-    private void getExpListViewAndBindEvents(View view) {
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.walletx, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_add_wallet) {
+            Intent intent = new Intent( getActivity(), WalletxCreateActivity.class );
+            startActivityForResult( intent, Constants.RESULT_WALLETX_FRAGMENT_NEW_WTX_ADDED);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setupExpListView(View view) {
         mExpListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
         mExpListView.setOnGroupClickListener(groupClickListener);
         mExpListView.setOnChildClickListener(childWalletClickListener);
@@ -154,11 +167,10 @@ public class WalletxFragment extends Fragment {
         List<Walletx> all = Walletx.getAll();
         long allWalletsBalance = 0;
         for (Walletx wtx : all)
-            allWalletsBalance = allWalletsBalance + wtx.finalBalance;
-        allWalletxBtcBalance.setText(Tx.formattedBTCValue(allWalletsBalance));
-        String inUSD = NumberFormat.getIntegerInstance().
-                format(ExchangeRate.EXCHANGE_RATE_IN_USD * allWalletsBalance / Constants.SATOSHIS);
-        allWalletsUSD.setText(inUSD);
+            allWalletsBalance = allWalletsBalance + Balance.getBalanceAsLong(wtx);
+        allWalletxBtcBalance.setText(Formatter.btcToString(allWalletsBalance));
+        float inUsd = ExchangeRate.convert(allWalletsBalance, getActivity());
+        allWalletsUSD.setText(Formatter.usdToString(inUsd));
     }
 
     private void prepareGroupAndChildData() {
@@ -185,7 +197,7 @@ public class WalletxFragment extends Fragment {
             mExpListView.setAdapter(mListApapter);
     }
 
-    private void refreshUi() {
+    public void refreshUi() {
         prepareData();
         setHeaderFooterVisibility();
         mListApapter.updateData(mGroupHeader, mListDataChild);
@@ -216,9 +228,14 @@ public class WalletxFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent( getActivity(), WalletxCreateActivity.class );
-            startActivityForResult( intent, NEW_WALLETX_ADDED );
+            startActivityForResult( intent, Constants.RESULT_WALLETX_FRAGMENT_NEW_WTX_ADDED);
         }
     };
+
+
+    /**
+     * TODO I can remove some extras and used SharedData
+     */
 
     private ExpandableListView.OnGroupClickListener groupClickListener = new ExpandableListView.OnGroupClickListener() {
         @Override
@@ -249,6 +266,13 @@ public class WalletxFragment extends Fragment {
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             int itemType = ExpandableListView.getPackedPositionType(id);
 
+
+
+
+
+
+
+
             // TODO @dc I need a count query here. Or isEmpty query. Replace the if statement below...
             int wtxCount = new Select()
                     .from(Walletx.class)
@@ -266,7 +290,7 @@ public class WalletxFragment extends Fragment {
                 String name = tv.getText().toString();
                 Intent intent = new Intent( getActivity(), WalletxUpdateActivity.class );
                 intent.putExtra("walletx_name", name);
-                startActivityForResult( intent, WALLETX_UPDATED );
+                startActivityForResult( intent, Constants.RESULT_WALLETX_FRAGMENT_UPDATES_MADE );
                 return true;
 
             } else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
@@ -276,7 +300,7 @@ public class WalletxFragment extends Fragment {
                 String name = group.getText().toString();
                 Intent intent = new Intent( getActivity(), GroupUpdateActivity.class );
                 intent.putExtra("wallet_group_name", name);
-                startActivityForResult( intent, WALLET_GROUP_UPDATED );
+                startActivityForResult( intent, Constants.RESULT_WALLETX_FRAGMENT_UPDATES_MADE );
                 return true;
 
             } else {
@@ -287,27 +311,5 @@ public class WalletxFragment extends Fragment {
             }
         }
     };
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Add fragment specific action bar items to activity action bar items.
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.walletx, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        System.out.println("WTF?");
-
-        if (item.getItemId() == R.id.action_add_wallet) {
-            // open new activity
-            Intent intent = new Intent( getActivity(), WalletxCreateActivity.class );
-            startActivityForResult( intent, NEW_WALLETX_ADDED );
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    //endregion
 
 } // WalletxFragment

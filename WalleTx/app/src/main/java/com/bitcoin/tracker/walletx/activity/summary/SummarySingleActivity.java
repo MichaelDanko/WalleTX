@@ -39,6 +39,10 @@ public class SummarySingleActivity extends SummaryAbstractActivity {
         getSupportActionBar().setTitle(mWalletxName);
     }
 
+    protected void refreshUi() {
+
+    }
+
     //endregion
 
 }

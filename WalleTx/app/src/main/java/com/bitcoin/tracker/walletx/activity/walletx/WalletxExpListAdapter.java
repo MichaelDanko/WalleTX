@@ -1,6 +1,5 @@
 package com.bitcoin.tracker.walletx.activity.walletx;
 
-import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,13 +13,12 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
-import com.bitcoin.tracker.walletx.activity.Constants;
+import com.bitcoin.tracker.walletx.helper.Formatter;
 import com.bitcoin.tracker.walletx.model.Balance;
 import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.Group;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 import com.bitcoin.tracker.walletx.model.SupportedWalletType;
-import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 /**
@@ -55,7 +53,7 @@ public class WalletxExpListAdapter extends BaseExpandableListAdapter {
         notifyDataSetChanged();
     }
 
-    //region CHILD ROWS (Rows pertaining to wallets within groups) ---------------------------------
+    //region CHILD ---------------------------------------------------------------------------------
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
@@ -108,18 +106,11 @@ public class WalletxExpListAdapter extends BaseExpandableListAdapter {
                 mDescription.setText(saw.publicKey);
         }
 
-        try {
-            mBtcBalance.setText(Tx.formattedBTCValue((long) Balance.getBalanceAsFloat(wtx)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Balance balance = Balance.getBalance(wtx);
-        if (balance != null) {
-            float convert = Balance.getBalanceAsFloat(wtx);
-            String inUsd = ExchangeRate.getFormattedConversionFor(convert);
-            mLocalCurrencyBalance.setText(inUsd);
-        }
+        // set balances
+        mBtcBalance.setText(Formatter.btcToString(Balance.getBalanceAsLong(wtx)));
+        float inUsd = ExchangeRate.convert(Balance.getBalanceAsLong(wtx), mContext);
+        String formatted = Formatter.usdToString(inUsd);
+        mLocalCurrencyBalance.setText(formatted);
     }
 
     @Override
@@ -132,8 +123,8 @@ public class WalletxExpListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    //endregion
-    //region GROUP (Group header rows) -------------------------------------------------------------
+    //endregion CHILD
+    //region GROUP ---------------------------------------------------------------------------------
 
     @Override
     public Object getGroup(int groupPosition) {
@@ -159,7 +150,7 @@ public class WalletxExpListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.walletx_fragment_group_header, null);
         }
         getViewsInGroupHeader(convertView);
-        prepareGroupHeaderData(groupPosition, parent);
+        prepareGroupHeaderData(groupPosition);
 
         // Prevent group collapsing
         ExpandableListView elv = (ExpandableListView) parent;
@@ -177,7 +168,7 @@ public class WalletxExpListAdapter extends BaseExpandableListAdapter {
         mLocalCurrencyBalanceLabel = (TextView) convertView.findViewById(R.id.lcBalance);
     }
 
-    private void prepareGroupHeaderData(int groupPosition, ViewGroup parent) {
+    private void prepareGroupHeaderData(int groupPosition) {
         String name = (String) getGroup(groupPosition);
         Group group = Group.getBy(name);
         mName.setText(group.name);
@@ -188,20 +179,20 @@ public class WalletxExpListAdapter extends BaseExpandableListAdapter {
             Balance balance = Balance.getBalance(wtx);
             long converted = 0;
             if (balance != null)
-                converted = (long) balance.balance;
+                converted = balance.balance;
             groupBalance = groupBalance + converted;
         }
 
-        mBtcBalance.setText(Tx.formattedBTCValue(groupBalance));
-        String inUSD = NumberFormat.getIntegerInstance().
-                format(ExchangeRate.EXCHANGE_RATE_IN_USD * groupBalance / Constants.SATOSHIS);
-        mLocalCurrencyBalance.setText(inUSD);
+        mBtcBalance.setText(Formatter.btcToString(groupBalance));
+        float inUsd = ExchangeRate.convert(groupBalance, mContext);
+        mLocalCurrencyBalance.setText(Formatter.usdToString(inUsd));
     }
+
+    //endregion GROUP
 
     @Override
     public boolean hasStableIds() {
         return false;
     }
 
-    //endregion
-}
+} // WalletxExpListAdapter

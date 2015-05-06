@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.Constants;
 import com.bitcoin.tracker.walletx.activity.SyncableActivity;
+import com.bitcoin.tracker.walletx.activity.SyncableFragmentInterface;
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
 
 import com.bitcoin.tracker.walletx.model.Group;
@@ -28,7 +29,9 @@ import java.util.List;
 /**
  * Presents a Group ListView so that user can create, update, sort and delete Groups.
  */
-public class GroupFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class GroupFragment extends Fragment implements
+        AbsListView.OnItemClickListener,
+        SyncableFragmentInterface {
 
     private OnFragmentInteractionListener mListener;
     private AbsListView mListView;
@@ -145,6 +148,13 @@ public class GroupFragment extends Fragment implements AbsListView.OnItemClickLi
             startActivityForResult( intent, Constants.RESULT_GROUP_ADDED );
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void refreshUi() {
+        // Required SyncableFragmentInterface method.
+        // We want the user to be able to initiate a sync from the MainActivity; however,
+        // a sync will no change data for this fragment. Thus we do nothing here.
     }
 
     private void prepareData() {

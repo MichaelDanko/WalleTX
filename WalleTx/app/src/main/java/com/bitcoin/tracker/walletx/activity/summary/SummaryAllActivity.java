@@ -31,6 +31,10 @@ public class SummaryAllActivity extends SummaryAbstractActivity {
         getSupportActionBar().setTitle(R.string.walletx_summary_all_title_activity_shortened);
     }
 
+    protected void refreshUi() {
+
+    }
+
     //endregion
 
 }

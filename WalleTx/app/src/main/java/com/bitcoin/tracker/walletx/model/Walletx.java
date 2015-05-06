@@ -32,11 +32,6 @@ public class Walletx extends Model {
     @Column(name = "WalletGroup")
     public Group group;
 
-    // Final Balance of the Wallet
-    // TODO Delete this column once Balances are implemented
-    @Column(name = "FinalBalance")
-    public long finalBalance = 0;
-
     // Has many Txs
     public List<Tx> txs() {
         return getMany(Tx.class, "Walletx");

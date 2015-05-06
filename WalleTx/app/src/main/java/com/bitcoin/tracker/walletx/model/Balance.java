@@ -27,7 +27,7 @@ public class Balance extends Model {
     public Date timestamp;
 
     @Column(name = "Balance")
-    public float balance;
+    public long balance;
 
     // Belongs to a Walletx
     @Column(name = "Walletx")
@@ -94,7 +94,7 @@ public class Balance extends Model {
             .executeSingle();
     }
 
-    public static float getBalanceAsFloat(Walletx wtx) {
+    public static long getBalanceAsLong(Walletx wtx) {
         Balance balance = new Select()
                 .from(Balance.class)
                 .where("Walletx = ?", wtx.getId())

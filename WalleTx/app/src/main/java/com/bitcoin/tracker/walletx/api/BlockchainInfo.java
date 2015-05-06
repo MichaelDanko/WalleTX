@@ -1,7 +1,10 @@
 package com.bitcoin.tracker.walletx.api;
 
-import android.util.Log;
+import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.bitcoin.tracker.walletx.activity.Constants;
+import com.bitcoin.tracker.walletx.helper.JsonHelper;
 import com.bitcoin.tracker.walletx.model.Balance;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
 
@@ -9,15 +12,8 @@ import com.bitcoin.tracker.walletx.model.Tx;
 import com.bitcoin.tracker.walletx.model.Walletx;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-
-import java.io.IOException;
 
 import java.util.Date;
 import java.util.List;
@@ -32,17 +28,53 @@ import java.util.List;
 public class BlockchainInfo {
 
     // Strings to build url's for Blockchain.info API calls
-    private final String URL_SINGLEADDR = "https://blockchain.info/address/";
-    private final String URL_JSON = "?format=json";
-    private final String URL_APPLY_LIMIT = "&limit=";
-    private final String URL_APPLY_OFFSET = "&offset=";
-    private final int BLOCKCHAIN_INFO_MAX_TX_LIMIT = 50;
+    private static final String URL_SINGLEADDR = "https://blockchain.info/address/";
+    private static final String URL_JSON = "?format=json";
+    private static final String URL_APPLY_LIMIT = "&limit=";
+    private static final String URL_APPLY_OFFSET = "&offset=";
+    private static final String URL_TICKER = "https://blockchain.info/ticker";
+    private static final int BLOCKCHAIN_INFO_MAX_TX_LIMIT = 50;
 
-    // Latest block number - for calculating confirmations
-    public static int sLatestBlock;
+    // Communicates with SyncManager that an error occurred.
+    public static boolean sInvalidTxJsonDataReceived = false;
+    public static boolean sInvalidTickerJsonReceived = false;
 
-    // Error logging tag
-    private static final String TAG = "BlockchainInfo";
+    // Stores the USD exchange rate from last sync
+    private static float sExchangeRateInUsd = 0;
+
+    public static float getCurrentExchangeRate(Context context) {
+        if (sExchangeRateInUsd == 0) {
+            SharedPreferences sp = context.getSharedPreferences(Constants.SHARED_PREFERENCES,
+                    Context.MODE_PRIVATE);
+            return sp.getFloat(Constants.SP_EXCHANGE_RATE, 0);
+        }
+        return sExchangeRateInUsd;
+    }
+
+
+
+    // Current called whenever syncable activity is created
+    public static void syncExchangeRate(Context context) {
+
+        URL url = JsonHelper.buildUrlFromString(URL_TICKER + URL_JSON);
+        JsonElement json = JsonHelper.getJsonElementFromUrl(url);
+        TickerData tickerData = new Gson().fromJson(json, TickerData.class);
+        if (tickerData == null) {
+            sInvalidTickerJsonReceived = true;
+        } else {
+            BlockchainInfo.sExchangeRateInUsd = tickerData.USD.sell;
+
+            // Save to shared pref in case activity loads before data pulled
+            SharedPreferences sp = context.getSharedPreferences(Constants.SHARED_PREFERENCES,
+                    Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putFloat(Constants.SP_EXCHANGE_RATE, BlockchainInfo.sExchangeRateInUsd);
+            editor.commit();
+        }
+    }
+
+
+
 
     public BlockchainInfo() {
         super();
@@ -63,6 +95,8 @@ public class BlockchainInfo {
         }
     }
 
+
+
     public void syncTxsForNewWallet(Walletx wtx) {
         SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
         int numTxsToSync = getNumberOfTxsToSyncFor(saw);
@@ -76,10 +110,15 @@ public class BlockchainInfo {
     private int getNumberOfTxsToSyncFor(SingleAddressWallet saw) {
         // perform quick api call to check if there are new txs to sync
         String sUrl = URL_SINGLEADDR + saw.publicKey + URL_JSON + URL_APPLY_LIMIT + "0";
-        JsonElement json = getJsonElementFromUrl(buildUrlFromString(sUrl));
+        JsonElement json = JsonHelper.getJsonElementFromUrl(JsonHelper.buildUrlFromString(sUrl));
         BciAddress bciAddress = new Gson().fromJson(json, BciAddress.class);
-        int currentTxCount = SingleAddressWallet.getPublicKey(bciAddress.address).getTxCount();
-        return bciAddress.n_tx - currentTxCount;
+        if (bciAddress == null) {
+            sInvalidTxJsonDataReceived = true;
+            return 0;
+        } else {
+            int currentTxCount = SingleAddressWallet.getPublicKey(bciAddress.address).getTxCount();
+            return bciAddress.n_tx - currentTxCount;
+        }
     }
 
     // Builds URL with offset to pickup last txs from those to sync
@@ -87,38 +126,7 @@ public class BlockchainInfo {
         int offset = numToSync - 50;
         String sUrl = URL_SINGLEADDR + saw.publicKey + URL_JSON +
                 URL_APPLY_OFFSET + offset;
-        return buildUrlFromString(sUrl);
-    }
-
-    private URL buildUrlFromString(String sUrl) {
-        URL url = null;
-        try {
-            url = new URL(sUrl);
-        } catch (MalformedURLException e) {
-            Log.e(TAG, e.getLocalizedMessage());
-        }
-        return url;
-    }
-
-    private JsonElement getJsonElementFromUrl(URL url) {
-        HttpURLConnection request = null;
-        try {
-            request = (HttpURLConnection) (url).openConnection();
-            request.connect();
-        } catch (MalformedURLException e) {
-            Log.e(TAG, e.getLocalizedMessage());
-        } catch (IOException e) {
-            Log.e(TAG, e.getLocalizedMessage());
-        }
-        JsonParser jp = new JsonParser(); // gson lib
-        JsonElement json = null; //convert the input stream to a json element
-        try {
-            InputStreamReader reader = new InputStreamReader((InputStream) request.getContent());
-            json = jp.parse(reader).getAsJsonObject();
-        } catch (IOException e) {
-            Log.e(TAG, e.getLocalizedMessage());
-        }
-        return json;
+        return JsonHelper.buildUrlFromString(sUrl);
     }
 
     private void syncTxsForWallet(SingleAddressWallet saw, int numTxsToSync, Walletx wtx) {
@@ -126,15 +134,16 @@ public class BlockchainInfo {
         // We need to track this to ensure that all new txs have been inserted
         while (numTxsToSync > 0) {
             URL url = buildSingleAddressApiCallUrlFor(saw, numTxsToSync);
-            JsonElement json = getJsonElementFromUrl(url);
+            JsonElement json = JsonHelper.getJsonElementFromUrl(url);
             BciAddress bciAddress = new Gson().fromJson(json, BciAddress.class);
-            // Save the final balance
-            wtx.finalBalance = bciAddress.final_balance;
-            wtx.save();
-            // Loop through each transaction obtained from the api call
-            for (BciTx bciTx : bciAddress.txs)
-                syncTx(saw, bciTx);
-            numTxsToSync = numTxsToSync - BLOCKCHAIN_INFO_MAX_TX_LIMIT;
+            if (bciAddress == null) {
+                sInvalidTxJsonDataReceived = true;
+            } else {
+                // Loop through each transaction obtained from the api call
+                for (BciTx bciTx : bciAddress.txs)
+                    syncTx(saw, bciTx);
+                numTxsToSync = numTxsToSync - BLOCKCHAIN_INFO_MAX_TX_LIMIT;
+            }
         }
         Balance.clean(wtx);
     }
@@ -193,7 +202,6 @@ public class BlockchainInfo {
         public String address;
         public int n_tx;
         public List<BciTx> txs;
-        public int final_balance;
     }
 
     public class BciTx {
@@ -217,6 +225,16 @@ public class BlockchainInfo {
     public class BciTxInputPrevOut {
         public String addr;
         public long value;
+    }
+
+    // Ticker data
+    public class TickerData {
+        public ExchangeRatesInUSD USD;
+        public TickerData() {}
+        public class ExchangeRatesInUSD {
+            public float sell;
+            public ExchangeRatesInUSD() {}
+        }
     }
 
 } // BlockchainInfo

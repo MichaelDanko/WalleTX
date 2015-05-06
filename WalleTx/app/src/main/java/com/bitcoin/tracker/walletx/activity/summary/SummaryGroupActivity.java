@@ -37,6 +37,10 @@ public class SummaryGroupActivity extends SummaryAbstractActivity {
         getSupportActionBar().setTitle(mGroupName);
     }
 
+    protected void refreshUi() {
+
+    }
+
     //endregion
 
 }

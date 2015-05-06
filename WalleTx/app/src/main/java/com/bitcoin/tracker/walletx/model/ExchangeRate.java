@@ -1,11 +1,20 @@
 package com.bitcoin.tracker.walletx.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.activeandroid.util.SQLiteUtils;
+import com.bitcoin.tracker.walletx.activity.Constants;
+import com.bitcoin.tracker.walletx.api.BlockchainInfo;
+import com.bitcoin.tracker.walletx.helper.JsonHelper;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,8 +32,6 @@ import java.util.List;
  */
 @Table(name = "ExchangeRate")
 public class ExchangeRate extends Model {
-
-    public static float EXCHANGE_RATE_IN_USD = 0;
 
     @Column(name = "timestamp")
     public Date timestamp;
@@ -68,6 +75,11 @@ public class ExchangeRate extends Model {
      *  ExchangeRate Queries  *
      *------------------------*/
 
+    public static float convert(long satoshis, Context context) {
+        float btc = satoshis / (float) Constants.SATOSHIS;
+        return btc * BlockchainInfo.getCurrentExchangeRate(context);
+    }
+
     /**
      * @return USD with specific date
      */
@@ -103,12 +115,12 @@ public class ExchangeRate extends Model {
                 .executeSingle();
     }
 
-    public static String getFormattedConversionFor(float btcAmount) {
-        float usdAmount = btcAmount * EXCHANGE_RATE_IN_USD;
-        DecimalFormat twoDecimal = new DecimalFormat("#.##");
-        float formattedUsdAmount = Float.valueOf(twoDecimal.format(usdAmount));
-        return String.valueOf(formattedUsdAmount);
-    }
+    //public static String getFormattedConversionFor(float btcAmount) {
+    //    float usdAmount = btcAmount * BlockchainInfo.getCurrentExchangeRate();
+    //    DecimalFormat twoDecimal = new DecimalFormat("#.##");
+    //    float formattedUsdAmount = Float.valueOf(twoDecimal.format(usdAmount));
+    //    return String.valueOf(formattedUsdAmount);
+    //}
 
 
 
@@ -118,7 +130,7 @@ public class ExchangeRate extends Model {
 
     public static Float getUSD(){
         //raw query to get one item from column
-        List<ExchangeRate> USDrates = SQLiteUtils.rawQuery(ExchangeRate.class, "Select USD from ExchangeRate Order by timestamp DESC Limit 1", new String[]{"null"} );
+        List<ExchangeRate> USDrates = SQLiteUtils.rawQuery(ExchangeRate.class, "Select USD from ExchangeRate Order by timestamp DESC Limit 1", new String[]{"null"});
         //returns pull list item
         return USDrates.get(0).usd;
     }
@@ -157,7 +169,6 @@ public class ExchangeRate extends Model {
                 .orderBy("Timestamp DESC")
                 .execute();
     }
-
 
     /**
      * Dumps the ExchangeRate table to console.

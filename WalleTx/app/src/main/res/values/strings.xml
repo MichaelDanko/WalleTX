@@ -146,4 +146,7 @@
     <string name="title_activity_graph_spending_by_category">Spending By Category</string>
     <string name="title_activity_syncable">SyncableActivity</string>
 
+    <!-- BLOCKCHAIN -->
+    <string name="blockchain_error_bad_json_data">Oops! We experienced an issue while syncing your data. Please try again.</string>
+
 </resources>

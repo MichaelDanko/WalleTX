@@ -25,7 +25,7 @@ import com.bitcoin.tracker.walletx.model.Balance;
  * of the sync icon in the ActionBar accordingly. This allows the sync icon to remain in
  * animation across all activities until the sync is complete.
  */
-public class SyncableActivity extends ActionBarActivity {
+public abstract class SyncableActivity extends ActionBarActivity {
 
     // Receives broadcasts from the SyncManager
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
@@ -37,6 +37,11 @@ public class SyncableActivity extends ActionBarActivity {
     // Sync ActionView and rotate animation
     private ImageView mSyncActionView;
     private Animation mSyncAnimation;
+
+    /**
+     *
+     */
+    protected abstract void refreshUi();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +83,6 @@ public class SyncableActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_sync) {
-
-
-            Balance.dump();
-
-
             // initiate a sync of txs for all existing wallets
             SyncManager.syncExistingWallets(this.getApplicationContext());
             return true;
@@ -141,10 +141,12 @@ public class SyncableActivity extends ActionBarActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             boolean syncComplete = intent.getBooleanExtra(Constants.EXTRA_SYNC_MGR_COMPLETE, true);
-            if (!syncComplete)
+            if (!syncComplete) {
                 startSyncIconRotation();
-            else
+            } else {
+                refreshUi();
                 stopSyncIconRotation();
+            }
         }
 
     } // SyncBroadcastReceiver

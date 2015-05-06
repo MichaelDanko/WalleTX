@@ -18,6 +18,7 @@ import android.widget.ListView;
 import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.Constants;
 import com.bitcoin.tracker.walletx.activity.SyncableActivity;
+import com.bitcoin.tracker.walletx.activity.SyncableFragmentInterface;
 import com.bitcoin.tracker.walletx.activity.navDrawer.MainActivity;
 import com.bitcoin.tracker.walletx.model.Category;
 
@@ -27,7 +28,9 @@ import java.util.List;
 /**
  * Presents a Category ListView so that user can create, update and delete Categories.
  */
-public class CategoryFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class CategoryFragment extends Fragment implements
+        AbsListView.OnItemClickListener,
+        SyncableFragmentInterface {
 
     private OnFragmentInteractionListener mListener;
     private ListView mListView;
@@ -141,6 +144,13 @@ public class CategoryFragment extends Fragment implements AbsListView.OnItemClic
             startActivityForResult( intent, Constants.RESULT_CATEGORY_CHANGES_MADE);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void refreshUi() {
+        // Required SyncableFragmentInterface method.
+        // We want the user to be able to initiate a sync from the MainActivity; however,
+        // a sync will no change data for this fragment. Thus we do nothing here.
     }
 
     private void setupListViewFooter() {

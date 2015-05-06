@@ -4,9 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.bitcoin.tracker.walletx.R;
 import com.bitcoin.tracker.walletx.activity.Constants;
-import com.bitcoin.tracker.walletx.model.Balance;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.ArrayList;
@@ -18,6 +19,10 @@ import java.util.List;
  *
  * Although it is possible to use this class directly, it has been implemented with
  * several static methods that should be used to initiate a sync.
+ *
+ * TODO Check for connectivity before attempting to initiate any sync.
+ * TODO Display user feedback if connectivity issue.
+ *
  */
 public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
 
@@ -56,9 +61,13 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
      * Syncs daily bitcoin price data
      * @param context of caller
      */
-    public static void syncBitcoinPriceData(Context context) {
+    public static void syncBtcPriceData(Context context) {
         if (!sSyncIsInProgress)
             new SyncManager(context, SyncType.BTC_PRICE_DATA).execute();
+    }
+
+    public static void syncExchangeRate(Context context) {
+        new SyncManager(context, SyncType.CURRENT_EXCHANGE_RATE).execute();
     }
 
     /**
@@ -85,7 +94,11 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        sSyncIsInProgress = true;
+
+        if (!mSyncType.equals(SyncType.CURRENT_EXCHANGE_RATE)) {
+            sSyncIsInProgress = true;
+        }
+
         switch (mSyncType) {
             case TXS_FOR_EXISTING_WALLETS:
                 syncTxsForExistingWallets();
@@ -96,6 +109,9 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
             case BTC_PRICE_DATA:
                 syncBtcPriceData();
                 break;
+            case CURRENT_EXCHANGE_RATE:
+                syncCurrentExchangeRate(mContext);
+                break;
             default:
                 Log.w(TAG, "Invalid SyncType");
                 break;
@@ -105,18 +121,35 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
 
     @Override
     protected void onPreExecute() {
-        broadcastSyncIsInProgress();
+        if (!mSyncType.equals(SyncType.CURRENT_EXCHANGE_RATE)) {
+            System.out.println("In here");
+            broadcastSyncIsInProgress();
+        }
+
     }
 
     @Override
     protected void onProgressUpdate(Integer... progress) {
         super.onProgressUpdate(progress);
-        broadcastSyncIsInProgress();
     }
 
     @Override
     protected void onPostExecute(Boolean result) {
         broadcastSyncIsComplete();
+
+        // Display toast messages for errors encountered.
+        if (BlockchainInfo.sInvalidTxJsonDataReceived) {
+            Toast.makeText(mContext,
+                    mContext.getApplicationContext().
+                            getString(R.string.blockchain_error_bad_json_data),
+                    Toast.LENGTH_SHORT).show();
+            BlockchainInfo.sInvalidTxJsonDataReceived = false;
+        } else if (BlockchainInfo.sInvalidTickerJsonReceived) {
+            Toast.makeText(mContext,"Yo Maman ticker erroror",
+                    Toast.LENGTH_SHORT).show();
+            BlockchainInfo.sInvalidTickerJsonReceived = false;
+        }
+
     }
 
     private void broadcastSyncIsInProgress() {
@@ -170,13 +203,19 @@ public class SyncManager extends AsyncTask<Void, Integer, Boolean> {
         // TODO Implement
     }
 
+    private void syncCurrentExchangeRate(Context context) {
+        System.out.println("Sync Manager called Exchange Rate sync");
+        BlockchainInfo.syncExchangeRate(context);
+    }
+
     /**
      * Various types of syncs that the SyncManager can initiate.
      */
     private enum SyncType {
         TXS_FOR_EXISTING_WALLETS,
         TXS_FOR_NEW_WALLET,
-        BTC_PRICE_DATA
+        BTC_PRICE_DATA,
+        CURRENT_EXCHANGE_RATE
     }
 
 } // SyncManager
