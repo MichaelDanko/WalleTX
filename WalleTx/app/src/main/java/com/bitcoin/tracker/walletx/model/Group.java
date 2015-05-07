@@ -231,11 +231,6 @@ public class Group extends Model {
      */
     public static void delete(Group delete) {
 
-        /*
-         * ---------------------------------------------------------------------------------------------------------
-         * TODO @dc Verify that this functionality is implemented correctly once Walletx implementation is complete.
-         * ---------------------------------------------------------------------------------------------------------
-         */
         List<Walletx> wallets = delete.walletxs();
         Group defaultGroup = Group.getDefault();
         for (Walletx wtx : wallets) {

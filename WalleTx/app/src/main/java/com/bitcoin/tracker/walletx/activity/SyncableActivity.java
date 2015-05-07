@@ -39,7 +39,7 @@ public abstract class SyncableActivity extends ActionBarActivity {
     private Animation mSyncAnimation;
 
     /**
-     *
+     * Extending classes must implement.
      */
     protected abstract void refreshUi();
 

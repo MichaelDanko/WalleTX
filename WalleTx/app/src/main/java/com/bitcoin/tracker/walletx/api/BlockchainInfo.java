@@ -41,6 +41,12 @@ public class BlockchainInfo {
     public static boolean sInvalidTickerJsonReceived = false;
     public static boolean sInvalidLatestBlockJsonReceived = false;
 
+    public BlockchainInfo() {
+        super();
+    }
+
+    //region EXCHANGE RATE -------------------------------------------------------------------------
+
     // Stores the USD exchange rate from last sync
     private static float sExchangeRateInUsd = 0;
 
@@ -71,6 +77,8 @@ public class BlockchainInfo {
         }
     }
 
+    //endregion
+    //region LATEST BLOCK --------------------------------------------------------------------------
 
     // Stores the USD exchange rate from last sync
     private static long sLatestBlock = 0;
@@ -102,12 +110,9 @@ public class BlockchainInfo {
         return sLatestBlock;
     }
 
-
-
-
-    public BlockchainInfo() {
-        super();
-    }
+    //endregion
+    //region TXS
+    //----------------------------------------------------------------------------------------------
 
     /**
      * Syncs new transactions associated with list of Walletx objects.
@@ -123,8 +128,6 @@ public class BlockchainInfo {
             syncTxsForWallet(saw, numTxsToSync, wtx);
         }
     }
-
-
 
     public void syncTxsForNewWallet(Walletx wtx) {
         SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
@@ -188,7 +191,6 @@ public class BlockchainInfo {
             tx.wtx = wtx;
             tx.block = bciTx.block_height;
             tx.category = null;
-            tx.note = null;
             tx.hash = bciTx.hash;
 
             // Sum inputs associated with this address
@@ -220,6 +222,8 @@ public class BlockchainInfo {
         }
 
     } // syncTx
+
+    //endregion
 
     //--------------------------------------------------//
     //  Blockchain.info json requests in object form.   //

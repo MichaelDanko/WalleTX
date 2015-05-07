@@ -20,7 +20,6 @@ public class Constants {
     public static final String SP_EXCHANGE_RATE = "Shared Preferences > Exchange Rate";
     public static final String SP_LATEST_BLOCK = "Shared Preferences > Latest Block";
 
-
     //endregion
     //region INTENT
     //----------------------------------------------------------------------------------------------
@@ -33,12 +32,9 @@ public class Constants {
 
     public static final int RESULT_WALLETX_FRAGMENT_NEW_WTX_ADDED = 1;
     public static final int RESULT_WALLETX_FRAGMENT_UPDATES_MADE = 2;
-
     public static final int RESULT_CATEGORY_CHANGES_MADE = 1;
-
     public static final int RESULT_GROUP_ADDED = 1;
     public static final int RESULT_GROUP_UPDATED = 2;
-
     public static final int RESULT_TX_UPDATED = 1;
 
     //endregion

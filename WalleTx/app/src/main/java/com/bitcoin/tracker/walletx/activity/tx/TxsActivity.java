@@ -100,8 +100,7 @@ public class TxsActivity extends SyncableActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // TODO Include TxDetailActivity functionality here rather than in a new activity.
                 Intent intent = new Intent(getBaseContext(), TxDetailActivity.class);
-                Tx tx = mTxs.get(position - 1);
-                intent.putExtra( "hash", tx.hash );
+                SharedData.TX_TO_GET_DETAILS = mTxs.get(position);
                 startActivityForResult( intent, Constants.RESULT_TX_UPDATED );
             }
 
@@ -120,7 +119,6 @@ public class TxsActivity extends SyncableActivity {
                 mTxs.add(tx);
             }
         }
-
         Collections.sort(mTxs, new Comparator<Tx>() {
             @Override
             public int compare(Tx tx1, Tx tx2) {

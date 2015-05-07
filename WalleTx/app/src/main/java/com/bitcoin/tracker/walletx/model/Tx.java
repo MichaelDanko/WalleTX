@@ -53,10 +53,6 @@ public class Tx extends Model {
     @Column(name = "TxCategory")
     public Category category;
 
-    // Has one note (optional)
-    @Column(name = "TxNote")
-    public Note note;
-
     public Tx() {
         super();
     }
@@ -99,7 +95,6 @@ public class Tx extends Model {
      * @param _category
      * @return all transactions with param of catagory
      */
-
     public static List<Tx> getAllTxCategory(Category _category){
         return new Select()
                 .from(Tx.class)
@@ -113,7 +108,6 @@ public class Tx extends Model {
      *
      * @return queries entire table for dump method
      */
-
     public static List<Tx> getAllTxTest(){
         return new Select()
                 .from(Tx.class)
@@ -123,16 +117,7 @@ public class Tx extends Model {
 
     }
 
-
     //endregion
-
-    //region VALIDATION
-    //----------------------------------------------------------------------------------------------
-
-
-
-    //endregion
-
     //region DEBUG
     //----------------------------------------------------------------------------------------------
 

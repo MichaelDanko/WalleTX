@@ -76,7 +76,11 @@ public class Balance extends Model {
 
     }
 
-    // TXS ADDED OUT OF ORDER
+    /*
+     * Note: Tx insert order is uncertain, thus we cannot calculate a balance while inserting
+     * Txs. We must wait until all txs are inserted, then sweep the tx table sorted by
+     * date and update the balance.
+     */
     public static Balance createNewAssociatedWith(Tx tx) {
         Balance balance = new Balance(tx.timestamp, 0, tx.wtx);
         balance.save();
@@ -114,18 +118,7 @@ public class Balance extends Model {
     }
 
     //endregion
-
-    //region VALIDATION
-    //----------------------------------------------------------------------------------------------
-
-
-
-    //endregion
-
-
-
-
-        //region DEBUG
+    //region DEBUG
     //----------------------------------------------------------------------------------------------
 
     public static void dump(){

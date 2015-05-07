@@ -19,6 +19,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bitcoin.tracker.walletx.R;
+import com.bitcoin.tracker.walletx.activity.Constants;
+import com.bitcoin.tracker.walletx.activity.SharedData;
+import com.bitcoin.tracker.walletx.activity.SyncableActivity;
+import com.bitcoin.tracker.walletx.api.BlockchainInfo;
+import com.bitcoin.tracker.walletx.helper.Formatter;
 import com.bitcoin.tracker.walletx.model.Category;
 import com.bitcoin.tracker.walletx.model.Tx;
 
@@ -31,16 +36,12 @@ import java.util.List;
  * Tx Details Activity
  * TODO Move all of this functionality into the TxsActivity in the form of dialogs
  */
-public class TxDetailActivity extends ActionBarActivity {
+public class TxDetailActivity extends SyncableActivity {
 
     AutoCompleteTextView mTagAutoCompleteTextView;
     ImageView mTagImageView;
     Button mMoreInfoButton;
     TextView confirmTextField;
-    Tx txDetail = null;
-
-    // Reference to activity
-    static Activity mActivity;
 
     // Track if changes has been made to the tag
     private boolean mTagUpdated = false;
@@ -49,12 +50,17 @@ public class TxDetailActivity extends ActionBarActivity {
     private ArrayList<String> mTags = new ArrayList<>();
 
     @Override
+    protected void refreshUi() {
+        // TODO This class requires refactoring so that we can reuse code from onCreate
+        //      However, if this content is moved in the TxsActivity
+        //      this class will simply be deleted.
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tx_detail_activity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mActivity = this;
 
         // prevent autofocus on tags autocompletetextview
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -63,39 +69,55 @@ public class TxDetailActivity extends ActionBarActivity {
 
         // Setup AutoCompleteTextView
         if ( mCategories != null ) {
-            for (Category cat : mCategories) {
+            for (Category cat : mCategories)
                 mTags.add(cat.name);
-            }
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mTags);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1, mTags);
             mTagAutoCompleteTextView.setAdapter(adapter);
         }
 
-        // Retrieve Extras
-        String extras = getIntent().getExtras().getString("hash");
-        txDetail = Tx.getTxByHash(extras);
         final TextView timeTextField = (TextView) findViewById(R.id.time);
         final TextView dateTextField = (TextView) findViewById(R.id.tx_date);
         confirmTextField = (TextView) findViewById(R.id.textView8);
         final TextView spendReceiveLabel = (TextView) findViewById(R.id.spent_or_received_label);
         final TextView spendReceiveAmount = (TextView) findViewById(R.id.spent_or_received_amount);
 
-        if (txDetail.amountBTC < 0) {
+        if (SharedData.TX_TO_GET_DETAILS.amountBTC < 0)
             spendReceiveLabel.setText("Spent");
-        } else {
+        else
             spendReceiveLabel.setText("Received");
-        }
-        spendReceiveAmount.setText("TODO"); //new Tx().formattedBTCValue(extras));
+
+        spendReceiveAmount.setText(Formatter.btcToString(SharedData.TX_TO_GET_DETAILS.amountBTC));
         DateFormat time = new SimpleDateFormat("HH:mm:ss");
         DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
-        timeTextField.setText(time.format(txDetail.timestamp));
-        dateTextField.setText(date.format(txDetail.timestamp));
-        // TODO CALC REALTIME
-        //confirmTextField.setText(Long.toString(txDetail.confirmations));
+        timeTextField.setText(time.format(SharedData.TX_TO_GET_DETAILS.timestamp));
+        dateTextField.setText(date.format(SharedData.TX_TO_GET_DETAILS.timestamp));
+        long confs = BlockchainInfo.getLatestBlock(
+                getApplicationContext()) - SharedData.TX_TO_GET_DETAILS.block + 1;
+        confirmTextField.setText(String.valueOf(confs));
 
         // populate the autocompletetextview with existing tag for this tx
-        if ( txDetail.category != null ) {
-            mTagAutoCompleteTextView.setText(txDetail.category.name);
+        if ( SharedData.TX_TO_GET_DETAILS.category != null )
+            mTagAutoCompleteTextView.setText(SharedData.TX_TO_GET_DETAILS.category.name);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            if (mTagUpdated) {
+                Intent intent = this.getIntent();
+                setResult(RESULT_OK, intent);
+            }
+            finish();
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void getUIViews() {
@@ -135,19 +157,19 @@ public class TxDetailActivity extends ActionBarActivity {
                     String toAdd = mTagAutoCompleteTextView.getText().toString();
                     Category existenceCheck = Category.getBy(toAdd);
                     if ( existenceCheck != null ) {
-                        txDetail.category = existenceCheck;
-                        txDetail.save();
+                        SharedData.TX_TO_GET_DETAILS.category = existenceCheck;
+                        SharedData.TX_TO_GET_DETAILS.save();
                         mTagUpdated = true;
                     } else if ( toAdd.equals("") ) {
-                        txDetail.category = null;
-                        txDetail.save();
+                        SharedData.TX_TO_GET_DETAILS.category = null;
+                        SharedData.TX_TO_GET_DETAILS.save();
                         mTagUpdated = true;
                     } else {
                         Category newCat = new Category();
                         newCat.name = toAdd;
                         newCat.save();
-                        txDetail.category = newCat;
-                        txDetail.save();
+                        SharedData.TX_TO_GET_DETAILS.category = newCat;
+                        SharedData.TX_TO_GET_DETAILS.save();
                         mTagUpdated = true;
                     }
                     mTagImageView.setTag("out_of_focus");
@@ -159,30 +181,12 @@ public class TxDetailActivity extends ActionBarActivity {
         mMoreInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent blockchaininfoIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://blockchain.info/tx/" + txDetail.hash));
+                Intent blockchaininfoIntent =
+                        new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://blockchain.info/tx/" + SharedData.TX_TO_GET_DETAILS.hash));
                 startActivity(blockchaininfoIntent);
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.sync, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            if (mTagUpdated) {
-                Intent intent = this.getIntent();
-                setResult(RESULT_OK, intent);
-            }
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }

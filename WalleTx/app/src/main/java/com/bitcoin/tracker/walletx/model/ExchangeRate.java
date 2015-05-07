@@ -107,7 +107,6 @@ public class ExchangeRate extends Model {
     /**
      * @return GBP with specific date
      */
-
     public static ExchangeRate fromDateGBP(Date date){
         return new Select("GBP")
                 .from(ExchangeRate.class)
@@ -115,19 +114,9 @@ public class ExchangeRate extends Model {
                 .executeSingle();
     }
 
-    //public static String getFormattedConversionFor(float btcAmount) {
-    //    float usdAmount = btcAmount * BlockchainInfo.getCurrentExchangeRate();
-    //    DecimalFormat twoDecimal = new DecimalFormat("#.##");
-    //    float formattedUsdAmount = Float.valueOf(twoDecimal.format(usdAmount));
-    //    return String.valueOf(formattedUsdAmount);
-    //}
-
-
-
     /**
      * @return  most recent USD by timestamp
      */
-
     public static Float getUSD(){
         //raw query to get one item from column
         List<ExchangeRate> USDrates = SQLiteUtils.rawQuery(ExchangeRate.class, "Select USD from ExchangeRate Order by timestamp DESC Limit 1", new String[]{"null"});
@@ -139,7 +128,6 @@ public class ExchangeRate extends Model {
     /**
      * @return returns most recent EUR by timestamp
      */
-
     public static Float getEUR(){
         //raw query to get one item from column
         List<ExchangeRate> EURrates = SQLiteUtils.rawQuery(ExchangeRate.class, "Select EUR from ExchangeRate Order by timestamp DESC Limit 1", new String[]{"null"} );
@@ -151,7 +139,6 @@ public class ExchangeRate extends Model {
     /**
      * @return returns most recent GBR by timestamp
      */
-
     public static Float getGBR(){
         //raw query to get one item from column
         List<ExchangeRate> GBRrates = SQLiteUtils.rawQuery(ExchangeRate.class, "Select GBR from ExchangeRate Order by timestamp DESC Limit 1", new String[]{"null"} );
@@ -162,7 +149,6 @@ public class ExchangeRate extends Model {
     /**
      * debug get all of ExchangeRate
      */
-
     public static List<ExchangeRate> getAllSortedTime(){
         return new Select()
                 .from(ExchangeRate.class)
