@@ -1,0 +1,17 @@
+<!-- This menu is displayed in the WalletxFragment and should be displayed
+     in all activities and/or fragments accessed from the WalletxFragment -->
+
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_add_wallet"
+        android:title="@string/menu_action_add_wallet"
+        android:orderInCategory="90"
+        android:icon="@drawable/ic_action_add"
+        app:showAsAction="always" />
+
+</menu>

@@ -1,244 +1,278 @@
-/* Michael Danko
- * CEN4021 Software Engineering II
- * Pretige Worldwide
- * Blockchain API Source Code for Assignment 7
- * Created 03-20-2015
- * Copyright 2015
- */
 package com.bitcoin.tracker.walletx.api;
 
-// Android requires Asynchronous Tasks to be completed in the background.
-import android.os.AsyncTask;
-// Android logging
-import android.util.Log;
+import android.content.Context;
+import android.content.SharedPreferences;
 
-// Data Model Functionality
-import com.bitcoin.tracker.walletx.activity.SyncableInterface;
+import com.bitcoin.tracker.walletx.activity.Constants;
+import com.bitcoin.tracker.walletx.helper.JsonHelper;
 import com.bitcoin.tracker.walletx.model.Balance;
-import com.bitcoin.tracker.walletx.model.ExchangeRate;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
+
 import com.bitcoin.tracker.walletx.model.Tx;
-import com.bitcoin.tracker.walletx.model.TxNote;
 import com.bitcoin.tracker.walletx.model.Walletx;
-
-// Gson library convert JSON to an object class
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
-// Used for web api calls
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.URL;
 
-// Exception Catching
-import java.io.IOException;
-
-// Java Lists
-
-// Used to determine when an asynchrnous call has been completed
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
-/*
- * Fetches Blockchain and wallet data from Blockchain.info usin*g the Blockchain.info API.
+/**
+ * BlockchainInfo handles Blockchain.info API calls
+ * and saves results to the database.
+ *
+ * TODO This class requires thorough testing.
+ *
  */
-public class BlockchainInfo extends AsyncTask<Void, Void, Boolean> {
+public class BlockchainInfo {
 
-    // Reference to calling fragment
-    SyncableInterface caller;
+    // Strings to build url's for Blockchain.info API calls
+    private static final String URL_SINGLEADDR = "https://blockchain.info/address/";
+    private static final String URL_JSON = "?format=json";
+    private static final String URL_APPLY_LIMIT = "&limit=";
+    private static final String URL_APPLY_OFFSET = "&offset=";
+    private static final String URL_TICKER = "https://blockchain.info/ticker";
+    private static final String URL_LATEST_BLOCK = "https://blockchain.info/latestblock";
+    private static final int BLOCKCHAIN_INFO_MAX_TX_LIMIT = 50;
 
-    // Data will be pushed into an object that models the JSON received
-    public static BlockchainInfoWalletData blockchainInfoWalletData = new BlockchainInfoWalletData();
+    // Communicates with SyncManager that an error occurred.
+    public static boolean sInvalidTxJsonDataReceived = false;
+    public static boolean sInvalidTickerJsonReceived = false;
+    public static boolean sInvalidLatestBlockJsonReceived = false;
 
-    public LatestBlockInfo latestBlockInfo = new LatestBlockInfo();
-    public TickerData tickerData = new TickerData();
-
-    // CountDownLatch is used to determine when an asynchronous call is complete, otherwise
-    // tests may fail if the data asynchronous call is slow.
-    public static final CountDownLatch signal = new CountDownLatch(1);
-
-    // Two parameter constructor, address and wallet
     public BlockchainInfo() {
         super();
     }
 
-    // Two parameter constructor, calling fragment, address and wallet
-    public BlockchainInfo(SyncableInterface caller) {
-        super();
-        this.caller = caller;
+    //region EXCHANGE RATE -------------------------------------------------------------------------
+
+    // Stores the USD exchange rate from last sync
+    private static float sExchangeRateInUsd = 0;
+
+    public static float getCurrentExchangeRate(Context context) {
+        if (sExchangeRateInUsd == 0) {
+            SharedPreferences sp = context.getSharedPreferences(Constants.SHARED_PREFERENCES,
+                    Context.MODE_PRIVATE);
+            return sp.getFloat(Constants.SP_EXCHANGE_RATE, 0);
+        }
+        return sExchangeRateInUsd;
     }
 
-    // Asynchronous call to complete web api pull in background.
-    @Override
-    protected Boolean doInBackground(Void...nothing) {
+    // Current called whenever syncable activity is created
+    public static void syncExchangeRate(Context context) {
+        URL url = JsonHelper.buildUrlFromString(URL_TICKER + URL_JSON);
+        JsonElement json = JsonHelper.getJsonElementFromUrl(url);
+        BciTickerData tickerData = new Gson().fromJson(json, BciTickerData.class);
+        if (tickerData == null) {
+            sInvalidTickerJsonReceived = true;
+        } else {
+            BlockchainInfo.sExchangeRateInUsd = tickerData.USD.sell;
+            // Save to shared pref in case activity loads before data pulled
+            SharedPreferences sp = context.getSharedPreferences(Constants.SHARED_PREFERENCES,
+                    Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putFloat(Constants.SP_EXCHANGE_RATE, BlockchainInfo.sExchangeRateInUsd);
+            editor.commit();
+        }
+    }
 
-        List<Walletx> wtxs = Walletx.getAll();
+    //endregion
+    //region LATEST BLOCK --------------------------------------------------------------------------
+
+    // Stores the USD exchange rate from last sync
+    private static long sLatestBlock = 0;
+
+    // Current called whenever syncable activity is created
+    public static void syncLatestBlock(Context context) {
+        URL url = JsonHelper.buildUrlFromString(URL_LATEST_BLOCK + URL_JSON);
+        JsonElement json = JsonHelper.getJsonElementFromUrl(url);
+        BciLatestBlock latestBlock = new Gson().fromJson(json, BciLatestBlock.class);
+        if (latestBlock == null) {
+            sInvalidLatestBlockJsonReceived = true;
+        } else {
+            BlockchainInfo.sLatestBlock = latestBlock.height;
+            // Save to shared pref in case activity loads before data pulled
+            SharedPreferences sp = context.getSharedPreferences(Constants.SHARED_PREFERENCES,
+                    Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putLong(Constants.SP_LATEST_BLOCK, BlockchainInfo.sLatestBlock);
+            editor.commit();
+        }
+    }
+
+    public static long getLatestBlock(Context context) {
+        if (sLatestBlock == 0) {
+            SharedPreferences sp = context.getSharedPreferences(Constants.SHARED_PREFERENCES,
+                    Context.MODE_PRIVATE);
+            return sp.getLong(Constants.SP_LATEST_BLOCK, 0);
+        }
+        return sLatestBlock;
+    }
+
+    //endregion
+    //region TXS
+    //----------------------------------------------------------------------------------------------
+
+    /**
+     * Syncs new transactions associated with list of Walletx objects.
+     *
+     * @param wtxs List of Walletx objects to sync
+     */
+    public void syncTxsFor(List<Walletx> wtxs) {
         for (Walletx wtx : wtxs) {
-
-            String jsonTicker;
-            String jsonLatestBlock;
-            String json;
-
-            try {
-                jsonTicker = readUrl("https://blockchain.info/ticker?format=json");
-                Gson gsonTickerData = new Gson();
-                tickerData = gsonTickerData.fromJson(jsonTicker, TickerData.class);
-                ExchangeRate.EXCHANGE_RATE_IN_USD = tickerData.USD.sell;
-
-                jsonLatestBlock = readUrl("https://blockchain.info/latestblock?format=json");
-                Gson gsonLatestBlockInfo = new Gson();
-                latestBlockInfo = gsonLatestBlockInfo.fromJson(jsonLatestBlock, LatestBlockInfo.class);
-
-                SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
-                json = readUrl("https://blockchain.info/address/" + saw.publicKey + "?format=json");
-                Gson gson = new Gson();
-                blockchainInfoWalletData = gson.fromJson(json, BlockchainInfoWalletData.class);
-                importBlockChainInfoData(wtx);
-
-            } catch (Exception e) {
-                Log.e(e.getClass().getName(), "ERROR:" + e.getMessage(), e);
-                return false;
-            }
+            SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
+            if (saw == null)
+                break;
+            int numTxsToSync = getNumberOfTxsToSyncFor(saw);
+            syncTxsForWallet(saw, numTxsToSync, wtx);
         }
-        return true;
     }
 
-    private void importBlockChainInfoData (Walletx wtx) {
-
-        // The tx amount can be determined by looking at the tx.result of the next tx
-        Tx prevTx = new Tx();
-        Tx newTx = new Tx();
-        BlockchainInfoWalletData.BlockchainInfoTxData lastTx = null;
+    public void syncTxsForNewWallet(Walletx wtx) {
         SingleAddressWallet saw = SingleAddressWallet.getByWalletx(wtx);
+        int numTxsToSync = getNumberOfTxsToSyncFor(saw);
+        syncTxsForWallet(saw, numTxsToSync, wtx);
+    }
 
-        // Loop through each transaction associated with this wallet
-        for (BlockchainInfoWalletData.BlockchainInfoTxData tx : blockchainInfoWalletData.txs) {
+    /**
+     * @param saw SingleAddressWallet to check for new txs
+     * @return int number of txs to sync for this wallet
+     */
+    private int getNumberOfTxsToSyncFor(SingleAddressWallet saw) {
+        // perform quick api call to check if there are new txs to sync
+        String sUrl = URL_SINGLEADDR + saw.publicKey + URL_JSON + URL_APPLY_LIMIT + "0";
+        JsonElement json = JsonHelper.getJsonElementFromUrl(JsonHelper.buildUrlFromString(sUrl));
+        BciAddress bciAddress = new Gson().fromJson(json, BciAddress.class);
+        if (bciAddress == null) {
+            sInvalidTxJsonDataReceived = true;
+            return 0;
+        } else {
+            int currentTxCount = SingleAddressWallet.getPublicKey(bciAddress.address).getTxCount();
+            return bciAddress.n_tx - currentTxCount;
+        }
+    }
 
-            long confirmations = Long.valueOf(0);
-            if (tx.block_height != 0) {
-                confirmations = (latestBlockInfo.height - tx.block_height) + 1;
-                System.out.println("Confirmations -----------------------------" + confirmations);
-            }
+    // Builds URL with offset to pickup last txs from those to sync
+    private URL buildSingleAddressApiCallUrlFor(SingleAddressWallet saw, int numToSync) {
+        int offset = numToSync - 50;
+        String sUrl = URL_SINGLEADDR + saw.publicKey + URL_JSON +
+                URL_APPLY_OFFSET + offset;
+        return JsonHelper.buildUrlFromString(sUrl);
+    }
 
-            Tx existingTx = Tx.getTxByHash(tx.hash);
-            if (existingTx != null) {
-                existingTx.confirmations = confirmations;
-                existingTx.save();
+    private void syncTxsForWallet(SingleAddressWallet saw, int numTxsToSync, Walletx wtx) {
+        // Blockchain limits the number of txs that can be pulled in a single api call
+        // We need to track this to ensure that all new txs have been inserted
+        while (numTxsToSync > 0) {
+            URL url = buildSingleAddressApiCallUrlFor(saw, numTxsToSync);
+            JsonElement json = JsonHelper.getJsonElementFromUrl(url);
+            BciAddress bciAddress = new Gson().fromJson(json, BciAddress.class);
+            if (bciAddress == null) {
+                sInvalidTxJsonDataReceived = true;
             } else {
-
-                // Set the amount for the previous tx and save
-                if (prevTx.hash != null) {
-                    prevTx.amountBTC = tx.result;
-                    prevTx.save();
-                }
-
-                newTx = new Tx(saw.publicKey,
-                        new Date(tx.time * 1000L),
-                        wtx,
-                        tx.block_height,
-                        confirmations,
-                        null,
-                        null,
-                        tx.result,
-                        0,
-                        tx.hash);
-                if (tx.result >= 0)
-                    wtx.totalReceive++;
-                else
-                    wtx.totalSpend++;
-                wtx.finalBalance = blockchainInfoWalletData.final_balance;
-                wtx.save();
-
-                // Save on next iteration
-                prevTx = newTx;
-
-                // Use for reference in calculating the amount of last tx
-                // using michael's logic
-                lastTx = tx;
+                // Loop through each transaction obtained from the api call
+                for (BciTx bciTx : bciAddress.txs)
+                    syncTx(saw, bciTx);
+                numTxsToSync = numTxsToSync - BLOCKCHAIN_INFO_MAX_TX_LIMIT;
             }
         }
+        Balance.clean(wtx);
+    }
 
-        // Although it is faster, we can't calculate the tx amount using the above method.
-        // Utilizing M.Danko's logic to calculate the amount of the final tx before saving
-        if (lastTx != null) {
-            for (BlockchainInfoWalletData.jsonInputs input : lastTx.inputs) {
-                if ( input.prev_out.addr.equals(saw.publicKey) && (Tx.getTxIndex(lastTx.tx_index) == null) ) {
-                    prevTx.amountBTC = 0 - input.prev_out.value;
-                }
-            }
-            for (BlockchainInfoWalletData.jsonOutputs out : lastTx.out) {
-                if (out.addr.equals(saw.publicKey) && (Tx.getTxIndex(lastTx.tx_index) == null)) {
-                    newTx.amountBTC = out.value;
-                }
+    private void syncTx(SingleAddressWallet saw, BciTx bciTx) {
 
+        if (Tx.getTxByHash(bciTx.hash) == null) {
+            Walletx wtx = Walletx.getBy(saw);
+
+            // Create the tx to insert
+            Tx tx = new Tx();
+            tx.timestamp = new Date(bciTx.time * 1000L);
+            tx.wtx = wtx;
+            tx.block = bciTx.block_height;
+            tx.category = null;
+            tx.hash = bciTx.hash;
+
+            // Sum inputs associated with this address
+            long totalInputs = 0;
+            for (BciTxInputs input : bciTx.inputs) {
+                boolean matchesSaw = input.prev_out.addr.equals(saw.publicKey);
+                if (matchesSaw)
+                    totalInputs = totalInputs + input.prev_out.value;
             }
-            newTx.save();
+
+            // Sum outputs assoicated with this address
+            long totalOutputs = 0;
+            for (BciTxOutputs output : bciTx.out) {
+                boolean matchesSaw = output.addr.equals(saw.publicKey);
+                if (matchesSaw)
+                    totalOutputs = totalOutputs + output.value;
+            }
+
+            // Calculate the Tx amount & write to the database
+            tx.amountBTC = 0 - (totalInputs - totalOutputs);
+            if (tx.amountBTC < 0)
+                tx.type = Tx.SPEND;
+            else
+                tx.type = Tx.RECEIVE;
+
+            // Calculate the associated balance and save
+            tx.balance = Balance.createNewAssociatedWith(tx);
+            tx.save();
         }
 
-        System.out.println("");
-        System.out.println("DONE WITH ONE WALLET");
-        System.out.println("");
+    } // syncTx
+
+    //endregion
+
+    //--------------------------------------------------//
+    //  Blockchain.info json requests in object form.   //
+    //  Classes only include data relevant to WalleTx.  //
+    //--------------------------------------------------//
+
+    // Single address wallet
+    public class BciAddress {
+        public String address;
+        public int n_tx;
+        public List<BciTx> txs;
     }
 
-    private static String readUrl (String urlString) throws Exception {
-        BufferedReader reader = null;
-        try {
-            URL url = new URL(urlString);
-            try {
-                reader = new BufferedReader(new InputStreamReader(url.openStream()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            StringBuffer buffer = new StringBuffer();
-            int read;
-            char[] chars = new char[1024];
-            try {
-                while ((read = reader.read(chars)) != -1)
-                buffer.append(chars, 0, read);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return buffer.toString();
-        } finally {
-            if (reader != null)
-            try {
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public class BciTx {
+        public String hash;
+        public int block_height;
+        public long time;
+        public List<BciTxInputs> inputs;
+        public List<BciTxOutputs> out;
+
     }
 
-    @Override
-    protected void onProgressUpdate(Void...argument) {}
-
-    @Override
-    protected void onPostExecute(Boolean result) {
-        if (caller != null) {
-            caller.stopSyncRelatedUI();
-        }
+    public class BciTxInputs {
+        public BciTxInputPrevOut prev_out;
     }
 
-    @Override
-    protected void onPreExecute() {
-        if (caller != null) {
-            caller.startSyncRelatedUI();
-        }
+    public class BciTxOutputs {
+        public String addr;
+        public long value;
     }
 
-    public class LatestBlockInfo {
-        public long height;
-        public LatestBlockInfo() {}
+    public class BciTxInputPrevOut {
+        public String addr;
+        public long value;
     }
 
-    public class TickerData {
+    // Ticker data
+    public class BciTickerData {
         public ExchangeRatesInUSD USD;
-        public TickerData() {}
-
+        public BciTickerData() {}
         public class ExchangeRatesInUSD {
             public float sell;
             public ExchangeRatesInUSD() {}
         }
+    }
+
+    // Latest block
+    public class BciLatestBlock {
+        public int height;
     }
 
 } // BlockchainInfo

@@ -1,51 +1,43 @@
 package com.bitcoin.tracker.walletx.model;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.bitcoin.tracker.walletx.helper.Formatter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
- * Tx model.
- *
- * Tx table stores all transactions associated with wallets added by the user.
- *
- * TODO Add indexes & constraints to columns (if any)
- *
+ * Tx represents a single transaction.
  */
 @Table(name = "Tx")
 public class Tx extends Model {
 
+    // Tx type constants
+    public static final int SPEND = -1;
+    public static final int RECEIVE = 1;
+
+    //region Table
+    //----------------------------------------------------------------------------------------------
+
     @Column(name = "timestamp", index = true)
     public Date timestamp;
-
-    @Column(name = "address")
-    public String address;
 
     @Column(name = "amountBTC")
     public long amountBTC;
 
-    @Column(name = "amountLC")
-    public long amountLC;
+    // Tx type - is tx a spend or receive?
+    // -1 = Spend, 1 = Receive
+    @Column(name = "type")
+    public int type;
 
     @Column(name = "block")
     public long block;
-
-    @Column(name = "tx_index")
-    public long tx_index;
-
-    @Column(name = "confirmation")
-    public long confirmations;
 
     @Column(name = "hash")
     public String hash;
@@ -54,65 +46,42 @@ public class Tx extends Model {
     @Column(name = "Walletx")
     public Walletx wtx;
 
+    @Column(name = "Balance")
+    public Balance balance;
+
     // Belongs to one category (optional)
     @Column(name = "TxCategory")
-    public TxCategory category;
-
-    // Has one note (optional)
-    @Column(name = "TxNote")
-    public TxNote note;
+    public Category category;
 
     public Tx() {
         super();
     }
 
-    public Tx(String address, Date date, Walletx wtx, long block, long confirmations, TxCategory category,
-              TxNote note, long amountBTC, long amountLC, String hash) {
+    public Tx(Date date, Walletx wtx, long block, long amountBTC, String hash) {
         super();
-        this.address = new String(address);
         this.timestamp = date;
         this.amountBTC = amountBTC;
-        this.amountLC = amountLC;
         this.block = block;
-        this.confirmations = confirmations;
         this.hash = hash;
         this.wtx = wtx;
-        this.category = category;
-        this.note = note;
     }
 
-    /*--------------*
-     *  Tx Queries  *
-     *--------------*/
+    //endregion
+    //region Queries -------------------------------------------------------------------------------
 
     /**
-     * @return a specific row with query of WalleTx
+     * @return Single Tx selected by hash value
      */
-
-    public static Tx getTxIndex(Long _tx_index){
+    public static Tx getTxByHash(String hash){
         return new Select()
                 .from(Tx.class)
-                .where("tx_index = ?", _tx_index)
-                .orderBy("timestamp DESC")
+                .where("hash = ?", hash)
                 .executeSingle();
     }
 
     /**
-     * @return a specific row with query of WalleTx
+     * @return All Txs linked to a Walletx
      */
-
-    public static Tx getTxByHash(String _hash){
-        return new Select()
-                .from(Tx.class)
-                .where("hash = ?", _hash)
-                .orderBy("timestamp DESC")
-                .executeSingle();
-    }
-
-    /**
-     * @return all rows with query of WalleTx
-     */
-
     public static List<Tx> getAllTxWalleTx(Walletx _wtx){
         return new Select()
                 .from(Tx.class)
@@ -126,8 +95,7 @@ public class Tx extends Model {
      * @param _category
      * @return all transactions with param of catagory
      */
-
-    public static List<Tx> getAllTxCategory(TxCategory _category){
+    public static List<Tx> getAllTxCategory(Category _category){
         return new Select()
                 .from(Tx.class)
                 .where("TxCategory = ?", _category)
@@ -140,7 +108,6 @@ public class Tx extends Model {
      *
      * @return queries entire table for dump method
      */
-
     public static List<Tx> getAllTxTest(){
         return new Select()
                 .from(Tx.class)
@@ -150,67 +117,9 @@ public class Tx extends Model {
 
     }
 
-    /**
-     *
-     * @return formatted string of BTC value
-      */
-    public static String formattedBTCValue(String _hash) {
-        Tx tx = new Select()
-                .from(Tx.class)
-                .where("hash = ?", _hash)
-                .orderBy("timestamp DESC")
-                .executeSingle();
-
-        return actualStringFormatter(Long.toString(tx.amountBTC));
-    }
-
-    public static String formattedBTCValue(Long formatThisLong) {
-       return actualStringFormatter(Long.toString(formatThisLong));
-    }
-
-    private static String actualStringFormatter (String editString) {
-        String formattedString = null;
-        StringBuilder buffer = new StringBuilder(20);
-        int j = editString.length();
-
-        int k = j-1;
-        boolean isNeg = false;
-        for (int i=16; i > 0 ; i--) {
-
-            if ((16 - i) <= k) {
-               if (editString.charAt(j-1) == '-') {
-                   isNeg = true;
-                   buffer.insert(0, '0');
-               }
-               else {
-                   buffer.insert(0, (editString.charAt(j - 1)));
-               }
-               j--;
-            }
-            else
-                buffer.insert(0, '0');
-        }
-        buffer.insert(8, '.');
-
-        while ((buffer.charAt(0) == '0') && (buffer.length() > 10)) {
-           buffer.delete(0,1);
-        }
-
-        while ((buffer.charAt(buffer.length() - 1) == '0') && (buffer.charAt(buffer.length() - 2)) != '.') {
-           buffer.delete(buffer.length() - 1,buffer.length());
-        }
-
-        if (isNeg) {
-            buffer.insert(0, '-');
-        }
-
-        formattedString = new String(buffer);
-        return formattedString;
-    }
-
-    /**
-     * dump method for testing
-     */
+    //endregion
+    //region DEBUG
+    //----------------------------------------------------------------------------------------------
 
     public static void dump() {
         String dividerCol1 = "------------------";
@@ -221,37 +130,10 @@ public class Tx extends Model {
         List<Tx> txs = Tx.getAllTxTest();
         for (Tx tx : txs) {
             System.out.printf(
-                    "%-20s %-29s %-16s %-15s\n",
+                    "%-20s %-29s %-16s\n",
                     tx.amountBTC,
-                    tx.timestamp,
-                    tx.confirmations);
+                    tx.timestamp);
         }
     }
-
-
-    /*----------------
-    * TX Validation *
-     --------------*/
-
-    /**
-     * Validates if new tx is table.  Checks a timestamp to make sure it's unique
-     * @param context application context
-     * @param time timestamp of tx
-     * @return boolean true or false
-     */
-    public static boolean validateTimeStampIsUnique(Context context, Date time){
-        List<Tx> txs = Tx.getAllTxTest();
-
-        for (Tx tx : txs){
-            if (tx.timestamp.equals(time)){
-                String error = "A transaction already exsists with that timestamp";
-                Toast.makeText(context, error, Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-
-        return true;
-    }
-
 
 } // Tx

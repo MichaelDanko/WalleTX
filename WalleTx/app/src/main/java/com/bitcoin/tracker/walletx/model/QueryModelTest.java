@@ -1,11 +1,7 @@
 package com.bitcoin.tracker.walletx.model;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -61,14 +57,14 @@ public class QueryModelTest {
             //add new tx category
             Walletx newWTX = new Walletx();
             newWTX.name = WTXNames.get(j);
-            newWTX.type = WalletType.SINGLE_ADDRESS_WALLET;
+            newWTX.type = SupportedWalletType.SINGLE_ADDRESS_WALLET;
 
             //adds new group for each tx
-            WalletGroup newGroup = new WalletGroup();
+            Group newGroup = new Group();
             newGroup.name = groupNames.get(j);
             //newGroup.setAsDefault(0);
 
-            WalletGroup last = WalletGroup.getLast();
+            Group last = Group.getLast();
             //newGroup.displayOrder = last.displayOrder + 1;
             newGroup.save();
 
@@ -98,8 +94,8 @@ public class QueryModelTest {
         Balance newBalance = new Balance();
         for(int j = 0; j < 6; j++) {
 
-            newBalance.balance = balances[j];
-            newBalance.setDateFromString(dt);
+            //newBalance.balance = balances[j];
+            //newBalance.setDateFromString(dt);
 
 
 

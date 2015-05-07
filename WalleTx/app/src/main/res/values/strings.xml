@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- TEMP -->
-    <string name="hello_world">Hello world!</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="action_settings">Settings</string>
-
     <!-- APP -->
     <string name="app_name">WalleTx</string>
     <string name="app_confirm_yes">Yes</string>
@@ -35,34 +30,40 @@
 
     <!-- WALLETX -->
     <!-- Read -->
-    <string name="walletx_main_label_all_wallets_aggreation">All Wallets</string>
-    <string name="walletx_main_label_group_placeholder">Wallet Group Name</string>
-    <string name="walletx_main_label_wallet_name_placeholder">Wallet Name</string>
-    <string name="walletx_main_label_wallet_desc_placeholder">Wallet Description</string>
-    <string name="walletx_main_label_empty_bitcoin_balance">0.0</string>
-    <string name="walletx_main_label_empty_lc_balance">0.0</string>
-    <!-- Create new wallet activity -->
-    <string name="walletx_create_title_activity">Add new wallet</string>
-    <string-array name="walletx_create_spinner_supported_wallet_types">
+        <string name="walletx_main_label_all_wallets_aggreation">All Wallets</string>
+        <string name="walletx_main_label_group_placeholder">Wallet Group Name</string>
+        <string name="walletx_main_label_wallet_name_placeholder">Wallet Name</string>
+        <string name="walletx_main_label_wallet_desc_placeholder">Wallet Description</string>
+        <string name="walletx_main_label_empty_bitcoin_balance">0.0</string>
+        <string name="walletx_main_label_empty_lc_balance">0.0</string>
+        <!-- Create new wallet activity -->
+
+
+    <string name="walletx_create_activity_title_activity">Add new wallet</string>
+    <string-array name="walletx_create_activity_spinner_supported_wallet_types">
         <item>Single address wallet</item>
     </string-array>
-    <string name="walletx_create_hint_public_key">Public key</string>
-    <string name="walletx_create_content_description_barcode">Scan public key</string>
-    <string name="walletx_create_hint_single_address_wallet_name">Wallet name</string>
-    <string name="walletx_create_label_group_spinner">Add in group: </string>
-    <string name="walletx_create_submit_button">Add Wallet</string>
-    <string name="walletx_create_toast_invalid_public_key">Oops! Invalid public key</string>
-    <string name="walletx_create_toast_name_is_empty_string">Please provide a name for this wallet</string>
-    <!-- Update existing walletx activity -->
-    <string name="walletx_update_title_activity">Update wallet</string>
-    <string name="walletx_update_hint_name">Name of your wallet</string>
-    <string name="walletx_update_label_group_spinner">In group: </string>
-    <string name="walletx_update_alert_message_delete">All data associated with this wallet will be removed from device. This action cannot be undone.</string>
-    <string name="walletx_update_toast_name_empty">Oops! Wallet name cannot be empty string</string>
-    <string name="walletx_update_toast_name_exists">Oops! Wallet name already exists</string>
-    <!-- No wallets footer -->
-    <string name="walletx_add_first_wallet_l1">You have not added any wallets.</string>
-    <string name="walletx_add_first_wallet_l2">Add your first wallet now.</string>
+    <string name="walletx_create_activity_hint_public_key">Public key</string>
+    <string name="walletx_create_activity_content_description_barcode">Scan public key</string>
+    <string name="walletx_create_activity_hint_single_address_wallet_name">Wallet name</string>
+    <string name="walletx_create_activity_label_group_spinner">Add in group: </string>
+    <string name="walletx_create_activity_submit_button">Add Wallet</string>
+    <string name="walletx_create_activity_error_invalid_public_key">Oops! Invalid public key</string>
+    <string name="walletx_create_activity_error_empty_string">Please provide a name for this wallet.</string>
+    <string name="walletx_create_activity_error_existing_public_key">Ooops! That public key already exists!</string>
+    <string name="walletx_create_activity_error_existing_name">Oops! Please provide a unique wallet name.</string>
+
+
+        <!-- Update existing walletx activity -->
+        <string name="walletx_update_title_activity">Update wallet</string>
+        <string name="walletx_update_hint_name">Name of your wallet</string>
+        <string name="walletx_update_label_group_spinner">In group: </string>
+        <string name="walletx_update_alert_message_delete">All data associated with this wallet will be removed from device. This action cannot be undone.</string>
+        <string name="walletx_update_toast_name_empty">Oops! Wallet name cannot be empty string</string>
+        <string name="walletx_update_toast_name_exists">Oops! Wallet name already exists</string>
+        <!-- No wallets footer -->
+        <string name="walletx_add_first_wallet_l1">You have not added any wallets.</string>
+        <string name="walletx_add_first_wallet_l2">Add your first wallet now.</string>
 
     <!-- WALLETX SUMMARIES -->
     <string name="walletx_summary_all_title_activity">All Wallets Summary</string>
@@ -86,6 +87,8 @@
     <string name="txs_list_item_amount_label">BTC</string>
     <string name="txs_list_item_confirmations">0</string>
     <string name="txs_list_item_confirmations_label">Confirmations</string>
+    <string name="walletx_update_activity_error_empty_string">Oops! Name cannot be an empty string</string>
+    <string name="walletx_update_activity_error_matches_existing">Oops! That name already exists</string>
 
     <!-- TX DETAIL -->
     <string name="title_activity_tx_detail">Transaction Details</string>
@@ -102,39 +105,50 @@
     <string name="tx_detail_hash_placeholder">-</string>
     <string name="tx_detail_button_text">View transaction at Blockchain.info</string>
 
-    <!-- WALLET GROUPS -->
-    <!-- Read list view -->
-    <string name="wallet_group_title_fragment">Wallet Groups</string>
-    <string name="wallet_group_wtx_default_group">My Wallets</string>
-    <string name="wallet_group_label_default">(default)</string>
-    <string name="wallet_group_content_description_up_arrow">Move group name up</string>
-    <string name="wallet_group_content_description_down_arrow">Move group name down</string>
-    <!-- Create new wallet group activity -->
-    <string name="wallet_group_create_title_activity">Add New Wallet Group</string>
-    <string name="wallet_group_create_hint_name">Wallet group name</string>
-    <string name="wallet_group_create_checkbox_set_as_default">Set as default group</string>
-    <string name="wallet_group_create_button_add">Add Wallet Group</string>
-    <string name="wallet_group_create_toast_name_empty">Oops! Wallet group cannot be empty string</string>
-    <string name="wallet_group_create_toast_name_exists">Oops! Wallet group already exists</string>
-    <!-- Update existing wallet group -->
-    <string name="wallet_group_update_title_activity">Edit Wallet Group</string>
-    <string name="wallet_group_update_button_update">Update</string>
-    <string name="wallet_group_update_button_delete">Delete</string>
-    <string name="wallet_group_update_alert_message_delete">Wallets within this group will automatically be moved to the default group.</string>
-    <string name="wallet_group_update_label_delete_default_group_note">Current default group cannot be deleted. If you wish to remove this group please set another wallet group as the default.</string>
+    <!-- GROUP -->
+    <string name="group_title_fragment">Wallet Groups</string>
+    <string name="group_wtx_default_group">My Wallets</string>
+    <string name="group_label_default">(default)</string>
+    <string name="group_content_description_up_arrow">Move group name up</string>
+    <string name="group_content_description_down_arrow">Move group name down</string>
 
-    <!-- TX CATEGORIES -->
-    <string name="title_activity_create_tx_category">Add New Tx Category</string>
-    <string name="tx_categories_create_edittext_hint">Category tag name</string>
-    <string name="tx_categories_create_button_text">Create tx category</string>
-    <string name="title_activity_tx_category_update">Update Tx Category</string>
-    <string name="tx_categories_update_button_text">Update Tx Category</string>
-    <string name="tx_categories_delete_button_text">Delete Tx Category</string>
-    <!-- No tags footer -->
-    <string name="tx_categories_add_first_l1">You have not added any Tx tag categories.</string>
-    <string name="tx_categories_add_first_l2">Add your first tag category now.</string>
+    <string name="group_create_activity_title_activity">Add New Wallet Group</string>
+    <string name="group_create_activity_hint">Wallet group name</string>
+    <string name="group_create_activity_checkbox_set_as_default">Set as default group</string>
+    <string name="group_create_activity_button_add">Add Wallet Group</string>
+    <string name="group_create_activity_error_empty_string">Oops! Group cannot be an empty string</string>
+    <string name="group_create_activity_error_matches_existing">Oops! That group already exists</string>
+
+    <string name="group_update_activity_title_activity">Edit Wallet Group</string>
+    <string name="group_update_activity_button_update">Update</string>
+    <string name="group_update_activity_button_delete">Delete</string>
+    <string name="group_update_activity_label_delete_default_group_note">Current default group cannot be deleted. If you wish to remove this group please set another wallet group as the default.</string>
+    <string name="group_update_activity_delete_dialog_title_1">Delete group \'</string>
+    <string name="group_update_activity_delete_dialog_title_2">\'?</string>
+    <string name="group_update_activity_delete_dialog_confirmation">Wallets within this group will automatically be moved to the default group.</string>
+
+    <!-- CATEGORIES -->
+    <string name="category_none_present_footer_line_1">You have not added any Tx tag categories.</string>
+    <string name="category_none_present_footer_line_2">Add your first tag category now.</string>
+
+    <string name="category_create_activity_title">Add New Tx Category</string>
+    <string name="category_create_activity_error_empty_string">Oops! Category cannot be an empty string</string>
+    <string name="category_create_activity_error_matches_existing">Oops! That category already exists</string>
+    <string name="category_create_activity_hint">Category tag name</string>
+    <string name="category_create_activity_submit_button_text">Create tx category</string>
+
+    <string name="category_update_activity_title">Edit Tx Category</string>
+    <string name="category_update_activity_delete_dialog_title_1">Delete category \'</string>
+    <string name="category_update_activity_delete_dialog_title_2">\'?</string>
+    <string name="category_update__activity_delete_dialog_confirmation">Are you sure you wish to delete this Tx tag category? This action cannot be undone.</string>
+    <string name="category_update_activity_update_button_text">Update Tx Category</string>
+    <string name="category_update_activity_delete_button_text">Delete Tx Category</string>
 
     <!-- GRAPHS -->
     <string name="title_activity_graph_spending_by_category">Spending By Category</string>
+    <string name="title_activity_syncable">SyncableActivity</string>
+
+    <!-- BLOCKCHAIN -->
+    <string name="blockchain_error_bad_json_data">Oops! We experienced an issue while syncing your data. Please try again.</string>
 
 </resources>

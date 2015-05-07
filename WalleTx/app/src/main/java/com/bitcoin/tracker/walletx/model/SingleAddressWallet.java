@@ -1,8 +1,5 @@
 package com.bitcoin.tracker.walletx.model;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -10,7 +7,6 @@ import com.activeandroid.query.Select;
 import com.google.bitcoin.core.Address;
 import com.google.bitcoin.core.AddressFormatException;
 
-import java.lang.ref.SoftReference;
 import java.util.List;
 
 /**
@@ -25,7 +21,7 @@ import java.util.List;
  *
  */
 @Table(name = "SingleAddressWallet")
-public class SingleAddressWallet extends Model implements WalletxBlockchainInterface {
+public class SingleAddressWallet extends Model {
 
     @Column(name = "PublicKey")
     public String publicKey;
@@ -44,23 +40,11 @@ public class SingleAddressWallet extends Model implements WalletxBlockchainInter
         this.publicKey = publicKey;
     }
 
-    /**
-     * Dumps the SingleAddressWallet table to console.
-     * For debugging purposes only.
-     */
-    public static void dump() {
-        String dividerCol1 = "--------------------------------------";
-        String dividerCol2 = "-----------------------";
-        System.out.printf("%-40s %-15s\n", dividerCol1, dividerCol2, dividerCol2);
-        System.out.printf("%-40s %-15s\n", "Public Key", "Walletx Name");
-        System.out.printf("%-40s %-15s\n", dividerCol1, dividerCol2, dividerCol2);
-        List<SingleAddressWallet> saws = SingleAddressWallet.getAll();
-        for (SingleAddressWallet saw : saws) {
-            System.out.printf(
-                    "%-40s %-15s\n",
-                    saw.publicKey,
-                    saw.wtx.name);
-        }
+    public static void create(String address, Walletx wtx) {
+        SingleAddressWallet saWallet = new SingleAddressWallet();
+        saWallet.publicKey = address;
+        saWallet.wtx = wtx;
+        saWallet.save();
     }
 
     /**
@@ -102,6 +86,14 @@ public class SingleAddressWallet extends Model implements WalletxBlockchainInter
         }
     }
 
+    /**
+     * @return Tx count associated with this SingleAddressWallet
+     */
+    public int getTxCount() {
+        Walletx wtx = Walletx.getBy(this);
+        return wtx.getTxCount();
+    }
+
 
     /* ---------------
     Validation
@@ -117,6 +109,28 @@ public class SingleAddressWallet extends Model implements WalletxBlockchainInter
         return new Select().from(SingleAddressWallet.class).where("publicKey = ?", pkey).count();
     }
 
+    public static boolean publicKeyExists(String pk) {
+        int count = new Select().from(SingleAddressWallet.class).where("publicKey = ?", pk).count();
+        return count >= 1;
+    }
 
+    /**
+     * Dumps the SingleAddressWallet table to console.
+     * For debugging purposes only.
+     */
+    public static void dump() {
+        String dividerCol1 = "--------------------------------------";
+        String dividerCol2 = "-----------------------";
+        System.out.printf("%-40s %-15s\n", dividerCol1, dividerCol2, dividerCol2);
+        System.out.printf("%-40s %-15s\n", "Public Key", "Walletx Name");
+        System.out.printf("%-40s %-15s\n", dividerCol1, dividerCol2, dividerCol2);
+        List<SingleAddressWallet> saws = SingleAddressWallet.getAll();
+        for (SingleAddressWallet saw : saws) {
+            System.out.printf(
+                    "%-40s %-15s\n",
+                    saw.publicKey,
+                    saw.wtx.name);
+        }
+    }
 
 } // SingleAddressWallet

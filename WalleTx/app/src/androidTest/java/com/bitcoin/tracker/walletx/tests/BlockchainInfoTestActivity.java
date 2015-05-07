@@ -17,11 +17,11 @@ import android.test.ActivityUnitTestCase;
 import android.util.Log;
 
 import com.bitcoin.tracker.walletx.activity.SplashActivity;
-import com.bitcoin.tracker.walletx.api.BlockchainInfoWalletData;
+import com.bitcoin.tracker.walletx.api.BlockchainInfoTxDataForWallet;
 import com.bitcoin.tracker.walletx.api.BlockchainInfo;
+import com.bitcoin.tracker.walletx.model.Group;
 import com.bitcoin.tracker.walletx.model.SingleAddressWallet;
-import com.bitcoin.tracker.walletx.model.WalletGroup;
-import com.bitcoin.tracker.walletx.model.WalletType;
+import com.bitcoin.tracker.walletx.model.SupportedWalletType;
 import com.bitcoin.tracker.walletx.model.Walletx;
 
 import java.util.concurrent.TimeUnit;
@@ -34,7 +34,7 @@ import java.util.concurrent.CountDownLatch;
 public class BlockchainInfoTestActivity extends ActivityUnitTestCase<SplashActivity> {
     private Intent _startIntent;
     final CountDownLatch signal = BlockchainInfo.signal;
-    final static BlockchainInfoWalletData blockChainInfoTest = new BlockchainInfoWalletData();
+    final static BlockchainInfoTxDataForWallet blockChainInfoTest = new BlockchainInfoTxDataForWallet();
 
     // Set activity to test with, avtivity is needed to provide a UI thread to run tests on.
     // If a true async thread is used the tests may fail due to conditions being tested prior
@@ -66,7 +66,7 @@ public class BlockchainInfoTestActivity extends ActivityUnitTestCase<SplashActiv
             @Override
             // Call blockchain API with known inputs and test results
             public void run() {
-                Walletx wtx = new Walletx("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", WalletType.SINGLE_ADDRESS_WALLET, WalletGroup.getBy("My Wallets"));
+                Walletx wtx = new Walletx("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", SupportedWalletType.SINGLE_ADDRESS_WALLET, Group.getBy("My Wallets"));
                 SingleAddressWallet saw = new SingleAddressWallet(wtx, "1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy");
                 new BlockchainInfo("1ELMkFs5x6avEj7H4FpmHryxUeSWaUJQhy", wtx, blockChainInfoTest).execute();
             }

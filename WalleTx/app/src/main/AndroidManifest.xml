@@ -8,7 +8,7 @@
     <application
         android:name="com.activeandroid.app.Application"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
@@ -32,56 +32,60 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.navDrawer.MainActivity"
             android:label="@string/navigation_drawer_title_activity_main" >
         </activity>
         <activity
-            android:name=".activity.walletx.create.WalletxCreateActivity"
-            android:label="@string/walletx_create_title_activity" >
+            android:name=".activity.walletx.WalletxCreateActivity"
+            android:label="@string/walletx_create_activity_title_activity" >
         </activity>
         <activity
-            android:name=".activity.walletx.updateDelete.WalletxUpdateActivity"
+            android:name=".activity.walletx.WalletxUpdateActivity"
             android:label="@string/walletx_update_title_activity" >
         </activity>
         <activity
-            android:name=".activity.walletxSummary.WalletxSummaryAllActivity"
+            android:name=".activity.summary.SummaryAllActivity"
             android:label="@string/walletx_summary_all_title_activity" >
         </activity>
         <activity
-            android:name=".activity.walletxSummary.WalletxSummaryGroupActivity"
+            android:name=".activity.summary.SummaryGroupActivity"
             android:label="@string/walletx_summary_group_title_activity" >
         </activity>
         <activity
-            android:name=".activity.walletxSummary.WalletxSummarySingleActivity"
+            android:name=".activity.summary.SummarySingleActivity"
             android:label="@string/walletx_summary_single_title_activity" >
         </activity>
         <activity
-            android:name=".activity.walletGroup.create.WalletGroupCreateActivity"
-            android:label="@string/wallet_group_create_title_activity" >
+            android:name=".activity.group.GroupCreateActivity"
+            android:label="@string/group_create_activity_title_activity" >
         </activity>
         <activity
-            android:name=".activity.walletGroup.updateDelete.WalletGroupUpdateActivity"
-            android:label="@string/wallet_group_update_title_activity" >
+            android:name=".activity.group.GroupUpdateActivity"
+            android:label="@string/group_update_activity_title_activity" >
         </activity>
         <activity
-            android:name=".activity.walletxTxs.TxsActivity"
+            android:name=".activity.tx.TxsActivity"
             android:label="@string/title_activity_walletx_txs_title_activity" >
         </activity>
         <activity
-            android:name=".activity.txDetail.TxDetailActivity"
+            android:name=".activity.tx.TxDetailActivity"
             android:label="@string/title_activity_tx_detail" >
         </activity>
         <activity
-            android:name=".activity.txCategories.TxCategoryCreateActivity"
-            android:label="@string/title_activity_create_tx_category" >
+            android:name=".activity.category.CategoryCreateActivity"
+            android:label="@string/category_create_activity_title" >
         </activity>
         <activity
-            android:name=".activity.txCategories.TxCategoryUpdateActivity"
-            android:label="@string/title_activity_tx_category_update" >
+            android:name=".activity.category.CategoryUpdateActivity"
+            android:label="@string/category_update_activity_title" >
         </activity>
         <activity
-            android:name=".activity.graphs.GraphSpendingByCategoryActivity"
+            android:name=".activity.chart.ChartSpendingByCategoryActivity"
             android:label="@string/title_activity_graph_spending_by_category" >
+        </activity>
+        <activity
+            android:name=".activity.SyncableActivity"
+            android:label="@string/title_activity_syncable" >
         </activity>
     </application>
 

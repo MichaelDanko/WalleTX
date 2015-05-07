@@ -1,11 +1,21 @@
 package com.bitcoin.tracker.walletx.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.activeandroid.util.SQLiteUtils;
+import com.bitcoin.tracker.walletx.activity.Constants;
+import com.bitcoin.tracker.walletx.api.BlockchainInfo;
+import com.bitcoin.tracker.walletx.helper.JsonHelper;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
+import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,8 +32,6 @@ import java.util.List;
  */
 @Table(name = "ExchangeRate")
 public class ExchangeRate extends Model {
-
-    public static float EXCHANGE_RATE_IN_USD = 0;
 
     @Column(name = "timestamp")
     public Date timestamp;
@@ -67,6 +75,11 @@ public class ExchangeRate extends Model {
      *  ExchangeRate Queries  *
      *------------------------*/
 
+    public static float convert(long satoshis, Context context) {
+        float btc = satoshis / (float) Constants.SATOSHIS;
+        return btc * BlockchainInfo.getCurrentExchangeRate(context);
+    }
+
     /**
      * @return USD with specific date
      */
@@ -94,7 +107,6 @@ public class ExchangeRate extends Model {
     /**
      * @return GBP with specific date
      */
-
     public static ExchangeRate fromDateGBP(Date date){
         return new Select("GBP")
                 .from(ExchangeRate.class)
@@ -102,15 +114,12 @@ public class ExchangeRate extends Model {
                 .executeSingle();
     }
 
-
-
     /**
      * @return  most recent USD by timestamp
      */
-
     public static Float getUSD(){
         //raw query to get one item from column
-        List<ExchangeRate> USDrates = SQLiteUtils.rawQuery(ExchangeRate.class, "Select USD from ExchangeRate Order by timestamp DESC Limit 1", new String[]{"null"} );
+        List<ExchangeRate> USDrates = SQLiteUtils.rawQuery(ExchangeRate.class, "Select USD from ExchangeRate Order by timestamp DESC Limit 1", new String[]{"null"});
         //returns pull list item
         return USDrates.get(0).usd;
     }
@@ -119,7 +128,6 @@ public class ExchangeRate extends Model {
     /**
      * @return returns most recent EUR by timestamp
      */
-
     public static Float getEUR(){
         //raw query to get one item from column
         List<ExchangeRate> EURrates = SQLiteUtils.rawQuery(ExchangeRate.class, "Select EUR from ExchangeRate Order by timestamp DESC Limit 1", new String[]{"null"} );
@@ -131,7 +139,6 @@ public class ExchangeRate extends Model {
     /**
      * @return returns most recent GBR by timestamp
      */
-
     public static Float getGBR(){
         //raw query to get one item from column
         List<ExchangeRate> GBRrates = SQLiteUtils.rawQuery(ExchangeRate.class, "Select GBR from ExchangeRate Order by timestamp DESC Limit 1", new String[]{"null"} );
@@ -142,14 +149,12 @@ public class ExchangeRate extends Model {
     /**
      * debug get all of ExchangeRate
      */
-
     public static List<ExchangeRate> getAllSortedTime(){
         return new Select()
                 .from(ExchangeRate.class)
                 .orderBy("Timestamp DESC")
                 .execute();
     }
-
 
     /**
      * Dumps the ExchangeRate table to console.

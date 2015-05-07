@@ -10,6 +10,6 @@
     <color name="wtx_gray">#454545</color>
 
     <!-- Colors for specific elements -->
-    <color name="navigation_drawer_bg">#cccc</color>
+    <color name="nav_drawer_bg">#cccc</color>
 
 </resources>

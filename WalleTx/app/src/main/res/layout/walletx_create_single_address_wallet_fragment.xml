@@ -1,0 +1,103 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bitcoin.tracker.walletx.activity.walletx.WalletxCreateSingleAddressWalletFragment"
+    android:id="@+id/container">
+
+    <EditText
+        android:layout_width="127dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextPublicKey"
+        android:layout_gravity="left|top"
+        android:inputType="textCapWords"
+        android:hint="@string/walletx_create_activity_hint_public_key"
+        android:paddingTop="@dimen/form_spacer_small"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_toLeftOf="@+id/scanQrCode"
+        android:layout_toStartOf="@+id/scanQrCode"
+        android:layout_marginBottom="@dimen/form_spacer_small" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scanQrCode"
+        android:layout_gravity="right|top"
+        android:src="@drawable/walletx_barcode"
+        android:minWidth="@dimen/minimum_size_barcode_button"
+        android:scaleType="fitCenter"
+        android:minHeight="@dimen/minimum_size_barcode_button"
+        android:background="@null"
+        android:paddingTop="@dimen/form_spacer_small"
+        android:cropToPadding="false"
+        android:contentDescription="@string/walletx_create_activity_content_description_barcode"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="@dimen/form_spacer_small" />
+
+    <EditText
+        android:layout_width="310dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextSaWalletName"
+        android:hint="@string/walletx_create_activity_hint_single_address_wallet_name"
+        android:paddingTop="@dimen/form_spacer_small"
+        android:inputType="textCapWords"
+        android:layout_gravity="center"
+        android:layout_below="@+id/editTextPublicKey"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/scanQrCode"
+        android:layout_alignEnd="@+id/scanQrCode"
+        android:layout_marginBottom="@dimen/form_spacer_small" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextSaWalletName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/groupContainer"
+        android:layout_marginBottom="@dimen/form_spacer_large"
+        android:layout_marginTop="@dimen/form_spacer_small">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/walletx_create_activity_label_group_spinner"
+            android:id="@+id/groupLabel"
+            android:layout_alignTop="@+id/groupSpinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/submitButton"
+            android:gravity="center_vertical"
+            android:layout_marginRight="@dimen/form_spacer_small"
+            android:layout_marginLeft="5dp" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/groupSpinner"
+            android:layout_below="@+id/editTextSaWalletName"
+            android:layout_toRightOf="@+id/groupLabel"
+            android:layout_toEndOf="@+id/groupLabel"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/walletx_create_activity_submit_button"
+        android:id="@+id/submitButton"
+        android:layout_below="@+id/groupContainer"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/scanQrCode"
+        android:layout_alignEnd="@+id/scanQrCode" />
+
+</RelativeLayout>

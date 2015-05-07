@@ -1,0 +1,17 @@
+<!-- This menu is displayed across all activities
+     including when the navigation drawer is open. -->
+
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- sync -->
+    <item
+        app:showAsAction="always"
+        android:id="@+id/action_sync"
+        android:title="@string/menu_action_sync"
+        android:icon="@drawable/ic_action_sync"
+        android:orderInCategory="100"
+        android:actionLayout="@layout/action_view_sync" />
+
+</menu>

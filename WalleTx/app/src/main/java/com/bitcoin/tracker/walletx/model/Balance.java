@@ -5,44 +5,29 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Balance model.
- *
- * A Balance is a snapshot of a Walletx balance at a given point in time.
- * Each time there is a new blockchainInfoWalletData associated with a Walletx, a new balance should be added.
+ * Balance is a snapshot of a Walletx balance at a given point in time.
+ * Each time there is a new Tx associated with a Walletx, a new balance should be added.
  * Balance detail should not go into detail finer than a daily balance.
  * If 2 balances occur on the same day the newest balance should overwrite the older balance.
  * All Balances are in BTC.
- *
- * TODO Add indexes & constraints to columns (if any)
- *
  */
 @Table(name = "Balance")
 public class Balance extends Model {
 
-    @Column(name = "timestamp")
+    //region Table
+    //----------------------------------------------------------------------------------------------
+
+    @Column(name = "timestamp", index = true)
     public Date timestamp;
 
-    public void setDateFromString(String date) {
-        SimpleDateFormat sf = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-        sf.setLenient(true);
-        try {
-            this.timestamp = sf.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Column(name = "Balance_Index")
-    public Long index;
-
     @Column(name = "Balance")
-    public float balance;
+    public long balance;
 
     // Belongs to a Walletx
     @Column(name = "Walletx")
@@ -52,74 +37,106 @@ public class Balance extends Model {
         super();
     }
 
-    public Balance(Walletx wtx, Long index, Date timestamp, float balance) {
+    public Balance(Date timestamp, long balance, Walletx wtx) {
         super();
-        this.wtx = wtx;
-        this.index = index;
         this.timestamp = timestamp;
-        //this.setDateFromString(date);
         this.balance = balance;
+        this.wtx = wtx;
     }
 
-    /*-------------------*
-     *  Balance Queries  *
-     *-------------------*/
-    /**
-    * @return Latest balance selected by wtx
-    *
-    */
-    public static Balance getBalance(Walletx wtx){
-    return new Select()
-        .from(Balance.class)
-        .where("Walletx = ?", wtx)
-        .orderBy("timestamp DESC")
-        .executeSingle();
+    //endregion
+
+    //region QUERIES
+    //----------------------------------------------------------------------------------------------
+
+    public static void clean(Walletx wtx) {
+
+        List<Tx> txs = wtx.txs();
+
+        // sort old to new
+        Collections.sort(txs, new Comparator<Tx>() {
+            @Override
+            public int compare(Tx tx1, Tx tx2) {
+                return tx1.timestamp.compareTo(tx2.timestamp);
+            }
+        });
+
+        Tx prevTx = null;
+        for (Tx tx : txs) {
+            Balance balance = tx.balance;
+            if (prevTx == null) {
+                balance.balance = tx.amountBTC;
+            } else {
+                Balance prevBalance = prevTx.balance;
+                balance.balance = prevBalance.balance + tx.amountBTC;
+            }
+            balance.save();
+            prevTx = tx;
+        }
+
     }
 
-    /** @return previous balance
-     *
+    /*
+     * Note: Tx insert order is uncertain, thus we cannot calculate a balance while inserting
+     * Txs. We must wait until all txs are inserted, then sweep the tx table sorted by
+     * date and update the balance.
      */
-    public static Balance getPreviousBalance(Walletx wtx, Long index) {
+    public static Balance createNewAssociatedWith(Tx tx) {
+        Balance balance = new Balance(tx.timestamp, 0, tx.wtx);
+        balance.save();
+        return balance;
+    }
+
+    /**
+     * @return latest balance selected by wtx
+     */
+    public static Balance getBalance(Walletx wtx) {
         return new Select()
+            .from(Balance.class)
+            .where("Walletx = ?", wtx.getId())
+            .orderBy("timestamp DESC")
+            .executeSingle();
+    }
+
+    public static long getBalanceAsLong(Walletx wtx) {
+        Balance balance = new Select()
                 .from(Balance.class)
-                .where("Walletx = ?", wtx)
-                //.where("Index = ?", index - 1)
+                .where("Walletx = ?", wtx.getId())
+                .orderBy("timestamp DESC")
                 .executeSingle();
+        return balance != null ? balance.balance : 0L;
     }
 
     /**
-     *
-     * @return list of balances (debug)
+     * @return list of all balances
      */
-    public static List<Balance> getAllBalances(){
+    public static List<Balance> getAll() {
         return new Select()
                 .from(Balance.class)
-                .orderBy("timestamp")
+                .orderBy("timestamp DESC")
                 .execute();
-
     }
 
+    //endregion
+    //region DEBUG
+    //----------------------------------------------------------------------------------------------
 
-    /**
-     * dumps all the balances table to console
-     * debug only
-     */
     public static void dump(){
-        String dividerCol1 = "------------------";
-        String dividerCol23 = "-------------";
-        System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
-        System.out.printf("%-20s %-15s %-16s\n", "Timestamp", "Balance", "WalleTx");
-        System.out.printf("%-20s %-15s %-16s\n", dividerCol1, dividerCol23, dividerCol23);
-        //List<WalletGroup> groups = WalletGroup.getAllSortedByDisplayOrder();
-        List<Balance> balances = Balance.getAllBalances();
-        for (Balance balance1 : balances) {
+        String dividerCol1 = "------------------------------";
+        String dividerCol23 = "------------------";
+        System.out.printf("%-32s %-20s %-20s\n", dividerCol1, dividerCol23, dividerCol23);
+        System.out.printf("%-32s %-20s %-20s\n", "Timestamp", "Balance", "WalleTx");
+        System.out.printf("%-32s %-20s %-20s\n", dividerCol1, dividerCol23, dividerCol23);
+        List<Balance> balances = Balance.getAll();
+        for (Balance balance : balances) {
             System.out.printf(
-                    "%-10s %-15s %-16s %-10s\n",
-                    balance1.balance,
-                    balance1.timestamp,
-                    balance1.wtx,
-                    balance1.index);
+                    "%-32s %-20s %-16s\n",
+                    balance.timestamp,
+                    balance.balance,
+                    balance.wtx);
         }
     }
+
+    //endregion
 
 } // Balance
